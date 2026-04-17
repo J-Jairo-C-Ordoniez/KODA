@@ -1,0 +1,11 @@
+import { AboutUsController } from '@/core/modules/about/controllers/aboutUs.controller';
+
+export async function GET() {
+  const controller = new AboutUsController();
+  return controller.getAboutUs();
+}
+
+export async function POST(req) {
+  const controller = new AboutUsController();
+  return controller.updateAboutUs(req);
+}

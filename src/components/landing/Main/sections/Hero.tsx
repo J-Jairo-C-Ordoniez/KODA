@@ -55,7 +55,7 @@ export default function Hero() {
               alt="mascota de Koda: robot sosteniendo una tablet con el logo de Koda"
               width={600}
               height={600}
-              className="w-full h-auto drop-shadow-xl"
+              className="w-full h-auto drop-shadow-xl mask-b-from-80%"
               priority
             />
           </div>

@@ -4,28 +4,24 @@ import { ShoppingCart, UserCheck, BarChart3, Cloud } from 'lucide-react';
 export default function Features() {
   const features = [
     {
-      title: 'Inventario Inteligente',
-      description: 'Controla tallas, colores y categorías con facilidad. Recibe alertas cuando el stock esté bajo.',
-      icon: <ShoppingCart size={32} />,
-      color: 'bg-blue-500'
+      title: 'Inventario',
+      description: 'Controla tus productos con categorías y recibe alertas cuando el stock esté bajo.',
+      icon: <ShoppingCart size={24} className="text-blue-500" />
     },
     {
       title: 'Gestión de Fiados',
       description: 'Lleva el registro exacto de deudas, abonos y fechas de cobro. No pierdas ni un peso.',
-      icon: <UserCheck size={32} />,
-      color: 'bg-purple-500'
+      icon: <UserCheck size={24} className="text-purple-500" />
     },
     {
       title: 'Reportes en Vivo',
       description: 'Visualiza tus ganancias, ventas diarias y productos más vendidos en tiempo real.',
-      icon: <BarChart3 size={32} />,
-      color: 'bg-pink-500'
+      icon: <BarChart3 size={24} className="text-pink-500" />
     },
     {
       title: 'Siempre en la Nube',
       description: 'Tus datos están seguros y accesibles desde cualquier lugar. Tu negocio no se detiene.',
-      icon: <Cloud size={32} />,
-      color: 'bg-indigo-500'
+      icon: <Cloud size={24} className="text-indigo-500" />
     }
   ];
 
@@ -57,9 +53,9 @@ export default function Features() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="p-8 rounded-lg bg-background hover:bg-foreground hover:shadow-2xl hover:shadow-indigo-200 transition-all group duration-500"
+              className="flex flex-col items-center justify-center p-8 rounded-3xl bg-foreground hover:bg-background hover:shadow-xl hover:shadow-indigo-500/5 transition-all group border border-transparent hover:border-indigo-100"
             >
-              <span className={`w-16 h-16 ${f.color} rounded-md flex items-center justify-center text-background mb-8 group-hover:scale-110 transition-transform`}>
+              <span className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm">
                 {f.icon}
               </span>
               <h3 className="text-md uppercase font-semibold tracking-wider text-primary mb-4">{f.title}</h3>

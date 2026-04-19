@@ -48,6 +48,7 @@ model Plan {
   description String         @db.VarChar(100)
   price       Decimal        @db.Decimal(10, 2)
   interval    String         @db.VarChar(20) // 'monthly', 'yearly'
+  feature     String[]       @default([])
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   subscriptions Subscription[]

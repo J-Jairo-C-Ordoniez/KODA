@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import Container from '../../ui/Container';
-import Button from '../../ui/Button';
 import Loader from '../../ui/Loader';
-import { Check } from 'lucide-react';
+import CardPricing from '../ui/CardPricing';
 
 interface Plan {
   planId: string;
   name: string;
   description: string;
   price: number;
+  feature: string[];
 }
 
 export default function Pricing() {
@@ -55,55 +55,10 @@ export default function Pricing() {
         ) : (
           <article className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {plans.map((plan) => (
-              <div
+              <CardPricing
                 key={plan.planId}
-                className={`relative p-10 rounded-[40px] bg-white border border-gray-100 shadow-xl shadow-black/5 hover:scale-[1.02] transition-transform duration-500 overflow-hidden group ${plan.name === 'Empresarial' ? 'ring-2 ring-purple-500' : ''}`}
-              >
-                {plan.name === 'Empresarial' && (
-                  <div className="absolute top-0 right-0 bg-linear-to-l from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-bl-3xl font-bold text-sm">
-                    Populares
-                  </div>
-                )}
-
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-2xl font-black text-primary">{plan.name}</h3>
-                    <p className="text-secondary mt-2 font-medium">{plan.description}</p>
-                  </div>
-
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-5xl font-black text-primary">
-                      ${Number(plan.price).toLocaleString('es-CO')}
-                    </span>
-                    <span className="text-gray-500 font-bold">/mes</span>
-                  </div>
-
-                  <ul className="space-y-4 py-8 border-y border-gray-100">
-                    {[
-                      'Inventario ilimitado',
-                      'Ventas y reportes',
-                      'Control de fiados',
-                      'Soporte priority',
-                      plan.name === 'Empresarial' ? 'Acceso multi-usuario' : 'Usuario único',
-                    ].map((feature) => (
-                      <li key={feature} className="flex items-center gap-3 font-medium text-[#444]">
-                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                          <Check size={14} strokeWidth={3} />
-                        </div>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    href="/register"
-                    variant={plan.name === 'Empresarial' ? 'accent' : 'primary'}
-                    className="w-full py-4 text-lg"
-                  >
-                    Seleccionar {plan.name}
-                  </Button>
-                </div>
-              </div>
+                plan={plan}
+              />
             ))}
           </article>
         )}

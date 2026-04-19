@@ -2,7 +2,7 @@ import Container from '../../ui/Container';
 import Button from '../../ui/Button';
 import { ShoppingBag, Zap, ShieldCheck } from 'lucide-react';
 
-export const Integrations = () => {
+export default function Integrations() {
   const categories = [
     { name: 'Moda y Ropa', icon: <ShoppingBag size={24} className="text-indigo-600" /> },
     { name: 'Calzado', icon: <Zap size={24} className="text-purple-600" /> },

@@ -5,6 +5,15 @@ export class PolicyService {
     this.repository = new PolicyRepository();
   }
 
+  async getPolicyByTitle(title: string) {
+    try {
+      const data = await this.repository.getPolicyByTitle(title);
+      return data;
+    } catch (error) {
+      throw new Error(`Error en PolicyService: ${error.message}`);
+    }
+  }
+
   async getLatestPolicy() {
     try {
       const data = await this.repository.getLatestPolicy();

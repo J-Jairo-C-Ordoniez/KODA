@@ -74,49 +74,105 @@ async function main() {
   console.log('Creating policies...');
   await prisma.policy.upsert({
     where: { policyId: 1 },
-    update: {},
-    create: {
-      policyId: 1,
+    update: {
       title: 'Términos y Condiciones de Uso',
       content: {
         lastUpdate: new Date().toISOString(),
         sections: [
           {
-            title: '1. Introducción',
-            content: 'Bienvenido a KODA. Al usar nuestra plataforma, aceptas estos términos diseñados para proteger tanto tu negocio como nuestra infraestructura SaaS.'
+            title: '1. Aceptación del Servicio',
+            content: 'Al acceder y utilizar KODA, el usuario (en adelante "el Comercio") acepta quedar vinculado por estos términos. Si no está de acuerdo, debe abstenerse de usar la plataforma.'
           },
           {
-            title: '2. Suscripciones y Pagos',
-            content: 'El acceso a las 7 capas de gestión depende del estado de tu suscripción. Contamos con un periodo de gracia de 3 días post-vencimiento.'
+            title: '2. Licencia de Uso',
+            content: 'KODA otorga una licencia limitada, no exclusiva e intransferible para el uso del software POS, gestión de inventarios y control de deudas bajo modalidad SaaS.'
           },
           {
-            title: '3. Aislamiento de Datos',
-            content: 'KODA garantiza que tus datos comerciales son privados y están aislados mediante identificadores de tenant únicos.'
+            title: '3. Propiedad de los Datos',
+            content: 'El Comercio mantiene la propiedad total de los datos de sus clientes, productos y ventas registrados. KODA actúa únicamente como procesador de datos.'
+          },
+          {
+            title: '4. Suscripciones y Pagos',
+            content: 'El acceso depende de una suscripción activa. El incumplimiento en los pagos resultará en la suspensión del acceso tras un periodo de gracia de 3 días.'
           }
         ]
       },
+    },
+    create: {
+      policyId: 1,
+      title: 'Términos y Condiciones de Uso',
+      content: { lastUpdate: new Date().toISOString(), sections: [] },
     },
   });
 
   await prisma.policy.upsert({
     where: { policyId: 2 },
-    update: {},
-    create: {
-      policyId: 2,
+    update: {
       title: 'Política de Privacidad',
       content: {
         lastUpdate: new Date().toISOString(),
         sections: [
           {
-            title: '1. Recolección de Datos',
-            content: 'Recolectamos datos mínimos necesarios para la operación: nombre del negocio, inventario y registros de ventas.'
+            title: '1. Información Recolectada',
+            content: 'Recolectamos datos técnicos de navegación y la información explícita de inventario, ventas y clientes necesaria para la operación.'
           },
           {
-            title: '2. Seguridad',
-            content: 'Utilizamos encriptación de grado industrial para las contraseñas y conexiones protegidas mediante SSL.'
+            title: '2. Uso de la Información',
+            content: 'Los datos se utilizan para generar reportes, gestionar stock y seguimiento de deudas.'
           }
         ]
       },
+    },
+    create: {
+      policyId: 2,
+      title: 'Política de Privacidad',
+      content: { lastUpdate: new Date().toISOString(), sections: [] },
+    },
+  });
+
+  await prisma.policy.upsert({
+    where: { policyId: 3 },
+    update: {
+      title: 'Política de Cookies',
+      content: {
+        lastUpdate: new Date().toISOString(),
+        sections: [
+          {
+            title: '1. Uso de Cookies',
+            content: 'Utilizamos cookies técnicas de sesión y seguridad para garantizar el funcionamiento del dashboard y el catálogo.'
+          }
+        ]
+      },
+    },
+    create: {
+      policyId: 3,
+      title: 'Política de Cookies',
+      content: { lastUpdate: new Date().toISOString(), sections: [] },
+    },
+  });
+
+  await prisma.policy.upsert({
+    where: { policyId: 4 },
+    update: {
+      title: 'Centro de Ayuda',
+      content: {
+        lastUpdate: new Date().toISOString(),
+        sections: [
+          {
+            title: 'Asistencia Personalizada',
+            content: 'Ofrecemos soporte directo para la configuración de tu tienda, carga de inventarios y gestión de pagos.'
+          },
+          {
+            title: 'Canal de WhatsApp',
+            content: 'Nuestro equipo responde de forma inmediata a través de la línea oficial de soporte de KODA.'
+          }
+        ]
+      },
+    },
+    create: {
+      policyId: 4,
+      title: 'Centro de Ayuda',
+      content: { lastUpdate: new Date().toISOString(), sections: [] },
     },
   });
 

@@ -6,6 +6,18 @@ export class PolicyController {
     this.service = new PolicyService();
   }
 
+  async getPolicyByTitle(req, title: string) {
+    try {
+      const data = await this.service.getPolicyByTitle(title);
+      if (!data) {
+        return NextResponse.json({ success: false, message: `No se encontró la política: ${title}` }, { status: 404 });
+      }
+      return NextResponse.json({ success: true, data }, { status: 200 });
+    } catch (error) {
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    }
+  }
+
   async getLatestPolicy() {
     try {
       const data = await this.service.getLatestPolicy();

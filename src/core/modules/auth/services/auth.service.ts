@@ -10,12 +10,12 @@ export class AuthService {
   async authenticateUser(email, password) {
     const user = await this.repository.getUserByEmail(email);
     if (!user) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('No se encontró ninguna cuenta asociada a este correo electrónico.');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error('Contraseña incorrecta');
+      throw new Error('La contraseña ingresada es incorrecta. Por favor, intenta de nuevo.');
     }
 
     return user;
@@ -24,7 +24,7 @@ export class AuthService {
   async requestPasswordReset(email) {
     const user = await this.repository.getUserByEmail(email);
     if (!user) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('No se encontró ninguna cuenta asociada a este correo electrónico.');
     }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -61,7 +61,7 @@ export class AuthService {
     }
 
     const isValid = await bcrypt.compare(code, latestCode.code);
-    if (!isValid) throw new Error('Código inválido');
+    if (!isValid) throw new Error('El código ingresado es incorrecto o ha expirado. Por favor, solicita uno nuevo.');
 
     return { success: true, userId: user.userId };
   }
@@ -76,49 +76,5 @@ export class AuthService {
     await this.repository.deleteUserCodes(user.userId);
 
     return { success: true, message: 'Contraseña actualizada con éxito' };
-  async registerBusiness(data) {
-    const { businessName, ownerName, email, password, whatsApp } = data;
-
-    // Check if user already exists
-    const existingUser = await this.repository.getUserByEmail(email);
-    if (existingUser) {
-      throw new Error('El correo electrónico ya está registrado');
-    }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Generate Slug (basic logic)
-    const slug = businessName
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-
-    // For production, we should check if slug exists and append random chars if so.
-    // Simplifying here for now.
-
-    const result = await this.repository.createTenantWithAdmin({
-      businessName,
-      ownerName,
-      email,
-      password: hashedPassword,
-      whatsApp,
-      slug,
-      planId: 'plan_emprendedor' // Default plan from seed
-    });
-
-    return {
-      success: true,
-      message: 'Negocio registrado con éxito',
-      user: {
-        id: result.user.userId,
-        email: result.user.email,
-        name: result.user.name,
-        tenantId: result.user.tenantId,
-        role: result.user.role
-      }
-    };
   }
 }

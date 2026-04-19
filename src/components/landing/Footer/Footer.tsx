@@ -2,7 +2,7 @@ import Container from '../ui/Container';
 import Brand from './ui/brand';
 import Nav from './ui/Nav';
 import Legal from './ui/Legal';
-import Location from './ui/Location';
+import Help from './ui/Help';
 import Rights from './ui/Rights';
 
 export default function Footer() {
@@ -13,7 +13,7 @@ export default function Footer() {
           <Brand />
           <Nav />
           <Legal />
-          <Location />
+          <Help />
         </section>
 
         <section className="pt-12 border-t border-background/5">

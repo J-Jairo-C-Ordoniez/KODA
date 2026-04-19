@@ -33,8 +33,8 @@ export const authOptions: AuthOptions = {
             role: user.role,
             tenantSlug: user.tenant?.slug || null
           };
-        } catch (error) {
-          throw new Error("Error en la autenticación");
+        } catch (error: any) {
+          throw new Error(error.message || "Ocurrió un problema durante la autenticación.");
         }
       }
     })

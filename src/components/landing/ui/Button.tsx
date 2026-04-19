@@ -5,26 +5,44 @@ interface ButtonProps {
   children: ReactNode;
   href?: string;
   onClick?: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'accent' | 'ambulance';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'accent' | 'ambulance' | 'navy';
   className?: string;
   type?: 'button' | 'submit';
+  disabled?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export default function Button({ children, href, onClick, variant = 'primary', className = '', type = 'button' }: ButtonProps) {
-  const baseStyles = "cursor-pointer px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 text-sm lg:text-md active:scale-95";
-
-  const variants = {
-    primary: "bg-primary text-foreground hover:bg-secondary shadow-lg shadow-black/5",
-    secondary: "bg-secondary text-foreground hover:bg-primary shadow-xl shadow-black/5",
-    outline: "border border-primary/20 text-primary hover:bg-secondary/10",
-    ghost: "text-primary hover:bg-secondary/10",
-    accent: "bg-accent/80 text-foreground hover:bg-accent shadow-lg",
-    ambulance: "bg-background/60 text-primary/60 hover:text-primary shadow-lg",
+export default function Button({ 
+  children, 
+  href, 
+  onClick, 
+  variant = 'primary', 
+  className = '', 
+  type = 'button',
+  disabled = false,
+  size = 'md'
+}: ButtonProps) {
+  const baseStyles = "cursor-pointer rounded-lg font-black tracking-wide transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100";
+  
+  const sizes = {
+    sm: "px-4 py-2 text-xs",
+    md: "px-6 py-3 text-sm lg:text-md",
+    lg: "px-8 py-4 text-md lg:text-lg",
   };
 
-  const combinedStyles = `${baseStyles} ${variants[variant]} ${className}`;
+  const variants = {
+    primary: "bg-primary text-background hover:bg-navy shadow-lg shadow-black/5",
+    secondary: "bg-secondary text-background hover:bg-primary shadow-xl shadow-black/5",
+    outline: "border-2 border-navy/20 text-navy hover:border-navy hover:bg-navy/5",
+    ghost: "text-navy hover:bg-navy/5",
+    accent: "bg-navy text-background hover:opacity-90 shadow-xl shadow-navy/20",
+    navy: "bg-navy text-background hover:opacity-90 shadow-xl shadow-navy/20",
+    ambulance: "bg-background border border-foreground/10 text-primary hover:bg-foreground hover:text-background shadow-sm hover:shadow-lg",
+  };
 
-  if (href) {
+  const combinedStyles = `${baseStyles} ${sizes[size]} ${variants[variant]} ${className}`;
+
+  if (href && !disabled) {
     return (
       <Link href={href} className={combinedStyles}>
         {children}
@@ -33,7 +51,7 @@ export default function Button({ children, href, onClick, variant = 'primary', c
   }
 
   return (
-    <button type={type} onClick={onClick} className={combinedStyles}>
+    <button type={type} onClick={onClick} disabled={disabled} className={combinedStyles}>
       {children}
     </button>
   );

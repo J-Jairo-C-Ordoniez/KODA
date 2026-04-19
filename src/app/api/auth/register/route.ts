@@ -1,24 +1,35 @@
 import { NextResponse } from 'next/server';
-import { AuthService } from '@/core/modules/auth/sevices/auth.service';
+import { TenantService } from '@/core/modules/tenants/services/tenant.service';
 
-const authService = new AuthService();
+const tenantService = new TenantService();
 
 export async function POST(request: Request) {
   try {
     const data = await request.json();
     
-    const { businessName, ownerName, email, password, whatsApp } = data;
+    // We expect: businessName, ownerName, email, whatsapp, password
+    const { businessName, ownerName, email, password, whatsapp } = data;
     
-    if (!businessName || !ownerName || !email || !password || !whatsApp) {
+    if (!businessName || !ownerName || !email || !password || !whatsapp) {
       return NextResponse.json(
         { error: 'Todos los campos son obligatorios' },
         { status: 400 }
       );
     }
 
-    const result = await authService.registerBusiness(data);
+    const result = await tenantService.registerBusiness(data);
     
-    return NextResponse.json(result);
+    return NextResponse.json({
+      success: true,
+      message: 'Negocio registrado con éxito',
+      user: {
+        id: result.user.userId,
+        email: result.user.email,
+        name: result.user.name,
+        tenantId: result.user.tenantId,
+        role: result.user.role
+      }
+    });
   } catch (error: any) {
     console.error('Registration Error:', error);
     return NextResponse.json(

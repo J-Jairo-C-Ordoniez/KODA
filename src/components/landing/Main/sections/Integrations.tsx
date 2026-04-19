@@ -1,56 +1,59 @@
 import Container from '../../ui/Container';
 import Button from '../../ui/Button';
-import { ShoppingBag, Zap, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, Zap, ShieldCheck, TrendingUp } from 'lucide-react';
 
 export default function Integrations() {
   const categories = [
-    { name: 'Moda y Ropa', icon: <ShoppingBag size={24} className="text-indigo-600" /> },
-    { name: 'Calzado', icon: <Zap size={24} className="text-purple-600" /> },
-    { name: 'Accesorios', icon: <ShieldCheck size={24} className="text-pink-600" /> },
-    { name: 'Boutiques', icon: <TrendingUp size={24} className="text-blue-600" /> },
+    { name: 'Moda y Ropa', icon: <ShoppingBag size={24} className="text-navy" />, color: 'bg-blue-50' },
+    { name: 'Calzado', icon: <Zap size={24} className="text-navy" />, color: 'bg-indigo-50' },
+    { name: 'Accesorios', icon: <ShieldCheck size={24} className="text-navy" />, color: 'bg-purple-50' },
+    { name: 'Boutiques', icon: <TrendingUp size={24} className="text-navy" />, color: 'bg-sky-50' },
   ];
 
   return (
-    <section className="py-20 bg-background border-y border-gray-100">
+    <section className="py-32 bg-background border-y border-foreground/5">
       <Container>
-        <article className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-4xl font-black text-primary">
-            DISEÑADO PARA TU <span className="text-indigo-600">NEGOCIO</span>
+        <article className="text-center space-y-6 mb-20">
+          <h2 className="text-4xl lg:text-5xl font-black text-primary tracking-tight">
+            Diseñado para <br />
+            <span className="text-navy">tu Crecimiento.</span>
           </h2>
-          <p className="text-md lg:text-lg text-secondary font-medium leading-relaxed tracking-wider">
-            Compatible con negocios pequeños y medianos que buscan agilidad y control total.
+          <p className="text-lg text-secondary max-w-2xl mx-auto font-medium leading-relaxed">
+            Compatible con negocios que buscan agilidad, control total e imagen profesional.
           </p>
         </article>
 
-        <article className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <article className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat) => (
             <div
               key={cat.name}
-              className="flex flex-col items-center justify-center p-8 rounded-3xl bg-foreground hover:bg-background hover:shadow-xl hover:shadow-indigo-500/5 transition-all group border border-transparent hover:border-indigo-100"
+              className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-background border border-foreground/5 hover:border-navy/20 hover:shadow-[0_20px_50px_rgba(0,0,128,0.05)] transition-all duration-500 group"
             >
-              <span className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm">
+              <div className={`w-14 h-14 ${cat.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500`}>
                 {cat.icon}
-              </span>
-              <p className="text-md lg:text-lg text-primary font-medium leading-relaxed tracking-wider">{cat.name}</p>
+              </div>
+              <p className="text-sm font-black tracking-widest text-primary uppercase">{cat.name}</p>
             </div>
           ))}
         </article>
 
-        <article className="mt-16 p-8 rounded-lg bg-linear-to-r from-primary to-primary/80 text-background flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="space-y-2 text-center lg:text-left">
-            <h3 className="text-2xl font-bold">¿Tienes un modelo de negocio diferente?</h3>
-            <p className="text-md lg:text-lg text-foreground font-medium leading-relaxed tracking-wider">Platicamos sobre cómo Koda puede adaptarse a tus necesidades.</p>
+        <article className="mt-24 p-12 rounded-[40px] bg-primary text-background flex flex-col lg:flex-row items-center justify-between gap-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-navy/20 rounded-full blur-[100px] -mr-48 -mt-48" />
+          
+          <div className="space-y-4 text-center lg:text-left relative z-10 max-w-xl">
+            <h3 className="text-3xl font-black tracking-tight leading-tight">¿Tienes un modelo de negocio diferente?</h3>
+            <p className="text-lg text-foreground/60 font-medium leading-relaxed">Platicamos sobre cómo Koda puede adaptarse a tus necesidades específicas.</p>
           </div>
+          
           <Button
-            href="https://wa.me/5215512345678"
-            variant="ambulance"
+            href="https://wa.me/573001234567"
+            variant="accent"
+            className="relative z-10 px-12 py-5 text-lg shadow-2xl shadow-black/20"
           >
-            Contáctanos por WhatsApp
+            Hablemos por WhatsApp
           </Button>
         </article>
       </Container>
     </section>
   );
-};
-
-import { TrendingUp } from 'lucide-react';
+}

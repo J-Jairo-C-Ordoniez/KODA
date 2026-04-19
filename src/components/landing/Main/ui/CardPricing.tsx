@@ -31,10 +31,12 @@ export default function CardPricing({ plan }: { plan: Plan }) {
                     <span className="text-secondary font-medium text-lg tracking-wider">/mes</span>
                 </div>
 
-                <h4 className="text-primary font-semibold text-xl tracking-wider">Lo que incluye</h4>
-                <ul className="space-y-4 py-8 border-y border-gray-100">
+                <ul className="space-y-4 py-8 border-y border-foreground/80">
                     {plan.feature.map((f) => (
-                        <li key={f} className="flex items-center gap-3 font-medium text-[#444]">
+                        <li
+                            key={f}
+                            className="flex items-center gap-3 text-secondary font-medium text-lg tracking-wider"
+                        >
                             <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600">
                                 <Check size={14} strokeWidth={3} />
                             </div>

@@ -6,7 +6,263 @@ datasource db {
   provider = "postgresql"
 }
 
-// --- ENUMS ---
+model Plan {
+  planId        String         @id @unique @default(cuid())
+  name          String         @db.VarChar(50)
+  description   String         @db.VarChar(100)
+  price         Decimal        @db.Decimal(10, 2)
+  interval      String         @db.VarChar(20)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  feature       String[]       @default([])
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Tenant {
+  tenantId     String             @id @unique @default(cuid())
+  businessName String             @db.VarChar(100)
+  description  String?
+  type         String             @default("ropa") @db.VarChar(50)
+  whatsApp     String             @db.Char(10)
+  slug         String             @unique @db.VarChar(50)
+  status       SubscriptionStatus @default(noVerify)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  aboutUs      AboutUs[]
+  categories   Category[]
+  customers    Customer[]
+  payments     Payment[]
+  products     Product[]
+  sales        Sale[]
+  subscription Subscription?
+  users        User[]
+
+  @@map("tenants")
+}
+
+model Subscription {
+  subscriptionId String             @id @unique @default(cuid())
+  tenantId       String             @unique
+  planId         String
+  startDate      DateTime           @default(now())
+  endDate        DateTime
+  status         SubscriptionStatus @default(active)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  transactions   Transaction[]
+  plan           Plan               @relation(fields: [planId], references: [planId])
+  tenant         Tenant             @relation(fields: [tenantId], references: [tenantId])
+
+  @@map("subscriptions")
+}
+
+model Transaction {
+  transactionId  String        @id @unique @default(cuid())
+  subscriptionId String
+  amount         Decimal       @db.Decimal(10, 2)
+  paymentDate    DateTime      @default(now())
+  paymentMethod  PaymentMethod
+  reference      String?       @db.VarChar(255)
+  createdAt      DateTime      @default(now())
+  subscription   Subscription  @relation(fields: [subscriptionId], references: [subscriptionId])
+
+  @@map("saas_transactions")
+}
+
+model Policy {
+  policyId  Int      @id @unique @default(autoincrement())
+  title     String   @default("Terminos") @db.VarChar(100)
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("policies")
+}
+
+model User {
+  userId     String   @id @unique @default(cuid())
+  tenantId   String?
+  role       Role     @default(employee)
+  name       String   @db.VarChar(100)
+  email      String   @unique @db.VarChar(50)
+  password   String   @db.VarChar(255)
+  avatar     String?  @db.VarChar(255)
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  codes      Code[]
+  sales      Sale[]
+  tenant     Tenant?  @relation(fields: [tenantId], references: [tenantId])
+
+  @@index([tenantId, email])
+  @@map("users")
+}
+
+model Code {
+  codeId    Int      @id @unique @default(autoincrement())
+  code      String   @db.VarChar(255)
+  type      CodeType
+  deadLine  DateTime
+  userId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [userId])
+
+  @@map("codes")
+}
+
+model Category {
+  categoryId String    @id @unique @default(cuid())
+  tenantId   String
+  name       String    @db.VarChar(50)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  tenant     Tenant    @relation(fields: [tenantId], references: [tenantId])
+  products   Product[]
+
+  @@index([tenantId])
+  @@map("categories")
+}
+
+model Product {
+  productId   String    @id @unique @default(cuid())
+  tenantId    String
+  categoryId  String
+  name        String    @db.VarChar(100)
+  description String
+  gender      Gender
+  isPublic    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  category    Category  @relation(fields: [categoryId], references: [categoryId])
+  tenant      Tenant    @relation(fields: [tenantId], references: [tenantId])
+  variants    Variant[]
+
+  @@index([tenantId, categoryId])
+  @@map("products")
+}
+
+model Variant {
+  variantId   String      @id @unique @default(cuid())
+  productId   String
+  name        String      @db.VarChar(50)
+  sku         String      @unique @db.VarChar(50)
+  color       String      @db.VarChar(20)
+  size        String      @db.VarChar(20)
+  price       Decimal     @db.Decimal(10, 2)
+  cost        Decimal     @db.Decimal(10, 2)
+  popularity  Int         @default(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  images      Image[]
+  inventories Inventory[]
+  saleItems   SaleItem[]
+  product     Product     @relation(fields: [productId], references: [productId])
+
+  @@index([productId, sku])
+  @@map("variants")
+}
+
+model Inventory {
+  inventoryId Int      @id @unique @default(autoincrement())
+  variantId   String
+  stock       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  variant     Variant  @relation(fields: [variantId], references: [variantId])
+
+  @@map("inventories")
+}
+
+model Image {
+  imageId   Int      @id @unique @default(autoincrement())
+  variantId String
+  content   String   @db.VarChar(255)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  variant   Variant  @relation(fields: [variantId], references: [variantId])
+
+  @@map("images")
+}
+
+model Customer {
+  customerId String    @id @unique @default(cuid())
+  tenantId   String
+  name       String    @db.VarChar(100)
+  phone      String    @db.VarChar(20)
+  totalDebt  Decimal   @default(0) @db.Decimal(10, 2)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  tenant     Tenant    @relation(fields: [tenantId], references: [tenantId])
+  payments   Payment[]
+  sales      Sale[]
+
+  @@index([tenantId])
+  @@map("customers")
+}
+
+model Payment {
+  paymentId     String        @id @unique @default(cuid())
+  tenantId      String
+  customerId    String
+  amount        Decimal       @db.Decimal(10, 2)
+  paymentMethod PaymentMethod
+  note          String?       @db.VarChar(255)
+  createdAt     DateTime      @default(now())
+  customer      Customer      @relation(fields: [customerId], references: [customerId])
+  tenant        Tenant        @relation(fields: [tenantId], references: [tenantId])
+
+  @@index([tenantId, customerId])
+  @@map("payments")
+}
+
+model Sale {
+  saleId        String        @id @unique @default(cuid())
+  tenantId      String
+  userId        String
+  customerId    String?
+  total         Decimal       @db.Decimal(10, 2)
+  paymentMethod PaymentMethod
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  items         SaleItem[]
+  customer      Customer?     @relation(fields: [customerId], references: [customerId])
+  tenant        Tenant        @relation(fields: [tenantId], references: [tenantId])
+  user          User          @relation(fields: [userId], references: [userId])
+
+  @@index([tenantId, userId])
+  @@map("sales")
+}
+
+model SaleItem {
+  itemId      String  @id @unique @default(cuid())
+  saleId      String
+  variantId   String
+  quantity    Int
+  priceAtSale Decimal @db.Decimal(10, 2)
+  sale        Sale    @relation(fields: [saleId], references: [saleId])
+  variant     Variant @relation(fields: [variantId], references: [variantId])
+
+  @@index([saleId])
+  @@map("sale_items")
+}
+
+model AboutUs {
+  aboutId     String   @id @unique @default(cuid())
+  tenantId    String
+  logo        String?  @db.VarChar(255)
+  socialLinks Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tenant      Tenant   @relation(fields: [tenantId], references: [tenantId])
+
+  @@index([tenantId])
+  @@map("about_us")
+}
+
 enum CodeType {
   verify
   reset
@@ -31,274 +287,11 @@ enum PaymentMethod {
   cash
   transfer
   online
-  debt 
+  debt
 }
 
 enum Role {
   superAdmin
   admin
   employee
-}
-
-// --- TABLAS GLOBALES ---
-
-model Plan {
-  planId      String         @id @default(cuid()) @unique
-  name        String         @db.VarChar(50)
-  description String         @db.VarChar(100)
-  price       Decimal        @db.Decimal(10, 2)
-  interval    String         @db.VarChar(20) // 'monthly', 'yearly'
-  feature     String[]       @default([])
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  subscriptions Subscription[]
-
-  @@map("plans")
-}
-
-model Tenant {
-  tenantId     String             @id @default(cuid()) @unique
-  businessName String             @db.VarChar(100)
-  description  String?            @db.Text
-  type         String             @default("ropa") @db.VarChar(50)
-  whatsApp     String             @db.Char(10)
-  slug         String             @unique @db.VarChar(50)
-  status       SubscriptionStatus @default(noVerify)
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  subscription Subscription?
-
-  users        User[]
-  categories   Category[]
-  products     Product[]
-  customers    Customer[]
-  payments     Payment[]
-  sales        Sale[]
-  aboutUs      AboutUs[]
-
-  @@map("tenants")
-}
-
-model Subscription {
-  subscriptionId String             @id @default(cuid()) @unique
-  tenantId       String             @unique
-  tenant         Tenant             @relation(fields: [tenantId], references: [tenantId])
-  planId         String
-  plan           Plan               @relation(fields: [planId], references: [planId])
-  startDate      DateTime           @default(now())
-  endDate        DateTime
-  status         SubscriptionStatus @default(active)
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
-  transactions   Transaction[]
-
-  @@map("subscriptions")
-}
-
-model Transaction {
-  transactionId  String        @id @default(cuid()) @unique
-  subscriptionId String
-  subscription   Subscription  @relation(fields: [subscriptionId], references: [subscriptionId])
-  amount         Decimal       @db.Decimal(10, 2)
-  paymentDate    DateTime      @default(now())
-  paymentMethod  PaymentMethod
-  reference      String?       @db.VarChar(255)
-  createdAt      DateTime      @default(now())
-
-  @@map("saas_transactions")
-}
-
-model Policy {
-  policyId  Int      @id @default(autoincrement()) @unique
-  title     String   @default("Terminos") @db.VarChar(100)
-  content   Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("policies")
-}
-
-// --- TABLAS HIBRIDAS / LOCALES ---
-
-model User {
-  userId     String   @id @default(cuid()) @unique
-  tenantId   String?  // Nullable para superAdmins
-  tenant     Tenant?  @relation(fields: [tenantId], references: [tenantId])
-  role       Role     @default(employee)
-  name       String   @db.VarChar(100)
-  email      String   @unique @db.VarChar(50)
-  password   String   @db.VarChar(255)
-  avatar     String?  @db.VarChar(255)
-  isVerified Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  
-  codes      Code[]
-  sales      Sale[]
-
-  @@index([tenantId, email])
-  @@map("users")
-}
-
-model Code {
-  codeId    Int      @id @default(autoincrement()) @unique
-  code      String   @db.VarChar(255)
-  type      CodeType
-  deadLine  DateTime
-  userId    String     
-  user      User     @relation(fields: [userId], references: [userId])
-  createdAt DateTime @default(now())
-
-  @@map("codes")
-}
-
-model Category {
-  categoryId String    @id @default(cuid()) @unique
-  tenantId   String
-  tenant     Tenant    @relation(fields: [tenantId], references: [tenantId])
-  name       String    @db.VarChar(50)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  products   Product[]
-
-  @@index([tenantId])
-  @@map("categories")
-}
-
-model Product {
-  productId   String    @id @default(cuid()) @unique
-  tenantId    String
-  tenant      Tenant    @relation(fields: [tenantId], references: [tenantId])
-  categoryId  String       
-  category    Category  @relation(fields: [categoryId], references: [categoryId])
-  name        String    @db.VarChar(100)
-  description String    @db.Text
-  gender      Gender
-  isPublic    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  variants    Variant[]
-
-  @@index([tenantId, categoryId])
-  @@map("products")
-}
-
-model Variant {
-  variantId       String           @id @default(cuid()) @unique
-  productId       String              
-  product         Product          @relation(fields: [productId], references: [productId])
-  name            String           @db.VarChar(50)
-  sku             String           @unique @db.VarChar(50)
-  color           String           @db.VarChar(20)
-  size            String           @db.VarChar(20)
-  price           Decimal          @db.Decimal(10, 2)
-  cost            Decimal          @db.Decimal(10, 2)
-  popularity      Int              @default(0)
-  isActive        Boolean          @default(true)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  inventories     Inventory[]
-  images          Image[]
-  saleItems       SaleItem[]
-
-  @@index([productId, sku])
-  @@map("variants")
-}
-
-model Inventory {
-  inventoryId Int      @id @default(autoincrement()) @unique
-  variantId   String      
-  variant     Variant  @relation(fields: [variantId], references: [variantId])
-  stock       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@map("inventories")
-}
-
-model Image {
-  imageId   Int      @id @default(autoincrement()) @unique
-  variantId String      
-  variant   Variant  @relation(fields: [variantId], references: [variantId])
-  content   String   @db.VarChar(255)
-  isPrimary Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("images")
-}
-
-model Customer {
-  customerId  String   @id @default(cuid()) @unique
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [tenantId])
-  name        String   @db.VarChar(100)
-  phone       String   @db.VarChar(20)
-  totalDebt   Decimal  @db.Decimal(10, 2) @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  payments    Payment[]
-  sales       Sale[]
-
-  @@index([tenantId])
-  @@map("customers")
-}
-
-model Payment {
-  paymentId     String        @id @default(cuid()) @unique
-  tenantId      String
-  tenant        Tenant        @relation(fields: [tenantId], references: [tenantId])
-  customerId    String
-  customer      Customer      @relation(fields: [customerId], references: [customerId])
-  amount        Decimal       @db.Decimal(10, 2)
-  paymentMethod PaymentMethod
-  note          String?       @db.VarChar(255)
-  createdAt     DateTime      @default(now())
-
-  @@index([tenantId, customerId])
-  @@map("payments")
-}
-
-model Sale {
-  saleId        String        @id @default(cuid()) @unique
-  tenantId      String
-  tenant        Tenant        @relation(fields: [tenantId], references: [tenantId])
-  userId        String
-  user          User          @relation(fields: [userId], references: [userId])
-  customerId    String?       // Opcional si no es fiado
-  customer      Customer?     @relation(fields: [customerId], references: [customerId])
-  total         Decimal       @db.Decimal(10, 2)
-  paymentMethod PaymentMethod // 'cash', 'transfer', 'debt'
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  items         SaleItem[]
-
-  @@index([tenantId, userId])
-  @@map("sales")
-}
-
-model SaleItem {
-  itemId        String   @id @default(cuid()) @unique
-  saleId        String
-  sale          Sale     @relation(fields: [saleId], references: [saleId])
-  variantId     String
-  variant       Variant  @relation(fields: [variantId], references: [variantId])
-  quantity      Int
-  priceAtSale   Decimal  @db.Decimal(10, 2)
-
-  @@index([saleId])
-  @@map("sale_items")
-}
-
-model AboutUs {
-  aboutId     String   @id @default(cuid()) @unique
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [tenantId])
-  logo        String?  @db.VarChar(255)
-  socialLinks Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([tenantId])
-  @@map("about_us")
 }

@@ -12,7 +12,6 @@ export class PlanService {
       const plans = await this.repository.getAllPlans();
       return plans;
     } catch (error) {
-      console.error('Error fetching plans in PlanService:', error);
       throw new Error('No se pudieron obtener los planes de precios');
     }
   }

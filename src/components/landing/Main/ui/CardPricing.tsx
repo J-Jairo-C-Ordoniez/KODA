@@ -18,7 +18,7 @@ export default function CardPricing({ plan }: { plan: Plan }) {
                 </p>
             )}
 
-            <article className="space-y-6">
+            <article className="flex flex-col gap-6 justify-between h-full">
                 <header className="space-y-2">
                     <h3 className="text-primary font-semibold text-xl tracking-wider">{plan.name}</h3>
                     <p className="text-secondary font-medium text-lg tracking-wider">{plan.description}</p>

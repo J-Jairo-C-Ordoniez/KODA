@@ -1,4 +1,4 @@
-import Logo from "./Logo";
+import Logo from "../../ui/Logo";
 import Link from "next/link";
 import Button from "../../ui/Button";
 import { X } from "lucide-react";
@@ -23,7 +23,7 @@ export function NavMobile({ navLinks, setIsMenuOpen }: { navLinks: { name: strin
     return (
         <div className="md:hidden fixed top-0 left-0 right-0 h-screen bg-background p-8 flex flex-col justify-between gap-6 shadow-xl animate-in slide-in-from-top-4 duration-300">
             <div className="flex items-center justify-between">
-                <Logo />
+                <Logo type="light" />
                 <div className="flex gap-3">
                     <Button
                         href="/login"

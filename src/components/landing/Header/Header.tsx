@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Container from '../ui/Container';
-import Logo from './ui/Logo';
+import Logo from '../ui/Logo';
 import Nav, { NavMobile } from './ui/Nav';
 import Button from '../ui/Button';
 import { Menu, X } from 'lucide-react';
@@ -24,14 +24,13 @@ export default function Header() {
   const navLinks = [
     { name: 'Inicio', href: '#inicio' },
     { name: 'Características', href: '#features' },
-    { name: 'Precios', href: '#pricing' },
-    { name: 'Políticas', href: '#policies' },
+    { name: 'Precios', href: '#pricing' }
   ];
 
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'}`}>
       <Container className="flex items-center justify-between">
-        <Logo />
+        <Logo type="light" />
 
         <Nav navLinks={navLinks} />
 
@@ -51,7 +50,7 @@ export default function Header() {
           </Button>
         </div>
 
-        <Button 
+        <Button
           variant="ambulance"
           className="md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -61,9 +60,9 @@ export default function Header() {
       </Container>
 
       {isMenuOpen && (
-        <NavMobile 
-          navLinks={navLinks} 
-          setIsMenuOpen={setIsMenuOpen} 
+        <NavMobile
+          navLinks={navLinks}
+          setIsMenuOpen={setIsMenuOpen}
         />
       )}
     </header>

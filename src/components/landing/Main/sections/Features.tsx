@@ -43,7 +43,7 @@ export default function Features() {
 
             <h2 className="text-5xl lg:text-7xl font-black text-primary leading-[1.05] tracking-tight">
               Control Total en <br />
-              <span className="text-navy/40">Segundos.</span>
+              <span className="text-navy/80">Segundos.</span>
             </h2>
           </div>
 

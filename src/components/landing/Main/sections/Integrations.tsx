@@ -42,7 +42,7 @@ export default function Integrations() {
           
           <div className="space-y-4 text-center lg:text-left relative z-10 max-w-xl">
             <h3 className="text-3xl font-black tracking-tight leading-tight">¿Tienes un modelo de negocio diferente?</h3>
-            <p className="text-lg text-foreground/60 font-medium leading-relaxed">Platicamos sobre cómo Koda puede adaptarse a tus necesidades específicas.</p>
+            <p className="text-lg text-background/80 font-medium leading-relaxed">Platicamos sobre cómo Koda puede adaptarse a tus necesidades específicas.</p>
           </div>
           
           <Button

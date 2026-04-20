@@ -54,12 +54,14 @@ export default function Pricing() {
           <Loader />
         ) : (
           <article className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {plans.map((plan) => (
+            {plans.length > 0 ? plans.map((plan) => (
               <CardPricing
                 key={plan.planId}
                 plan={plan}
               />
-            ))}
+            )) : (
+              <p className="text-secondary mx-auto font-medium text-lg text-center w-full col-span-2">No hay planes disponibles</p>
+            )}
           </article>
         )}
       </Container>

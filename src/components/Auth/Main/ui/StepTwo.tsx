@@ -74,7 +74,7 @@ export default function StepTwo({ formData, handleChange, prevStep, loading }: a
                     type="button"
                     onClick={prevStep}
                     variant="secondary"
-                    className="bg-foreground/5 hover:bg-foreground/10 py-4 px-6 rounded-2xl font-medium text-secondary"
+                    className="bg-foreground/5 hover:bg-foreground/10 py-4 px-6 rounded-2xl font-medium text-background"
                 >
                     <ArrowLeft size={18} />
                 </Button>

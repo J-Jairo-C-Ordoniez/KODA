@@ -1,6 +1,6 @@
-import Logo from "../../ui/Logo";
+import Logo from "../../../ui/Logo";
 import Link from "next/link";
-import Button from "../../ui/Button";
+import Button from "../../../ui/Button";
 import { X } from "lucide-react";
 
 export default function Nav({ navLinks }: { navLinks: { name: string; href: string }[] }) {

@@ -2,7 +2,7 @@
 
 import { CreditCard, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import Container from "@/components/landing/ui/Container";
+import Container from "@/components/ui/Container";
 
 interface PlanAlertProps {
   status: string;
@@ -22,8 +22,8 @@ export default function PlanAlert({ status }: PlanAlertProps) {
             Tu negocio está casi listo. Activa un plan para empezar a disfrutar de todas las funciones de KODA.
           </p>
         </div>
-        <Link 
-          href="/dashboard/settings/billing" 
+        <Link
+          href="/dashboard/settings/billing"
           className="bg-white text-navy px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white/90 transition-all shadow-lg"
         >
           Activar Ahora

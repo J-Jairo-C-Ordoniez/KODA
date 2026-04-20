@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import Container from '../../ui/Container';
-import Button from '../../ui/Button';
+import Container from '../../../ui/Container';
+import Button from '../../../ui/Button';
 import { ArrowRight, CheckCircle2, Star, TrendingUp, Users } from 'lucide-react';
 import gsap from 'gsap';
 
@@ -104,7 +104,7 @@ export default function Hero() {
           </div>
 
           {/* Floating Badges */}
-          <div 
+          <div
             ref={badge1Ref}
             className="absolute top-10 -left-10 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-foreground/5 flex items-center gap-4 z-20"
           >
@@ -117,7 +117,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div 
+          <div
             ref={badge2Ref}
             className="absolute bottom-20 -right-10 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-foreground/5 flex items-center gap-4 z-20"
           >

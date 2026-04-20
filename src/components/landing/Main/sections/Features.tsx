@@ -1,4 +1,4 @@
-import Container from '../../ui/Container';
+import Container from '../../../ui/Container';
 import { ShoppingCart, UserCheck, BarChart3, Cloud } from 'lucide-react';
 
 export default function Features() {

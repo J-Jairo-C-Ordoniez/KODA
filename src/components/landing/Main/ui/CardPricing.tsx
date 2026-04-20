@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import Button from "../../ui/Button";
+import Button from "../../../ui/Button";
 
 interface Plan {
     planId: string;
@@ -13,11 +13,10 @@ export default function CardPricing({ plan }: { plan: Plan }) {
     const isEmpresarial = plan.name.toLowerCase() === 'empresarial';
 
     return (
-        <section className={`relative p-10 rounded-[40px] bg-background border transition-all duration-500 overflow-hidden group ${
-            isEmpresarial 
-                ? 'border-navy shadow-[0_20px_50px_rgba(0,0,128,0.1)] scale-[1.02] z-10' 
+        <section className={`relative p-10 rounded-[40px] bg-background border transition-all duration-500 overflow-hidden group ${isEmpresarial
+                ? 'border-navy shadow-[0_20px_50px_rgba(0,0,128,0.1)] scale-[1.02] z-10'
                 : 'border-foreground/5 shadow-sm hover:shadow-xl hover:shadow-navy/5 hover:border-navy/20'
-        }`}>
+            }`}>
             {isEmpresarial && (
                 <div className="absolute top-0 right-0 bg-navy text-background px-6 py-2 rounded-bl-2xl font-bold text-[10px] uppercase tracking-[0.2em]">
                     Populares
@@ -65,4 +64,4 @@ export default function CardPricing({ plan }: { plan: Plan }) {
             </article>
         </section>
     );
-}
+}

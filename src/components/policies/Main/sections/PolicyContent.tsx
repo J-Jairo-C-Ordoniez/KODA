@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Container from "../../ui/Container";
+import Container from "@/components/ui/Container";
+import Loader from "@/components/ui/Loader";
 
 interface Section {
     title: string;
@@ -49,8 +50,7 @@ export default function PolicyContent({ title }: { title: string }) {
     if (loading) {
         return (
             <Container className="py-20 text-center">
-                <div className="w-10 h-10 border-4 border-navy border-t-transparent rounded-full animate-spin mx-auto" />
-                <p className="mt-4 text-secondary font-medium">Cargando...</p>
+                <Loader />
             </Container>
         );
     }
@@ -88,8 +88,8 @@ export default function PolicyContent({ title }: { title: string }) {
                         <p className="text-sm text-secondary font-medium">
                             ¿Tienes dudas sobre nuestras políticas? <br />
                         </p>
-                        <Link 
-                            href="/help" 
+                        <Link
+                            href="/help"
                             className="inline-block mt-4 text-navy font-black hover:scale-105 transition-transform"
                         >
                             Ir al Centro de Ayuda

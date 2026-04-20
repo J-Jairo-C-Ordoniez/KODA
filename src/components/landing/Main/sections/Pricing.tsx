@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Container from '../../ui/Container';
-import Loader from '../../ui/Loader';
+import Container from '../../../ui/Container';
+import Loader from '../../../ui/Loader';
 import CardPricing from '../ui/CardPricing';
 
 interface Plan {

@@ -1,5 +1,5 @@
-import Container from '../../ui/Container';
-import Button from '../../ui/Button';
+import Container from '../../../ui/Container';
+import Button from '../../../ui/Button';
 import { ShoppingBag, Zap, ShieldCheck, TrendingUp } from 'lucide-react';
 
 export default function Integrations() {
@@ -39,12 +39,12 @@ export default function Integrations() {
 
         <article className="mt-24 p-12 rounded-[40px] bg-primary text-background flex flex-col lg:flex-row items-center justify-between gap-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-navy/20 rounded-full blur-[100px] -mr-48 -mt-48" />
-          
+
           <div className="space-y-4 text-center lg:text-left relative z-10 max-w-xl">
             <h3 className="text-3xl font-black tracking-tight leading-tight">¿Tienes un modelo de negocio diferente?</h3>
             <p className="text-lg text-background/80 font-medium leading-relaxed">Platicamos sobre cómo Koda puede adaptarse a tus necesidades específicas.</p>
           </div>
-          
+
           <Button
             href="https://wa.me/573001234567"
             variant="accent"

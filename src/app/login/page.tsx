@@ -5,8 +5,8 @@ import Link from "next/link";
 import { Loader2, Mail, Lock } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import AuthWrapper from "@/components/landing/ui/AuthWrapper";
-import Button from "@/components/landing/ui/Button";
+import AuthWrapper from "@/components/ui/AuthWrapper";
+import Button from "@/components/ui/Button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -48,8 +48,8 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthWrapper 
-      title="Bienvenido de nuevo" 
+    <AuthWrapper
+      title="Bienvenido de nuevo"
       subtitle="Accede a tu panel y mantén el control de tu negocio en tiempo real."
     >
       <form className="space-y-6" onSubmit={handleSubmit}>
@@ -58,7 +58,7 @@ export default function LoginPage() {
             <p className="text-sm text-red-600 font-medium text-center">{error}</p>
           </div>
         )}
-        
+
         <div className="space-y-2">
           <label htmlFor="email" className="block text-xs font-black uppercase tracking-[0.1em] text-secondary ml-1">
             Correo Electrónico
@@ -85,7 +85,7 @@ export default function LoginPage() {
               Contraseña
             </label>
             <Link href="/forgot-password" alt="Recuperar contraseña" title="Recuperar contraseña" className="text-[10px] font-black uppercase tracking-[0.1em] text-navy hover:underline">
-               ¿Olvidaste tu contraseña?
+              ¿Olvidaste tu contraseña?
             </Link>
           </div>
           <div className="relative group">
@@ -102,7 +102,7 @@ export default function LoginPage() {
             />
           </div>
         </div>
-        
+
         <div className="pt-2">
           <Button
             type="submit"

@@ -1,8 +1,8 @@
 import Container from '../ui/Container';
-import Brand from './ui/brand';
+import Brand from './ui/Brand';
 import Nav from './ui/Nav';
 import Legal from './ui/Legal';
-import Help from './ui/Help';
+import Location from './ui/Location';
 import Rights from './ui/Rights';
 
 export default function Footer() {
@@ -13,7 +13,7 @@ export default function Footer() {
           <Brand />
           <Nav />
           <Legal />
-          <Help />
+          <Location />
         </section>
 
         <section className="pt-12 border-t border-background/5">

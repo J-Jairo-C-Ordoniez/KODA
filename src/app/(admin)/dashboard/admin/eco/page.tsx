@@ -1,4 +1,4 @@
-import { Eco } from "@/components/dashboard/eco/Eco";
+import { EcoP } from "@/components/dashboard/admin/Admin";
 
 export const metadata = {
   title: "Ecosistema | KODA",
@@ -7,6 +7,6 @@ export const metadata = {
 
 export default function EcoPage() {
   return (
-    <Eco />
+    <EcoP />
   );
 }

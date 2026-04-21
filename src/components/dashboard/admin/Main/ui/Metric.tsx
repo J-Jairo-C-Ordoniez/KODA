@@ -6,7 +6,7 @@ type Stat = {
 
 export default function Metrics({ stat }: { stat: Stat }) {
     return (
-        <div className="bg-background border border-foreground/5 p-6 rounded-[32px] shadow-sm flex items-center gap-6">
+        <article className="bg-background border border-foreground/5 p-6 rounded-[32px] shadow-sm flex items-center gap-6">
             <div className="p-4 bg-navy/5 rounded-2xl text-navy">
                 <stat.icon size={24} />
             </div>
@@ -14,6 +14,6 @@ export default function Metrics({ stat }: { stat: Stat }) {
                 <p className="text-secondary text-xs font-bold uppercase tracking-widest mb-1">{stat.label}</p>
                 <h3 className="text-2xl font-black text-primary">{stat.value}</h3>
             </div>
-        </div>
+        </article>
     );
 }

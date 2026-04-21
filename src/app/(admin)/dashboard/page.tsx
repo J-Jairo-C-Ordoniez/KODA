@@ -7,8 +7,7 @@ import {
   Package, 
   ShoppingBag,
   TrendingUp,
-  ArrowUpRight,
-  TrendingDown
+  ArrowUpRight
 } from "lucide-react";
 
 export default async function DashboardHome() {
@@ -18,7 +17,7 @@ export default async function DashboardHome() {
 
   // Basic redirection based on role
   if (session.user.role === "superAdmin") {
-    redirect("/dashboard/eco");
+    redirect("/dashboard/admin/metrics");
   }
 
   if (session.user.role === "admin") {

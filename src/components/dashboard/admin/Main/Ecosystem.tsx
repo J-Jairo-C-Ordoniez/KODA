@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { Store, MoreVertical, Search } from "lucide-react";
-import Header from "@/components/dashboard/eco/Main/ui/Header";
+import Header from "@/components/dashboard/admin/Main/ui/Header";
 import Loader from "@/components/ui/Loader";
-import Metrics from "@/components/dashboard/eco/Main/ui/Metrics";
+import Metric from "@/components/dashboard/admin/Main/ui/Metric";
 
 export default function Ecosystem() {
     const [tenants, setTenants] = useState([]);
@@ -42,7 +42,7 @@ export default function Ecosystem() {
             {!loading && !error && (
                 <section className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <Metrics
+                        <Metric
                             stat={{
                                 label: "Total Negocios",
                                 value: `${tenants.length}`.padStart(2, '0'),
@@ -50,7 +50,7 @@ export default function Ecosystem() {
                             }}
                         />
 
-                        <Metrics
+                        <Metric
                             stat={{
                                 label: "Negocios Activos",
                                 value: `${tenants.filter((tenant) => tenant.status === 'active').length}`.padStart(2, '0'),
@@ -58,10 +58,10 @@ export default function Ecosystem() {
                             }}
                         />
 
-                        <Metrics
+                        <Metric
                             stat={{
-                                label: "Negocios Inactivos",
-                                value: `${tenants.filter((tenant) => tenant.status === 'inactive').length}`.padStart(2, '0'),
+                                label: "Negocios Suspendidos",
+                                value: `${tenants.filter((tenant) => tenant.status !== 'active').length}`.padStart(2, '0'),
                                 icon: Store
                             }}
                         />

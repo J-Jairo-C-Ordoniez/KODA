@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CreditCard, LogOut, ChevronRight, ShieldCheck } from "lucide-react";
+import { CreditCard, LogOut, ChevronRight, ShieldCheck, Home, Package, Building2, Scroll, Settings } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
 import { signOut } from "next-auth/react";
 
@@ -15,15 +15,45 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
+    label: "Dashboard",
+    href: "/dashboard/admin/metrics",
+    icon: Home,
+    roles: ["superAdmin"]
+  },
+  {
     label: "Ecosistema",
-    href: "/dashboard/eco",
+    href: "/dashboard/admin/eco",
     icon: ShieldCheck,
     roles: ["superAdmin"]
   },
   {
     label: "Suscripciones",
-    href: "/dashboard/eco/billing",
+    href: "/dashboard/admin/billing",
     icon: CreditCard,
+    roles: ["superAdmin"]
+  },
+  {
+    label: "Planes",
+    href: "/dashboard/admin/plans",
+    icon: Package,
+    roles: ["superAdmin"]
+  },
+  {
+    label: "Negocios",
+    href: "/dashboard/admin/business",
+    icon: Building2,
+    roles: ["superAdmin"]
+  },
+  {
+    label: "Legal",
+    href: "/dashboard/admin/legal",
+    icon: Scroll,
+    roles: ["superAdmin"]
+  },
+  {
+    label: "Ajustes",
+    href: "/dashboard/admin/settings",
+    icon: Settings,
     roles: ["superAdmin"]
   }
 ];
@@ -64,7 +94,7 @@ export default function Sidebar() {
       <div className="p-6 border-t border-foreground/5 mt-auto">
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="cursor-pointer w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-red-500 hover:bg-red-500/5 transition-colors font-black text-sm tracking-tight"
+          className="cursor-pointer text-md font-medium tracking-tight w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-red-500 hover:bg-red-500/5 transition-colors text-sm"
         >
           <LogOut size={20} />
           Cerrar Sesión

@@ -18,11 +18,11 @@ export default async function DashboardHome() {
 
   // Basic redirection based on role
   if (session.user.role === "superAdmin") {
-    redirect("/dashboard/admin/eco");
+    redirect("/dashboard/eco");
   }
 
   if (session.user.role === "admin") {
-    redirect("/dashboard/admin/business");
+    redirect("/dashboard/business");
   }
 
   // Admin Dashboard Content

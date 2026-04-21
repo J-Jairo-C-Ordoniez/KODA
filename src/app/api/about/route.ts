@@ -5,7 +5,7 @@ export async function GET() {
   return controller.getAboutUs();
 }
 
-export async function POST(req) {
+export async function POST(req: Request) {
   const controller = new AboutUsController();
   return controller.updateAboutUs(req);
 }

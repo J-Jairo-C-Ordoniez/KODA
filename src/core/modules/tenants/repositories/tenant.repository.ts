@@ -1,10 +1,9 @@
 import prisma from "@/infrastructure/db/client";
 import { SubscriptionStatus } from "@prisma/client";
 
-export class TenantRepository {
+const tenantRepository = {
   async createTenantWithAdmin(tenantData: any, adminData: any) {
     return await prisma.$transaction(async (tx) => {
-      // 1. Create the Tenant
       const tenant = await tx.tenant.create({
         data: {
           businessName: tenantData.businessName,
@@ -15,7 +14,6 @@ export class TenantRepository {
         },
       });
 
-      // 2. Create the Admin User for this Tenant
       const user = await tx.user.create({
         data: {
           tenantId: tenant.tenantId,
@@ -29,11 +27,27 @@ export class TenantRepository {
 
       return { tenant, user };
     });
-  }
+  },
+
+  async getAllTenants() {
+    try {
+      const tenants = await prisma.tenant.findMany({
+        take: 10,
+        orderBy: { createdAt: 'desc' },
+        include: { _count: { select: { users: true, products: true } } }
+      });
+
+      return tenants;
+    } catch (error) {
+      return error;
+    }
+  },
 
   async findBySlug(slug: string) {
     return await prisma.tenant.findUnique({
       where: { slug },
     });
-  }
+  },
 }
+
+export default tenantRepository;

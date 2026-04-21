@@ -1,29 +1,20 @@
-import { TenantRepository } from "../repositories/tenant.repository";
+import tenantRepository from "../repositories/tenant.repository";
 import { slugify } from "@/core/utils/slugify";
 import bcrypt from "bcryptjs";
 
-export class TenantService {
-  private repository: TenantRepository;
 
-  constructor() {
-    this.repository = new TenantRepository();
-  }
-
+const tenantService = {
   async registerBusiness(data: any) {
     try {
-      // 1. Generate unique slug
       let slug = slugify(data.businessName);
-      const existingTenant = await this.repository.findBySlug(slug);
+      const existingTenant = await tenantRepository.findBySlug(slug);
       
       if (existingTenant) {
-        // If slug exists, add random suffix
         slug = `${slug}-${Math.floor(Math.random() * 1000)}`;
       }
 
-      // 2. Hash password
       const hashedPassword = await bcrypt.hash(data.password, 10);
 
-      // 3. Create Tenant + User
       const tenantData = {
         businessName: data.businessName,
         type: data.type,
@@ -37,16 +28,27 @@ export class TenantService {
         password: hashedPassword,
       };
 
-      return await this.repository.createTenantWithAdmin(tenantData, adminData);
+      return await tenantRepository.createTenantWithAdmin(tenantData, adminData);
     } catch (error: any) {
       if (error.code === 'P2002') {
         const field = error.meta?.target?.[0];
-        if (field === 'email') throw new Error('Este correo electrónico ya está registrado. Intenta con otro.');
-        if (field === 'slug') throw new Error('El nombre de este negocio ya está en uso o es muy similar a uno existente.');
+        if (field === 'email') return {error: 'El correo electrónico ya está registrado. Intenta con otro.'};
+        if (field === 'slug') return {error: 'El nombre del negocio ya está en uso o es muy similar a uno existente.'};
       }
       
-      console.error('Registration Error Details:', error);
-      throw new Error(error.message || 'Error inesperado al registrar el negocio. Por favor intenta de nuevo.');
+      return {error: error.message || 'Error inesperado al registrar el negocio. Por favor intenta de nuevo.'};
     }
-  }
+  },
+
+  async getAllTenants() {
+    try {
+      const tenants = await tenantRepository.getAllTenants();
+      return tenants;
+    } catch (error) {
+      console.error('Error al obtener los tenants:', error);
+      throw error;
+    }
+  },
 }
+
+export default tenantService;

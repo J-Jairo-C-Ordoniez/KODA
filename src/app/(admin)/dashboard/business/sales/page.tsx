@@ -1,6 +1,6 @@
-import Header from '@/components/dashboard/header/Header';
-import Sidebar from '@/components/dashboard/sidebar/Sidebar';
-import SalesClient from '@/components/dashboard/sales/SalesClient';
+import Header from '@/components/dashboard/bussines/header/Header';
+import Sidebar from '@/components/dashboard/bussines/sidebar/Sidebar';
+import SalesClient from '@/components/dashboard/bussines/sales/SalesClient';
 
 export const dynamic = 'force-dynamic';
 

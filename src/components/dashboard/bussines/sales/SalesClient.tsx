@@ -29,28 +29,28 @@ export default function SalesClient() {
 
     const handleSaleSubmit = async (data) => {
         const result = await saveSale(data);
-        
+
         if (result.success) {
             setIsModalOpen(false);
-            setAlertConfig({ 
-                isOpen: true, 
-                title: 'Éxito', 
-                message: 'Venta registrada correctamente e inventario actualizado.', 
+            setAlertConfig({
+                isOpen: true,
+                title: 'Éxito',
+                message: 'Venta registrada correctamente e inventario actualizado.',
                 variant: 'success',
                 type: 'success'
             });
         } else {
-            setAlertConfig({ 
-                isOpen: true, 
-                title: 'Error', 
-                message: result.error, 
+            setAlertConfig({
+                isOpen: true,
+                title: 'Error',
+                message: result.error,
                 variant: 'danger',
                 type: 'alert'
             });
         }
     };
 
-    const filteredSales = sales.filter(s => 
+    const filteredSales = sales.filter(s =>
         s.saleId.toString().includes(searchTerm) ||
         s.variant.product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         s.variant.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -69,13 +69,13 @@ export default function SalesClient() {
     return (
         <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
             <div className="container mx-auto space-y-8 pt-2">
-                <Header 
-                    title="Ventas" 
-                    description="Historial completo de transacciones y registro de nuevas ventas." 
+                <Header
+                    title="Ventas"
+                    description="Historial completo de transacciones y registro de nuevas ventas."
                 />
 
                 <section className="rounded-xl p-6 flex flex-col gap-6 relative">
-                    <SalesHeader 
+                    <SalesHeader
                         saleCount={sales.length}
                         onOpenSaleModal={() => setIsModalOpen(true)}
                         searchTerm={searchTerm}
@@ -91,7 +91,7 @@ export default function SalesClient() {
                 onClose={() => setIsModalOpen(false)}
                 title="Registrar Nueva Venta"
             >
-                <SaleForm 
+                <SaleForm
                     variants={variants}
                     onSubmit={handleSaleSubmit}
                     onCancel={() => setIsModalOpen(false)}

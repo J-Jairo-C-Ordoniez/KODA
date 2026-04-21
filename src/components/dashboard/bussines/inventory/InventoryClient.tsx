@@ -59,8 +59,8 @@ export default function InventoryClient() {
 
     const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.variants.some(v => 
-            v.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        p.variants.some(v =>
+            v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             v.sku.toLowerCase().includes(searchTerm.toLowerCase())
         )
     );
@@ -78,24 +78,24 @@ export default function InventoryClient() {
     return (
         <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
             <div className="container mx-auto space-y-8 pt-2">
-                <Header 
-                    title="Inventario" 
-                    description="Control total de existencias por producto y variante." 
+                <Header
+                    title="Inventario"
+                    description="Control total de existencias por producto y variante."
                 />
 
                 <section className="rounded-xl p-6 flex flex-col gap-6 relative">
-                    <InventoryHeader 
-                        variantCount={products.reduce((acc, p) => acc + p.variants.length, 0)} 
-                        searchTerm={searchTerm} 
-                        setSearchTerm={setSearchTerm} 
+                    <InventoryHeader
+                        variantCount={products.reduce((acc, p) => acc + p.variants.length, 0)}
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
                     />
 
-                    <InventoryTable 
-                        products={filteredProducts} 
+                    <InventoryTable
+                        products={filteredProducts}
                         expandedProducts={expandedProducts}
                         onToggleExpand={toggleExpand}
-                        loadingId={loadingId} 
-                        onUpdateStock={handleUpdateStock} 
+                        loadingId={loadingId}
+                        onUpdateStock={handleUpdateStock}
                     />
                 </section>
             </div>

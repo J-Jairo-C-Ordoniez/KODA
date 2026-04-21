@@ -1,6 +1,6 @@
-import Sidebar from '@/components/dashboard/sidebar/Sidebar';
-import Header from '@/components/dashboard/header/Header';
-import SettingsClient from '@/components/dashboard/settings/SettingsClient';
+import Sidebar from '@/components/dashboard/bussines/sidebar/Sidebar';
+import Header from '@/components/dashboard/bussines/header/Header';
+import SettingsClient from '@/components/dashboard/bussines/settings/SettingsClient';
 
 export default function SettingsPage() {
   return (

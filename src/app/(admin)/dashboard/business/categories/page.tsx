@@ -1,6 +1,6 @@
-import Header from '@/components/dashboard/header/Header';
-import Sidebar from '@/components/dashboard/sidebar/Sidebar';
-import CategoryClient from '@/components/dashboard/categories/CategoryClient';
+import Header from '@/components/dashboard/bussines/header/Header';
+import Sidebar from '@/components/dashboard/bussines/sidebar/Sidebar';
+import CategoryClient from '@/components/dashboard/bussines/categories/CategoryClient';
 
 export default function CategoriesPage() {
   return (

@@ -38,9 +38,9 @@ export default function SettingsPage() {
                     description="Gestiona el contenido público y las políticas de la tienda."
                 />
 
-                <MainSettings 
-                    initialAboutUs={aboutUs} 
-                    initialPolicy={policy} 
+                <MainSettings
+                    initialAboutUs={aboutUs}
+                    initialPolicy={policy}
                     savePolicyAction={savePolicyAction}
                     saveAboutUsAction={saveAboutUsAction}
                 />

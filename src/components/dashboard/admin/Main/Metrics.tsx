@@ -17,7 +17,7 @@ export default function Metrics() {
             try {
                 const [activeTenantRes, mrrRes, onboardingRes, monthlyChurnCountRes, churnRateRes] = await Promise.all(
                     [
-                        fetch("/api/tenants/counts"),
+                        fetch("/api/tenants/counts?type=active"),
                         fetch("/api/tenants/MRR"),
                         fetch("/api/tenants/onboarding"),
                         fetch("/api/tenants/churn?type=MonthlyChurnCount"),
@@ -115,7 +115,7 @@ export default function Metrics() {
 
     return (
         <main className="space-y-10 bg-background w-full pt-8 px-12">
-            <Header />
+            <Header title="Métricas Generales" />
 
             {loading && <Loader />}
             {error && <p className="text-red-500">Error</p>}

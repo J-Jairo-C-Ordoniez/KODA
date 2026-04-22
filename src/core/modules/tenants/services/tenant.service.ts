@@ -40,9 +40,9 @@ const tenantService = {
     }
   },
 
-  async getAllTenants() {
+  async countAllTenants() {
     try {
-      const tenants = await tenantRepository.getAllTenants();
+      const tenants = await tenantRepository.countAllTenants();
       return tenants;
     } catch (error) {
       console.error('Error al obtener los tenants:', error);
@@ -91,6 +91,15 @@ const tenantService = {
       return error;
     }
   },
+
+  async getAllTenants() {
+    try {
+      const tenants = await tenantRepository.getAllTenants();
+      return tenants;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default tenantService;

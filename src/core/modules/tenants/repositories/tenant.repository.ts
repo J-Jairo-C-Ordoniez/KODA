@@ -29,13 +29,9 @@ const tenantRepository = {
     });
   },
 
-  async getAllTenants() {
+  async countAllTenants() {
     try {
-      const tenants = await prisma.tenant.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        include: { _count: { select: { users: true, products: true } } }
-      });
+      const tenants = await prisma.tenant.count();
 
       return tenants;
     } catch (error) {
@@ -146,6 +142,27 @@ const tenantRepository = {
 
     return String(rate.toFixed(1));
   },
+
+  async getAllTenants() {
+    return await prisma.tenant.findMany({
+      include: {
+        subscription: {
+          include: {
+            plan: true,
+          },
+        },
+        _count: {
+          select: {
+            users: true,
+            products: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
 }
 
 export default tenantRepository;

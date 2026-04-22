@@ -15,6 +15,7 @@ export async function GET() {
   if (!session || session.user.role !== "superAdmin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
   const tenants = await tenantController.getAllTenants();
   return NextResponse.json(tenants);
 }

@@ -10,9 +10,9 @@ const tenantController = {
         }
     },
 
-    async getAllTenants() {
+    async countAllTenants() {
         try {
-            const tenants = await tenantService.getAllTenants();
+            const tenants = await tenantService.countAllTenants();
             return tenants;
         } catch (error) {
             return error;
@@ -59,6 +59,15 @@ const tenantController = {
             return error;
         }
     },
+
+    async getAllTenants() {
+        try {
+            const tenants = await tenantService.getAllTenants();
+            return tenants;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export default tenantController;

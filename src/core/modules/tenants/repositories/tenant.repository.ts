@@ -48,6 +48,104 @@ const tenantRepository = {
       where: { slug },
     });
   },
+
+  async countActiveTenants() {
+    try {
+      const count = await prisma.tenant.count({
+        where: { status: 'active' },
+      });
+
+      return count;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getMonthlyIncomes() {
+    const ahora = new Date();
+    const inicioMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+
+    const result = await prisma.transaction.aggregate({
+      where: {
+        paymentDate: {
+          gte: inicioMes,
+        },
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    return result._sum.amount || 0;
+  },
+
+  async getOnboardingHealth() {
+    const stats = await prisma.tenant.groupBy({
+      by: ['status'],
+      where: {
+        status: {
+          in: ['active', 'noVerify']
+        }
+      },
+      _count: {
+        _all: true
+      }
+    });
+
+    const counts = {
+      active: stats.find(s => s.status === 'active')?._count._all || 0,
+      noVerify: stats.find(s => s.status === 'noVerify')?._count._all || 0
+    };
+
+    const totalInteresados = counts.active + counts.noVerify;
+
+    if (totalInteresados === 0) return 0;
+
+    const conversionRate = Number(counts.active / totalInteresados) * 100;
+
+    return {
+      percentage: String(conversionRate.toFixed(1)),
+      counts
+    }
+  },
+
+  async getMonthlyChurnCount() {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+    const count = await prisma.tenant.count({
+      where: {
+        status: 'suspended',
+        updatedAt: {
+          gte: startOfMonth,
+        },
+      },
+    });
+
+    return count;
+  },
+
+  async getChurnRate() {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+    const lostTenants = await prisma.tenant.count({
+      where: {
+        status: 'suspended',
+        updatedAt: { gte: startOfMonth }
+      }
+    });
+
+    const activeTenants = await prisma.tenant.count({
+      where: { status: 'active' }
+    });
+
+    const totalBase = activeTenants + lostTenants;
+
+    if (totalBase === 0) return 0;
+
+    const rate = Number((lostTenants / totalBase) * 100);
+
+    return String(rate.toFixed(1));
+  },
 }
 
 export default tenantRepository;

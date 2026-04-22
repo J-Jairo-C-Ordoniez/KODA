@@ -49,6 +49,48 @@ const tenantService = {
       throw error;
     }
   },
+
+  async countActiveTenants() {
+    try {
+      const count = await tenantRepository.countActiveTenants();
+
+      return count;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getMonthlyIncomes() {
+    try {
+      return await tenantRepository.getMonthlyIncomes();
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getOnboardingHealth() {
+    try {
+      return await tenantRepository.getOnboardingHealth();
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getMonthlyChurnCount() {
+    try {
+      return await tenantRepository.getMonthlyChurnCount();
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async getChurnRate() {
+    try {
+      return await tenantRepository.getChurnRate();
+    } catch (error) {
+      return error;
+    }
+  },
 }
 
 export default tenantService;

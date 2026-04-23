@@ -67,7 +67,16 @@ const tenantController = {
         } catch (error) {
             return error;
         }
-    }
+    },
+
+    async getTenantsFiltered(search?: string, status?: string) {
+        try {
+            const tenants = await tenantService.getTenantsFiltered(search, status);
+            return tenants;
+        } catch (error) {
+            return error;
+        }
+    },
 }
 
 export default tenantController;

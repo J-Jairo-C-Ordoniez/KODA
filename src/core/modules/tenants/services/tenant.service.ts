@@ -99,6 +99,15 @@ const tenantService = {
     } catch (error) {
       return error;
     }
+  },
+
+  async getTenantsFiltered(search?: string, status?: string) {
+    try {
+      const tenants = await tenantRepository.getTenantsFiltered(search, status);
+      return tenants;
+    } catch (error) {
+      return error;
+    }
   }
 }
 

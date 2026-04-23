@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
-import { Store, Search } from "lucide-react";
+import { Store, Search, ArrowRight } from "lucide-react";
 import Header from "@/components/dashboard/admin/Main/ui/Header";
 import Loader from "@/components/ui/Loader";
 import Metric from "@/components/dashboard/admin/Main/ui/Metric";
@@ -11,42 +11,64 @@ import Table from "@/components/dashboard/admin/Main/ui/Table";
 export default function Ecosystem() {
     const [countAllTenants, setCountAllTenants] = useState(0);
     const [tenants, setTenants] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [isSearching, setIsSearching] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchTenants = async () => {
+        const fetchInitialMetrics = async () => {
             try {
-                const [countAllTenantsRes, getAllTenantsRes] = await Promise.all([
-                    fetch("/api/tenants/counts?type=all"),
-                    fetch("/api/tenants"),
-                ]);
+                const res = await fetch("/api/tenants/counts?type=all");
+                const data = await res.json();
 
-                const countAllTenantsData = await countAllTenantsRes.json();
-                const getAllTenantsData = await getAllTenantsRes.json();
+                if (data.error) redirect("/");
+                setCountAllTenants(data);
+            } catch (err) {
+                console.error("Error cargando métricas:", err);
+            }
+        };
+        fetchInitialMetrics();
+    }, []);
 
-                if (countAllTenantsData.error || getAllTenantsData.error) {
-                    redirect("/");
-                }
+    useEffect(() => {
+        const fetchFilteredTenants = async () => {
+            setIsSearching(true);
+            try {
+                const params = new URLSearchParams();
+                if (searchQuery) params.append("search", searchQuery);
+                if (status) params.append("status", status);
 
-                setCountAllTenants(countAllTenantsData.count);
-                setTenants(getAllTenantsData);
-                setLoading(false);
-            } catch (error) {
-                setError(error);
+                const url = params.toString() ? `/api/tenants/search?${params.toString()}` : "/api/tenants";
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.error) throw new Error(data.error);
+
+                setTenants(Array.isArray(data) ? data : []);
+            } catch (error: any) {
+                setError(error.message);
             } finally {
+                setIsSearching(false);
                 setLoading(false);
             }
         };
-        fetchTenants();
-    }, []);
+
+        const delayTimer = setTimeout(() => {
+            fetchFilteredTenants();
+        }, 300);
+
+        return () => clearTimeout(delayTimer);
+    }, [searchQuery, status]);
 
     return (
         <main className="space-y-10 bg-background w-full pt-8 px-12">
             <Header title="Ecosistema Koda" />
 
             {loading && <Loader />}
-            {error && <p className="text-red-500">Error: {error}</p>}
+            {error && <p className="text-red-500 text-sm font-semibold">Error: {error}</p>}
 
             {!loading && !error && (
                 <section className="space-y-6">
@@ -60,15 +82,37 @@ export default function Ecosystem() {
                         />
                     </div>
 
-                    <header className="flex justify-between items-center">
-                        <h3 className="text-md font-semibold text-primary tracking-wider">Negocios Registrados</h3>
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" size={16} />
-                            <input
-                                type="text"
-                                placeholder="Buscar negocio..."
-                                className="pl-10 pr-4 py-2 bg-foreground/5 border-none rounded-xl text-sm font-medium focus:ring-2 focus:ring-navy/20 outline-hidden"
-                            />
+                    {/* Controles de Búsqueda y Filtro */}
+                    <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <h3 className="text-md font-semibold text-primary tracking-wider">
+                            Negocios Registrados
+                        </h3>
+
+                        <div className="flex gap-3 w-full md:w-auto">
+                            <div className="relative group">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-navy transition-colors" size={18} />
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Buscar negocio..."
+                                    className="w-full pl-12 pr-4 py-4 bg-background/50 border border-foreground/5 rounded-2xl focus:ring-2 focus:ring-navy/20 focus:border-navy outline-hidden transition-all font-medium placeholder:text-secondary/80"
+                                />
+                            </div>
+
+                            <div className="relative group">
+                                <select
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    className="mr-2 w-full px-4 py-4 bg-background/50 border border-foreground/5 rounded-2xl focus:ring-2 focus:ring-navy/20 focus:border-navy outline-hidden transition-all font-medium appearance-none"
+                                >
+                                    <option value="">Todos</option>
+                                    <option value="active">Activos</option>
+                                    <option value="noVerify">Pendientes</option>
+                                    <option value="suspended">Suspendidos</option>
+                                </select>
+                                <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary rotate-90" size={16} />
+                            </div>
                         </div>
                     </header>
 
@@ -82,6 +126,7 @@ export default function Ecosystem() {
                             { accessorKey: "actions", header: "Acciones" },
                         ]}
                         data={tenants}
+                        isSearching={isSearching}
                     />
                 </section>
             )}

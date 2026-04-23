@@ -162,7 +162,35 @@ const tenantRepository = {
         createdAt: 'desc',
       },
     });
-  }
+  },
+
+  async getTenantsFiltered(search?: string, status?: string) {
+    return await prisma.tenant.findMany({
+      where: {
+        OR: search ? [
+          { businessName: { contains: search, mode: 'insensitive' } },
+          { slug: { contains: search, mode: 'insensitive' } },
+        ] : undefined,
+        status: status ? (status as any) : undefined,
+      },
+      include: {
+        subscription: {
+          include: {
+            plan: true
+          }
+        },
+        _count: {
+          select: {
+            users: true,
+            products: true
+          }
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  },
 }
 
 export default tenantRepository;

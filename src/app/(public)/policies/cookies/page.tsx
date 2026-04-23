@@ -1,7 +1,7 @@
 import { CookiesP } from "@/components/policies/Policies";
 
 export const metadata = {
-  title: "Política de Cookies | KODA",
+  title: "KODA | Política de Cookies",
   description: "Uso de cookies y tecnologías de seguimiento en KODA.",
 };
 

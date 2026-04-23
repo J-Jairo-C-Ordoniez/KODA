@@ -75,7 +75,6 @@ export default function Hero() {
             />
           </div>
 
-          {/* Floating Badges */}
           <div className="absolute top-10 -left-10 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-foreground/5 flex items-center gap-4 z-20">
             <span className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center text-green-600">
               <TrendingUp size={24} />

@@ -1,7 +1,7 @@
 import { PrivacyP } from "@/components/policies/Policies";
 
 export const metadata = {
-  title: "Política de Privacidad | KODA",
+  title: "KODA | Política de Privacidad",
   description: "Tratamiento de datos personales y seguridad en KODA.",
 };
 

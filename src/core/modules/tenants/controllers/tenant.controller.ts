@@ -77,6 +77,15 @@ const tenantController = {
             return error;
         }
     },
+
+    async getTenantBySlug(slug: string) {
+        try {
+            const tenant = await tenantService.getTenantBySlug(slug);
+            return tenant;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export default tenantController;

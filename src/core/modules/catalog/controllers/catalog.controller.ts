@@ -1,11 +1,30 @@
-import { NextResponse } from 'next/server';
-import { CatalogService } from '../services/catalog.service';
-import { ProductService } from '../services/product.service';
-import { VariantService } from '../services/variant.service';
+import catalogService from "@/core/modules/catalog/services/catalog.service";
 
-export class CatalogController {
+const catalogController = {
+  async getCategories(tenantId?: string) {
+    try {
+      const categories = await catalogService.getCategories(tenantId);
+      return categories
+    } catch (error) {
+      return error;
+    }
+  },
+  
+  async getColors(tenantId?: string) {
+    try {
+      const colors = await catalogService.getColors(tenantId);
+      return colors;
+    } catch (error) {
+      return error;
+    }
+  },
+}
+
+export default catalogController;
+
+/* export class CatalogController {
   constructor() {
-    this.service = new CatalogService();
+    this.service = catalogService;
     this.productService = new ProductService();
     this.variantService = new VariantService();
   }
@@ -151,4 +170,4 @@ export class CatalogController {
       return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
   }
-}
+} */

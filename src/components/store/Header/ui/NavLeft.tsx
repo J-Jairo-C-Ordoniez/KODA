@@ -1,15 +1,7 @@
-import { useRouter, usePathname } from 'next/navigation';
-
 export default function NavLeft({ breadcrumbs, setBreadcrumbsRoute, setGender }) {
-    const router = useRouter();
-    const pathname = usePathname();
-
     const handleGenderClick = (gender) => {
         setBreadcrumbsRoute(gender);
         setGender(gender);
-        if (pathname !== '/') {
-            router.push('/');
-        }
     };
 
     return (

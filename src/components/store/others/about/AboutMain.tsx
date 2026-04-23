@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import useBreadcrumbsStore from "../../../store/breadcrumbs.store";
-import Breadcrumbs from "../main/ui/Breadcrumbs";
+import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
+import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import Content from "./ui/Content";
 import { usePublicData } from "@/hooks/usePublicData";
 

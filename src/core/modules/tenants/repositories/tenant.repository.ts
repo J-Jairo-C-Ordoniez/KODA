@@ -40,9 +40,18 @@ const tenantRepository = {
   },
 
   async findBySlug(slug: string) {
-    return await prisma.tenant.findUnique({
+    const tenant = await prisma.tenant.findUnique({
       where: { slug },
+      select: {
+        tenantId: true,
+        slug: true,
+        businessName: true,
+        status: true,
+      }
     });
+
+
+    return tenant;
   },
 
   async countActiveTenants() {

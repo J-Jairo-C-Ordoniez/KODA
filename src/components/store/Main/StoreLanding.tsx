@@ -6,7 +6,7 @@ import FilterBar from "./ui/FilterBar";
 import { ProductGrid } from "./ui/ProductGrid";
 import { Pagination } from "./ui/Pagination";
 
-export default function Main() {
+export default function Main({ tenantId }: { tenantId?: string }) {
     const { breadcrumbs, setBreadcrumbsRoute } = useBreadcrumbsStore();
 
     return (
@@ -18,9 +18,9 @@ export default function Main() {
                 />
 
                 <div>
-                    <FilterBar />
-                    <ProductGrid />
-                    <Pagination />
+                    <FilterBar tenantId={tenantId} />
+                    {/* <ProductGrid />
+                    <Pagination /> */}
                 </div>
             </div>
         </main>

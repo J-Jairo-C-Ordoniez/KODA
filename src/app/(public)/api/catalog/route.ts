@@ -1,25 +1,28 @@
-import { CatalogController } from '@/core/modules/catalog/controllers/catalog.controller';
+import catalogController from "@/core/modules/catalog/controllers/catalog.controller";
+import { NextResponse } from "next/server";
 
-export async function GET(req) {
-  const controller = new CatalogController();
+export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const action = searchParams.get('action');
+  const tenantId = searchParams.get('tenantId');
 
   if (action === 'categories') {
-    return controller.getCategories();
+    const categories = await catalogController.getCategories(tenantId);
+    return NextResponse.json(categories);
   }
 
   if (action === 'colors') {
-    return controller.getColors();
+    const colors = await catalogController.getColors(tenantId);
+    return NextResponse.json(colors);
   }
 
-  if (action === 'popular') {
-    return controller.getPopularVariants(req);
-  }
+  /* if (action === 'popular') {
+    return catalogController.getPopularVariants(req);
+  } */
 
-  if (action === 'dashboard') {
-    return controller.getDashboardCatalog();
-  }
+  /* if (action === 'dashboard') {
+    return catalogController.getDashboardCatalog();
+  } */
 
-  return controller.getProducts(req);
+  /* return catalogController.getProducts(req); */
 }

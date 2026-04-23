@@ -108,6 +108,15 @@ const tenantService = {
     } catch (error) {
       return error;
     }
+  },
+
+  async getTenantBySlug(slug: string) {
+    try {
+      const tenant = await tenantRepository.findBySlug(slug);
+      return tenant;
+    } catch (error) {
+      return error;
+    }
   }
 }
 

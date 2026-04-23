@@ -1,19 +1,23 @@
 'use client';
 
-import useBreadcrumbsStore from '../../../store/breadcrumbs.store';
-import useFilterCatalogStore from '../../../store/filterCatalog.store';
+import useBreadcrumbsStore from '@/store/breadcrumbs.store';
+import useFilterCatalogStore from '@/store/filterCatalog.store';
+import NavLeft from '@/components/store/Header/ui/NavLeft';
+import NavRight from '@/components/store/Header/ui/NavRight';
 import Link from 'next/link';
-import NavLeft from './ui/NavLeft';
-import NavRight from './ui/NavRight';
 
-export default function Header() {
+interface Props {
+  businessName?: string;
+  slug?: string;
+}
+
+export default function Header({ businessName, slug }: Props) {
   const { breadcrumbs, setBreadcrumbsRoute } = useBreadcrumbsStore();
   const { setGender } = useFilterCatalogStore();
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background font-sans">
       <div className="container mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
-
         <NavLeft
           breadcrumbs={breadcrumbs}
           setBreadcrumbsRoute={setBreadcrumbsRoute}
@@ -21,14 +25,16 @@ export default function Header() {
         />
 
         <div className="absolute left-1/2 -translate-x-1/2 text-center">
-          <Link href="/" aria-label="Inicio, Moda y Estilo" className="text-sm md:text-base font-semibold tracking-widest text-primary whitespace-nowrap">
-            <span className="hidden sm:inline">MODA Y ESTILO</span>
-            <span className="sm:hidden">M & E</span>
+          <Link href={`/${slug}`}>
+            <h1 className="text-sm md:text-base font-semibold tracking-widest text-primary whitespace-nowrap uppercase ">
+              {businessName}
+            </h1>
           </Link>
         </div>
 
         <NavRight
           setBreadcrumbsRoute={setBreadcrumbsRoute}
+          slug={slug}
         />
       </div>
     </header>

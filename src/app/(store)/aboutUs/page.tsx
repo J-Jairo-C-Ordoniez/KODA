@@ -1,6 +1,6 @@
-import Header from '../../../components/structure/header/Header';
-import Footer from '../../../components/structure/footer/Footer';
-import AboutMain from '../../../components/structure/about/AboutMain';
+import Header from '../../../components/store/Header/Header';
+import Footer from '../../../components/store/Footer/Footer';
+import AboutMain from '../../../components/store/others/about/AboutMain';
 
 export default function AboutPage() {
   return (

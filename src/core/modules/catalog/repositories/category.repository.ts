@@ -1,7 +1,7 @@
 import prisma from '@/infrastructure/db/client';
 
 export class CategoryRepository {
-  async getAll() {
+    async getAll() {
     return await prisma.category.findMany({
       orderBy: { createdAt: 'desc' },
       include: {

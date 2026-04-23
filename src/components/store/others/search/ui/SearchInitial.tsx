@@ -1,4 +1,4 @@
-import { ProductCard } from "../../main/ui/ProductCard";
+import { ProductCard } from "../../../Main/ui/ProductCard";
 
 export default function SearchInitial({ popular, setQuery }) {
 

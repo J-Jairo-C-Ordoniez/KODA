@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import useBreadcrumbsStore from "../../../store/breadcrumbs.store";
-import Breadcrumbs from '../main/ui/Breadcrumbs';
+import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
+import Breadcrumbs from '../../Main/ui/Breadcrumbs';
 import { useForgotPassword } from '@/hooks/useForgotPassword';
 
 export default function ForgotPasswordMain() {

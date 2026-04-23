@@ -1,6 +1,6 @@
-import Header from '../../../components/structure/header/Header';
-import SearchMain from '../../../components/structure/search/SearchMain';
-import Footer from '../../../components/structure/footer/Footer';
+import Header from '../../../components/store/Header/Header';
+import SearchMain from '../../../components/store/others/search/SearchMain';
+import Footer from '../../../components/store/Footer/Footer';
 
 export default function SearchPage() {
   return (

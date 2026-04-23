@@ -2,14 +2,14 @@
 
 import { useEffect } from "react";
 import useBreadcrumbsStore from "../../../store/breadcrumbs.store";
-import Breadcrumbs from "../main/ui/Breadcrumbs";
+import Breadcrumbs from "../Main/ui/Breadcrumbs";
 import ProductInfo from "./ui/ProductInfo";
 import ProductImg from "./ui/ProductImg";
 import { useProductDetail } from "@/hooks/useProductDetail";
 
 export default function ProductDetail({ variantId }) {
   const { breadcrumbs, setBreadcrumbsRoute, setBreadcrumbsProduct } = useBreadcrumbsStore();
-  
+
   const {
     data,
     contact,

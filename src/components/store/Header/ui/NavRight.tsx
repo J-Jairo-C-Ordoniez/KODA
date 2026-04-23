@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { Search, User } from 'lucide-react';
 
-export default function NavRight({ setBreadcrumbsRoute }) {
+export default function NavRight({ setBreadcrumbsRoute, slug }) {
     return (
         <div className="flex items-center gap-4">
             <Link
-                href="/search"
+                href={`/${slug}/search`}
                 aria-label="Search"
                 onClick={() => setBreadcrumbsRoute("búscar")}
                 className="text-secondary/90 hover:text-primary transition-colors cursor-pointer"
@@ -14,7 +14,7 @@ export default function NavRight({ setBreadcrumbsRoute }) {
             </Link>
 
             <Link
-                href="/login"
+                href={`/login`}
                 onClick={() => setBreadcrumbsRoute("iniciar sesión")}
                 aria-label="User Account"
                 className="text-secondary/90 hover:text-primary transition-colors"

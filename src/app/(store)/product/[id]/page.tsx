@@ -1,6 +1,6 @@
-import Header from '../../../../components/structure/header/Header';
-import Footer from '../../../../components/structure/footer/Footer';
-import ProductDetail from '../../../../components/structure/product/ProductDetail';
+import Header from '../../../../components/store/Header/Header';
+import Footer from '../../../../components/store/Footer/Footer';
+import ProductDetail from '../../../../components/store/product/ProductDetail';
 
 export default async function ProductDetailPage({ params }) {
   const { id } = await params;

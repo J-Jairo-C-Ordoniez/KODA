@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { FilterDropdown } from './FilterDropdown';
 import useFilterCatalogStore from '../../../../store/filterCatalog.store';
 
-export default function FilterBar() {
+export default function FilterBar({ tenantId }: { tenantId?: string }) {
   const { setColor, setCategory } = useFilterCatalogStore();
   const [colorOptions, setColorOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
@@ -12,7 +12,7 @@ export default function FilterBar() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/catalog?action=categories');
+        const res = await fetch(`/api/catalog?action=categories&tenantId=${tenantId}`);
         const json = await res.json();
         if (json.success) {
           setCategoryOptions(json.data.map(cat => ({ ...cat, checked: false })));
@@ -28,7 +28,7 @@ export default function FilterBar() {
   useEffect(() => {
     const fetchColors = async () => {
       try {
-        const res = await fetch('/api/catalog?action=colors');
+        const res = await fetch(`/api/catalog?action=colors&tenantId=${tenantId}`);
         const json = await res.json();
         if (json.success) {
           setColorOptions(json.data.map(color => ({ ...color, checked: false })));
@@ -48,9 +48,6 @@ export default function FilterBar() {
   useEffect(() => {
     setCategory(categoryOptions.filter(opt => opt.checked));
   }, [categoryOptions]);
-
-  console.log(colorOptions);
-  console.log(categoryOptions);
 
   return (
     <section className="w-full py-2">

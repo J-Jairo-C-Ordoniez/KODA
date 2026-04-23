@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductCard } from "../../main/ui/ProductCard";
+import { ProductCard } from "../../../Main/ui/ProductCard";
 
 export default function SearchResults({ query, products }) {
   return (

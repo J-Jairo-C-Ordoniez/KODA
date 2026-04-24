@@ -27,7 +27,7 @@ export default function Integrations() {
           {categories.map((cat) => (
             <div
               key={cat.name}
-              className="flex flex-col items-center justify-center p-8 rounded-[32px] bg-background border border-foreground/5 hover:border-navy/20 hover:shadow-[0_20px_50px_rgba(0,0,128,0.05)] transition-all duration-500 group"
+              className="flex flex-col items-center justify-center p-8 rounded-3xl bg-background border border-foreground/5 hover:border-navy/20 hover:shadow-2xl hover:shadow-navy/10 transition-all duration-500 group"
             >
               <div className={`w-14 h-14 ${cat.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500`}>
                 {cat.icon}
@@ -37,8 +37,8 @@ export default function Integrations() {
           ))}
         </article>
 
-        <article className="mt-24 p-12 rounded-[40px] bg-primary text-background flex flex-col lg:flex-row items-center justify-between gap-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-navy/20 rounded-full blur-[100px] -mr-48 -mt-48" />
+        <article className="mt-24 p-12 rounded-3xl bg-primary text-background flex flex-col lg:flex-row items-center justify-between gap-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-navy/20 rounded-full blur-3xl -mr-48 -mt-48" />
 
           <div className="space-y-4 text-center lg:text-left relative z-10 max-w-xl">
             <h3 className="text-3xl font-black tracking-tight leading-tight">¿Tienes un modelo de negocio diferente?</h3>

@@ -19,24 +19,24 @@ export default function Hero() {
         <article className="flex-1 space-y-8 text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background border border-foreground/5 shadow-sm animate-fade-in">
             <Star size={16} className="text-navy fill-navy animate-pulse" />
-            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-primary/80">Software para Tiendas de Ropa</p>
+            <p className="text-xs uppercase font-bold tracking-widest text-primary/80">Software para Tiendas de Ropa</p>
           </div>
 
           <h1 className="text-5xl lg:text-7xl font-black text-primary leading-[1.05] tracking-tight">
-            Gestiona tu <br />
-            <span className="text-navy">Negocio de Moda</span> <br />
+            Del Cuaderno a la Nube. <br />
+            <span className="text-navy">Controla tu Negocio</span> <br />
             sin Estrés.
           </h1>
 
           <p className="text-lg lg:text-xl text-secondary max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed tracking-tight">
-            La plataforma definitiva para controlar tu inventario, ventas y fiados. Olvida los cuadernos y toma el control total con KODA.
+            La plataforma definitiva para gestionar inventario, ventas y fiados en segundos. Despídete del desorden y toma el control total con KODA.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
             <Button
               href="/register"
               variant="accent"
-              className="group px-10 py-5 text-lg shadow-2xl shadow-navy/20 active:scale-95"
+              className="group px-10 py-5 text-lg shadow-xl shadow-navy/20 active:scale-95"
             >
               Empezar Ahora
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -70,27 +70,27 @@ export default function Hero() {
               alt="mascota de Koda"
               width={600}
               height={600}
-              className="w-full h-auto drop-shadow-[0_20px_50px_rgba(0,0,128,0.15)] mask-b-from-80%"
+              className="w-full h-auto drop-shadow-2xl opacity-90 mask-[linear-gradient(to_bottom,black_80%,transparent)]"
               priority
             />
           </div>
 
-          <div className="absolute top-10 -left-10 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-foreground/5 flex items-center gap-4 z-20">
+          <div className="absolute top-10 -left-10 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-xl shadow-black/5 border border-foreground/5 flex items-center gap-4 z-20">
             <span className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center text-green-600">
               <TrendingUp size={24} />
             </span>
             <div>
-              <p className="text-[10px] uppercase text-secondary font-bold tracking-widest">Venta Registrada</p>
+              <p className="text-xs uppercase text-secondary font-bold tracking-widest">Venta Exitosa</p>
               <p className="text-sm font-black text-primary">$120,000 COP</p>
             </div>
           </div>
 
-          <div className="absolute bottom-20 -right-10 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-foreground/5 flex items-center gap-4 z-20">
+          <div className="absolute bottom-20 -right-10 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-xl shadow-black/5 border border-foreground/5 flex items-center gap-4 z-20">
             <span className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center text-navy">
               <Users size={24} />
             </span>
             <div>
-              <p className="text-[10px] uppercase text-secondary font-bold tracking-widest">Nuevo Cliente</p>
+              <p className="text-xs uppercase text-secondary font-bold tracking-widest">Nuevo Cliente</p>
               <p className="text-sm font-black text-primary">Sofía Martínez</p>
             </div>
           </div>

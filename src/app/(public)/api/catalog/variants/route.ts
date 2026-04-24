@@ -1,11 +1,14 @@
-import { CatalogController } from '@/core/modules/catalog/controllers/catalog.controller';
+import variantController from '@/core/modules/catalog/controllers/variant.controller';
 
-const controller = new CatalogController();
-
-export async function GET(req) {
-  return controller.getAllVariants(req);
+export async function GET(req: Request) {
+  return await variantController.getAllVariants();
 }
 
-export async function POST(req) {
-  return controller.createVariant(req);
+export async function POST(req: Request) {
+  try {
+    const data = await req.json();
+    return await variantController.createVariant(data);
+  } catch (error) {
+    return await variantController.createVariant({});
+  }
 }

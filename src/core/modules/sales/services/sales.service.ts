@@ -1,6 +1,4 @@
-import { SalesRepository } from '../repositories/sales.repository';
-// import { InventoryService } from '@/core/modules/inventory/services/inventory.service';
-// import { VariantService } from '@/core/modules/catalog/services/variant.service';
+import salesRepository from '../repositories/sales.repository';
 import { PaymentMethod } from '@prisma/client';
 
 export interface SaleItemData {
@@ -15,33 +13,33 @@ export interface CreateSaleDTO {
   paymentMethod: PaymentMethod;
 }
 
-export class SalesService {
-  private repository: SalesRepository;
-  // private inventoryService: InventoryService;
-  // private variantService: VariantService;
-
-  constructor() {
-    this.repository = new SalesRepository();
-    // this.inventoryService = new InventoryService();
-    // this.variantService = new VariantService();
-  }
-
+const salesService = {
   async registerSale(tenantId: string, userId: string, saleData: CreateSaleDTO) {
-    // 1. Transactional operation is better handled in the repository down to Prisma
-    // For now we pass all data to repo to handle atomic operations
-    const newSale = await this.repository.createSale(tenantId, userId, saleData);
-
-    // TODO: Incrementar popularidad
-    // await this.variantService.incrementPopularity(saleData.variantId, saleData.amount);
-
-    return newSale;
-  }
+    try {
+      const newSale = await salesRepository.createSale(tenantId, userId, saleData);
+      return newSale;
+    } catch (error: any) {
+      throw new Error(`Error al registrar la venta: ${error.message}`);
+    }
+  },
 
   async getAllSales(tenantId: string) {
     try {
-      return await this.repository.getSalesByTenant(tenantId);
+      return await salesRepository.getSalesByTenant(tenantId);
     } catch (error: any) {
       throw new Error(`Error al obtener ventas: ${error.message}`);
     }
+  },
+
+  async getDashboardMetrics(tenantId?: string) {
+    try {
+      // Stub for dashboard metrics, tenantId might be undefined if global
+      if (!tenantId) return { totalRevenue: 0, totalOrders: 0 };
+      return await salesRepository.getDashboardMetrics(tenantId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener métricas del dashboard: ${error.message}`);
+    }
   }
-}
+};
+
+export default salesService;

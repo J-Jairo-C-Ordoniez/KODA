@@ -1,18 +1,14 @@
-import { PlanRepository } from '../repositories/plan.repository';
+import planRepository from '../repositories/plan.repository';
 
-export class PlanService {
-  private repository: PlanRepository;
-
-  constructor() {
-    this.repository = new PlanRepository();
-  }
-
+const planService = {
   async getPlans() {
     try {
-      const plans = await this.repository.getAllPlans();
+      const plans = await planRepository.getAllPlans();
       return plans;
     } catch (error) {
       throw new Error('No se pudieron obtener los planes de precios');
     }
   }
-}
+};
+
+export default planService;

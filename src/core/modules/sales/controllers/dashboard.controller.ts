@@ -1,41 +1,31 @@
-import { NextResponse } from 'next/server';
-import { SalesService } from '../services/sales.service';
-import { InventoryService } from '@/core/modules/inventory/services/inventory.service';
-import { CatalogService } from '@/core/modules/catalog/services/catalog.service';
+import { apiResponse } from '@/core/utils/apiResponse';
+import salesService from '../services/sales.service';
+import inventoryService from '@/core/modules/inventory/services/inventory.service';
+import catalogService from '@/core/modules/catalog/services/catalog.service';
 
-export class DashboardController {
-  constructor() {
-    this.salesService = new SalesService();
-    this.inventoryService = new InventoryService();
-    this.catalogService = new CatalogService();
-  }
-
-  async getStats() {
+const dashboardController = {
+  async getStats(tenantId?: string) {
     try {
       const [
         salesData,
         inventoryData,
         topProducts
       ] = await Promise.all([
-        this.salesService.getDashboardMetrics(),
-        this.inventoryService.getDashboardData(),
-        this.catalogService.getPopularVariants(5)
+        salesService.getDashboardMetrics(tenantId),
+        inventoryService.getDashboardData(), // May need tenantId filter if applicable
+        catalogService.getPopularVariants(5)
       ]);
 
-      return NextResponse.json({
-        success: true,
-        data: {
-          sales: salesData,
-          inventory: inventoryData,
-          topProducts
-        }
-      }, { status: 200 });
-    } catch (error) {
+      return apiResponse.success({
+        sales: salesData,
+        inventory: inventoryData,
+        topProducts
+      });
+    } catch (error: any) {
       console.error('Error in DashboardController:', error);
-      return NextResponse.json({
-        success: false,
-        error: error.message
-      }, { status: 500 });
+      return apiResponse.error(error.message || 'Error al obtener estadísticas', 500);
     }
   }
-}
+};
+
+export default dashboardController;

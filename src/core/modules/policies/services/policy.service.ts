@@ -1,37 +1,35 @@
-import { PolicyRepository } from '../repositories/policy.repository';
+import policyRepository from '../repositories/policy.repository';
 
-export class PolicyService {
-  constructor() {
-    this.repository = new PolicyRepository();
-  }
-
+const policyService = {
   async getPolicyByTitle(title: string) {
     try {
-      const data = await this.repository.getPolicyByTitle(title);
+      const data = await policyRepository.getPolicyByTitle(title);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en PolicyService: ${error.message}`);
     }
-  }
+  },
 
   async getLatestPolicy() {
     try {
-      const data = await this.repository.getLatestPolicy();
+      const data = await policyRepository.getLatestPolicy();
       if (!data) {
         return null;
       }
       return data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en PolicyService: ${error.message}`);
     }
-  }
+  },
 
-  async updatePolicy(content) {
+  async updatePolicy(content: any) {
     try {
-      const data = await this.repository.updatePolicy(content);
+      const data = await policyRepository.updatePolicy(content);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en PolicyService: ${error.message}`);
     }
   }
-}
+};
+
+export default policyService;

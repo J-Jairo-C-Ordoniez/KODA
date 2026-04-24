@@ -1,11 +1,23 @@
-import { PolicyController } from '@/core/modules/policies/controllers/policy.controller';
+import policyController from '@/core/modules/policies/controllers/policy.controller';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { apiResponse } from '@/core/utils/apiResponse';
 
 export async function GET() {
-  const controller = new PolicyController();
-  return controller.getLatestPolicy();
+  return await policyController.getLatestPolicy();
 }
 
-export async function POST(req) {
-  const controller = new PolicyController();
-  return controller.updatePolicy(req);
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || session.user.role !== 'superAdmin') {
+    return apiResponse.error('No autorizado. Solo superAdmin puede actualizar políticas', 401);
+  }
+
+  try {
+    const data = await req.json();
+    return await policyController.updatePolicy(data);
+  } catch (error) {
+    return apiResponse.error('Error en la solicitud JSON', 400);
+  }
 }

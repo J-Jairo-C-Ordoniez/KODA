@@ -10,9 +10,10 @@ export function useSearch() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const popRes = await fetch("/api/catalog?action=popular&limit=4");
+        // Asumiendo que el controlador de variantes ahora soporta un flag 'popular'
+        const popRes = await fetch("/api/catalog/variants?popular=true&limit=4");
         const popData = await popRes.json();
-        if (popData.success) setPopular(popData.data);
+        if (popData.success) setPopular(popData.data || []);
       } catch (error) {
         console.error("Error fetching popular data:", error);
       }
@@ -31,7 +32,7 @@ export function useSearch() {
       const fetchResults = async () => {
         setIsLoading(true);
         try {
-          const res = await fetch(`/api/catalog?search=${query}`);
+          const res = await fetch(`/api/catalog/products?search=${encodeURIComponent(query)}`);
           const data = await res.json();
           if (data.success) {
             setResults(Array.isArray(data.data) ? data.data : data.data.items || []);

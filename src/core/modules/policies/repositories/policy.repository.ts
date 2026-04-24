@@ -1,6 +1,6 @@
 import prisma from '@/infrastructure/db/client';
 
-export class PolicyRepository {
+const policyRepository = {
   async getPolicyByTitle(title: string) {
     try {
       return await prisma.policy.findFirst({
@@ -11,10 +11,10 @@ export class PolicyRepository {
           }
         }
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en PolicyRepository: ${error.message}`);
     }
-  }
+  },
 
   async getLatestPolicy() {
     try {
@@ -23,12 +23,12 @@ export class PolicyRepository {
           createdAt: 'desc'
         }
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en PolicyRepository: ${error.message}`);
     }
-  }
+  },
 
-  async updatePolicy(content) {
+  async updatePolicy(content: any) {
     try {
       return await prisma.policy.update({
         where: {
@@ -38,8 +38,10 @@ export class PolicyRepository {
           content: content.content
         }
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en PolicyRepository: ${error.message}`);
     }
   }
-}
+};
+
+export default policyRepository;

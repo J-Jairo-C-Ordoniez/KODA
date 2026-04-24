@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 
-export function useProductDetail(variantId, setBreadcrumbsProduct) {
+export function useProductDetail(variantId: string | undefined, setBreadcrumbsProduct?: any) {
   const [data, setData] = useState(null);
-  const [contact, setContact] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
 
   useEffect(() => {
@@ -23,7 +22,7 @@ export function useProductDetail(variantId, setBreadcrumbsProduct) {
           const variant = result.data;
           const product = variant.product;
           
-          if (setBreadcrumbsProduct) {
+          if (setBreadcrumbsProduct && product) {
             setBreadcrumbsProduct(
               product.gender === 'hombre' ? 'hombre' : 'mujer',
               product.name,
@@ -31,13 +30,7 @@ export function useProductDetail(variantId, setBreadcrumbsProduct) {
             );
           }
         } else {
-          setError(result.message || "Producto no encontrado");
-        }
-
-        const contactRes = await fetch("/api/contact");
-        const contactResult = await contactRes.json();
-        if (contactResult.success) {
-          setContact(contactResult.data.contact);
+          setError(result.error || result.message || "Producto no encontrado");
         }
       } catch (err) {
         setError("Error de conexión");
@@ -49,5 +42,5 @@ export function useProductDetail(variantId, setBreadcrumbsProduct) {
     fetchData();
   }, [variantId, setBreadcrumbsProduct]);
 
-  return { data, contact, isLoading, error, selectedVariant, setSelectedVariant };
+  return { data, isLoading, error, selectedVariant, setSelectedVariant };
 }

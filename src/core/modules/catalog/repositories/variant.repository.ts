@@ -1,23 +1,23 @@
 import prisma from '@/infrastructure/db/client';
 
-export class VariantRepository {
+const variantRepository = {
   async getAll() {
     return await prisma.variant.findMany({
       include: { product: true }
     });
-  }
+  },
 
-  async getById(variantId) {
+  async getById(variantId: string) {
     return await prisma.variant.findUnique({
-      where: { variantId: parseInt(variantId) },
+      where: { variantId: variantId },
       include: { product: true }
     });
-  }
+  },
 
-  async create(data) {
+  async create(data: any) {
     return await prisma.variant.create({
       data: {
-        productId: parseInt(data.productId),
+        productId: data.productId, // should be string directly
         name: data.name,
         sku: data.sku,
         color: data.color,
@@ -27,11 +27,11 @@ export class VariantRepository {
         isActive: data.isActive === true || data.isActive === 'true'
       }
     });
-  }
+  },
 
-  async update(variantId, data) {
+  async update(variantId: string, data: any) {
     return await prisma.variant.update({
-      where: { variantId: parseInt(variantId) },
+      where: { variantId: variantId },
       data: {
         name: data.name,
         sku: data.sku,
@@ -42,17 +42,17 @@ export class VariantRepository {
         isActive: data.isActive === true || data.isActive === 'true'
       }
     });
-  }
+  },
 
-  async delete(variantId) {
+  async delete(variantId: string) {
     return await prisma.variant.delete({
-      where: { variantId: parseInt(variantId) }
+      where: { variantId: variantId }
     });
-  }
+  },
 
-  async incrementPopularity(variantId, amount = 1) {
+  async incrementPopularity(variantId: string, amount = 1) {
     return await prisma.variant.update({
-      where: { variantId: parseInt(variantId) },
+      where: { variantId: variantId },
       data: {
         popularity: {
           increment: amount
@@ -60,4 +60,6 @@ export class VariantRepository {
       }
     });
   }
-}
+};
+
+export default variantRepository;

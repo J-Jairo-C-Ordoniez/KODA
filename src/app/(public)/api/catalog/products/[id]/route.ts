@@ -1,18 +1,21 @@
-import { CatalogController } from '@/core/modules/catalog/controllers/catalog.controller';
+import productController from '@/core/modules/catalog/controllers/product.controller';
 
-const controller = new CatalogController();
-
-export async function GET(req, { params }) {
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
-  return controller.getProductById(req, id);
+  return await productController.getProductById(id);
 }
 
-export async function PATCH(req, { params }) {
+export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
-  return controller.updateProduct(req, id);
+  try {
+    const data = await req.json();
+    return await productController.updateProduct(id, data);
+  } catch (error) {
+    return await productController.updateProduct(id, {});
+  }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
-  return controller.deleteProduct(req, id);
+  return await productController.deleteProduct(id);
 }

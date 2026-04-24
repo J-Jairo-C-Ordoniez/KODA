@@ -1,23 +1,16 @@
-import { NextResponse } from 'next/server';
-import { PlanService } from '../services/plan.service';
+import { apiResponse } from '@/core/utils/apiResponse';
+import planService from '../services/plan.service';
 
-export class PlanController {
-  private service: PlanService;
-
-  constructor() {
-    this.service = new PlanService();
-  }
-
+const planController = {
   async getPlans() {
     try {
-      const plans = await this.service.getPlans();
-      return NextResponse.json({ success: true, data: plans });
+      const plans = await planService.getPlans();
+      return apiResponse.success(plans);
     } catch (error: any) {
       console.error('Error in PlanController:', error);
-      return NextResponse.json(
-        { success: false, error: error.message || 'Error interno del servidor' },
-        { status: 500 }
-      );
+      return apiResponse.error(error.message || 'Error interno del servidor', 500);
     }
   }
-}
+};
+
+export default planController;

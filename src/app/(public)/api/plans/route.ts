@@ -1,7 +1,5 @@
-import { PlanController } from '@/core/modules/plans/controllers/plan.controller';
-
-const controller = new PlanController();
+import planController from '@/core/modules/plans/controllers/plan.controller';
 
 export async function GET() {
-  return await controller.getPlans();
+  return await planController.getPlans();
 }

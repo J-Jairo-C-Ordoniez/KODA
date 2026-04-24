@@ -1,11 +1,15 @@
-import { InventoryController } from '@/core/modules/inventory/controllers/inventory.controller';
+import inventoryController from '@/core/modules/inventory/controllers/inventory.controller';
+import { apiResponse } from '@/core/utils/apiResponse';
 
-const controller = new InventoryController();
-
-export async function GET(req) {
-  return controller.getDashboardInventory(req);
+export async function GET() {
+  return await inventoryController.getDashboardInventory();
 }
 
-export async function POST(req) {
-  return controller.updateStock(req);
+export async function POST(req: Request) {
+  try {
+    const data = await req.json();
+    return await inventoryController.updateStock(data);
+  } catch (error) {
+    return apiResponse.error("Error en la solicitud JSON", 400);
+  }
 }

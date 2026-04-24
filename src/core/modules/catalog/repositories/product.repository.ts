@@ -1,32 +1,33 @@
 import prisma from '@/infrastructure/db/client';
 
-export class ProductRepository {
+const productRepository = {
   async getAll() {
     return await prisma.product.findMany({
       orderBy: { createdAt: 'desc' },
       include: { category: true, variants: true }
     });
-  }
+  },
 
-  async getById(productId) {
+  async getById(productId: string) {
     return await prisma.product.findUnique({
       where: { productId: parseInt(productId) },
       include: { category: true, variants: true }
     });
-  }
+  },
 
-  async create(data) {
+  async create(data: any) {
     return await prisma.product.create({
       data: {
         name: data.name,
         description: data.description,
         gender: data.gender,
-        categoryId: parseInt(data.categoryId)
+        categoryId: parseInt(data.categoryId),
+        tenantId: data.tenantId,
       }
     });
-  }
+  },
 
-  async update(productId, data) {
+  async update(productId: string, data: any) {
     return await prisma.product.update({
       where: { productId: parseInt(productId) },
       data: {
@@ -36,11 +37,13 @@ export class ProductRepository {
         categoryId: parseInt(data.categoryId)
       }
     });
-  }
+  },
 
-  async delete(productId) {
+  async delete(productId: string) {
     return await prisma.product.delete({
       where: { productId: parseInt(productId) }
     });
   }
-}
+};
+
+export default productRepository;

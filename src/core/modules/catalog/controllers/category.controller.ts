@@ -1,55 +1,51 @@
-import { NextResponse } from 'next/server';
-import { CategoryService } from '../services/category.service';
+import { apiResponse } from '@/core/utils/apiResponse';
+import categoryService from '../services/category.service';
 
-export class CategoryController {
-  constructor() {
-    this.service = new CategoryService();
-  }
-
+const categoryController = {
   async getAllCategories() {
     try {
-      const categories = await this.service.getAllCategories();
-      return NextResponse.json({ success: true, data: categories }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      const categories = await categoryService.getAllCategories();
+      return apiResponse.success(categories);
+    } catch (error: any) {
+      return apiResponse.error(error.message || "Error al obtener categorías", 500);
     }
-  }
+  },
 
-  async getCategoryById(id) {
+  async getCategoryById(id: string) {
     try {
-      const category = await this.service.getCategoryById(id);
-      return NextResponse.json({ success: true, data: category }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 404 });
+      const category = await categoryService.getCategoryById(id);
+      return apiResponse.success(category);
+    } catch (error: any) {
+      return apiResponse.error(error.message || "Categoría no encontrada", 404);
     }
-  }
+  },
 
-  async createCategory(req) {
+  async createCategory(data: any) {
     try {
-      const body = await req.json();
-      const category = await this.service.createCategory(body);
-      return NextResponse.json({ success: true, data: category }, { status: 201 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+      const category = await categoryService.createCategory(data);
+      return apiResponse.success(category, 201);
+    } catch (error: any) {
+      return apiResponse.error(error.message || "Error al crear categoría", 400);
     }
-  }
+  },
 
-  async updateCategory(req, id) {
+  async updateCategory(id: string, data: any) {
     try {
-      const body = await req.json();
-      const category = await this.service.updateCategory(id, body);
-      return NextResponse.json({ success: true, data: category }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+      const category = await categoryService.updateCategory(id, data);
+      return apiResponse.success(category);
+    } catch (error: any) {
+      return apiResponse.error(error.message || "Error al actualizar categoría", 400);
     }
-  }
+  },
 
-  async deleteCategory(id) {
+  async deleteCategory(id: string) {
     try {
-      await this.service.deleteCategory(id);
-      return NextResponse.json({ success: true }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+      await categoryService.deleteCategory(id);
+      return apiResponse.success({ deleted: true });
+    } catch (error: any) {
+      return apiResponse.error(error.message || "Error al eliminar categoría", 400);
     }
   }
-}
+};
+
+export default categoryController;

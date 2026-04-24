@@ -1,21 +1,21 @@
-import variantController from '@/core/modules/catalog/controllers/variant.controller';
+import categoryController from '@/core/modules/catalog/controllers/category.controller';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
-  return await variantController.getVariantById(id);
+  return await categoryController.getCategoryById(id);
 }
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
   try {
     const data = await req.json();
-    return await variantController.updateVariant(id, data);
+    return await categoryController.updateCategory(id, data);
   } catch (error) {
-    return await variantController.updateVariant(id, {});
+    return await categoryController.updateCategory(id, {});
   }
 }
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
-  return await variantController.deleteVariant(id);
+  return await categoryController.deleteCategory(id);
 }

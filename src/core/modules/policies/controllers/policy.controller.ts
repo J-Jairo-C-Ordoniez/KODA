@@ -1,42 +1,39 @@
-import { NextResponse } from 'next/server';
-import { PolicyService } from '../services/policy.service';
+import { apiResponse } from '@/core/utils/apiResponse';
+import policyService from '../services/policy.service';
 
-export class PolicyController {
-  constructor() {
-    this.service = new PolicyService();
-  }
-
-  async getPolicyByTitle(req, title: string) {
+const policyController = {
+  async getPolicyByTitle(title: string) {
     try {
-      const data = await this.service.getPolicyByTitle(title);
+      const data = await policyService.getPolicyByTitle(title);
       if (!data) {
-        return NextResponse.json({ success: false, message: `No se encontró la política: ${title}` }, { status: 404 });
+        return apiResponse.error(`No se encontró la política: ${title}`, 404);
       }
-      return NextResponse.json({ success: true, data }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      return apiResponse.success(data);
+    } catch (error: any) {
+      return apiResponse.error(error.message || 'Error al obtener política', 500);
     }
-  }
+  },
 
   async getLatestPolicy() {
     try {
-      const data = await this.service.getLatestPolicy();
+      const data = await policyService.getLatestPolicy();
       if (!data) {
-        return NextResponse.json({ success: false, message: 'No se encontraron políticas' }, { status: 404 });
+        return apiResponse.error('No se encontraron políticas', 404);
       }
-      return NextResponse.json({ success: true, data }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      return apiResponse.success(data);
+    } catch (error: any) {
+      return apiResponse.error(error.message || 'Error al obtener la última política', 500);
     }
-  }
+  },
 
-  async updatePolicy(req) {
+  async updatePolicy(data: any) {
     try {
-      const body = await req.json();
-      const data = await this.service.updatePolicy(body);
-      return NextResponse.json({ success: true, data }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      const updated = await policyService.updatePolicy(data);
+      return apiResponse.success(updated);
+    } catch (error: any) {
+      return apiResponse.error(error.message || 'Error al actualizar política', 500);
     }
   }
-}
+};
+
+export default policyController;

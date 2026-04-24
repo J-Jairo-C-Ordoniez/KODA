@@ -1,11 +1,11 @@
 import prisma from '@/infrastructure/db/client';
 
-export class InventoryRepository {
-  async getInventoryByVariantId(variantId) {
+const inventoryRepository = {
+  async getInventoryByVariantId(variantId: string) {
     return await prisma.inventory.findFirst({
-      where: { variantId: parseInt(variantId) },
+      where: { variantId: variantId },
     });
-  }
+  },
 
   async getAllProductsWithInventory() {
     return await prisma.product.findMany({
@@ -24,31 +24,31 @@ export class InventoryRepository {
         name: 'asc'
       }
     });
-  }
+  },
 
-  async createOrUpdateStock(variantId, stock) {
-    const existing = await this.getInventoryByVariantId(variantId);
+  async createOrUpdateStock(variantId: string, stock: number) {
+    const existing = await inventoryRepository.getInventoryByVariantId(variantId);
     if (existing) {
       return await prisma.inventory.update({
         where: { inventoryId: existing.inventoryId },
-        data: { stock: parseInt(stock) }
+        data: { stock: stock }
       });
     } else {
       return await prisma.inventory.create({
         data: {
-          variantId: parseInt(variantId),
-          stock: parseInt(stock)
+          variantId: variantId,
+          stock: stock
         }
       });
     }
-  }
+  },
 
   async getTotalStock() {
     const result = await prisma.inventory.aggregate({
       _sum: { stock: true }
     });
     return result._sum.stock || 0;
-  }
+  },
 
   async getLowStockItems(limit = 10) {
     return await prisma.inventory.findMany({
@@ -64,4 +64,6 @@ export class InventoryRepository {
       orderBy: { stock: 'asc' }
     });
   }
-}
+};
+
+export default inventoryRepository;

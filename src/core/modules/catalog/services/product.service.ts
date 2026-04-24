@@ -1,55 +1,53 @@
-import { ProductRepository } from '../repositories/product.repository';
+import productRepository from '../repositories/product.repository';
 
-export class ProductService {
-  constructor() {
-    this.repository = new ProductRepository();
-  }
-
+const productService = {
   async getAllProducts() {
     try {
-      return await this.repository.getAll();
-    } catch (error) {
+      return await productRepository.getAll();
+    } catch (error: any) {
       throw new Error(`Error al obtener productos: ${error.message}`);
     }
-  }
+  },
 
-  async getProductById(id) {
+  async getProductById(id: string) {
     try {
-      const product = await this.repository.getById(id);
+      const product = await productRepository.getById(id);
       if (!product) throw new Error('Producto no encontrado');
       return product;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error al obtener el producto: ${error.message}`);
     }
-  }
+  },
 
-  async createProduct(data) {
+  async createProduct(data: any) {
     try {
       if (!data.name || !data.categoryId || !data.gender) {
         throw new Error('Nombre, categoría y género son requeridos');
       }
-      return await this.repository.create(data);
-    } catch (error) {
+      return await productRepository.create(data);
+    } catch (error: any) {
       throw new Error(`Error al crear el producto: ${error.message}`);
     }
-  }
+  },
 
-  async updateProduct(id, data) {
+  async updateProduct(id: string, data: any) {
     try {
       if (!data.name || !data.categoryId || !data.gender) {
         throw new Error('Nombre, categoría y género son requeridos');
       }
-      return await this.repository.update(id, data);
-    } catch (error) {
+      return await productRepository.update(id, data);
+    } catch (error: any) {
       throw new Error(`Error al actualizar el producto: ${error.message}`);
     }
-  }
+  },
 
-  async deleteProduct(id) {
+  async deleteProduct(id: string) {
     try {
-      return await this.repository.delete(id);
-    } catch (error) {
+      return await productRepository.delete(id);
+    } catch (error: any) {
       throw new Error('No se puede eliminar el producto si tiene variantes asociadas o el ID es inválido');
     }
   }
-}
+};
+
+export default productService;

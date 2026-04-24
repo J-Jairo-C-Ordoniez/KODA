@@ -1,52 +1,50 @@
-import { InventoryRepository } from '../repositories/inventory.repository';
+import inventoryRepository from '../repositories/inventory.repository';
 
-export class InventoryService {
-  constructor() {
-    this.repository = new InventoryRepository();
-  }
-
-  async checkStock(variantId) {
-    const inventory = await this.repository.getInventoryByVariantId(variantId);
+const inventoryService = {
+  async checkStock(variantId: string) {
+    const inventory = await inventoryRepository.getInventoryByVariantId(variantId);
     return { variantId, stock: inventory ? inventory.stock : 0 };
-  }
+  },
 
-  async decreaseStock(variantId, amount) {
-    const { stock: currentStock } = await this.checkStock(variantId);
+  async decreaseStock(variantId: string, amount: number) {
+    const { stock: currentStock } = await inventoryService.checkStock(variantId);
     if (currentStock < amount) {
       throw new Error(`Stock insuficiente. Disponible: ${currentStock}`);
     }
     const newStock = currentStock - amount;
-    return await this.updateInventoryStock(variantId, newStock);
-  }
+    return await inventoryService.updateInventoryStock(variantId, newStock);
+  },
 
-  async increaseStock(variantId, amount) {
-    const { stock: currentStock } = await this.checkStock(variantId);
+  async increaseStock(variantId: string, amount: number) {
+    const { stock: currentStock } = await inventoryService.checkStock(variantId);
     const newStock = currentStock + amount;
-    return await this.updateInventoryStock(variantId, newStock);
-  }
+    return await inventoryService.updateInventoryStock(variantId, newStock);
+  },
 
   async getAllInventory() {
     try {
-      return await this.repository.getAllProductsWithInventory();
-    } catch (error) {
+      return await inventoryRepository.getAllProductsWithInventory();
+    } catch (error: any) {
       throw new Error(`Error al obtener el inventario: ${error.message}`);
     }
-  }
+  },
 
-  async updateInventoryStock(variantId, stock) {
+  async updateInventoryStock(variantId: string, stock: number) {
     if (stock < 0) throw new Error('El stock no puede ser negativo');
     try {
-      return await this.repository.createOrUpdateStock(variantId, stock);
-    } catch (error) {
+      return await inventoryRepository.createOrUpdateStock(variantId, stock);
+    } catch (error: any) {
       throw new Error(`Error al actualizar stock: ${error.message}`);
     }
-  }
+  },
 
   async getDashboardData() {
     const [totalStock, lowStockItems] = await Promise.all([
-      this.repository.getTotalStock(),
-      this.repository.getLowStockItems(10)
+      inventoryRepository.getTotalStock(),
+      inventoryRepository.getLowStockItems(10)
     ]);
     return { totalStock, lowStockItems };
   }
-}
+};
+
+export default inventoryService;

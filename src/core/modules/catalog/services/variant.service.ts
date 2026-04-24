@@ -1,64 +1,61 @@
-import { VariantRepository } from '../repositories/variant.repository';
+import variantRepository from '../repositories/variant.repository';
 
-export class VariantService {
-  constructor() {
-    this.repository = new VariantRepository();
-  }
-
+const variantService = {
   async getAllVariants() {
     try {
-      return await this.repository.getAll();
-    } catch (error) {
+      return await variantRepository.getAll();
+    } catch (error: any) {
       throw new Error(`Error al obtener variantes: ${error.message}`);
     }
-  }
+  },
 
-  async getVariantById(id) {
+  async getVariantById(id: string) {
     try {
-      const variant = await this.repository.getById(id);
+      const variant = await variantRepository.getById(id);
       if (!variant) throw new Error('Variante no encontrada');
       return variant;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error al obtener la variante: ${error.message}`);
     }
-  }
+  },
 
-  async createVariant(data) {
+  async createVariant(data: any) {
     try {
       if (!data.productId || !data.name || !data.sku || !data.price) {
         throw new Error('ID de producto, nombre, SKU y precio son requeridos');
       }
-      return await this.repository.create(data);
-    } catch (error) {
+      return await variantRepository.create(data);
+    } catch (error: any) {
       throw new Error(`Error al crear la variante: ${error.message}`);
     }
-  }
+  },
 
-  async updateVariant(id, data) {
+  async updateVariant(id: string, data: any) {
     try {
       if (!data.name || !data.sku || !data.price) {
         throw new Error('Nombre, SKU y precio son requeridos');
       }
-      return await this.repository.update(id, data);
-    } catch (error) {
+      return await variantRepository.update(id, data);
+    } catch (error: any) {
       throw new Error(`Error al actualizar la variante: ${error.message}`);
     }
-  }
+  },
 
-  async deleteVariant(id) {
+  async deleteVariant(id: string) {
     try {
-      return await this.repository.delete(id);
-    } catch (error) {
+      return await variantRepository.delete(id);
+    } catch (error: any) {
       throw new Error('No se puede eliminar la variante si tiene inventario o ventas asociadas');
     }
-  }
+  },
 
-  async incrementPopularity(id, amount) {
+  async incrementPopularity(id: string, amount: number) {
     try {
-      return await this.repository.incrementPopularity(id, amount);
-    } catch (error) {
+      return await variantRepository.incrementPopularity(id, amount);
+    } catch (error: any) {
       console.error(`Error al incrementar popularidad: ${error.message}`);
-      // No lanzamos error para no bloquear la venta si falla la popularidad
     }
   }
-}
+};
+
+export default variantService;

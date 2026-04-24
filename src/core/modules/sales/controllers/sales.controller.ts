@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { SalesService } from '../services/sales.service';
+import { apiResponse } from '@/core/utils/apiResponse';
+import salesService from '../services/sales.service';
 import { z } from 'zod';
 import { PaymentMethod } from '@prisma/client';
 
@@ -13,42 +13,36 @@ const saleSchema = z.object({
   paymentMethod: z.nativeEnum(PaymentMethod),
 });
 
-export class SalesController {
-  private service: SalesService;
-
-  constructor() {
-    this.service = new SalesService();
-  }
-
-  async createSale(req: Request, tenantId: string, userId: string) {
+const salesController = {
+  async createSale(data: any, tenantId: string, userId: string) {
     try {
-      const body = await req.json();
-      const parseResult = saleSchema.safeParse(body);
+      const parseResult = saleSchema.safeParse(data);
 
       if (!parseResult.success) {
-        return NextResponse.json({ success: false, error: 'Datos de venta inválidos', details: parseResult.error.errors }, { status: 400 });
+        return apiResponse.error('Datos de venta inválidos', 400);
       }
 
       const saleData = parseResult.data;
 
-      // Business rule: si es fiado, customerId es obligatorio
       if (saleData.paymentMethod === PaymentMethod.debt && !saleData.customerId) {
-        return NextResponse.json({ success: false, error: 'Un fiado requiere seleccionar un cliente' }, { status: 400 });
+        return apiResponse.error('Un fiado requiere seleccionar un cliente', 400);
       }
 
-      const sale = await this.service.registerSale(tenantId, userId, saleData);
-      return NextResponse.json({ success: true, data: sale }, { status: 201 });
+      const sale = await salesService.registerSale(tenantId, userId, saleData);
+      return apiResponse.success(sale, 201);
     } catch (error: any) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      return apiResponse.error(error.message || 'Error al procesar la venta', 500);
     }
-  }
+  },
 
   async getSales(tenantId: string) {
     try {
-      const sales = await this.service.getAllSales(tenantId);
-      return NextResponse.json({ success: true, data: sales }, { status: 200 });
+      const sales = await salesService.getAllSales(tenantId);
+      return apiResponse.success(sales);
     } catch (error: any) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      return apiResponse.error(error.message || 'Error al obtener ventas', 500);
     }
   }
-}
+};
+
+export default salesController;

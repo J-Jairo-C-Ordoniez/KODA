@@ -1,44 +1,41 @@
-import { NextResponse } from 'next/server';
-import { InventoryService } from '../services/inventory.service';
+import { apiResponse } from '@/core/utils/apiResponse';
+import inventoryService from '../services/inventory.service';
 
-export class InventoryController {
-  constructor() {
-    this.service = new InventoryService();
-  }
-
-  async getStock(req) {
+const inventoryController = {
+  async getStock(variantId: string) {
     try {
-      const { searchParams } = new URL(req.url);
-      const variantId = searchParams.get('variantId');
-
       if (!variantId) {
-        return NextResponse.json({ success: false, error: 'Falta variantId' }, { status: 400 });
+        return apiResponse.error('Falta variantId', 400);
       }
 
-      const stockData = await this.service.checkStock(variantId);
-      return NextResponse.json({ success: true, data: stockData }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      const stockData = await inventoryService.checkStock(variantId);
+      return apiResponse.success(stockData);
+    } catch (error: any) {
+      return apiResponse.error(error.message || 'Error al obtener stock', 500);
     }
-  }
+  },
 
-  async getDashboardInventory(req) {
+  async getDashboardInventory() {
     try {
-      const inventory = await this.service.getAllInventory();
-      return NextResponse.json({ success: true, data: inventory }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      const inventory = await inventoryService.getAllInventory();
+      return apiResponse.success(inventory);
+    } catch (error: any) {
+      return apiResponse.error(error.message || 'Error al obtener inventario', 500);
     }
-  }
+  },
 
-  async updateStock(req) {
+  async updateStock(data: any) {
     try {
-      const data = await req.json();
       const { variantId, stock } = data;
-      const updated = await this.service.updateInventoryStock(variantId, stock);
-      return NextResponse.json({ success: true, data: updated }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+      if (!variantId || stock === undefined) {
+        return apiResponse.error('Faltan datos requeridos (variantId, stock)', 400);
+      }
+      const updated = await inventoryService.updateInventoryStock(variantId, stock);
+      return apiResponse.success(updated);
+    } catch (error: any) {
+      return apiResponse.error(error.message || 'Error al actualizar stock', 500);
     }
   }
-}
+};
+
+export default inventoryController;

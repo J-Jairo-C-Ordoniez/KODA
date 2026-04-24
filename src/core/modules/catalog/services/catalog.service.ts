@@ -19,6 +19,15 @@ const catalogService = {
     }
   },
 
+  async getProducts(tenantId: string, filters: any) {
+    try {
+      const products = await catalogRepository.getPublicCatalog(tenantId, filters);
+      return products;
+    } catch (error) {
+      return error;
+    }
+  },
+
   async getProductById(id) {
     /* try {
       const product = await CatalogRepository.getProductById(id);

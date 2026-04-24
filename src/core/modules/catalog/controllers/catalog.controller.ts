@@ -18,6 +18,15 @@ const catalogController = {
       return error;
     }
   },
+
+  async getProducts(tenantId?: string, filters?: any) {
+    try {
+      const products = await catalogService.getProducts(tenantId, filters);
+      return products;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default catalogController;

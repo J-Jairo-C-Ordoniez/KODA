@@ -14,6 +14,7 @@ export function LandingStore({ tenantId, businessName, slug }: Props) {
             <Header
                 businessName={businessName}
                 slug={slug}
+                tenantId={tenantId}
             />
             <StoreLanding
                 tenantId={tenantId}

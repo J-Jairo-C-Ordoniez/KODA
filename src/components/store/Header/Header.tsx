@@ -9,9 +9,10 @@ import Link from 'next/link';
 interface Props {
   businessName?: string;
   slug?: string;
+  tenantId?: string;
 }
 
-export default function Header({ businessName, slug }: Props) {
+export default function Header({ businessName, slug, tenantId }: Props) {
   const { breadcrumbs, setBreadcrumbsRoute } = useBreadcrumbsStore();
   const { setGender } = useFilterCatalogStore();
 
@@ -22,6 +23,7 @@ export default function Header({ businessName, slug }: Props) {
           breadcrumbs={breadcrumbs}
           setBreadcrumbsRoute={setBreadcrumbsRoute}
           setGender={setGender}
+          tenantId={tenantId}
         />
 
         <div className="absolute left-1/2 -translate-x-1/2 text-center">

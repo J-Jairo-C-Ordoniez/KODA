@@ -1,4 +1,5 @@
 import prisma from '@/infrastructure/db/client';
+import { Prisma } from '@prisma/client';
 
 const catalogRepository = {
   async getCategories(tenantId: string) {
@@ -16,31 +17,32 @@ const catalogRepository = {
   async getColors(tenantId: string) {
     const colors = await prisma.variant.findMany({
       where: { product: { tenantId: tenantId } },
-      select: { color: true },
+      select: {
+        variantId: true,
+        color: true
+      },
       distinct: ['color']
     });
 
     return colors;
   },
 
-  async getAllProducts(filters: { category?: string, gender?: string, search?: string, color?: string, page?: number, limit?: number }) {
+  async getPublicCatalog(tenantId: string, filters: { category?: string, gender?: string, search?: string, color?: string[], page?: number, limit?: number }) {
     const { category, gender, search, color, page = 1, limit = 12 } = filters;
 
-    const whereClause = { isActive: true };
-
-    /* const productFilters = {};
-    if (categoryId) productFilters.categoryId = parseInt(categoryId);
-    if (gender) productFilters.gender = { in: [gender, 'mixto'] };
-
-    if (Object.keys(productFilters).length > 0) {
-      whereClause.product = productFilters;
-    }
-
-    if (color) {
-      const colorsArray = color.split(',').map(c => c.trim()).filter(Boolean);
-      if (colorsArray.length > 0) {
-        whereClause.color = { in: colorsArray };
+    const whereClause: Prisma.VariantWhereInput = {
+      isActive: true,
+      product: {
+        is: {
+          tenantId: tenantId,
+          ...(category && typeof category === 'string' && category.length > 0 && { categoryId: category }),
+          ...(gender && { gender: { in: [gender, 'mixto'] as any } }),
+        }
       }
+    };
+
+    if (color && color.length > 0) {
+      whereClause.color = { in: color };
     }
 
     if (search) {
@@ -56,33 +58,46 @@ const catalogRepository = {
     const [variants, total] = await Promise.all([
       prisma.variant.findMany({
         where: whereClause,
-        include: {
+        orderBy: { popularity: 'desc' },
+        skip,
+        take: limit,
+        select: {
+          variantId: true,
+          name: true,
+          price: true,
+          color: true,
+          inventories: {
+            select: { stock: true }
+          },
           product: {
-            include: {
-              category: true
+            select: {
+              productId: true,
+              name: true,
+              gender: true,
+              category: {
+                select: { name: true }
+              }
             }
           },
-          images: true,
-          inventories: true
-        },
-        orderBy: {
-          popularity: 'desc'
-        },
-        skip,
-        take: limit
+          images: {
+            select: { imageId: true, content: true },
+            take: 2
+          }
+        }
       }),
+
       prisma.variant.count({
         where: whereClause
       })
-    ]); */
+    ]);
 
-    return /* {
+    return {
       items: variants,
       total,
       page,
       limit,
       totalPages: Math.ceil(total / limit)
-    }; */
+    };
   },
 
   async getProductById(productId) {

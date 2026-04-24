@@ -1,6 +1,7 @@
+import Image from 'next/image';
 import Link from "next/link";
 
-export function ProductCard({ product }) {
+export default function ProductCard({ product }: { product: any }) {
   const formatter = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
@@ -11,11 +12,12 @@ export function ProductCard({ product }) {
     product ? (
       <Link href={`/product/${product.variantId}`} className="flex flex-col group cursor-pointer">
         <div className={`aspect-4/6 w-full mb-4 relative overflow-hidden bg-foreground flex items-center justify-center`}>
-          {product.image ? (
-            <img 
-              src={product.image} 
+          {product.images[0].content ? (
+            <Image
+              src={product.images[0].content}
               alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
             />
           ) : (
             <div className={`w-3/4 h-[60%] bg-secondary rounded-md shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out`} />
@@ -38,8 +40,8 @@ export function ProductCard({ product }) {
       </Link>
     ) : (
       <article className="flex flex-col group animate-pulse duration-1000">
-        <div className={`aspect-4/6 w-full mb-4 relative overflow-hidden bg-foreground flex items-center justify-center`}>
-          <div className={`w-3/4 h-[60%] bg-secondary rounded-md shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out`} />
+        <div className={`aspect-4/6 w-full mb-4 relative overflow-hidden bg-gray-200 flex items-center justify-center`}>
+          <div className={`w-3/4 h-[60%] bg-gray-300 rounded-md shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out`} />
         </div>
       </article>
     )

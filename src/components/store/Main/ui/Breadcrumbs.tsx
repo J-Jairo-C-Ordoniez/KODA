@@ -1,4 +1,4 @@
-export default function Breadcrumbs({ breadcrumbs, setBreadcrumbsRoute }) {
+export default function Breadcrumbs({ breadcrumbs, setBreadcrumbsRoute }: { breadcrumbs: any[], setBreadcrumbsRoute: (label: string) => void }) {
     return (
         <div className="w-full flex items-center gap-1 text-xs font-semibold tracking-wider py-2">
             {breadcrumbs.map((breadcrumb, index) => (

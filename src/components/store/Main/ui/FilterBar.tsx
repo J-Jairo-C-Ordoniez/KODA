@@ -13,10 +13,9 @@ export default function FilterBar({ tenantId }: { tenantId?: string }) {
     const fetchCategories = async () => {
       try {
         const res = await fetch(`/api/catalog?action=categories&tenantId=${tenantId}`);
-        const json = await res.json();
-        if (json.success) {
-          setCategoryOptions(json.data.map(cat => ({ ...cat, checked: false })));
-        }
+        const data = await res.json();
+        setCategoryOptions(data.map((cat: any) => ({ ...cat, checked: false })));
+
       } catch (err) {
         setCategoryOptions([]);
       }
@@ -29,10 +28,8 @@ export default function FilterBar({ tenantId }: { tenantId?: string }) {
     const fetchColors = async () => {
       try {
         const res = await fetch(`/api/catalog?action=colors&tenantId=${tenantId}`);
-        const json = await res.json();
-        if (json.success) {
-          setColorOptions(json.data.map(color => ({ ...color, checked: false })));
-        }
+        const data = await res.json();
+        setColorOptions(data.map((color: any) => ({ ...color, checked: false })));
       } catch (err) {
         setColorOptions([]);
       }
@@ -42,11 +39,11 @@ export default function FilterBar({ tenantId }: { tenantId?: string }) {
   }, []);
 
   useEffect(() => {
-    setColor(colorOptions.filter(opt => opt.checked));
+    setColor(colorOptions.filter(opt => opt.checked), tenantId);
   }, [colorOptions]);
 
   useEffect(() => {
-    setCategory(categoryOptions.filter(opt => opt.checked));
+    setCategory(categoryOptions.filter(opt => opt.checked), tenantId);
   }, [categoryOptions]);
 
   return (

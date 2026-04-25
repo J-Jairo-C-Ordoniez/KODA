@@ -42,6 +42,23 @@ const customerRepository = {
       });
     });
   },
+
+  async getCustomersWithDebt(tenantId: string) {
+    const result = await prisma.customer.aggregate({
+      where: {
+        tenantId,
+        totalDebt: {
+          gt: 0
+        }
+      },
+      _count: {
+        tenantId: true,
+      }
+    });
+
+    return { totalCustomersWithDebt: result._count.tenantId || 0 };
+
+  }
 };
 
 export default customerRepository;

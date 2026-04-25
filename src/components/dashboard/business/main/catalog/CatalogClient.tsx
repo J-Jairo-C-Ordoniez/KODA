@@ -8,7 +8,7 @@ import ProductForm from './ui/ProductForm';
 import VariantForm from './ui/VariantForm';
 import Modal from '../categories/ui/Modal';
 import ActionDialog from '../categories/ui/ActionDialog';
-import Header from '../../main/ui/Header';
+import Header from '../ui/Header';
 import { useCatalog } from '@/hooks/useCatalog';
 
 export default function CatalogClient() {

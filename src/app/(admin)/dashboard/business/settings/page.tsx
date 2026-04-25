@@ -1,4 +1,4 @@
-import BusinessSettings from '@/components/dashboard/business/others/settings/Settings';
+import BusinessSettings from '@/components/dashboard/business/Main/settings/Settings';
 
 export const metadata = { title: 'Mi Negocio | KODA' };
 

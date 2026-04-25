@@ -1,7 +1,7 @@
-import Categories from '@/components/dashboard/business/others/categories/Categories';
+import { CategoriesP } from '@/components/dashboard/business/Business';
 
 export const metadata = { title: 'Categorías | KODA' };
 
 export default function CategoriesPage() {
-  return <Categories />;
+  return <CategoriesP />;
 }

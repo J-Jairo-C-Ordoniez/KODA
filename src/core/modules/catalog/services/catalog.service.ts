@@ -40,9 +40,9 @@ const catalogService = {
     }
   },
 
-  async getPopularVariants(limit: number) {
+  async getPopularVariants(tenantId: string, limit: number) {
     try {
-      return await catalogRepository.getPopularVariants(limit);
+      return await catalogRepository.getPopularVariants(tenantId, limit);
     } catch (error: any) {
       throw new Error(`Error en CatalogService al obtener variantes populares: ${error.message}`);
     }

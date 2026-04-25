@@ -1,7 +1,7 @@
-import Catalog from '@/components/dashboard/business/others/catalog/Catalog';
+import { CatalogP } from '@/components/dashboard/business/Business';
 
 export const metadata = { title: 'Catálogo | KODA' };
 
 export default function CatalogPage() {
-  return <Catalog />;
+  return <CatalogP />;
 }

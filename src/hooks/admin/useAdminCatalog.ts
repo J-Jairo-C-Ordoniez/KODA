@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export function useAdminCatalog() {
+export function useAdminCatalog(tenantId: string | undefined) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -9,12 +9,13 @@ export function useAdminCatalog() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchCatalogData = useCallback(async () => {
+    if (!tenantId) return;
     setIsLoading(true);
     setError(null);
     try {
       const [productsRes, categoriesRes] = await Promise.all([
-        fetch('/api/catalog/products'),
-        fetch('/api/catalog/categories')
+        fetch(`/api/${tenantId}/catalog/products`),
+        fetch(`/api/${tenantId}/catalog/categories`)
       ]);
 
       const productsJson = await productsRes.json();
@@ -27,13 +28,16 @@ export function useAdminCatalog() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [tenantId]);
 
   // --- Products ---
   const saveProduct = async (data: any, editingProduct: any = null) => {
+    if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     setIsSaving(true);
     try {
-      const url = editingProduct ? `/api/catalog/products/${editingProduct.productId}` : '/api/catalog/products';
+      const url = editingProduct 
+        ? `/api/${tenantId}/catalog/products/${editingProduct.productId}` 
+        : `/api/${tenantId}/catalog/products`;
       const method = editingProduct ? 'PATCH' : 'POST';
 
       const res = await fetch(url, {
@@ -57,8 +61,9 @@ export function useAdminCatalog() {
   };
 
   const deleteProduct = async (productId: string) => {
+    if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     try {
-      const res = await fetch(`/api/catalog/products/${productId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/${tenantId}/catalog/products/${productId}`, { method: 'DELETE' });
       const json = await res.json();
       if (json.success) {
         await fetchCatalogData();
@@ -73,9 +78,12 @@ export function useAdminCatalog() {
 
   // --- Variants ---
   const saveVariant = async (data: any, editingVariant: any = null, productId: string | null = null) => {
+    if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     setIsSaving(true);
     try {
-      const url = editingVariant ? `/api/catalog/variants/${editingVariant.variantId}` : '/api/catalog/variants';
+      const url = editingVariant 
+        ? `/api/${tenantId}/catalog/variants/${editingVariant.variantId}` 
+        : `/api/${tenantId}/catalog/variants`;
       const method = editingVariant ? 'PATCH' : 'POST';
 
       if (!editingVariant && productId) data.productId = productId;
@@ -101,8 +109,9 @@ export function useAdminCatalog() {
   };
 
   const deleteVariant = async (variantId: string) => {
+    if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     try {
-      const res = await fetch(`/api/catalog/variants/${variantId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/${tenantId}/catalog/variants/${variantId}`, { method: 'DELETE' });
       const json = await res.json();
       if (json.success) {
         await fetchCatalogData();
@@ -116,22 +125,25 @@ export function useAdminCatalog() {
   };
 
   // --- Categories ---
-  const saveCategory = async (name: string, editingCategory: any = null) => {
+  const saveCategory = async (data: { name: string, description?: string, icon?: string }, editingCategory: any = null) => {
+    if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     setIsSaving(true);
     try {
-      const url = editingCategory ? `/api/catalog/categories/${editingCategory.categoryId}` : '/api/catalog/categories';
+      const url = editingCategory 
+        ? `/api/${tenantId}/catalog/categories/${editingCategory.categoryId}` 
+        : `/api/${tenantId}/catalog/categories`;
       const method = editingCategory ? 'PATCH' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
+        body: JSON.stringify(data)
       });
 
       const json = await response.json();
       if (json.success) {
         await fetchCatalogData();
-        return { success: true };
+        return { success: true, data: json.data };
       } else {
         return { success: false, error: json.error || 'Error al guardar la categoría' };
       }
@@ -143,9 +155,10 @@ export function useAdminCatalog() {
   };
 
   const deleteCategory = async (categoryId: string) => {
+    if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     setIsDeleting(true);
     try {
-      const response = await fetch(`/api/catalog/categories/${categoryId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/${tenantId}/catalog/categories/${categoryId}`, { method: 'DELETE' });
       const json = await response.json();
       if (json.success) {
         await fetchCatalogData();

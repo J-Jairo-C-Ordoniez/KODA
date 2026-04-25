@@ -14,7 +14,7 @@ export function useSales(tenantId: string | undefined) {
         try {
             const [salesRes, variantsRes] = await Promise.all([
                 fetch(`/api/${tenantId}/sales`),
-                fetch(`/api/catalog/variants`) // Ajustado para apuntar al catálogo
+                fetch(`/api/${tenantId}/catalog/variants`)
             ]);
             
             const salesJson = await salesRes.json();

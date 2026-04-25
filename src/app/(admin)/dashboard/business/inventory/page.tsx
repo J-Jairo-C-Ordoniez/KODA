@@ -1,4 +1,4 @@
-import Inventory from '@/components/dashboard/business/others/inventory/Inventory';
+import Inventory from '@/components/dashboard/business/Main/inventory/Inventory';
 
 export const metadata = { title: 'Inventario | KODA' };
 

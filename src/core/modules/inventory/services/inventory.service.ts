@@ -38,12 +38,16 @@ const inventoryService = {
     }
   },
 
-  async getDashboardData() {
+  async getDashboardData(tenantId: string) {
     const [totalStock, lowStockItems] = await Promise.all([
-      inventoryRepository.getTotalStock(),
-      inventoryRepository.getLowStockItems(10)
+      inventoryRepository.getTotalStock(tenantId),
+      inventoryRepository.getLowStockItems(tenantId)
     ]);
     return { totalStock, lowStockItems };
+  },
+
+  async getLowStockItems(tenantId: string) {
+    return inventoryRepository.getLowStockItems(tenantId);
   }
 };
 

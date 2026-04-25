@@ -1,7 +1,7 @@
-import Overview from '@/components/dashboard/business/main/Overview';
+import {OverviewP} from '@/components/dashboard/business/Business';
 
 export const metadata = { title: 'Dashboard | KODA' };
 
-export default function BusinessPage() {
-  return <Overview />;
+export default function OverviewPage() {
+  return <OverviewP />;
 }

@@ -1,28 +1,35 @@
 import { apiResponse } from '@/core/utils/apiResponse';
 import salesService from '../services/sales.service';
+import customerService from '@/core/modules/customers/services/customer.service';
 import inventoryService from '@/core/modules/inventory/services/inventory.service';
-import catalogService from '@/core/modules/catalog/services/catalog.service';
 
 const dashboardController = {
   async getStats(tenantId?: string) {
     try {
       const [
-        salesData,
-        inventoryData,
-        topProducts
+        salesDataToday,
+        salesDataMonth,
+        debtCustomers,
+        lowStockItems,
+        salesTrend
       ] = await Promise.all([
-        salesService.getDashboardMetrics(tenantId),
-        inventoryService.getDashboardData(), // May need tenantId filter if applicable
-        catalogService.getPopularVariants(5)
+        salesService.getSalesToday(tenantId),
+        salesService.getSalesMonth(tenantId),
+        customerService.getCustomersWithDebt(tenantId),
+        inventoryService.getLowStockItems(tenantId),
+        salesService.getSalesTrend(tenantId)
       ]);
 
+      console.log('lowStockItems', lowStockItems);
+
       return apiResponse.success({
-        sales: salesData,
-        inventory: inventoryData,
-        topProducts
+        salesToday: salesDataToday,
+        salesMonth: salesDataMonth,
+        debtCustomers: debtCustomers,
+        lowStockItems: lowStockItems,
+        salesTrend: salesTrend
       });
     } catch (error: any) {
-      console.error('Error in DashboardController:', error);
       return apiResponse.error(error.message || 'Error al obtener estadísticas', 500);
     }
   }

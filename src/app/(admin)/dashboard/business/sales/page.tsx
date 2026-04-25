@@ -1,4 +1,4 @@
-import Sales from '@/components/dashboard/business/others/sales/Sales';
+import Sales from '@/components/dashboard/business/Main/sales/Sales';
 
 export const metadata = { title: 'Ventas | KODA' };
 

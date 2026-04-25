@@ -43,26 +43,32 @@ const inventoryRepository = {
     }
   },
 
-  async getTotalStock() {
+  async getTotalStock(tenantId: string) {
     const result = await prisma.inventory.aggregate({
+      where: {
+        variant: {
+          product: { tenantId: tenantId }
+        }
+      },
       _sum: { stock: true }
     });
     return result._sum.stock || 0;
   },
 
-  async getLowStockItems(limit = 10) {
-    return await prisma.inventory.findMany({
-      where: { stock: { lt: 10 } },
-      include: {
+  async getLowStockItems(tenantId: string) {
+    const items = await prisma.inventory.aggregate({
+      where: {
         variant: {
-          include: {
-            product: true
-          }
-        }
+          product: { tenantId: tenantId }
+        },
+        stock: { lt: 2 }
       },
-      take: limit,
-      orderBy: { stock: 'asc' }
+      _count: {
+        inventoryId: true,
+      }
     });
+
+    return { totalLowStockItems: items._count.inventoryId };
   }
 };
 

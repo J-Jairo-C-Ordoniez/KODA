@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Header from '../../main/ui/Header';
+import Header from '../ui/Header';
 import MainSettings from './ui/mainSettings';
 import { useSettings } from '@/hooks/useSettings';
 

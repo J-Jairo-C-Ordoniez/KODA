@@ -116,6 +116,8 @@ model Category {
   categoryId String    @id @unique @default(cuid())
   tenantId   String
   name       String    @db.VarChar(50)
+  description String?   @db.VarChar(255)
+  icon       String?   @db.VarChar(50)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   tenant     Tenant    @relation(fields: [tenantId], references: [tenantId])

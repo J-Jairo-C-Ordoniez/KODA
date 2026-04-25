@@ -1,47 +1,48 @@
 import prisma from '@/infrastructure/db/client';
 
 const productRepository = {
-  async getAll() {
+  async getAll(tenantId: string) {
     return await prisma.product.findMany({
+      where: { tenantId },
       orderBy: { createdAt: 'desc' },
-      include: { category: true, variants: true }
+      include: { category: true, variants: { include: { images: true, inventories: true } } }
     });
   },
 
-  async getById(productId: string) {
-    return await prisma.product.findUnique({
-      where: { productId: parseInt(productId) },
-      include: { category: true, variants: true }
+  async getById(tenantId: string, productId: string) {
+    return await prisma.product.findFirst({
+      where: { productId, tenantId },
+      include: { category: true, variants: { include: { images: true, inventories: true } } }
     });
   },
 
-  async create(data: any) {
+  async create(tenantId: string, data: any) {
     return await prisma.product.create({
       data: {
         name: data.name,
         description: data.description,
         gender: data.gender,
-        categoryId: parseInt(data.categoryId),
-        tenantId: data.tenantId,
+        categoryId: data.categoryId,
+        tenantId,
       }
     });
   },
 
-  async update(productId: string, data: any) {
+  async update(tenantId: string, productId: string, data: any) {
     return await prisma.product.update({
-      where: { productId: parseInt(productId) },
+      where: { productId, tenantId },
       data: {
         name: data.name,
         description: data.description,
         gender: data.gender,
-        categoryId: parseInt(data.categoryId)
+        categoryId: data.categoryId
       }
     });
   },
 
-  async delete(productId: string) {
+  async delete(tenantId: string, productId: string) {
     return await prisma.product.delete({
-      where: { productId: parseInt(productId) }
+      where: { productId, tenantId }
     });
   }
 };

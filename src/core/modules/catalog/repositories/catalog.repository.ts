@@ -115,8 +115,8 @@ const catalogRepository = {
     }); */
   },
 
-  async getPopularVariants(limit = 10) {
-    return/*  await prisma.variant.findMany({
+  async getPopularVariants(tenantId: string, limit = 10) {
+    return await prisma.variant.findMany({
       where: { isActive: true },
       include: {
         product: {
@@ -131,7 +131,7 @@ const catalogRepository = {
         popularity: 'desc'
       },
       take: limit
-    }); */
+    });
   },
 
   async getVariantById(variantId) {

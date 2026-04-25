@@ -31,13 +31,30 @@ const salesService = {
     }
   },
 
-  async getDashboardMetrics(tenantId?: string) {
+  async getSalesToday(tenantId?: string) {
     try {
-      // Stub for dashboard metrics, tenantId might be undefined if global
       if (!tenantId) return { totalRevenue: 0, totalOrders: 0 };
-      return await salesRepository.getDashboardMetrics(tenantId);
+      return await salesRepository.getSalesToday(tenantId);
     } catch (error: any) {
       throw new Error(`Error al obtener métricas del dashboard: ${error.message}`);
+    }
+  },
+
+  async getSalesMonth(tenantId?: string) {
+    try {
+      if (!tenantId) return { totalRevenue: 0, totalOrders: 0 };
+      return await salesRepository.getSalesMonth(tenantId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener métricas del dashboard: ${error.message}`);
+    }
+  },
+
+  async getSalesTrend(tenantId?: string) {
+    try {
+      if (!tenantId) return [];
+      return await salesRepository.getSalesTrend(tenantId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener tendencia de ventas: ${error.message}`);
     }
   }
 };

@@ -1,4 +1,4 @@
-import Customers from '@/components/dashboard/business/others/customers/Customers';
+import Customers from '@/components/dashboard/business/Main/customers/Customers';
 
 export const metadata = { title: 'Clientes y Fiados | KODA' };
 

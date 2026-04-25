@@ -1,18 +1,7 @@
-import Header from '@/components/dashboard/bussines/header/Header';
-import Sidebar from '@/components/dashboard/bussines/sidebar/Sidebar';
-import CatalogClient from '@/components/dashboard/bussines/catalog/CatalogClient';
+import Catalog from '@/components/dashboard/business/others/catalog/Catalog';
 
-export const dynamic = 'force-dynamic';
+export const metadata = { title: 'Catálogo | KODA' };
 
 export default function CatalogPage() {
-  return (
-    <div className='flex flex-col h-screen overflow-hidden w-screen'>
-      <Header />
-      <div className='flex flex-1 overflow-hidden'>
-        <Sidebar />
-        <CatalogClient />
-      </div>
-    </div>
-  );
+  return <Catalog />;
 }
-

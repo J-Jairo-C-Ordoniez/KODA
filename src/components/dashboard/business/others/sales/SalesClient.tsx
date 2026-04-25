@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Header from '../main/ui/Header';
+import Header from '../../main/ui/Header';
 import Modal from '../categories/ui/Modal';
 import SalesHeader from './ui/SalesHeader';
 import SalesTable from './ui/SalesTable';

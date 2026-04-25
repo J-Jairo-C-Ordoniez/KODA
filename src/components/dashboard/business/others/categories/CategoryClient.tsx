@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Header from '../main/ui/Header';
+import Header from '../../main/ui/Header';
 import HeaderCategory from './ui/HeaderCategory';
 import MainCategory from './ui/MainCategory';
 import Modal from './ui/Modal';

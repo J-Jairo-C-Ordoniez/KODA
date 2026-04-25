@@ -7,7 +7,7 @@ type Stat = {
 
 export default function Metrics({ stat }: { stat: Stat }) {
     return (
-        <article className="bg-background border border-foreground/5 p-6 rounded-[32px] shadow-sm flex items-center gap-6">
+        <article className="bg-background border border-foreground/5 p-6 rounded-3xl shadow-sm flex items-center gap-6">
             <div className={`p-4 rounded-2xl ${stat.color ? `${stat.color}` : 'bg-navy/5 text-navy'}`}>
                 <stat.icon size={24} />
             </div>

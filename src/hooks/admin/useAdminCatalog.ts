@@ -14,8 +14,8 @@ export function useAdminCatalog(tenantId: string | undefined) {
     setError(null);
     try {
       const [productsRes, categoriesRes] = await Promise.all([
-        fetch(`/api/${tenantId}/catalog/products`),
-        fetch(`/api/${tenantId}/catalog/categories`)
+        fetch(`/api/${tenantId}/catalog/products`, { cache: 'no-store' }),
+        fetch(`/api/${tenantId}/catalog/categories`, { cache: 'no-store' })
       ]);
 
       const productsJson = await productsRes.json();
@@ -43,7 +43,8 @@ export function useAdminCatalog(tenantId: string | undefined) {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        cache: 'no-store'
       });
       const json = await res.json();
 
@@ -63,7 +64,10 @@ export function useAdminCatalog(tenantId: string | undefined) {
   const deleteProduct = async (productId: string) => {
     if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     try {
-      const res = await fetch(`/api/${tenantId}/catalog/products/${productId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/${tenantId}/catalog/products/${productId}`, { 
+        method: 'DELETE',
+        cache: 'no-store'
+      });
       const json = await res.json();
       if (json.success) {
         await fetchCatalogData();
@@ -91,13 +95,14 @@ export function useAdminCatalog(tenantId: string | undefined) {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        cache: 'no-store'
       });
       const json = await res.json();
 
       if (json.success) {
         await fetchCatalogData();
-        return { success: true };
+        return { success: true, data: json.data };
       } else {
         return { success: false, error: json.error || 'Error al guardar la variante' };
       }
@@ -108,10 +113,33 @@ export function useAdminCatalog(tenantId: string | undefined) {
     }
   };
 
+  const updateVariantStock = async (variantId: string, stock: number) => {
+    if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
+    try {
+      const res = await fetch(`/api/${tenantId}/catalog/variants/${variantId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stock }),
+        cache: 'no-store'
+      });
+      const json = await res.json();
+      if (json.success) {
+        await fetchCatalogData();
+        return { success: true };
+      }
+      return { success: false, error: json.error || 'Error al actualizar stock' };
+    } catch (err) {
+      return { success: false, error: 'Error de conexión' };
+    }
+  };
+
   const deleteVariant = async (variantId: string) => {
     if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     try {
-      const res = await fetch(`/api/${tenantId}/catalog/variants/${variantId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/${tenantId}/catalog/variants/${variantId}`, { 
+        method: 'DELETE',
+        cache: 'no-store'
+      });
       const json = await res.json();
       if (json.success) {
         await fetchCatalogData();
@@ -184,6 +212,7 @@ export function useAdminCatalog(tenantId: string | undefined) {
     saveProduct,
     deleteProduct,
     saveVariant,
+    updateVariantStock,
     deleteVariant,
     saveCategory,
     deleteCategory

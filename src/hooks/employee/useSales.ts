@@ -52,7 +52,7 @@ export function useSales(tenantId: string | undefined) {
 
             if (json.success) {
                 await fetchSalesData();
-                return { success: true };
+                return { success: true, data: json.data };
             } else {
                 return { success: false, error: json.error || 'No se pudo registrar la venta' };
             }

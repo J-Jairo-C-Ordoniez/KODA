@@ -14,7 +14,23 @@ const settingsService = {
   },
 
   async updateTenant(tenantId: string, data: any) {
-    return settingsRepository.updateTenantInfo(tenantId, data);
+    const { socialLinks, ...tenantData } = data;
+    
+    // Solo permitimos campos válidos del Tenant para evitar errores de Prisma
+    const cleanTenantData = {
+      businessName: tenantData.businessName,
+      description: tenantData.description,
+      whatsApp: tenantData.whatsApp,
+      type: tenantData.type,
+      slug: tenantData.slug
+    };
+
+    const [updatedTenant] = await Promise.all([
+      settingsRepository.updateTenantInfo(tenantId, cleanTenantData),
+      socialLinks ? settingsRepository.upsertAboutUs(tenantId, { socialLinks }) : Promise.resolve(null)
+    ]);
+    
+    return updatedTenant;
   },
 
   async uploadLogo(tenantId: string, file: File) {

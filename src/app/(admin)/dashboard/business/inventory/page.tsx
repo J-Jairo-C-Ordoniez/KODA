@@ -1,7 +1,7 @@
-import Inventory from '@/components/dashboard/business/Main/inventory/Inventory';
+import { InventoryP } from '@/components/dashboard/business/Business';
 
 export const metadata = { title: 'Inventario | KODA' };
 
 export default function InventoryPage() {
-  return <Inventory />;
+  return <InventoryP />;
 }

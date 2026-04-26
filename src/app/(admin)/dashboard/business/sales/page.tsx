@@ -1,7 +1,7 @@
-import Sales from '@/components/dashboard/business/Main/sales/Sales';
+import { SalesP } from '@/components/dashboard/business/Business';
 
 export const metadata = { title: 'Ventas | KODA' };
 
 export default function SalesPage() {
-  return <Sales />;
+  return <SalesP />;
 }

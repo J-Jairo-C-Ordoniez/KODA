@@ -23,6 +23,7 @@ const productRepository = {
         description: data.description,
         gender: data.gender,
         categoryId: data.categoryId,
+        isPublic: data.isPublic ?? true,
         tenantId,
       }
     });
@@ -35,7 +36,8 @@ const productRepository = {
         name: data.name,
         description: data.description,
         gender: data.gender,
-        categoryId: data.categoryId
+        categoryId: data.categoryId,
+        isPublic: data.isPublic
       }
     });
   },

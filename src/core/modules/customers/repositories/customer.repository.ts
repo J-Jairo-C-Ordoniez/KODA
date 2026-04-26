@@ -5,8 +5,8 @@ const customerRepository = {
     return prisma.customer.findMany({
       where: { tenantId },
       include: {
-        sales: { orderBy: { createdAt: 'desc' }, take: 3 },
-        payments: { orderBy: { createdAt: 'desc' }, take: 3 },
+        sales: { orderBy: { createdAt: 'desc' }, take: 10 },
+        payments: { orderBy: { createdAt: 'desc' }, take: 20 },
       },
       orderBy: { totalDebt: 'desc' },
     });

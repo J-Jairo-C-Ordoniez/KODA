@@ -1,9 +1,14 @@
 import prisma from '@/infrastructure/db/client';
 
 const variantRepository = {
-  async getAll() {
+  async getAll(tenantId?: string) {
     return await prisma.variant.findMany({
-      include: { product: true }
+      where: tenantId ? { product: { tenantId } } : {},
+      include: { 
+        product: true,
+        images: true,
+        inventories: true
+      }
     });
   },
 
@@ -39,7 +44,6 @@ const variantRepository = {
         });
       }
 
-      // Initialize inventory
       await tx.inventory.create({
         data: {
           variantId: variant.variantId,

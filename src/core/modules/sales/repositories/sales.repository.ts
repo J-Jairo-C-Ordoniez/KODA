@@ -45,6 +45,8 @@ const salesRepository = {
       }
 
       return sale;
+    }, {
+      timeout: 10000 // 10 seconds
     });
   },
 
@@ -52,9 +54,26 @@ const salesRepository = {
     return prisma.sale.findMany({
       where: { tenantId },
       include: {
-        items: true,
+        items: {
+          include: {
+            variant: {
+              include: {
+                product: {
+                  select: { name: true }
+                }
+              }
+            }
+          }
+        },
         user: { select: { name: true } },
         customer: true,
+        tenant: {
+          select: {
+            businessName: true,
+            whatsApp: true,
+            description: true
+          }
+        }
       },
       orderBy: { createdAt: 'desc' },
       take: 50

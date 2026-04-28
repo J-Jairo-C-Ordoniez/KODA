@@ -11,19 +11,19 @@ export default function Integrations() {
   ];
 
   return (
-    <section className="py-32 bg-background border-y border-foreground/5">
+    <section className="py-10 bg-background">
       <Container>
-        <article className="text-center space-y-6 mb-20">
-          <h2 className="text-4xl lg:text-5xl font-black text-primary tracking-tight">
+        <article className="text-center space-y-6 py-10">
+          <h2 className="uppercase w-full text-3xl lg:text-5xl 3xl:text-6xl font-black text-primary leading-tight tracking-tight">
             Diseñado para <br />
             <span className="text-navy">tu Crecimiento.</span>
           </h2>
-          <p className="text-lg text-secondary max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-md lg:text-lg text-primary/80 max-w-xl mx-auto font-medium leading-snug tracking-wider">
             Compatible con negocios que buscan agilidad, control total e imagen profesional.
           </p>
         </article>
 
-        <article className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <article className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 py-6">
           {categories.map((cat) => (
             <div
               key={cat.name}
@@ -37,18 +37,16 @@ export default function Integrations() {
           ))}
         </article>
 
-        <article className="mt-24 p-12 rounded-3xl bg-primary text-background flex flex-col lg:flex-row items-center justify-between gap-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-navy/20 rounded-full blur-3xl -mr-48 -mt-48" />
-
-          <div className="space-y-4 text-center lg:text-left relative z-10 max-w-xl">
-            <h3 className="text-3xl font-black tracking-tight leading-tight">¿Tienes un modelo de negocio diferente?</h3>
-            <p className="text-lg text-background/80 font-medium leading-relaxed">Platicamos sobre cómo Koda puede adaptarse a tus necesidades específicas.</p>
+        <article className="mt-24 p-12 rounded-3xl bg-primary text-background flex flex-col lg:flex-row items-center justify-between gap-12 overflow-hidden">
+          <div className="space-y-4 text-center lg:text-left max-w-xl">
+            <h3 className="uppercase w-full text-2xl lg:text-3xl 3xl:text-4xl font-black text-background leading-tight tracking-tight">¿Tienes un modelo de negocio diferente?</h3>
+            <p className="text-md lg:text-lg text-background/80 max-w-xl mx-auto font-medium leading-snug tracking-wider">Platicamos sobre cómo Koda puede adaptarse a tus necesidades específicas.</p>
           </div>
 
           <Button
             href="https://wa.me/573001234567"
-            variant="accent"
-            className="relative z-10 px-12 py-5 text-lg shadow-2xl shadow-black/20"
+            variant="secondary"
+            className="px-4 font-bold tracking-tight text-background"
           >
             Hablemos por WhatsApp
           </Button>

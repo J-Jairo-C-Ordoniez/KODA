@@ -35,24 +35,18 @@ export default function Features() {
       className="pb-10 pt-24 bg-background"
     >
       <Container>
-        <article className="flex flex-col lg:flex-row items-end justify-between gap-12">
-          <div className="space-y-6 max-w-2xl text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 border border-navy/10 shadow-sm animate-fade-in">
-              <p className="text-xs uppercase font-bold tracking-widest text-navy">Potencia tu Negocio</p>
-            </div>
+        <article className="flex flex-col lg:flex-row lg:items-end items-start justify-between gap-12 py-6">
+          <h2 className="uppercase w-full lg:w-fit text-center lg:text-left text-3xl lg:text-5xl 3xl:text-6xl font-black text-primary leading-tight tracking-tight">
+            Control Total en <br />
+            <span className="text-navy/80">Segundos.</span>
+          </h2>
 
-            <h2 className="uppercase text-3xl lg:text-5xl 3xl:text-6xl font-black text-primary leading-tight tracking-tight">
-              Control Total en <br />
-              <span className="text-navy/80">Segundos.</span>
-            </h2>
-          </div>
-
-          <p className="text-lg lg:text-xl text-secondary max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed tracking-tight pb-2 text-center lg:text-left">
+          <p className="text-md lg:text-lg text-primary/80 max-w-xl mx-auto lg:mx-0 font-medium leading-snug tracking-wider">
             Diseñamos cada función para que sea más rápida que un cuaderno y más potente que cualquier hoja de cálculo.
           </p>
         </article>
 
-        <article className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <article className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 py-6">
           {features.map((f) => (
             <div
               key={f.title}

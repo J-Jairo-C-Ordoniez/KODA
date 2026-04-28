@@ -7,12 +7,12 @@ export default function Hero() {
   return (
     <section
       id="inicio"
-      className="relative py-4 flex justify-center h-[calc(100vh-4rem)] overflow-hidden bg-background bg-grid"
+      className="relative py-4 flex justify-center h-fit lg:h-[calc(100vh-4rem)] overflow-x-hidden lg:overflow-hidden bg-background bg-grid"
     >
       <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,var(--background)_100%)] pointer-events-none" />
 
-      <Container className='flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-24 z-10'>
+      <Container className='py-6 flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-12 z-10'>
         <article className="flex-1 space-y-8 text-center lg:text-left">
           <h1 className="uppercase text-3xl lg:text-5xl 3xl:text-6xl font-black text-primary leading-tight tracking-tight">
             Controla tu Negocio
@@ -54,7 +54,7 @@ export default function Hero() {
         </article>
 
         <article className="flex-1 relative">
-          <figure className="w-full p-20">
+          <figure className="w-full p-0 lg:p-20">
             <Image
               src="/mascot.png"
               alt="mascota de Koda"
@@ -65,7 +65,7 @@ export default function Hero() {
             />
           </figure>
 
-          <div className="absolute top-30 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-xl shadow-black/5 border border-foreground/5 flex items-center gap-4 z-20">
+          <div className="absolute top-0 lg:top-30 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-xl shadow-black/5 border border-foreground/5 flex items-center gap-4 z-20">
             <span className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center text-green-600">
               <TrendingUp size={24} />
             </span>
@@ -75,7 +75,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="absolute bottom-30 right-0 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-xl shadow-black/5 border border-foreground/5 flex items-center gap-4 z-20">
+          <div className="absolute bottom-0 lg:bottom-30 right-0 bg-background/80 backdrop-blur-md p-4 rounded-2xl shadow-xl shadow-black/5 border border-foreground/5 flex items-center gap-4 z-20">
             <span className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center text-navy">
               <Users size={24} />
             </span>

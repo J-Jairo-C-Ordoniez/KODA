@@ -7,7 +7,7 @@ interface PolicyHeroProps {
 
 export default function PolicyHero({ title, subtitle }: PolicyHeroProps) {
     return (
-        <section className="relative pt-40 pb-20 overflow-hidden bg-background bg-grid">
+        <section className="relative py-4 flex justify-center h-fit overflow-hidden bg-background bg-grid">
             <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background pointer-events-none" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,var(--background)_100%)] pointer-events-none" />
 

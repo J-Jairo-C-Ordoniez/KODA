@@ -28,7 +28,7 @@ export default function Header() {
   ];
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-background/80 backdrop-blur-md py-4 border-b border-foreground/5 shadow-sm' : 'bg-transparent py-6'}`}>
+    <header className={`h-16 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-background/80 backdrop-blur-md border-b border-foreground/5 shadow-sm' : 'bg-transparent'}`}>
       <Container className="flex items-center justify-between">
         <Logo type="light" />
 

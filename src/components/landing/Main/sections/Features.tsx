@@ -32,16 +32,16 @@ export default function Features() {
   return (
     <section
       id="features"
-      className="py-32 bg-background border-t border-foreground/5 shadow-inner shadow-black/5"
+      className="pb-10 pt-24 bg-background"
     >
       <Container>
-        <article className="flex flex-col lg:flex-row items-end justify-between gap-12 mb-20">
+        <article className="flex flex-col lg:flex-row items-end justify-between gap-12">
           <div className="space-y-6 max-w-2xl text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 border border-navy/10 shadow-sm animate-fade-in">
               <p className="text-xs uppercase font-bold tracking-widest text-navy">Potencia tu Negocio</p>
             </div>
 
-            <h2 className="text-5xl lg:text-7xl font-black text-primary leading-[1.05] tracking-tight">
+            <h2 className="uppercase text-3xl lg:text-5xl 3xl:text-6xl font-black text-primary leading-tight tracking-tight">
               Control Total en <br />
               <span className="text-navy/80">Segundos.</span>
             </h2>

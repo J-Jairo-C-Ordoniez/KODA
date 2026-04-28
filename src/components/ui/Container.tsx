@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 export default function Container({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`max-w-7xl mx-auto px-6 sm:px-12 ${className}`}>
+    <div className={`w-full mx-auto px-10 sm:px-20 ${className}`}>
       {children}
     </div>
   );

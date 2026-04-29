@@ -7,6 +7,7 @@ import Sales from "@/components/dashboard/business/Main/sales/Sales";
 import Customers from "@/components/dashboard/business/Main/customers/Customers";
 import Inventory from "@/components/dashboard/business/Main/inventory/Inventory";
 import Settings from "@/components/dashboard/business/Main/settings/Settings";
+import Employees from "@/components/dashboard/business/Main/employees/Employees";
 import { FloatingSaleButton } from "./ui/FloatingSaleButton";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -74,6 +75,14 @@ export function SettingsP() {
     return (
         <DashboardLayout>
             <Settings />
+        </DashboardLayout>
+    );
+}
+
+export function EmployeesP() {
+    return (
+        <DashboardLayout>
+            <Employees />
         </DashboardLayout>
     );
 }

@@ -1,0 +1,27 @@
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
+import { apiResponse } from '@/core/utils/apiResponse';
+import employeeController from '@/core/modules/employees/controllers/employee.controller';
+
+export async function GET(req: Request, { params }: { params: Promise<{ tenantId: string }> }) {
+  const session = await getServerSession(authOptions);
+  const { tenantId } = await params;
+
+  if (!session || session.user.tenantId !== tenantId) {
+    return apiResponse.error('No autorizado', 401);
+  }
+
+  return employeeController.getEmployees(tenantId);
+}
+
+export async function POST(req: Request, { params }: { params: Promise<{ tenantId: string }> }) {
+  const session = await getServerSession(authOptions);
+  const { tenantId } = await params;
+
+  if (!session || session.user.tenantId !== tenantId) {
+    return apiResponse.error('No autorizado', 401);
+  }
+
+  const data = await req.json();
+  return employeeController.createEmployee(tenantId, data);
+}

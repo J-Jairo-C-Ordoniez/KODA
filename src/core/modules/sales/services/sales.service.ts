@@ -31,6 +31,14 @@ const salesService = {
     }
   },
 
+  async getSalesByUser(tenantId: string, userId: string) {
+    try {
+      return await salesRepository.getSalesByUser(tenantId, userId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener ventas del empleado: ${error.message}`);
+    }
+  },
+
   async getSalesToday(tenantId?: string) {
     try {
       if (!tenantId) return { totalRevenue: 0, totalOrders: 0 };

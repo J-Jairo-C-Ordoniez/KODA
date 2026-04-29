@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, ChevronRight, Home, Package, Settings, Tag, BarChart3, ShoppingCart, Users, UserCog } from "lucide-react";
+import { LogOut, ChevronRight, ShoppingCart, Users } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
 import { signOut } from "next-auth/react";
 
@@ -14,56 +14,21 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  {
-    label: 'Resumen',
-    href: '/dashboard/business',
-    icon: Home,
-    roles: ["admin", "owner"] },
-  {
-    label: 'Categorías',
-    href: '/dashboard/business/categories',
-    icon: Tag,
-    roles: ["admin", "owner"] 
-  },
-  { 
-    label: 'Catálogo',
-    href: '/dashboard/business/catalog',
-    icon: Package, 
-    roles: ["admin", "owner"] 
-  },
-  { 
-    label: 'Inventario',
-    href: '/dashboard/business/inventory',
-    icon: BarChart3,
-    roles: ["admin", "owner"] 
-  },
   { 
     label: 'Ventas',
-    href: '/dashboard/business/sales',
+    href: '/dashboard/employee/sales',
     icon: ShoppingCart,
-    roles: ["admin", "owner"] 
+    roles: ["employee"] 
   },
   { 
     label: 'Clientes / Fiados',
-    href: '/dashboard/business/customers',
+    href: '/dashboard/employee/customers',
     icon: Users,
-    roles: ["admin", "owner"] 
-  },
-  { 
-    label: 'Empleados',
-    href: '/dashboard/business/employees',
-    icon: UserCog,
-    roles: ["admin", "owner"] 
-  },
-  { 
-    label: 'Mi Negocio',
-    href: '/dashboard/business/settings',
-    icon: Settings,
-    roles: ["admin", "owner"] 
-  },
+    roles: ["employee"] 
+  }
 ];
 
-export default function Sidebar() {
+export default function EmployeeSidebar() {
   const pathname = usePathname();
 
   return (
@@ -87,7 +52,6 @@ export default function Sidebar() {
                   size={20}
                   className={cn(isActive ? "text-navy" : "text-secondary group-hover:text-secondary")}
                 />
-
                 <span className="text-md font-medium tracking-tight">{item.label}</span>
               </div>
               <ChevronRight size={14} className={cn("transition-transform", isActive ? "opacity-100" : "opacity-0 group-hover:opacity-40")} />

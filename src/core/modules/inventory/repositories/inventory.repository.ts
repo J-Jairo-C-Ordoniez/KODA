@@ -7,8 +7,9 @@ const inventoryRepository = {
     });
   },
 
-  async getAllProductsWithInventory() {
+  async getAllProductsWithInventory(tenantId: string) {
     return await prisma.product.findMany({
+      where: { tenantId: tenantId },
       include: {
         category: true,
         variants: {

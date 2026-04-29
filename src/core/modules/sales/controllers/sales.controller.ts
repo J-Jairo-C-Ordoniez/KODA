@@ -42,6 +42,15 @@ const salesController = {
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al obtener ventas', 500);
     }
+  },
+
+  async getSalesByUser(tenantId: string, userId: string) {
+    try {
+      const sales = await salesService.getSalesByUser(tenantId, userId);
+      return apiResponse.success(sales);
+    } catch (error: any) {
+      return apiResponse.error(error.message || 'Error al obtener ventas del empleado', 500);
+    }
   }
 };
 

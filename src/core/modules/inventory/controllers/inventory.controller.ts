@@ -15,9 +15,9 @@ const inventoryController = {
     }
   },
 
-  async getDashboardInventory() {
+  async getDashboardInventory(tenantId: string) {
     try {
-      const inventory = await inventoryService.getAllInventory();
+      const inventory = await inventoryService.getAllInventory(tenantId);
       return apiResponse.success(inventory);
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al obtener inventario', 500);

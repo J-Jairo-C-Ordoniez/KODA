@@ -21,9 +21,9 @@ const inventoryService = {
     return await inventoryService.updateInventoryStock(variantId, newStock);
   },
 
-  async getAllInventory() {
+  async getAllInventory(tenantId: string) {
     try {
-      return await inventoryRepository.getAllProductsWithInventory();
+      return await inventoryRepository.getAllProductsWithInventory(tenantId);
     } catch (error: any) {
       throw new Error(`Error al obtener el inventario: ${error.message}`);
     }

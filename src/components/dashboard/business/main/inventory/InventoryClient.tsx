@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Header from '../ui/Header';
 import InventoryHeader from './ui/InventoryHeader';
 import InventoryTable from './ui/InventoryTable';
-import { useInventory } from '@/hooks/useInventory';
+import { useInventory } from '@/hooks/admin/useInventory';
 
 export default function InventoryClient() {
     const {

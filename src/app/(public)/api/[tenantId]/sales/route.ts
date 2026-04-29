@@ -27,5 +27,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ tenantId
     return apiResponse.error('No autorizado', 401);
   }
 
+  // Employees can only see their own sales
+  if (session.user.role === 'employee') {
+    return await salesController.getSalesByUser(resolvedParams.tenantId, session.user.id);
+  }
+
+  // Admins can optionally filter by a specific userId via query param
+  const url = new URL(req.url);
+  const userId = url.searchParams.get('userId');
+  if (userId) {
+    return await salesController.getSalesByUser(resolvedParams.tenantId, userId);
+  }
+
   return await salesController.getSales(resolvedParams.tenantId);
 }

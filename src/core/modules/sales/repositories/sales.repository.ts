@@ -80,6 +80,30 @@ const salesRepository = {
     });
   },
 
+  async getSalesByUser(tenantId: string, userId: string) {
+    return prisma.sale.findMany({
+      where: { tenantId, userId },
+      include: {
+        items: {
+          include: {
+            variant: {
+              include: {
+                product: { select: { name: true } }
+              }
+            }
+          }
+        },
+        user: { select: { name: true } },
+        customer: true,
+        tenant: {
+          select: { businessName: true, whatsApp: true, description: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 100
+    });
+  },
+
   /* async getSalesToday(tenantId: string) {
     const totalSales = await prisma.sale.aggregate({
       where: { tenantId },

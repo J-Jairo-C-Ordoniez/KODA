@@ -1,4 +1,4 @@
-import LandingPage from "@/components/landing/LandingPage";
+import LandingPage from "@/components/Landing/LandingPage";
 
 export const metadata = {
   title: "KODA",

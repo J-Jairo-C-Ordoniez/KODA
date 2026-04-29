@@ -19,7 +19,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
                     {title}
                 </h1>
                 {subtitle && (
-                    <p className="text-lg text-secondary max-w-2xl mx-auto font-medium">
+                    <p className="text-md lg:text-lg text-primary/80 max-w-4xl mx-auto font-medium leading-snug tracking-wider">
                         {subtitle}
                     </p>
                 )}

@@ -1,4 +1,4 @@
-import { PrivacyP } from "@/components/policies/Policies";
+import { PrivacyP } from "@/components/Policies/Policies";
 
 export const metadata = {
   title: "KODA | Política de Privacidad",

@@ -1,5 +1,5 @@
-import PolicyHero from "@/components/policies/Main/sections/PolicyHero";
-import PolicyContent from "@/components/policies/Main/sections/PolicyContent";
+import PolicyHero from "@/components/Policies/Main/sections/PolicyHero";
+import PolicyContent from "@/components/Policies/Main/sections/PolicyContent";
 
 export default function Cookies() {
     return (

@@ -17,13 +17,13 @@ export default function Main() {
                         <h2 className="text-2xl font-black text-primary tracking-tight">
                             ¿Cómo podemos ayudarte hoy?
                         </h2>
-                        <p className="text-lg text-secondary font-medium leading-relaxed">
+                        <p className="text-md lg:text-lg text-primary/80 font-medium leading-snug tracking-wider">
                             En KODA nos tomamos en serio tu crecimiento. Si tienes problemas con el sistema, dudas sobre tu suscripción o necesitas ayuda configurando tu inventario, nuestro equipo está a un clic de distancia.
                         </p>
                     </article>
 
                     <div className="p-10 rounded-3xl bg-navy/5 border border-navy/10 space-y-6 text-center">
-                        <p className="text-md text-secondary font-bold">
+                        <p className="text-md lg:text-lg text-primary/60 font-medium leading-snug tracking-wider">
                             Para una atención inmediata, escríbenos directamente a nuestra línea oficial de soporte.
                         </p>
                         <Button

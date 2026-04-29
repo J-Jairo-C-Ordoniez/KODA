@@ -1,4 +1,4 @@
-import { TermsP } from "@/components/policies/Policies";
+import { TermsP } from "@/components/Policies/Policies";
 
 export const metadata = {
   title: "KODA | Términos y Condiciones",

@@ -1,8 +1,8 @@
-import Header from "@/components/policies/Header/Header";
-import Footer from "@/components/policies/Footer/Footer";
-import Terms from "@/components/policies/Main/Terms";
-import Privacy from "@/components/policies/Main/Privacy";
-import Cookies from "@/components/policies/Main/Cookies";
+import Header from "@/components/Policies/Header/Header";
+import Footer from "@/components/Policies/Footer/Footer";
+import Terms from "@/components/Policies/Main/Terms";
+import Privacy from "@/components/Policies/Main/Privacy";
+import Cookies from "@/components/Policies/Main/Cookies";
 
 export function TermsP() {
     return (

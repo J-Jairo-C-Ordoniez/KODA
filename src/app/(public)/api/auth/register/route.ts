@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import tenantService from '@/core/modules/tenants/services/tenant.service';
+import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
 
 
 export async function POST(request: Request) {
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await tenantService.registerBusiness(data);
+    const result = await tenantController.registerBusiness(data);
     
     return NextResponse.json({
       success: true,

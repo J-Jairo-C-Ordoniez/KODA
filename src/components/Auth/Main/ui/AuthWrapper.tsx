@@ -9,7 +9,7 @@ interface AuthWrapperProps {
 export default function AuthWrapper({ children, title, subtitle }: AuthWrapperProps) {
   return (
     <main className="grow">
-      <header className="relative pt-40 pb-4 overflow-hidden bg-background bg-grid">
+      <header className="relative pt-24 pb-4 overflow-hidden bg-background bg-grid">
         <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,var(--background)_100%)] pointer-events-none" />
 
@@ -18,7 +18,7 @@ export default function AuthWrapper({ children, title, subtitle }: AuthWrapperPr
             {title}
           </h1>
           {subtitle && (
-            <p className="text-lg text-secondary max-w-2xl mx-auto font-medium">
+            <p className="text-md lg:text-lg text-primary/80 mx-auto font-medium leading-snug tracking-wider">
               {subtitle}
             </p>
           )}
@@ -26,7 +26,7 @@ export default function AuthWrapper({ children, title, subtitle }: AuthWrapperPr
       </header>
 
       <Container className="flex flex-col items-center justify-center grow py-12 w-full max-w-2xl space-y-8">
-        <div className="w-1/2 bg-background/60 backdrop-blur-xl border border-foreground/5 rounded-2xl p-8 md:p-10 shadow-2xl shadow-navy/5">
+        <div className="w-full border border-foreground/5 rounded-2xl p-8 md:p-10 shadow-2xl shadow-navy/5">
           {children}
         </div>
       </Container>

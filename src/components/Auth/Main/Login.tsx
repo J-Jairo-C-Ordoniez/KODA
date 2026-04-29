@@ -123,7 +123,7 @@ export default function Login() {
           </div>
 
           <div className="pt-6 border-t border-foreground/5">
-            <p className="text-center text-sm text-secondary font-medium">
+            <p className="text-md text-primary/80 font-medium leading-snug tracking-wider">
               ¿No tienes cuenta?{" "}
               <Link href="/register" className="font-medium text-navy hover:underline">
                 Regístrate

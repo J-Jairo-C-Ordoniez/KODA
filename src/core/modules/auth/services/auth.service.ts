@@ -2,12 +2,25 @@ import bcrypt from 'bcryptjs';
 import { AuthRepository } from '../repositories/auth.repository';
 import { emailService } from '@/shared/utils/email.service';
 
-export class AuthService {
-  constructor() {
-    this.repository = new AuthRepository();
-  }
+const authService = {
+  async registerUser(email: string, password: string, name: string, role: string) {
+    const user = await this.repository.getUserByEmail(email);
+    if (user) {
+      throw new Error('Ya existe una cuenta asociada a este correo electrónico.');
+    }
 
-  async authenticateUser(email, password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await this.repository.createUser({
+      email,
+      password: hashedPassword,
+      name,
+      role
+    });
+
+    return newUser;
+  },
+  
+  async authenticateUser(email: string, password: string) {
     const user = await this.repository.getUserByEmail(email);
     if (!user) {
       throw new Error('No se encontró ninguna cuenta asociada a este correo electrónico.');
@@ -19,9 +32,9 @@ export class AuthService {
     }
 
     return user;
-  }
+  },
 
-  async requestPasswordReset(email) {
+  async requestPasswordReset(email: string) {
     const user = await this.repository.getUserByEmail(email);
     if (!user) {
       throw new Error('No se encontró ninguna cuenta asociada a este correo electrónico.');
@@ -43,9 +56,9 @@ export class AuthService {
     await emailService.sendPasswordResetCode(email, code);
 
     return { success: true, message: 'Código enviado al correo' };
-  }
+  },
 
-  async verifyResetCode(email, code) {
+  async verifyResetCode(email: string, code: string) {
     const user = await this.repository.getUserByEmail(email);
     if (!user) throw new Error('Usuario no encontrado');
 
@@ -64,7 +77,7 @@ export class AuthService {
     if (!isValid) throw new Error('El código ingresado es incorrecto o ha expirado. Por favor, solicita uno nuevo.');
 
     return { success: true, userId: user.userId };
-  }
+  },
 
   async resetPassword(email, newPassword) {
     const user = await this.repository.getUserByEmail(email);
@@ -78,3 +91,5 @@ export class AuthService {
     return { success: true, message: 'Contraseña actualizada con éxito' };
   }
 }
+
+export default authService;

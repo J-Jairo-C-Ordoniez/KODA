@@ -1,19 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { useRegister } from "@/hooks/auth/useRegister";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import AuthWrapper from "@/components/Auth/Main/ui/AuthWrapper";
 import Steps from "@/components/Auth/Main/ui/Steps";
 import StepOne from "@/components/Auth/Main/ui/StepOne";
 import StepTwo from "@/components/Auth/Main/ui/StepTwo";
+import Error from "@/components/ui/Error";
 
 export default function Register() {
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const { registerUser, isLoading, error } = useRegister();
+    const [alert, setAlert] = useState<any>(null);
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         businessName: "",
@@ -32,56 +31,17 @@ export default function Register() {
     const nextStep = () => {
         if (step === 1) {
             if (!formData.businessName || !formData.whatsapp) {
-                setError("Por favor completa los datos de tu negocio.");
+                setAlert("Por favor completa los datos de tu negocio.");
                 return;
             }
-            setError("");
+            setAlert("");
             setStep(2);
         }
     };
 
-    const prevStep = () => setStep(1);
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.ownerName || !formData.email || !formData.password) {
-            setError("Por favor completa tus datos personales.");
-            return;
-        }
-
-        setLoading(true);
-        setError("");
-
-        try {
-            const response = await fetch("/api/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                setError(data.error || "Ocurrió un error durante el registro");
-            }
-
-            const loginResult = await signIn("credentials", {
-                redirect: false,
-                email: formData.email,
-                password: formData.password,
-            });
-
-            if (loginResult?.error) {
-                setError(loginResult.error);
-            } else {
-                router.push("/dashboard");
-                router.refresh();
-            }
-        } catch (err: any) {
-            setError(err.message || "Ocurrió un error inesperado.");
-        } finally {
-            setLoading(false);
-        }
+        registerUser(formData);
     };
 
     return (
@@ -93,10 +53,8 @@ export default function Register() {
                 <Steps step={step} />
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
-                    {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl">
-                            <p className="text-sm text-red-600 font-medium text-center">{error}</p>
-                        </div>
+                    {error || alert && (
+                        <Error message={error || alert} />
                     )}
 
                     <AnimatePresence mode="wait">
@@ -110,14 +68,14 @@ export default function Register() {
                             <StepTwo
                                 formData={formData}
                                 handleChange={handleChange}
-                                prevStep={prevStep}
-                                loading={loading}
+                                prevStep={() => setStep(1)}
+                                loading={isLoading}
                             />
                         )}
                     </AnimatePresence>
 
                     <div className="pt-6 border-t border-foreground/5">
-                        <p className="text-center text-sm text-secondary font-medium">
+                        <p className="text-md text-primary/80 font-medium leading-snug tracking-wider">
                             ¿Ya tienes cuenta?{" "}
                             <Link href="/login" className="font-medium text-navy hover:underline">
                                 Inicia sesión

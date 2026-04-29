@@ -100,9 +100,9 @@ const catalogRepository = {
     };
   },
 
-  async getProductById(productId) {
-    return /* await prisma.product.findUnique({
-      where: { productId: parseInt(productId) },
+  async getProductById(productId: string) {
+    return await prisma.product.findUnique({
+      where: { productId: productId },
       include: {
         category: true,
         variants: {
@@ -112,7 +112,7 @@ const catalogRepository = {
           }
         }
       }
-    }); */
+    });
   },
 
   async getPopularVariants(tenantId: string, limit = 10) {
@@ -134,9 +134,9 @@ const catalogRepository = {
     });
   },
 
-  async getVariantById(variantId) {
-    return /* await prisma.variant.findUnique({
-      where: { variantId: parseInt(variantId) },
+  async getVariantById(variantId: string) {
+    return await prisma.variant.findUnique({
+      where: { variantId: variantId },
       include: {
         product: {
           include: {
@@ -153,9 +153,8 @@ const catalogRepository = {
         images: true,
         inventories: true
       }
-    }); */
+    });
   }
 }
-
 
 export default catalogRepository;

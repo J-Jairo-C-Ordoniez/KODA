@@ -1,19 +1,17 @@
 import nodemailer from 'nodemailer';
 
-class EmailService {
-  constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: process.env.SMTP_PORT || 587,
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-  }
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587,
+  secure: process.env.SMTP_SECURE === 'true',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+} as any);
 
-  async sendPasswordResetCode(to, code) {
+export const emailService = {
+  async sendPasswordResetCode(to: string, code: string) {
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
       console.warn(`[EMAIL WARNING] SMTP credentials not fully configured in .env. Falling back to console log.`);
       console.log(`[EMAIL DEV MODE] Enviando código de recuperación a: ${to} - Código: ${code}`);
@@ -21,7 +19,7 @@ class EmailService {
     }
 
     try {
-      const info = await this.transporter.sendMail({
+      const info = await transporter.sendMail({
         from: `"Moda y Estilo Equipo" <${process.env.SMTP_USER}>`,
         to: to,
         subject: "Código de Recuperación de Contraseña",
@@ -41,10 +39,8 @@ class EmailService {
       });
 
       return { success: true };
-    } catch (error) {
+    } catch (error: any) {
       throw new Error("No se pudo enviar el correo electrónico.");
     }
   }
-}
-
-export const emailService = new EmailService();
+};

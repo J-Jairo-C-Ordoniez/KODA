@@ -1,35 +1,25 @@
-import { AboutUsRepository } from '../repositories/aboutUs.repository';
+import aboutUsRepository from '../repositories/aboutUs.repository';
 
-export class AboutUsService {
-  constructor() {
-    this.repository = new AboutUsRepository();
-  }
-
+const aboutUsService = {
   async getAboutUs() {
     try {
-      const data = await this.repository.getAboutUs();
+      const data = await aboutUsRepository.getAboutUs();
       if (!data) {
         return null;
       }
       return data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en AboutUsService: ${error.message}`);
     }
-  }
+  },
 
-  async getContact() {
+  async updateAboutUs(data: any) {
     try {
-      return await this.repository.getContact();
-    } catch (error) {
-      throw new Error(`Error en AboutUsService al obtener contacto: ${error.message}`);
-    }
-  }
-
-  async updateAboutUs(data) {
-    try {
-      return await this.repository.updateAboutUs(data);
-    } catch (error) {
+      return await aboutUsRepository.updateAboutUs(data);
+    } catch (error: any) {
       throw new Error(`Error en AboutUsService al actualizar: ${error.message}`);
     }
   }
-}
+};
+
+export default aboutUsService;

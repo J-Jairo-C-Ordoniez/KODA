@@ -1,25 +1,25 @@
 import prisma from '@/infrastructure/db/client';
 
-export class AuthRepository {
-  async getUserByEmail(email) {
+const authRepository = {
+  async getUserByEmail(email: string) {
     return await prisma.user.findUnique({
       where: { email },
     });
-  }
+  },
 
-  async createUser(userData) {
+  async createUser(userData: any) {
     return await prisma.user.create({
       data: userData,
     });
-  }
+  },
 
-  async getUserById(userId) {
+  async getUserById(userId: string) {
     return await prisma.user.findUnique({
-      where: { userId: parseInt(userId) },
+      where: { userId },
     });
-  }
+  },
 
-  async createCode(data) {
+  async createCode(data: any) {
     return await prisma.code.create({
       data: {
         code: data.code,
@@ -28,28 +28,30 @@ export class AuthRepository {
         userId: data.userId
       }
     });
-  }
+  },
 
-  async getLatestCodeByUserId(userId, type) {
+  async getLatestCodeByUserId(userId: string, type: any) {
     return await prisma.code.findFirst({
       where: { 
-        userId: parseInt(userId),
+        userId: userId,
         type: type
       },
       orderBy: { createdAt: 'desc' }
     });
-  }
+  },
 
-  async updateUserPassword(userId, newPassword) {
+  async updateUserPassword(userId: string, newPassword: string) {
     return await prisma.user.update({
-      where: { userId: parseInt(userId) },
+      where: { userId },
       data: { password: newPassword }
     });
-  }
+  },
 
-  async deleteUserCodes(userId) {
+  async deleteUserCodes(userId: string) {
     return await prisma.code.deleteMany({
-      where: { userId: parseInt(userId) }
+      where: { userId }
     });
   }
-}
+};
+
+export default authRepository;

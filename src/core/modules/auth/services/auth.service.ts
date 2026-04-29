@@ -1,16 +1,16 @@
 import bcrypt from 'bcryptjs';
-import { AuthRepository } from '../repositories/auth.repository';
+import authRepository from '../repositories/auth.repository';
 import { emailService } from '@/shared/utils/email.service';
 
 const authService = {
   async registerUser(email: string, password: string, name: string, role: string) {
-    const user = await this.repository.getUserByEmail(email);
+    const user = await authRepository.getUserByEmail(email);
     if (user) {
       throw new Error('Ya existe una cuenta asociada a este correo electrónico.');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await this.repository.createUser({
+    const newUser = await authRepository.createUser({
       email,
       password: hashedPassword,
       name,
@@ -21,7 +21,7 @@ const authService = {
   },
   
   async authenticateUser(email: string, password: string) {
-    const user = await this.repository.getUserByEmail(email);
+    const user = await authRepository.getUserByEmail(email);
     if (!user) {
       throw new Error('No se encontró ninguna cuenta asociada a este correo electrónico.');
     }
@@ -35,7 +35,7 @@ const authService = {
   },
 
   async requestPasswordReset(email: string) {
-    const user = await this.repository.getUserByEmail(email);
+    const user = await authRepository.getUserByEmail(email);
     if (!user) {
       throw new Error('No se encontró ninguna cuenta asociada a este correo electrónico.');
     }
@@ -46,7 +46,7 @@ const authService = {
     const deadLine = new Date();
     deadLine.setHours(deadLine.getHours() + 1);
 
-    await this.repository.createCode({
+    await authRepository.createCode({
       userId: user.userId,
       code: hashedCode,
       type: 'reset',
@@ -59,10 +59,10 @@ const authService = {
   },
 
   async verifyResetCode(email: string, code: string) {
-    const user = await this.repository.getUserByEmail(email);
+    const user = await authRepository.getUserByEmail(email);
     if (!user) throw new Error('Usuario no encontrado');
 
-    const latestCode = await this.repository.getLatestCodeByUserId(user.userId, 'reset');
+    const latestCode = await authRepository.getLatestCodeByUserId(user.userId, 'reset');
 
     if (!latestCode) throw new Error('No se encontró un código de recuperación');
 
@@ -79,14 +79,14 @@ const authService = {
     return { success: true, userId: user.userId };
   },
 
-  async resetPassword(email, newPassword) {
-    const user = await this.repository.getUserByEmail(email);
+  async resetPassword(email: string, newPassword: string) {
+    const user = await authRepository.getUserByEmail(email);
     if (!user) throw new Error('Usuario no encontrado');
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await this.repository.updateUserPassword(user.userId, hashedPassword);
+    await authRepository.updateUserPassword(user.userId, hashedPassword);
 
-    await this.repository.deleteUserCodes(user.userId);
+    await authRepository.deleteUserCodes(user.userId);
 
     return { success: true, message: 'Contraseña actualizada con éxito' };
   }

@@ -1,89 +1,94 @@
 import tenantService from "../services/tenant.service";
+import { apiResponse } from "@/core/utils/apiResponse";
 
 const tenantController = {
     async registerBusiness(data: any) {
         try {
             const tenant = await tenantService.registerBusiness(data);
-            return tenant;
-        } catch (error) {
-            return error;
+            return apiResponse.success(tenant, 201);
+        } catch (error: any) {
+            return apiResponse.error(error.message || "Error al registrar el negocio", 400);
         }
     },
 
     async countAllTenants() {
         try {
             const tenants = await tenantService.countAllTenants();
-            return tenants;
-        } catch (error) {
-            return error;
+            return apiResponse.success(tenants);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async countActiveTenants() {
         try {
             const count = await tenantService.countActiveTenants();
-            return count;
-        } catch (error) {
-            return error;
+            return apiResponse.success(count);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async getMonthlyIncomes() {
         try {
-            return await tenantService.getMonthlyIncomes();
-        } catch (error) {
-            return error;
+            const incomes = await tenantService.getMonthlyIncomes();
+            return apiResponse.success(incomes);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async getOnboardingHealth() {
         try {
-            return await tenantService.getOnboardingHealth();
-        } catch (error) {
-            return error;
+            const health = await tenantService.getOnboardingHealth();
+            return apiResponse.success(health);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async getMonthlyChurnCount() {
         try {
-            return await tenantService.getMonthlyChurnCount();
-        } catch (error) {
-            return error;
+            const churn = await tenantService.getMonthlyChurnCount();
+            return apiResponse.success(churn);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async getChurnRate() {
         try {
-            return await tenantService.getChurnRate();
-        } catch (error) {
-            return error;
+            const rate = await tenantService.getChurnRate();
+            return apiResponse.success(rate);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async getAllTenants() {
         try {
             const tenants = await tenantService.getAllTenants();
-            return tenants;
-        } catch (error) {
-            return error;
+            return apiResponse.success(tenants);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async getTenantsFiltered(search?: string, status?: string) {
         try {
             const tenants = await tenantService.getTenantsFiltered(search, status);
-            return tenants;
-        } catch (error) {
-            return error;
+            return apiResponse.success(tenants);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     },
 
     async getTenantBySlug(slug: string) {
         try {
             const tenant = await tenantService.getTenantBySlug(slug);
-            return tenant;
-        } catch (error) {
-            return error;
+            return apiResponse.success(tenant);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 404);
         }
     }
 }

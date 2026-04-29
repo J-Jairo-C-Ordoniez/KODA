@@ -1,6 +1,6 @@
 import prisma from '@/infrastructure/db/client';
 
-export class AboutUsRepository {
+const aboutUsRepository = {
   async getAboutUs() {
     try {
       return await prisma.aboutUs.findFirst({
@@ -8,35 +8,23 @@ export class AboutUsRepository {
           createdAt: 'desc'
         }
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en AboutUsRepository: ${error.message}`);
     }
-  }
+  },
 
-  async getContact() {
-    try {
-      const data = await prisma.aboutUs.findFirst({
-        select: {
-          contact: true
-        },
-        orderBy: {
-          createdAt: 'desc'
-        }
-      });
-      return data ? data.contact : null;
-    } catch (error) {
-      throw new Error(`Error en AboutUsRepository al obtener contacto: ${error.message}`);
-    }
-  }
 
-  async updateAboutUs(data) {
+
+  async updateAboutUs(data: any) {
     try {
       return await prisma.aboutUs.update({
         where: { aboutId: data.aboutId },
         data: data
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error en AboutUsRepository al actualizar: ${error.message}`);
     }
   }
-}
+};
+
+export default aboutUsRepository;

@@ -12,7 +12,7 @@ export default function Main() {
             />
 
             <section className="pb-32 bg-background">
-                <Container className="max-w-4xl bg-background border border-foreground/5 rounded-3xl p-8 md:p-12 shadow-sm space-y-12">
+                <Container className="max-w-4xl p-8 md:p-12 space-y-12">
                     <article className="space-y-6">
                         <h2 className="text-2xl font-black text-primary tracking-tight">
                             ¿Cómo podemos ayudarte hoy?

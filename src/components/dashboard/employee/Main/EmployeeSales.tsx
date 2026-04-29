@@ -74,7 +74,7 @@ export default function EmployeeSales() {
     acc[s.paymentMethod] = (acc[s.paymentMethod] || 0) + 1;
     return acc;
   }, {});
-  const topMethod = Object.entries(paymentBreakdown).sort((a, b) => b[1] - a[1])[0];
+  const topMethod = Object.entries(paymentBreakdown).sort((a: any, b: any) => b[1] - a[1])[0];
 
   const filteredSales = sales.filter((s: any) =>
     s.customer?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -176,7 +176,7 @@ export default function EmployeeSales() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-foreground/[0.02] border-b border-foreground/5">
+                <tr className="bg-foreground20.02] border-b border-foreground/5">
                   <th className="text-left px-8 py-6 text-[10px] font-black uppercase tracking-widest text-secondary">Fecha / Hora</th>
                   <th className="text-left px-8 py-6 text-[10px] font-black uppercase tracking-widest text-secondary">Cliente</th>
                   <th className="text-left px-8 py-6 text-[10px] font-black uppercase tracking-widest text-secondary">Método</th>
@@ -188,7 +188,7 @@ export default function EmployeeSales() {
                 {filteredSales.map((sale: any) => (
                   <tr
                     key={sale.saleId}
-                    className={`hover:bg-foreground/[0.01] transition-all duration-1000 group ${
+                    className={`hover:bg-foreground/1 transition-all duration-1000 group ${
                       newSaleId === sale.saleId ? 'bg-green-50 ring-2 ring-green-500 ring-inset animate-pulse' : ''
                     }`}
                   >

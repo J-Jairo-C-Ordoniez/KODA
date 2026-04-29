@@ -89,6 +89,14 @@ export default function Employees() {
 
   const handleDelete = async () => {
     if (!confirmDelete) return;
+
+    // Restricción: No se puede eliminar si tiene ventas
+    if ((confirmDelete._count?.sales ?? 0) > 0) {
+      showToast('error', 'No se puede eliminar', `El empleado ${confirmDelete.name} ya tiene ventas registradas en el sistema.`);
+      setConfirmDelete(null);
+      return;
+    }
+
     const result = await deleteEmployee(confirmDelete.userId);
     if (result.success) {
       showToast('success', 'Eliminado', `${confirmDelete.name} fue eliminado del equipo.`);
@@ -136,7 +144,7 @@ export default function Employees() {
               key={emp.userId}
               className="bg-background border border-foreground/5 rounded-[28px] p-5 space-y-4 hover:shadow-xl hover:shadow-navy/5 hover:border-navy/10 transition-all group relative overflow-hidden flex flex-col"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-navy/[0.03] rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform" />
+              <div className="absolute top-0 right-0 w-24 h-24 bg-navy/3 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform" />
 
               {/* Header */}
               <div className={`flex items-center justify-between relative ${activeMenuId === emp.userId ? 'z-30' : 'z-10'}`}>
@@ -193,11 +201,11 @@ export default function Employees() {
 
               {/* Stats */}
               <div className="pt-3 border-t border-foreground/5 grid grid-cols-2 gap-3 relative z-10">
-                <div className="bg-foreground/[0.03] rounded-xl p-3">
+                <div className="bg-foreground/3 rounded-xl p-3">
                   <p className="text-[8px] font-black uppercase tracking-widest text-secondary mb-1">Ventas</p>
                   <p className="text-lg font-black text-primary">{emp._count?.sales ?? 0}</p>
                 </div>
-                <div className="bg-foreground/[0.03] rounded-xl p-3">
+                <div className="bg-foreground/3 rounded-xl p-3">
                   <p className="text-[8px] font-black uppercase tracking-widest text-secondary mb-1">Total</p>
                   <p className="text-sm font-black text-green-600">${totalSalesAmount(emp).toLocaleString('es-CO')}</p>
                 </div>
@@ -245,7 +253,7 @@ export default function Employees() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="flex-[2] py-4 rounded-2xl bg-navy text-white font-black text-[10px] uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-2 py-4 rounded-2xl bg-navy text-white font-black text-[10px] uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isSaving ? 'Guardando...' : <><Check size={16} /> Registrar</>}
                 </button>
@@ -262,7 +270,7 @@ export default function Employees() {
             <div className="p-8 border-b border-foreground/5 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center">
-                  <Pencil size={22} className="text-navy" />
+                  <Edit3 size={22} className="text-navy" />
                 </div>
                 <div>
                   <h3 className="text-xl font-black text-primary">Editar Empleado</h3>
@@ -283,7 +291,7 @@ export default function Employees() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="flex-[2] py-4 rounded-2xl bg-navy text-white font-black text-[10px] uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-2 py-4 rounded-2xl bg-navy text-white font-black text-[10px] uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isSaving ? 'Guardando...' : <><Check size={16} /> Guardar Cambios</>}
                 </button>
@@ -332,7 +340,7 @@ export default function Employees() {
                 </div>
               ) : (
                 salesEmployee.sales.map((sale: any) => (
-                  <div key={sale.saleId} className="flex items-center justify-between p-4 rounded-2xl bg-foreground/[0.02] border border-foreground/5 hover:bg-white transition-all">
+                  <div key={sale.saleId} className="flex items-center justify-between p-4 rounded-2xl bg-foreground/2 border border-foreground/5 hover:bg-white transition-all">
                     <div>
                       <p className="text-xs font-black text-primary tracking-tight">
                         {PAYMENT_LABELS[sale.paymentMethod] || sale.paymentMethod}

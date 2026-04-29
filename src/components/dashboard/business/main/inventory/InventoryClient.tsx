@@ -6,6 +6,7 @@ import Header from '../ui/Header';
 import InventoryHeader from './ui/InventoryHeader';
 import InventoryTable from './ui/InventoryTable';
 import { useInventory } from '@/hooks/admin/useInventory';
+import { Toaster, useToast } from '@/components/ui/Toast';
 
 export default function InventoryClient() {
     const {
@@ -19,6 +20,7 @@ export default function InventoryClient() {
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedProducts, setExpandedProducts] = useState({});
     const searchParams = useSearchParams();
+    const { toasts, showToast, removeToast } = useToast();
 
     useEffect(() => {
         fetchInventory();
@@ -52,8 +54,10 @@ export default function InventoryClient() {
 
     const handleUpdateStock = async (variantId, newStock) => {
         const result = await updateStock(variantId, newStock);
-        if (!result.success) {
-            alert(result.error);
+        if (result.success) {
+            showToast('success', 'Stock actualizado', 'El inventario ha sido actualizado correctamente.');
+        } else {
+            showToast('error', 'Error', result.error || 'No se pudo actualizar el stock.');
         }
     };
 
@@ -76,7 +80,8 @@ export default function InventoryClient() {
     }
 
     return (
-        <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
+        <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10 relative">
+            <Toaster toasts={toasts} removeToast={removeToast} />
             <div className="container mx-auto space-y-8 pt-2">
                 <Header
                     title="Inventario"

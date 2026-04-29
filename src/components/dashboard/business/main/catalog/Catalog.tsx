@@ -11,6 +11,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import ProductModal from './ProductModal';
 import ProductDetail from './ProductDetail';
 import VariantModal from './VariantModal';
+import { Toaster, useToast } from '@/components/ui/Toast';
 
 export default function Catalog() {
   const { data: session } = useSession();
@@ -48,18 +49,13 @@ export default function Catalog() {
   const [editingVariant, setEditingVariant] = useState<any>(null);
   const [productToDelete, setProductToDelete] = useState<any>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const { toasts, showToast, removeToast } = useToast();
 
   useEffect(() => { 
     if (tenantId) fetchCatalogData(); 
   }, [tenantId, fetchCatalogData]);
 
-  useEffect(() => { 
-    if (alertMessage) {
-      const timer = setTimeout(() => setAlertMessage(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [alertMessage]);
+
 
   const selectedProduct = useMemo(() => {
     return products.find((p: any) => p.productId === productIdFromUrl);
@@ -85,7 +81,7 @@ export default function Catalog() {
 
   const handleDeleteProduct = (product: any) => {
     if (product.variants?.length > 0) {
-      setAlertMessage(`No se puede eliminar: el producto "${product.name}" tiene variantes asociadas.`);
+      showToast('error', 'No se puede eliminar', `El producto "${product.name}" tiene variantes asociadas. Elimínalas primero.`);
       setActiveMenuId(null);
       return;
     }
@@ -99,13 +95,14 @@ export default function Catalog() {
     setIsDeleting(true);
     const result = await deleteProduct(productToDelete.productId);
     if (result.success) {
+      showToast('success', 'Eliminado', 'El producto ha sido eliminado del catálogo.');
       setIsDeleteModalOpen(false);
       setProductToDelete(null);
       if (productIdFromUrl === productToDelete.productId) {
         handleCloseDetail();
       }
     } else {
-      alert(result.error);
+      showToast('error', 'Error', result.error || 'No se pudo eliminar el producto.');
     }
     setIsDeleting(false);
   };
@@ -124,8 +121,11 @@ export default function Catalog() {
   const handleSaveVariant = async (data: any) => {
     const result = await saveVariant(data, editingVariant, productIdFromUrl);
     if (result.success) {
+      showToast('success', editingVariant ? 'Variante actualizada' : 'Variante añadida', 'Los cambios se reflejarán en el catálogo.');
       setIsVariantModalOpen(false);
       setEditingVariant(null);
+    } else {
+      showToast('error', 'Error', result.error || 'No se pudo guardar la variante.');
     }
   };
 
@@ -143,7 +143,8 @@ export default function Catalog() {
 
   if (productIdFromUrl && selectedProduct) {
     return (
-      <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20">
+      <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20 relative">
+        <Toaster toasts={toasts} removeToast={removeToast} />
         <ProductDetail 
           product={selectedProduct}
           onBack={handleCloseDetail}
@@ -182,7 +183,8 @@ export default function Catalog() {
   }
 
   return (
-    <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20">
+    <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20 relative">
+      <Toaster toasts={toasts} removeToast={removeToast} />
       <SectionHeader
         title="Catálogo de Productos"
         subtitle="Gestiona tus productos y sus variantes."
@@ -208,14 +210,7 @@ export default function Catalog() {
         }
       />
 
-      {alertMessage && (
-        <div className="p-4 rounded-2xl bg-red-50 border border-red-100 flex items-center gap-3 animate-in slide-in-from-top duration-300">
-          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
-            <Trash2 size={16} className="text-red-500" />
-          </div>
-          <p className="text-red-600 font-bold text-sm tracking-tight">{alertMessage}</p>
-        </div>
-      )}
+
 
       {isLoading ? <Loader /> : error ? (
         <p className="text-red-500 text-sm font-medium bg-red-50 p-4 rounded-2xl border border-red-100">{error}</p>
@@ -337,9 +332,8 @@ export default function Catalog() {
         isSaving={isSaving}
       />
 
-      {/* Modal Personalizado de Eliminación */}
       {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-red-600/10 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+        <div className="fixed inset-0 bg-red-600/10 backdrop-blur-md z-100 flex items-center justify-center p-4 animate-in fade-in duration-300">
           <div className="bg-background rounded-[40px] p-10 w-full max-w-sm shadow-2xl shadow-red-600/10 border border-white/20 relative overflow-hidden text-center">
             <div className="space-y-6">
               <div className="w-20 h-20 rounded-[30px] bg-red-50 flex items-center justify-center mx-auto shadow-inner">

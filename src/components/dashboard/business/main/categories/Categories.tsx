@@ -8,6 +8,7 @@ import { EmptyState } from '@/components/dashboard/business/ui/EmptyState';
 import Loader from '@/components/ui/Loader';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { Toaster, useToast } from '@/components/ui/Toast';
 
 export default function Categories() {
   const { data: session } = useSession();
@@ -21,7 +22,7 @@ export default function Categories() {
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [categoryToDelete, setCategoryToDelete] = useState<any>(null);
   const [newCat, setNewCat] = useState({ name: '', description: '', icon: 'Tag' });
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
+  const { toasts, showToast, removeToast } = useToast();
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
@@ -61,7 +62,7 @@ export default function Categories() {
 
     const result = await saveCategory(newCat, editingCategory);
     if (result.success) {
-      setFeedback({ type: 'success', msg: editingCategory ? 'Categoría actualizada' : 'Categoría creada' });
+      showToast('success', editingCategory ? 'Categoría actualizada' : 'Categoría creada', editingCategory ? 'Los cambios se guardaron correctamente.' : `La categoría ${newCat.name} ha sido añadida.`);
       setNewCat({ name: '', description: '', icon: 'Tag' });
       setIsModalOpen(false);
       
@@ -71,16 +72,14 @@ export default function Categories() {
         setTimeout(() => setHighlightedId(null), 3000);
       }
     } else {
-      setFeedback({ type: 'error', msg: result.error || 'Error al procesar la categoría' });
+      showToast('error', 'Error', result.error || 'No se pudo procesar la categoría.');
     }
-    setTimeout(() => setFeedback(null), 3000);
   };
 
   const handleOpenDelete = (e: React.MouseEvent, cat: any) => {
     e.stopPropagation();
     if (cat._count?.products > 0) {
-      setFeedback({ type: 'error', msg: 'No se puede eliminar: tiene productos asociados.' });
-      setTimeout(() => setFeedback(null), 4000);
+      showToast('error', 'No se puede eliminar', 'Esta categoría tiene productos asociados. Elimínalos primero.');
       setActiveMenuId(null);
       return;
     }
@@ -94,13 +93,12 @@ export default function Categories() {
     
     const result = await deleteCategory(categoryToDelete.categoryId);
     if (result.success) {
-      setFeedback({ type: 'success', msg: 'Categoría eliminada' });
+      showToast('success', 'Eliminado', 'La categoría ha sido eliminada del sistema.');
       setIsDeleteModalOpen(false);
       setCategoryToDelete(null);
     } else {
-      setFeedback({ type: 'error', msg: result.error || 'Error al eliminar' });
+      showToast('error', 'Error', result.error || 'No se pudo eliminar la categoría.');
     }
-    setTimeout(() => setFeedback(null), 3000);
   };
 
   const handleCategoryClick = (categoryId: string) => {
@@ -109,6 +107,8 @@ export default function Categories() {
 
   return (
     <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20">
+      <Toaster toasts={toasts} removeToast={removeToast} />
+
       <SectionHeader
         title="Categorías"
         subtitle="Organiza tus productos por grupos para facilitar la gestión."
@@ -122,14 +122,6 @@ export default function Categories() {
         }
       />
 
-      {feedback && (
-        <div className={`px-6 py-4 rounded-2xl text-sm font-bold border flex items-center gap-3 animate-in fade-in slide-in-from-top-2 ${
-          feedback.type === 'success' ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-red-600 border-red-100'
-        }`}>
-          {feedback.type === 'error' && <AlertCircle size={18} />}
-          {feedback.msg}
-        </div>
-      )}
 
       {isLoading ? <Loader /> : error ? (
         <p className="text-red-500 text-sm font-medium bg-red-50 p-4 rounded-2xl border border-red-100">{error}</p>
@@ -240,7 +232,7 @@ export default function Categories() {
                     required
                     value={newCat.name}
                     onChange={(e) => setNewCat({ ...newCat, name: e.target.value })}
-                    className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary placeholder:font-medium bg-foreground/[0.02]"
+                    className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary placeholder:font-medium bg-foreground/2"
                     placeholder="Ej. Calzado, Accesorios..."
                   />
                 </div>
@@ -251,7 +243,7 @@ export default function Categories() {
                     rows={4}
                     value={newCat.description}
                     onChange={(e) => setNewCat({ ...newCat, description: e.target.value })}
-                    className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary placeholder:font-medium bg-foreground/[0.02] resize-none"
+                    className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary placeholder:font-medium bg-foreground/2 resize-none"
                     placeholder="Breve descripción de la categoría..."
                   />
                 </div>

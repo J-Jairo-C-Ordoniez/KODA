@@ -26,50 +26,47 @@ export function useToast() {
   return { toasts, showToast, removeToast: (id: string) => setToasts((prev) => prev.filter((t) => t.id !== id)) };
 }
 
-// Global context version if needed, but for now we can use it locally or pass it.
-// To make it easy, let's create a component that renders the toasts.
-
 export function Toaster({ toasts, removeToast }: { toasts: Toast[], removeToast: (id: string) => void }) {
   return (
-    <div className="fixed top-8 right-8 z-[200] flex flex-col gap-4 pointer-events-none">
+    <div className="fixed top-8 left-1/2 -translate-x-1/2 z-200 flex flex-col gap-4 pointer-events-none w-full max-w-[450px] px-4">
       {toasts.map((toast) => (
         <div
           key={toast.id}
           className={`
-            pointer-events-auto flex items-start gap-4 p-5 rounded-[24px] shadow-2xl border min-w-[320px] max-w-[400px]
-            animate-in slide-in-from-right-10 duration-500
-            ${toast.type === 'success' ? 'bg-white border-green-100' : 
-              toast.type === 'error' ? 'bg-white border-red-100' : 
-              toast.type === 'warning' ? 'bg-white border-amber-100' : 'bg-white border-blue-100'}
+            pointer-events-auto flex items-center gap-4 p-4 pl-5 rounded-[28px] shadow-2xl border bg-white relative overflow-hidden
+            animate-in slide-in-from-top-10 duration-500
+            ${toast.type === 'success' ? 'border-green-100' : 
+              toast.type === 'error' ? 'border-red-100' : 
+              toast.type === 'warning' ? 'border-amber-100' : 'border-blue-100'}
           `}
         >
           <div className={`
-            w-10 h-10 rounded-2xl flex items-center justify-center shrink-0
+            w-11 h-11 rounded-2xl flex items-center justify-center shrink-0
             ${toast.type === 'success' ? 'bg-green-50 text-green-600' : 
               toast.type === 'error' ? 'bg-red-50 text-red-600' : 
               toast.type === 'warning' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-blue-600'}
           `}>
-            {toast.type === 'success' && <CheckCircle2 size={20} />}
-            {toast.type === 'error' && <AlertCircle size={20} />}
-            {toast.type === 'warning' && <AlertTriangle size={20} />}
-            {toast.type === 'info' && <Info size={20} />}
+            {toast.type === 'success' && <CheckCircle2 size={22} />}
+            {toast.type === 'error' && <AlertCircle size={22} />}
+            {toast.type === 'warning' && <AlertTriangle size={22} />}
+            {toast.type === 'info' && <Info size={22} />}
           </div>
 
-          <div className="flex-1 space-y-1">
-            <h4 className="text-sm font-black text-primary leading-tight">{toast.message}</h4>
-            {toast.description && <p className="text-xs font-medium text-secondary leading-relaxed">{toast.description}</p>}
+          <div className="flex-1 pr-4">
+            <h4 className="text-[15px] font-black text-primary tracking-tight leading-tight">{toast.message}</h4>
+            {toast.description && <p className="text-[13px] font-medium text-secondary leading-relaxed mt-0.5">{toast.description}</p>}
           </div>
 
           <button 
             onClick={() => removeToast(toast.id)}
-            className="p-1 hover:bg-foreground/5 rounded-lg text-secondary transition-colors"
+            className="p-2 hover:bg-foreground/5 rounded-xl text-secondary/40 hover:text-secondary transition-colors shrink-0"
           >
-            <X size={16} />
+            <X size={20} />
           </button>
 
           {/* Progress bar */}
           <div className={`
-            absolute bottom-0 left-0 h-1 rounded-full animate-toast-progress
+            absolute bottom-0 left-0 h-1.5 animate-toast-progress
             ${toast.type === 'success' ? 'bg-green-500' : 
               toast.type === 'error' ? 'bg-red-500' : 
               toast.type === 'warning' ? 'bg-amber-500' : 'bg-blue-500'}

@@ -12,7 +12,7 @@ export default function Main() {
             />
 
             <section className="pb-32 bg-background">
-                <Container className="max-w-4xl bg-background border border-foreground/5 rounded-[40px] p-8 md:p-16 shadow-sm space-y-12">
+                <Container className="max-w-4xl bg-background border border-foreground/5 rounded-3xl p-8 md:p-12 shadow-sm space-y-12">
                     <article className="space-y-6">
                         <h2 className="text-2xl font-black text-primary tracking-tight">
                             ¿Cómo podemos ayudarte hoy?
@@ -22,7 +22,7 @@ export default function Main() {
                         </p>
                     </article>
 
-                    <div className="p-10 rounded-[32px] bg-navy/5 border border-navy/10 space-y-6 text-center">
+                    <div className="p-10 rounded-3xl bg-navy/5 border border-navy/10 space-y-6 text-center">
                         <p className="text-md text-secondary font-bold">
                             Para una atención inmediata, escríbenos directamente a nuestra línea oficial de soporte.
                         </p>

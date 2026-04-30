@@ -26,9 +26,10 @@ interface DashboardStats {
 }
 
 interface DashboardStore {
-  stats: DashboardStats | null;
-  isLoading: boolean;
-  error: string | null;
+  isSidebarOpen: boolean;
+  openSidebar: () => void;
+  closeSidebar: () => void;
+  toggleSidebar: () => void;
   fetchDashboardData: () => Promise<void>;
 }
 
@@ -36,6 +37,11 @@ const useDashboardStore = create<DashboardStore>((set) => ({
   stats: null,
   isLoading: true,
   error: null,
+  isSidebarOpen: false,
+
+  openSidebar: () => set({ isSidebarOpen: true }),
+  closeSidebar: () => set({ isSidebarOpen: false }),
+  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
 
   fetchDashboardData: async () => {
     set({ isLoading: true, error: null });

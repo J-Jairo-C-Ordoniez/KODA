@@ -12,16 +12,19 @@ import { FloatingSaleButton } from "./ui/FloatingSaleButton";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="grid grid-cols-2 h-screen box-border relative">
+        <div className="flex flex-col h-screen overflow-hidden bg-background">
             <Header />
-            <div className="col-span-full flex h-[calc(100vh-5rem)]">
+            <div className="flex flex-1 overflow-hidden relative">
                 <Sidebar />
-                {children}
+                <div className="flex-1 overflow-y-auto custom-scrollbar bg-foreground/2">
+                    {children}
+                </div>
             </div>
             <FloatingSaleButton />
         </div>
     );
 }
+
 
 export function OverviewP() {
     return (

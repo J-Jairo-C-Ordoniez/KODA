@@ -7,9 +7,13 @@ import SalesHeader from './ui/SalesHeader';
 import SalesTable from './ui/SalesTable';
 import SaleForm from './ui/SaleForm';
 import ActionDialog from '../categories/ui/ActionDialog';
-import { useSales } from '@/hooks/useSales';
+import { useSession } from 'next-auth/react';
+import { useSales } from '@/hooks/employee/useSales';
 
 export default function SalesClient() {
+    const { data: session } = useSession();
+    const tenantId = session?.user?.tenantId;
+    
     const {
         sales,
         variants,
@@ -17,7 +21,7 @@ export default function SalesClient() {
         isSaving: submitting,
         fetchSalesData: fetchData,
         saveSale
-    } = useSales();
+    } = useSales(tenantId);
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,14 +71,14 @@ export default function SalesClient() {
     }
 
     return (
-        <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
-            <div className="container mx-auto space-y-8 pt-2">
+        <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-8 pt-6 pb-12">
+            <div className="container mx-auto space-y-8">
                 <Header
                     title="Ventas"
                     description="Historial completo de transacciones y registro de nuevas ventas."
                 />
 
-                <section className="rounded-xl p-6 flex flex-col gap-6 relative">
+                <section className="bg-background border border-foreground/5 rounded-3xl p-4 sm:p-8 flex flex-col gap-6 relative shadow-sm">
                     <SalesHeader
                         saleCount={sales.length}
                         onOpenSaleModal={() => setIsModalOpen(true)}
@@ -85,6 +89,7 @@ export default function SalesClient() {
                     <SalesTable sales={filteredSales} />
                 </section>
             </div>
+
 
             <Modal
                 isOpen={isModalOpen}

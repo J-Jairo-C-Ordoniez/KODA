@@ -5,18 +5,44 @@ import { PaymentMethod } from '@prisma/client';
 const salesRepository = {
   async createSale(tenantId: string, userId: string, data: CreateSaleDTO) {
     return prisma.$transaction(async (tx) => {
-      for (const item of data.items) {
-        const inventory = await tx.inventory.findFirst({
-          where: { variantId: item.variantId }
-        });
+      const variantIds = data.items.map(item => item.variantId);
+      
+      // Fetch all variants with their current inventory in one query
+      const variants = await tx.variant.findMany({
+        where: { 
+          variantId: { in: variantIds },
+          product: { tenantId } 
+        },
+        include: {
+          inventories: true
+        }
+      });
 
-        if (!inventory || inventory.stock < item.quantity) {
-          throw new Error('Stock insuficiente para la variante ' + item.variantId);
+      const variantMap = new Map(variants.map(v => [v.variantId, v]));
+      const itemsToCreate = [];
+
+      for (const item of data.items) {
+        const variant = variantMap.get(item.variantId);
+        
+        if (!variant) {
+          throw new Error(`Variante ${item.variantId} no encontrada o no pertenece a este comercio`);
         }
 
+        const inventory = variant.inventories[0];
+        if (!inventory || inventory.stock < item.quantity) {
+          throw new Error(`Stock insuficiente para la variante: ${variant.name}`);
+        }
+
+        // Update inventory
         await tx.inventory.update({
           where: { inventoryId: inventory.inventoryId },
-          data: { stock: inventory.stock - item.quantity }
+          data: { stock: { decrement: item.quantity } }
+        });
+
+        itemsToCreate.push({
+          variantId: item.variantId,
+          quantity: item.quantity,
+          priceAtSale: variant.price
         });
       }
 
@@ -28,11 +54,7 @@ const salesRepository = {
           total: data.total,
           paymentMethod: data.paymentMethod,
           items: {
-            create: data.items.map(item => ({
-              variantId: item.variantId,
-              quantity: item.quantity,
-              priceAtSale: 0
-            }))
+            create: itemsToCreate
           }
         }
       });
@@ -46,7 +68,7 @@ const salesRepository = {
 
       return sale;
     }, {
-      timeout: 10000 // 10 seconds
+      timeout: 10000 
     });
   },
 
@@ -103,19 +125,6 @@ const salesRepository = {
       take: 100
     });
   },
-
-  /* async getSalesToday(tenantId: string) {
-    const totalSales = await prisma.sale.aggregate({
-      where: { tenantId },
-      orderBy: { createdAt: 'desc' },
-      _sum: { total: true },
-      _count: { saleId: true }
-    });
-    return {
-      totalRevenue: totalSales._sum.total || 0,
-      totalOrders: totalSales._count.saleId || 0
-    };
-  }, */
 
   async getSalesToday(tenantId: string) {
     const today = new Date();

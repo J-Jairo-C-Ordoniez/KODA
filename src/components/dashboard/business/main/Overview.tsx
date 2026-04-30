@@ -30,7 +30,7 @@ export default function Overview() {
   const user = session?.user?.name || 'tu negocio';
 
   return (
-    <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto">
+    <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto">
       <SectionHeader
         title={`Bienvenido, ${user}`}
         subtitle="Aquí tienes un resumen de tu negocio hoy."
@@ -108,25 +108,25 @@ export default function Overview() {
               )}
             </article>
 
-            <article className="bg-navy text-white p-10 rounded-[40px] shadow-2xl shadow-navy/20 flex flex-col justify-between relative overflow-hidden group">
+            <article className="bg-navy text-white p-8 sm:p-10 rounded-3xl shadow-2xl shadow-navy/20 flex flex-col justify-between relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 transition-transform group-hover:scale-110" />
               
               <div className="relative z-10 space-y-6">
-                <div className="bg-white/10 w-16 h-16 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/10 shadow-inner">
-                  <Package size={32} />
+                <div className="bg-white/10 w-14 h-14 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/10 shadow-inner">
+                  <Package size={28} />
                 </div>
                 
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-black tracking-tight leading-tight">
+                <div className="space-y-2">
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
                     Tu tienda está lista.
                   </h3>
-                  <p className="text-white/70 text-sm font-medium leading-relaxed max-w-[240px]">
+                  <p className="text-white/70 text-xs sm:text-sm font-medium leading-relaxed max-w-[240px]">
                     Comparte tu catálogo público y empieza a recibir pedidos hoy mismo.
                   </p>
                 </div>
               </div>
 
-              <div className="relative z-10 grid grid-cols-1 gap-3 mt-8">
+              <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 mt-8">
                 <button 
                   onClick={() => setIsShareModalOpen(true)}
                   className="w-full py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 border border-white/5"

@@ -1,38 +1,32 @@
 'use client';
 
-import { useEffect } from "react";
-import useBreadcrumbsStore from "../../../store/breadcrumbs.store";
 import Breadcrumbs from "./ui/Breadcrumbs";
 import FilterBar from "./ui/FilterBar";
 import ProductGrid from "@/components/store/Main/ui/ProductGrid";
-import { Pagination } from "./ui/Pagination";
-import useFilterCatalogStore from "@/store/filterCatalog.store";
+import Loader from "@/components/ui/Loader";
+import { useCatalog } from "@/hooks/publicCatalog/useCatalog";
 
 export default function Main({ tenantId }: { tenantId?: string }) {
-    const { breadcrumbs, setBreadcrumbsRoute } = useBreadcrumbsStore();
-    const { products, isLoading, error, fetchProducts } = useFilterCatalogStore();
-
-    useEffect(() => {
-        fetchProducts(tenantId);
-    }, []);
+    const { products, isLoading, error } = useCatalog(tenantId);
 
     return (
-        <main className="bg-background w-full min-h-screen">
-            <div className="container mx-auto p-4 md:p-8 flex flex-col justify-between">
-                <Breadcrumbs
-                    breadcrumbs={breadcrumbs}
-                    setBreadcrumbsRoute={setBreadcrumbsRoute}
-                />
+        <main className="bg-background w-full min-h-screen pt-4">
+            <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col gap-8">
+                <Breadcrumbs />
 
-                <div>
+                <div className="flex flex-col gap-6">
                     <FilterBar tenantId={tenantId} />
-                    <ProductGrid
-                        isLoading={isLoading}
-                        error={error}
-                        products={products}
-                    />
-
-                    {/* <Pagination /> */}
+                    
+                    {isLoading ? (
+                        <div className="flex justify-center py-20">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <ProductGrid
+                            error={error}
+                            products={products}
+                        />
+                    )}
                 </div>
             </div>
         </main>

@@ -1,67 +1,65 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { FilterDropdown } from './FilterDropdown';
-import useFilterCatalogStore from '../../../../store/filterCatalog.store';
+import { SlidersHorizontal, X } from 'lucide-react';
+import { useCatalogFilters } from '@/hooks/publicCatalog/useCatalogFilters';
 
 export default function FilterBar({ tenantId }: { tenantId?: string }) {
-  const { setColor, setCategory } = useFilterCatalogStore();
-  const [colorOptions, setColorOptions] = useState([]);
-  const [categoryOptions, setCategoryOptions] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch(`/api/catalog?action=categories&tenantId=${tenantId}`);
-        const data = await res.json();
-        setCategoryOptions(data.map((cat: any) => ({ ...cat, checked: false })));
-
-      } catch (err) {
-        setCategoryOptions([]);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchColors = async () => {
-      try {
-        const res = await fetch(`/api/catalog?action=colors&tenantId=${tenantId}`);
-        const data = await res.json();
-        setColorOptions(data.map((color: any) => ({ ...color, checked: false })));
-      } catch (err) {
-        setColorOptions([]);
-      }
-    };
-
-    fetchColors();
-  }, []);
-
-  useEffect(() => {
-    setColor(colorOptions.filter(opt => opt.checked), tenantId);
-  }, [colorOptions]);
-
-  useEffect(() => {
-    setCategory(categoryOptions.filter(opt => opt.checked), tenantId);
-  }, [categoryOptions]);
+  const { 
+    colorOptions, 
+    categoryOptions, 
+    handleFilterChange, 
+    clearFilters, 
+    hasFilters,
+    currentParams 
+  } = useCatalogFilters(tenantId);
 
   return (
-    <section className="w-full py-2">
-      <div className="flex items-center justify-between">
-        <FilterDropdown
-          title="COLOR"
-          options={colorOptions}
-          setOptions={setColorOptions}
-          align="left"
-        />
+    <section className="w-full border-y border-foreground/5 py-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-center gap-8">
+          <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest border-r border-foreground/10 pr-6 mr-2">
+            <SlidersHorizontal size={14} />
+            Filtros
+          </div>
 
-        <FilterDropdown
-          title="CLASIFICAR POR"
-          options={categoryOptions}
-          setOptions={setCategoryOptions}
-          align="right"
-        />
+          <div className="flex items-center gap-6">
+            <FilterDropdown
+              title="Categoría"
+              options={categoryOptions}
+              onSelect={(val) => handleFilterChange('category', val)}
+              selectedValue={currentParams.category}
+            />
+
+            <FilterDropdown
+              title="Color"
+              options={colorOptions}
+              onSelect={(val) => handleFilterChange('color', val)}
+              selectedValue={currentParams.color}
+            />
+            
+            <FilterDropdown
+              title="Género"
+              options={[
+                { id: 'hombre', name: 'Hombre' },
+                { id: 'mujer', name: 'Mujer' },
+                { id: 'mixto', name: 'Unisex' }
+              ]}
+              onSelect={(val) => handleFilterChange('gender', val)}
+              selectedValue={currentParams.gender}
+            />
+          </div>
+        </div>
+
+        {hasFilters && (
+          <button 
+            onClick={clearFilters}
+            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-secondary hover:text-red-500 transition-colors"
+          >
+            <X size={14} />
+            Limpiar filtros
+          </button>
+        )}
       </div>
     </section>
   );

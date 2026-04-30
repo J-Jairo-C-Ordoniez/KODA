@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from "react";
 import { LandingStore } from "@/components/store/Store";
@@ -19,31 +19,30 @@ export default function StorePage({ params }: Props) {
             try {
                 const response = await fetch(`/api/tenants/slug?slug=${slug}`);
                 const data = await response.json();
-
-                if (data && !data.error) {
-                    setTenant(data);
-                }
+                if (data && !data.error) setTenant(data);
             } catch (err) {
                 console.error("Error cargando el negocio:", err);
             } finally {
                 setLoading(false);
             }
         };
-
         if (slug) fetchTenant();
     }, [slug]);
 
-    if (loading) return <Loader />;
+    if (loading) return <div className="h-screen w-full flex items-center justify-center bg-background"><Loader size="lg" /></div>;
 
     if (!tenant || tenant.status === 'suspended') {
-        return redirect("/")
+        return redirect("/");
     }
 
     return (
-        <LandingStore
-            tenantId={tenant.tenantId}
-            businessName={tenant.businessName}
-            slug={tenant.slug}
-        />
+        <>
+            <div>holaaaaaaaaaa</div>
+            <LandingStore
+                tenantId={tenant.tenantId}
+                businessName={tenant.businessName}
+                slug={tenant.slug}
+            />
+        </>
     );
 }

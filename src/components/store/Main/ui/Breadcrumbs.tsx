@@ -1,26 +1,31 @@
-export default function Breadcrumbs({ breadcrumbs, setBreadcrumbsRoute }: { breadcrumbs: any[], setBreadcrumbsRoute: (label: string) => void }) {
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ChevronRight } from 'lucide-react';
+
+export default function Breadcrumbs() {
+    const pathname = usePathname();
+    const segments = pathname.split('/').filter(Boolean);
+
     return (
-        <div className="w-full flex items-center gap-1 text-xs font-semibold tracking-wider py-2">
-            {breadcrumbs.map((breadcrumb, index) => (
-                breadcrumb.isLink ? (
-                    <button
-                        key={index}
-                        onClick={() => setBreadcrumbsRoute(breadcrumb.label)}
-                        className={breadcrumbs[index].active ? "text-primary transition-colors cursor-pointer" : "text-secondary/90 hover:text-primary transition-colors cursor-pointer"}
-                    >
-                        {breadcrumb.label.toUpperCase()}
-                        {index < breadcrumbs.length - 1 && " |"}
-                    </button>
-                ) : (
-                    <span
-                        key={index}
-                        className="text-secondary/90 transition-colors"
-                    >
-                        {breadcrumb.label.toUpperCase()}
-                        {index < breadcrumbs.length - 1 && " |"}
-                    </span>
-                )
-            ))}
-        </div>
+        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-secondary/60 py-2">
+            <Link href="/" className="hover:text-primary transition-colors">INICIO</Link>
+            {segments.map((segment, index) => {
+                const href = `/${segments.slice(0, index + 1).join('/')}`;
+                const isLast = index === segments.length - 1;
+                
+                return (
+                    <div key={href} className="flex items-center gap-2">
+                        <ChevronRight size={10} className="opacity-40" />
+                        {isLast ? (
+                            <span className="text-primary tracking-widest">{segment}</span>
+                        ) : (
+                            <Link href={href} className="hover:text-primary transition-colors">{segment}</Link>
+                        )}
+                    </div>
+                );
+            })}
+        </nav>
     );
 }

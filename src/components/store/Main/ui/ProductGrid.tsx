@@ -1,34 +1,40 @@
 import ProductCard from '@/components/store/Main/ui/ProductCard';
+import { Search } from 'lucide-react';
 
-export default function ProductGrid({ products, isLoading, error }: { products: any, isLoading: boolean, error: string | null }) {
+export default function ProductGrid({ products, error }: { products: any[], error: string | null }) {
+  if (error) {
+    return (
+      <div className="w-full py-32 flex flex-col items-center justify-center gap-4 text-center">
+        <div className="w-16 h-16 rounded-3xl bg-red-50 flex items-center justify-center text-red-500 mb-2">
+          <Search size={32} />
+        </div>
+        <p className="text-sm font-black text-primary uppercase tracking-widest">Error al cargar productos</p>
+        <p className="text-xs font-medium text-secondary max-w-xs leading-relaxed">
+          Hubo un problema al conectar con el catálogo. Por favor, intenta recargar la página.
+        </p>
+      </div>
+    );
+  }
+
+  if (products && products.length === 0) {
+    return (
+      <div className="w-full py-32 flex flex-col items-center justify-center gap-4 text-center">
+        <div className="w-16 h-16 rounded-3xl bg-foreground/5 flex items-center justify-center text-secondary mb-2">
+          <Search size={32} />
+        </div>
+        <p className="text-sm font-black text-primary uppercase tracking-widest">Sin resultados</p>
+        <p className="text-xs font-medium text-secondary max-w-xs leading-relaxed">
+          No encontramos productos que coincidan con tus filtros. Intenta con otra combinación.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <section className="pt-6 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-16 justify-center overflow-x-hidden">
-      {isLoading && Array.from({ length: 3 }).map((_, index) => (
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16 pb-20">
+      {products.map((product: any) => (
         <ProductCard
-          key={index}
-          product={null}
-        />
-      ))}
-
-      {!isLoading && error && (
-        <div className="w-full py-20 flex flex-col items-center gap-4 m-auto col-span-full">
-          <p className="text-md font-medium tracking-wider text-secondary">
-            Ha ocurrido un error, intenta de nuevo
-          </p>
-        </div>
-      )}
-
-      {!isLoading && !error && products && products.length === 0 && (
-        <div className="w-full py-20 flex flex-col items-center gap-4 m-auto col-span-full">
-          <p className="text-md font-medium tracking-wider text-secondary">
-            No hay productos disponibles para tu búsqueda.
-          </p>
-        </div>
-      )}
-
-      {products && products.length > 0 && products.map((product: any) => (
-        <ProductCard
-          key={product.variantId || product.id}
+          key={product.variantId}
           product={product}
         />
       ))}

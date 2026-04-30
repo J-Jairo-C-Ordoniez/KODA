@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-import useBreadcrumbsStore from "../../../store/breadcrumbs.store";
-import Breadcrumbs from "../Main/ui/Breadcrumbs";
+import useBreadcrumbsStore from "@/store/breadcrumbs.store";
+import Breadcrumbs from "@/components/store/Main/ui/Breadcrumbs";
 import ProductInfo from "./ui/ProductInfo";
 import ProductImg from "./ui/ProductImg";
-import { useProductDetail } from "@/hooks/useProductDetail";
+import { useProductDetail } from "@/hooks/publicCatalog/useProductDetail";
 
-export default function ProductDetail({ variantId }) {
+export default function ProductDetail({ variantId, contact }: { variantId: string, contact?: string }) {
   const { breadcrumbs, setBreadcrumbsRoute, setBreadcrumbsProduct } = useBreadcrumbsStore();
 
   const {
     data,
-    contact,
     isLoading,
     error,
     selectedVariant,
@@ -22,10 +21,7 @@ export default function ProductDetail({ variantId }) {
   return (
     <main className="bg-background w-full min-h-screen">
       <div className="container mx-auto p-4 md:p-8">
-        <Breadcrumbs
-          breadcrumbs={breadcrumbs}
-          setBreadcrumbsRoute={setBreadcrumbsRoute}
-        />
+        <Breadcrumbs />
 
         {isLoading && (
           <div className="w-full py-20 flex flex-col items-center gap-4 m-auto">

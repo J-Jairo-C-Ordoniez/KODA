@@ -11,15 +11,15 @@ export default function ProductInfo({ product, variant, allVariants, contact, se
   });
 
   const colors = useMemo(() => {
-    const uniqueColors = new Set();
-    allVariants.forEach(v => uniqueColors.add(v.color));
+    const uniqueColors = new Set<string>();
+    allVariants.forEach((v: any) => uniqueColors.add(v.color));
     return Array.from(uniqueColors);
   }, [allVariants]);
 
   const sizes = useMemo(() => {
     return allVariants
-      .filter(v => v.color === variant.color)
-      .map(v => v.size);
+      .filter((v: any) => v.color === variant.color)
+      .map((v: any) => v.size as string);
   }, [allVariants, variant.color]);
 
   const handleColorChange = (color) => {

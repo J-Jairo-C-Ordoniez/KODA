@@ -4,7 +4,12 @@ import Image from 'next/image';
 import Link from "next/link";
 import { ArrowRight } from 'lucide-react';
 
+import { useParams } from 'next/navigation';
+
 export default function ProductCard({ product }: { product: any }) {
+  const params = useParams();
+  const slug = params?.slug as string;
+  
   const formatter = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
@@ -14,7 +19,7 @@ export default function ProductCard({ product }: { product: any }) {
   if (!product) {
     return (
       <article className="flex flex-col gap-4 animate-pulse">
-        <div className="aspect-[4/5] w-full bg-foreground/5 rounded-3xl" />
+        <div className="aspect-4/5 w-full bg-foreground/5 rounded-3xl" />
         <div className="space-y-2">
           <div className="h-4 bg-foreground/5 rounded-full w-2/3" />
           <div className="h-3 bg-foreground/5 rounded-full w-1/2" />
@@ -25,23 +30,25 @@ export default function ProductCard({ product }: { product: any }) {
 
   const mainImage = product.images?.[0]?.content || null;
   const hoverImage = product.images?.[1]?.content || mainImage;
+  
+  const productUrl = slug ? `/${slug}/product/${product.variantId}` : `/product/${product.variantId}`;
 
   return (
-    <Link href={`/product/${product.variantId}`} className="flex flex-col group gap-5">
-      <div className="aspect-[4/5] w-full relative overflow-hidden bg-[#F6F6F6] rounded-[32px] transition-all group-hover:shadow-2xl group-hover:shadow-navy/5">
+    <Link href={productUrl} className="flex flex-col group gap-5">
+      <div className="aspect-4/5 w-full relative overflow-hidden bg-[#F6F6F6] rounded-[32px] transition-all group-hover:shadow-2xl group-hover:shadow-navy/5">
         {mainImage ? (
           <>
             <Image
               src={mainImage}
               alt={product.name}
               fill
-              className="object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:opacity-0"
+              className="object-contain p-6 mix-blend-multiply transition-all duration-700 ease-out group-hover:scale-110 group-hover:opacity-0"
             />
             <Image
               src={hoverImage}
               alt={product.name}
               fill
-              className="object-cover transition-all duration-700 ease-out scale-110 opacity-0 group-hover:scale-100 group-hover:opacity-100"
+              className="object-contain p-6 mix-blend-multiply transition-all duration-700 ease-out scale-110 opacity-0 group-hover:scale-100 group-hover:opacity-100"
             />
           </>
         ) : (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearch } from "@/hooks/useSearch";
+import { useSearch } from "@/hooks/publicCatalog/useSearch";
 import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
 import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import SearchInitial from "./ui/SearchInitial";
@@ -23,10 +23,7 @@ export default function SearchMain() {
   return (
     <main className="bg-background w-full min-h-screen">
       <div className="container mx-auto p-4 md:p-8 flex flex-col">
-        <Breadcrumbs
-          breadcrumbs={breadcrumbs}
-          setBreadcrumbsRoute={setBreadcrumbsRoute}
-        />
+        <Breadcrumbs />
 
         <section className="border-secondary/20 mx-auto w-full py-10">
           <div className="relative border-b border-secondary/20 pb-2 mb-16 group">

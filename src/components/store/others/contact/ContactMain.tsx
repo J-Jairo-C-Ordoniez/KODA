@@ -1,27 +1,41 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
 import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import ContactContent from "./ui/ContactContent";
-import { usePublicData } from "@/hooks/usePublicData";
 
 export default function ContactMain() {
-  const { breadcrumbs, setBreadcrumbsRoute } = useBreadcrumbsStore();
-  const { data, isLoading, error } = usePublicData("/api/contact");
-  const contact = data?.contact || null;
+  const { setBreadcrumbsRoute } = useBreadcrumbsStore();
+  const [contact, setContact] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setBreadcrumbsRoute("contacto");
   }, [setBreadcrumbsRoute]);
 
+  useEffect(() => {
+    const fetchContact = async () => {
+      try {
+        setIsLoading(true);
+        const res = await fetch("/api/contact");
+        const result = await res.json();
+        const data = result.success ? result.data : result;
+        setContact(data?.contact || data || null);
+      } catch (err) {
+        setError("Error al cargar información de contacto");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContact();
+  }, []);
+
   return (
     <main className="bg-background w-full min-h-screen overflow-x-hidden">
       <div className="container mx-auto p-4 md:p-8">
-        <Breadcrumbs
-          breadcrumbs={breadcrumbs}
-          setBreadcrumbsRoute={setBreadcrumbsRoute}
-        />
+        <Breadcrumbs />
 
         {isLoading && (
           <div className="w-full py-20 flex flex-col items-center gap-4 m-auto">

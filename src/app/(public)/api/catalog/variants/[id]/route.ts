@@ -1,9 +1,10 @@
-import variantController from '@/core/modules/catalog/controllers/variant.controller';
+import catalogController from '@/core/modules/catalog/controllers/catalog.controller';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return await variantController.getVariantById(id);
+  return await catalogController.getVariantById(id);
 }
+
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;

@@ -20,8 +20,14 @@ export function useCatalogFilters(tenantId?: string) {
             const colors = await colorRes.json();
             const curCat = searchParams.get('category');
             const curCol = searchParams.get('color');
-            setCategoryOptions(cats.map((c: any) => ({ id: c.categoryId, name: c.name, checked: curCat === c.categoryId })));
-            setColorOptions(colors.map((c: any) => ({ id: c.color, name: c.color, checked: curCol === c.color })));
+            const catsData = cats.success ? cats.data : cats;
+            const colorsData = colors.success ? colors.data : colors;
+            
+            const catsArray = Array.isArray(catsData) ? catsData : [];
+            const colorsArray = Array.isArray(colorsData) ? colorsData : [];
+
+            setCategoryOptions(catsArray.map((c: any) => ({ id: c.categoryId, name: c.name, checked: curCat === c.categoryId })));
+            setColorOptions(colorsArray.map((c: any) => ({ id: c.color, name: c.color, checked: curCol === c.color })));
         };
         fetchData();
     }, [tenantId, searchParams]);

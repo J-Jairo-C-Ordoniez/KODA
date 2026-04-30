@@ -4,6 +4,5 @@ import tenantController from '@/core/modules/tenants/controllers/tenant.controll
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const slug = searchParams.get("slug");
-  const tenant = await tenantController.getTenantBySlug(slug);
-  return NextResponse.json(tenant);
+  return tenantController.getTenantBySlug(slug as string);
 }

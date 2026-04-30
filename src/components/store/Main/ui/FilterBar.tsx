@@ -37,17 +37,6 @@ export default function FilterBar({ tenantId }: { tenantId?: string }) {
               onSelect={(val) => handleFilterChange('color', val)}
               selectedValue={currentParams.color}
             />
-            
-            <FilterDropdown
-              title="Género"
-              options={[
-                { id: 'hombre', name: 'Hombre' },
-                { id: 'mujer', name: 'Mujer' },
-                { id: 'mixto', name: 'Unisex' }
-              ]}
-              onSelect={(val) => handleFilterChange('gender', val)}
-              selectedValue={currentParams.gender}
-            />
           </div>
         </div>
 

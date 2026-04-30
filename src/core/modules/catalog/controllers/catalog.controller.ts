@@ -1,4 +1,5 @@
 import catalogService from "@/core/modules/catalog/services/catalog.service";
+import catalogRepository from "@/core/modules/catalog/repositories/catalog.repository";
 import { apiResponse } from "@/core/utils/apiResponse";
 
 const catalogController = {
@@ -26,6 +27,16 @@ const catalogController = {
       return apiResponse.success(products);
     } catch (error: any) {
       return apiResponse.error(error.message || "Error al obtener productos", 500);
+    }
+  },
+
+  async getVariantById(variantId: string) {
+    try {
+      const variant = await catalogRepository.getVariantById(variantId);
+      if (!variant) return apiResponse.error("Variante no encontrada", 404);
+      return apiResponse.success(variant);
+    } catch (error: any) {
+      return apiResponse.error(error.message || "Error al obtener la variante", 500);
     }
   }
 }

@@ -36,10 +36,7 @@ export default function Login() {
     return (
         <main className="bg-background w-full">
             <div className="container mx-auto p-4 md:p-8 flex flex-col items-center">
-                <Breadcrumbs
-                    breadcrumbs={breadcrumbs}
-                    setBreadcrumbsRoute={setBreadcrumbsRoute}
-                />
+                <Breadcrumbs />
 
                 <div className="py-40">
                     <h2 className="text-primary font-medium tracking-widest uppercase mb-6 text-md border-b border-secondary/10 pb-2">

@@ -5,10 +5,10 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
 import Breadcrumbs from '../../Main/ui/Breadcrumbs';
-import { useForgotPassword } from '@/hooks/useForgotPassword';
+import { useForgotPassword } from '@/hooks/auth/useForgotPassword';
 
 export default function ForgotPasswordMain() {
-    const { breadcrumbs, setBreadcrumbsRoute } = useBreadcrumbsStore();
+    const { setBreadcrumbsRoute } = useBreadcrumbsStore();
     const router = useRouter();
 
     const {
@@ -31,10 +31,7 @@ export default function ForgotPasswordMain() {
     return (
         <main className="bg-background w-full">
             <div className="container mx-auto p-4 md:p-8 flex flex-col items-center">
-                <Breadcrumbs
-                    breadcrumbs={breadcrumbs}
-                    setBreadcrumbsRoute={setBreadcrumbsRoute}
-                />
+                <Breadcrumbs />
 
                 <div className="py-20 md:py-40 w-full max-w-lg">
                     {step === 'EMAIL' && (

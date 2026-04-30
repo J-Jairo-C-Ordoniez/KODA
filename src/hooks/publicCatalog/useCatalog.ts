@@ -21,12 +21,13 @@ export function useCatalog(tenantId?: string) {
             const params = new URLSearchParams(searchParamsStr);
             const url = `/api/catalog/products?${params.toString()}&tenantId=${tenantId}`;
             const res = await fetch(url);
-            const data = await res.json();
+            const result = await res.json();
+            const responseData = result.success ? result.data : result;
 
-            if (data.error) {
-                setError(data.error);
+            if (responseData.error) {
+                setError(responseData.error);
             } else {
-                setProducts(data.items || []);
+                setProducts(responseData.items || []);
             }
         } catch (err: any) {
             setError(err.message || 'Error al cargar productos');

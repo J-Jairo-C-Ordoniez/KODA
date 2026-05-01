@@ -58,7 +58,7 @@ export default function Overview() {
             />
 
             <StatCard
-              label="Ventas del Mes"
+              label="Ventas (Últimos 30 días)"
               value={stats.salesMonth.totalOrders || 0}
               icon={TrendingUp}
               change={new Intl.NumberFormat('es-CO', {

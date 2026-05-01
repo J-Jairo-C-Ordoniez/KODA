@@ -23,8 +23,9 @@ export function useAdminCatalog(tenantId: string | undefined) {
 
       if (productsJson.success) setProducts(productsJson.data || []);
       if (categoriesJson.success) setCategories(categoriesJson.data || []);
-    } catch (err) {
-      setError('Error al cargar datos del catálogo');
+    } catch (err: any) {
+      console.error('Fetch Catalog Error:', err);
+      setError(`Error al cargar datos del catálogo: ${err.message || err}`);
     } finally {
       setIsLoading(false);
     }

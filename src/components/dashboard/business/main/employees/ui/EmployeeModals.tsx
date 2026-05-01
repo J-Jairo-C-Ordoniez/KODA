@@ -117,7 +117,7 @@ export function EmployeeFormModal({
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-[2] py-4 rounded-2xl bg-navy text-white font-black text-xs uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="flex-2 py-4 rounded-2xl bg-navy text-white font-black text-xs uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isSaving ? 'Guardando...' : <><Check size={16} /> {isEdit ? 'Guardar Cambios' : 'Registrar'}</>}
             </button>

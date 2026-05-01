@@ -49,7 +49,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
             <input 
               value={form.businessName} 
               onChange={(e) => setForm({ ...form, businessName: e.target.value })} 
-              className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02] shadow-inner" 
+              className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 shadow-inner" 
               placeholder="E.g. Koda Boutique"
             />
           </div>
@@ -60,7 +60,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
               <select 
                 value={form.type} 
                 onChange={(e) => setForm({ ...form, type: e.target.value })} 
-                className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02] appearance-none cursor-pointer shadow-inner"
+                className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 appearance-none cursor-pointer shadow-inner"
               >
                 <option value="ropa">Clothing & Fashion</option>
                 <option value="calzado">Footwear & Shoes</option>
@@ -83,7 +83,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
               <input 
                 value={form.slug} 
                 onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s/g, '-') })} 
-                className="w-full pl-[92px] pr-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-black text-navy bg-foreground/[0.02] shadow-inner" 
+                className="w-full pl-[92px] pr-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-black text-navy bg-foreground/2 shadow-inner" 
               />
             </div>
             <p className="text-[9px] font-bold text-secondary/40 uppercase tracking-widest ml-1">This changes your public link. Use with caution.</p>
@@ -96,7 +96,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
               <input 
                 value={form.whatsApp} 
                 onChange={(e) => setForm({ ...form, whatsApp: e.target.value })} 
-                className="w-full pl-14 pr-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02] shadow-inner" 
+                className="w-full pl-14 pr-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 shadow-inner" 
                 placeholder="300 000 0000" 
               />
             </div>
@@ -109,7 +109,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
             rows={3} 
             value={form.description} 
             onChange={(e) => setForm({ ...form, description: e.target.value })} 
-            className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02] resize-none shadow-inner" 
+            className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 resize-none shadow-inner" 
             placeholder="Define your style, mission, or what makes your store unique..." 
           />
         </div>

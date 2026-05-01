@@ -25,7 +25,7 @@ export function BrandIdentityForm({ logo, slug, isUploading, fileInputRef, onLog
             className="relative group cursor-pointer w-full aspect-square max-w-[240px]" 
             onClick={() => fileInputRef.current?.click()}
           >
-            <div className="w-full h-full rounded-[48px] border-2 border-dashed border-navy/10 flex items-center justify-center bg-navy/[0.02] overflow-hidden transition-all group-hover:border-navy/30 group-hover:bg-navy/[0.05]">
+            <div className="w-full h-full rounded-[48px] border-2 border-dashed border-navy/10 flex items-center justify-center bg-navy/2 overflow-hidden transition-all group-hover:border-navy/30 group-hover:bg-navy/5">
               {logo ? (
                 <img src={logo} alt="Logo" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               ) : (
@@ -57,8 +57,8 @@ export function BrandIdentityForm({ logo, slug, isUploading, fileInputRef, onLog
         </div>
       </div>
 
-      <div className="bg-navy/[0.03] border border-navy/10 rounded-[40px] p-8 space-y-6 relative overflow-hidden group">
-        <div className="absolute -top-4 -right-4 w-24 h-24 bg-navy/[0.05] rounded-full blur-2xl" />
+      <div className="bg-navy/3 border border-navy/10 rounded-[40px] p-8 space-y-6 relative overflow-hidden group">
+        <div className="absolute -top-4 -right-4 w-24 h-24 bg-navy/5 rounded-full blur-2xl" />
         
         <div className="flex items-center gap-3 relative z-10">
           <div className="w-10 h-10 rounded-xl bg-navy/10 flex items-center justify-center text-navy">

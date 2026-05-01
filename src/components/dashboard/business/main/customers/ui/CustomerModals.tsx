@@ -17,7 +17,7 @@ export function CustomerPaymentModal({
   return (
     <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
       <header className="bg-background rounded-[40px] w-full max-w-md shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300">
-        <div className="p-8 border-b border-foreground/5 bg-foreground/[0.01] flex items-center justify-between">
+        <div className="p-8 border-b border-foreground/5 bg-foreground/1 flex items-center justify-between">
           <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center">
             <Wallet size={24} className="text-navy" />
           </div>

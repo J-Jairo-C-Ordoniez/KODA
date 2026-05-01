@@ -13,6 +13,7 @@ import ProductDetail from './ProductDetail';
 import VariantModal from './VariantModal';
 import { Toaster, useToast } from '@/components/ui/Toast';
 import ProductCard from './components/ProductCard';
+import { DeleteProductModal } from './ui/DeleteProductModal';
 
 export default function Catalog() {
   const { data: session } = useSession();
@@ -104,7 +105,7 @@ export default function Catalog() {
   const handleSaveVariant = async (data: any) => {
     const result = await saveVariant(data, editingVariant, productIdFromUrl);
     if (result.success) {
-      showToast('success', editingVariant ? 'Actualizada' : 'Añadida', 'Variante guardada.');
+      showToast('success', editingVariant ? 'Actualizado' : 'Añadido', 'Variante guardada.');
       setIsVariantModalOpen(false);
       setEditingVariant(null);
     } else {
@@ -126,7 +127,7 @@ export default function Catalog() {
 
   if (productIdFromUrl && selectedProduct) {
     return (
-      <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto pb-20">
+      <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto pb-20 custom-scrollbar">
         <Toaster toasts={toasts} removeToast={removeToast} />
         <ProductDetail 
           product={selectedProduct}
@@ -137,31 +138,35 @@ export default function Catalog() {
           onUpdateStock={updateVariantStock}
         />
         
-        <ProductModal 
-          isOpen={isProductModalOpen}
-          onClose={() => setIsProductModalOpen(false)}
-          size="2xl"
-          tenantId={tenantId}
-          categories={categories}
-          editingProduct={editingProduct}
-          onSave={saveProduct}
-          isSaving={isSaving}
-        />
+        {isProductModalOpen && (
+          <ProductModal 
+            isOpen={isProductModalOpen}
+            onClose={() => setIsProductModalOpen(false)}
+            size="2xl"
+            tenantId={tenantId}
+            categories={categories}
+            editingProduct={editingProduct}
+            onSave={saveProduct}
+            isSaving={isSaving}
+          />
+        )}
 
-        <VariantModal 
-          isOpen={isVariantModalOpen}
-          onClose={() => setIsVariantModalOpen(false)}
-          size="2xl"
-          onSubmit={handleSaveVariant}
-          editingVariant={editingVariant}
-          loading={isSaving}
-        />
+        {isVariantModalOpen && (
+          <VariantModal 
+            isOpen={isVariantModalOpen}
+            onClose={() => setIsVariantModalOpen(false)}
+            size="2xl"
+            onSubmit={handleSaveVariant}
+            editingVariant={editingVariant}
+            loading={isSaving}
+          />
+        )}
       </main>
     );
   }
 
   return (
-    <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto pb-20 relative">
+    <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto pb-20 relative custom-scrollbar">
       <Toaster toasts={toasts} removeToast={removeToast} />
       <SectionHeader
         title="Catálogo"
@@ -175,7 +180,7 @@ export default function Catalog() {
                 placeholder="Buscar..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full sm:w-[240px] pl-10 pr-4 py-2.5 rounded-xl bg-foreground/5 border-transparent focus:bg-background focus:border-navy outline-none transition-all font-bold text-xs"
+                className="w-full sm:w-60 pl-10 pr-4 py-2.5 rounded-xl bg-foreground/5 border-transparent focus:bg-background focus:border-navy outline-none transition-all font-bold text-xs"
               />
             </div>
             <button 
@@ -191,7 +196,7 @@ export default function Catalog() {
       {isLoading ? <Loader /> : error ? (
         <p className="text-red-500 text-xs font-bold bg-red-50 p-4 rounded-xl border border-red-100">{error}</p>
       ) : filteredProducts.length === 0 ? (
-        <EmptyState icon={Package} title="Sin resultados" description="Prueba con otro término." />
+        <EmptyState icon={Package} title="Sin resultados" description="Prueba con otro término de búsqueda." />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
           {filteredProducts.map((product: any) => (
@@ -208,46 +213,26 @@ export default function Catalog() {
         </div>
       )}
 
-      <ProductModal 
-        isOpen={isProductModalOpen}
-        onClose={() => setIsProductModalOpen(false)}
-        size="2xl"
-        tenantId={tenantId}
-        categories={categories}
-        editingProduct={editingProduct}
-        onSave={saveProduct}
-        isSaving={isSaving}
-      />
+      {isProductModalOpen && (
+        <ProductModal 
+          isOpen={isProductModalOpen}
+          onClose={() => setIsProductModalOpen(false)}
+          size="2xl"
+          tenantId={tenantId}
+          categories={categories}
+          editingProduct={editingProduct}
+          onSave={saveProduct}
+          isSaving={isSaving}
+        />
+      )}
 
       {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="bg-background rounded-3xl p-8 w-full max-w-sm shadow-2xl border border-foreground/5 text-center">
-            <div className="space-y-6">
-              <div className="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center mx-auto">
-                <Trash2 size={32} className="text-red-500" />
-              </div>
-              <div>
-                <h3 className="text-xl font-black text-primary">¿Eliminar Producto?</h3>
-                <p className="text-secondary text-sm mt-2 font-medium">Esta acción no se puede deshacer.</p>
-              </div>
-              <div className="flex flex-col gap-2 pt-2">
-                <button
-                  disabled={isDeleting}
-                  onClick={confirmDeleteProduct}
-                  className="w-full py-3.5 rounded-xl bg-red-500 text-white font-black text-xs hover:bg-red-600 transition-all active:scale-95"
-                >
-                  {isDeleting ? 'Eliminando...' : 'Sí, eliminar'}
-                </button>
-                <button
-                  onClick={() => setIsDeleteModalOpen(false)}
-                  className="w-full py-3.5 rounded-xl border border-foreground/10 font-bold text-secondary hover:bg-foreground/5 text-xs transition-all"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <DeleteProductModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={confirmDeleteProduct}
+          isDeleting={isDeleting}
+        />
       )}
     </main>
   );

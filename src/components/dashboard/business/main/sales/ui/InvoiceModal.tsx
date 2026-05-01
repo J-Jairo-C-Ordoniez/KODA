@@ -107,16 +107,16 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
 
             <div className="bg-foreground/[0.03] border border-foreground/5 p-6 rounded-[32px] min-w-[240px] space-y-4">
               <div className="space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-secondary">No. Factura</p>
+                <p className="text-xs font-black uppercase tracking-widest text-secondary">No. Factura</p>
                 <p className="text-2xl font-black text-navy tracking-tight">#{invoiceNumber}</p>
               </div>
               <div className="grid grid-cols-2 gap-4 border-t border-foreground/5 pt-4">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-secondary">Fecha</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-secondary">Fecha</p>
                   <p className="text-xs font-bold text-primary">{date}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-secondary">Hora</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-secondary">Hora</p>
                   <p className="text-xs font-bold text-primary">{time}</p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-foreground/5">
             {/* Customer Details */}
             <div className="space-y-4">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-secondary flex items-center gap-2">
+              <h3 className="text-xs font-black uppercase tracking-widest text-secondary flex items-center gap-2">
                 <User size={12} className="text-navy" /> Cliente
               </h3>
               <div className="space-y-1">
@@ -138,7 +138,7 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
 
             {/* Payment Details */}
             <div className="space-y-4">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-secondary flex items-center gap-2">
+              <h3 className="text-xs font-black uppercase tracking-widest text-secondary flex items-center gap-2">
                 <CreditCard size={12} className="text-navy" /> Pago
               </h3>
               <div className="flex items-center gap-3">
@@ -154,7 +154,7 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
                       sale.paymentMethod === 'debt' ? 'FIADO (CRÉDITO)' : 'Online'}
                    </p>
                    {sale.paymentMethod === 'debt' ? (
-                     <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded-full w-fit">PENDIENTE DE PAGO</p>
+                     <p className="text-xs font-bold text-red-500 uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded-full w-fit">PENDIENTE DE PAGO</p>
                    ) : (
                      <p className="text-xs font-medium text-secondary">Vendedor: {sale.user?.name}</p>
                    )}
@@ -165,15 +165,15 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
 
           {/* Items Table */}
           <div className="space-y-4">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-secondary ml-2">Detalle de Productos</h3>
+            <h3 className="text-xs font-black uppercase tracking-widest text-secondary ml-2">Detalle de Productos</h3>
             <div className="bg-foreground/[0.02] border border-foreground/5 rounded-[32px] overflow-hidden">
               <table className="w-full">
                 <thead className="bg-foreground/[0.03] border-b border-foreground/5">
                   <tr>
-                    <th className="text-left px-8 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Cant.</th>
-                    <th className="text-left px-8 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Descripción</th>
-                    <th className="text-right px-8 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Precio</th>
-                    <th className="text-right px-8 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Subtotal</th>
+                    <th className="text-left px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Cant.</th>
+                    <th className="text-left px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Descripción</th>
+                    <th className="text-right px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Precio</th>
+                    <th className="text-right px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Subtotal</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-foreground/5">
@@ -182,7 +182,7 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
                       <td className="px-8 py-4 text-sm font-black text-navy">{item.quantity}</td>
                       <td className="px-8 py-4">
                         <p className="text-sm font-bold text-primary">{item.variant?.product?.name || 'Producto'}</p>
-                        <p className="text-[10px] font-medium text-secondary uppercase tracking-tighter">
+                        <p className="text-xs font-medium text-secondary uppercase tracking-tighter">
                           {item.variant?.name} {item.variant?.color && `• ${item.variant.color}`} {item.variant?.size && `• ${item.variant.size}`}
                         </p>
                       </td>
@@ -221,7 +221,7 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
           {/* Footer Note */}
           <div className="text-center pt-12 space-y-2 border-t border-foreground/5">
              <p className="text-xs font-bold text-primary">¡Gracias por tu compra!</p>
-             <p className="text-[10px] font-medium text-secondary">Este documento es un comprobante de venta. Para cambios o garantías, presenta esta factura antes de 15 días.</p>
+             <p className="text-xs font-medium text-secondary">Este documento es un comprobante de venta. Para cambios o garantías, presenta esta factura antes de 15 días.</p>
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+'use client'
+
 import Logo from '@/components/ui/Logo';
 import { Menu } from 'lucide-react';
 import useDashboardStore from '@/store/dashboard.store';
@@ -11,7 +13,7 @@ export default function Header() {
         <button 
           onClick={toggleSidebar}
           className="p-2 hover:bg-foreground/5 rounded-xl lg:hidden text-secondary hover:text-primary transition-colors"
-          aria-label="Toggle Menu"
+          aria-label="Alternar menú"
         >
           <Menu size={20} />
         </button>

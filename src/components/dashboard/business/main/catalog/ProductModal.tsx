@@ -17,7 +17,6 @@ interface ProductModalProps {
 }
 
 export default function ProductModal({ isOpen, onClose, tenantId, categories, editingProduct, onSave, isSaving, size = 'md' }: ProductModalProps) {
-  // const { saveProduct, isSaving } = useAdminCatalog(tenantId); // REMOVED to share state with Catalog
   
   const [formData, setFormData] = useState({
     name: '',
@@ -54,10 +53,10 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
       if (result.success) {
         onClose();
       } else {
-        alert(result.error || 'Error al guardar el producto');
+        alert(result.error || 'Error saving product');
       }
     } catch (err) {
-      alert('Error de conexión');
+      alert('Connection error');
     }
   };
 
@@ -67,41 +66,41 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
       onClose={onClose} 
       size={size}
       title={editingProduct ? 'Editar Producto' : 'Nuevo Producto'}
-      description="Gestiona la información base de tu producto."
+      description="Gestiona la información básica de tu producto."
       icon={<Package size={32} className="text-navy" />}
     >
       <form onSubmit={handleSubmit} className="space-y-6 pt-2 overflow-y-auto max-h-[70vh] custom-scrollbar px-1">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Nombre del Producto</label>
+          <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Nombre del Producto</label>
           <input
             type="text"
             required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02]"
-            placeholder="Ej. Gorras cerradas"
+            className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2"
+            placeholder="Ej. Gorras de béisbol"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Descripción del Producto</label>
+          <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Descripción del Producto</label>
           <textarea
             rows={4}
             required
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02] resize-none"
+            className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 resize-none"
             placeholder="Materiales, ajuste y detalles del producto..."
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Categoría</label>
+          <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Categoría</label>
           <select
             required
             value={formData.categoryId}
             onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-            className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02] appearance-none"
+            className="w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 appearance-none"
           >
             <option value="" disabled>Seleccionar categoría</option>
             {categories.map(cat => (
@@ -111,14 +110,14 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Género</label>
+          <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Género</label>
           <div className="grid grid-cols-3 gap-2">
             {['hombre', 'mujer', 'mixto'].map(g => (
               <button
                 key={g}
                 type="button"
                 onClick={() => setFormData({ ...formData, gender: g })}
-                className={`py-4 rounded-xl border font-bold text-[10px] uppercase tracking-widest transition-all ${
+                className={`py-4 rounded-xl border font-bold text-xs uppercase tracking-widest transition-all ${
                   formData.gender === g 
                     ? 'bg-navy text-white border-navy shadow-lg shadow-navy/20' 
                     : 'bg-background text-secondary border-foreground/10 hover:border-navy/30'
@@ -132,13 +131,14 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
 
         <div className="p-6 rounded-3xl bg-navy/5 border border-navy/10 flex items-center justify-between gap-4">
           <div className="space-y-0.5">
-            <p className="font-black text-navy text-xs tracking-tight uppercase tracking-widest">Público</p>
-            <p className="text-secondary text-[10px] font-medium leading-tight">Mostrar en el catálogo para clientes.</p>
+            <p className="font-black text-navy text-xs uppercase tracking-widest">Público</p>
+            <p className="text-secondary text-xs font-medium leading-tight">Mostrar en el catálogo para clientes.</p>
           </div>
           <button
             type="button"
             onClick={() => setFormData({ ...formData, isPublic: !formData.isPublic })}
             className={`w-14 h-8 rounded-full p-1 transition-all shrink-0 ${formData.isPublic ? 'bg-navy' : 'bg-foreground/20'}`}
+            aria-label={formData.isPublic ? 'Hacer privado' : 'Hacer público'}
           >
             <div className={`w-6 h-6 rounded-full bg-white transition-all transform ${formData.isPublic ? 'translate-x-6' : 'translate-x-0'}`} />
           </button>

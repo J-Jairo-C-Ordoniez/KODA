@@ -149,7 +149,7 @@ export default function SaleForm({ variants, onSubmit, onCancel, submitting }: a
                 <button
                   key={m}
                   onClick={() => setPaymentMethod(m)}
-                  className={`py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] border transition-all ${
+                  className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
                     paymentMethod === m 
                       ? 'bg-navy text-white shadow-lg shadow-navy/20 border-navy' 
                       : 'bg-white border-foreground/10 text-secondary hover:border-navy/30'
@@ -170,21 +170,21 @@ export default function SaleForm({ variants, onSubmit, onCancel, submitting }: a
 
           <div className="pt-4 border-t border-foreground/5 space-y-4">
             <div className="flex justify-between items-end">
-              <p className="text-[10px] font-black uppercase tracking-widest text-secondary opacity-60">Total Venta</p>
+              <p className="text-xs font-black uppercase tracking-widest text-secondary opacity-60">Total Venta</p>
               <p className="text-3xl font-black text-primary tracking-tighter">${total.toLocaleString()}</p>
             </div>
 
             <div className="flex gap-3">
               <button 
                 onClick={onCancel} 
-                className="flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-secondary hover:bg-foreground/5 rounded-2xl transition-all"
+                className="flex-1 py-4 text-xs font-black uppercase tracking-widest text-secondary hover:bg-foreground/5 rounded-2xl transition-all"
               >
                 Cancelar
               </button>
               <button 
                 onClick={handleSubmit}
                 disabled={submitting || cart.length === 0 || (paymentMethod === 'debt' && !selectedCustomerId)}
-                className="flex-2 py-4 bg-navy text-white text-md font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-navy/20 active:translate-y-0 transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
+                className="flex-2 py-4 bg-navy text-white text-sm font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-navy/20 active:translate-y-0 transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
               >
                 {submitting ? 'Procesando...' : 'Confirmar Venta'}
               </button>

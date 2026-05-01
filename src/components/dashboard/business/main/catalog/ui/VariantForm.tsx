@@ -19,7 +19,7 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
     onSubmit(data);
   };
 
-  const labelClass = "text-[10px] font-black uppercase tracking-widest text-secondary ml-1";
+  const labelClass = "text-xs font-black uppercase tracking-widest text-secondary ml-1";
   const inputClass = "w-full px-6 py-4 rounded-2xl border border-foreground/10 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/[0.02]";
 
   return (
@@ -30,11 +30,10 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
         </div>
       )}
 
-      {/* --- Sección: Detalles Básicos --- */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-foreground/5 pb-2">
           <Tag size={14} className="text-navy" />
-          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Detalles Básicos</h4>
+          <h4 className="text-xs font-black uppercase tracking-widest text-primary">Detalles Básicos</h4>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -47,7 +46,7 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
                 name="name"
                 defaultValue={editingVariant?.name}
                 className={`${inputClass} pl-11 py-3 text-sm`}
-                placeholder="Ej: Negro L"
+                placeholder="Ej. Negro L"
               />
             </div>
           </div>
@@ -68,16 +67,15 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
         </div>
       </div>
 
-      {/* --- Sección: Precios e Inventario --- */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-foreground/5 pb-2">
           <DollarSign size={14} className="text-navy" />
-          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Precios e Inventario</h4>
+          <h4 className="text-xs font-black uppercase tracking-widest text-primary">Precios e Inventario</h4>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className={labelClass}>Venta</label>
+            <label className={labelClass}>Precio</label>
             <div className="relative group">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/30 font-black text-xs group-focus-within:text-navy">$</div>
               <input
@@ -110,11 +108,10 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
         </div>
       </div>
 
-      {/* --- Sección: Atributos --- */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-foreground/5 pb-2">
           <Palette size={14} className="text-navy" />
-          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Atributos</h4>
+          <h4 className="text-xs font-black uppercase tracking-widest text-primary">Atributos</h4>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -148,11 +145,10 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
         </div>
       </div>
 
-      {/* --- Sección: Multimedia y Estado --- */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 border-b border-foreground/5 pb-2">
           <ImageIcon size={14} className="text-navy" />
-          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Multimedia y Estado</h4>
+          <h4 className="text-xs font-black uppercase tracking-widest text-primary">Multimedia y Estado</h4>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
@@ -160,14 +156,14 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
             <label className={labelClass}>Imagen</label>
             {imageUrl ? (
               <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-navy/20 group">
-                <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                <img src={imageUrl} alt="Vista previa" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-navy/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center backdrop-blur-sm">
                   <button 
                     type="button"
                     onClick={() => setImageUrl('')}
-                    className="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all shadow-xl hover:scale-105 active:scale-95 flex items-center gap-2 font-bold text-[10px]"
+                    className="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all shadow-xl hover:scale-105 active:scale-95 flex items-center gap-2 font-bold text-xs"
                   >
-                    <X size={14} /> Quitar Imagen
+                    <X size={14} /> Eliminar Imagen
                   </button>
                 </div>
               </div>
@@ -184,10 +180,10 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
                   <button
                     type="button"
                     onClick={() => open()}
-                    className="w-full aspect-video rounded-3xl border-2 border-dashed border-foreground/10 flex flex-col items-center justify-center gap-2 text-secondary hover:border-navy hover:text-navy hover:bg-navy/5 transition-all group bg-foreground/[0.01]"
+                    className="w-full aspect-video rounded-3xl border-2 border-dashed border-foreground/10 flex flex-col items-center justify-center gap-2 text-secondary hover:border-navy hover:text-navy hover:bg-navy/5 transition-all group bg-foreground/1"
                   >
                     <Plus size={20} />
-                    <span className="text-[10px] font-black uppercase tracking-widest block">Subir Foto</span>
+                    <span className="text-xs font-black uppercase tracking-widest block">Subir Foto</span>
                   </button>
                 )}
               </CldUploadWidget>
@@ -201,7 +197,7 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
               className={`p-4 rounded-3xl border transition-all cursor-pointer flex items-center justify-between gap-4 ${
                 isActive 
                   ? 'bg-navy/5 border-navy/20 shadow-sm' 
-                  : 'bg-foreground/[0.02] border-foreground/10 opacity-60'
+                  : 'bg-foreground/2 border-foreground/10 opacity-60'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -210,7 +206,7 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
                 </div>
                 <div>
                   <p className={`font-black text-xs ${isActive ? 'text-navy' : 'text-primary'}`}>Estado</p>
-                  <p className="text-secondary text-[10px] font-medium leading-none mt-0.5">
+                  <p className="text-secondary text-xs font-medium leading-none mt-0.5">
                     {isActive ? 'Público' : 'Oculto'}
                   </p>
                 </div>
@@ -218,6 +214,7 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
               <button
                 type="button"
                 className={`w-12 h-7 rounded-full p-1 transition-all ${isActive ? 'bg-navy' : 'bg-foreground/20'}`}
+                aria-label={isActive ? 'Hacer oculto' : 'Hacer público'}
               >
                 <div className={`w-5 h-5 rounded-full bg-white transition-all transform ${isActive ? 'translate-x-5' : 'translate-x-0'}`} />
               </button>
@@ -226,7 +223,6 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
         </div>
       </div>
 
-      {/* --- Acciones --- */}
       <div className="flex gap-4 pt-4 border-t border-foreground/5">
         <button
           type="button"

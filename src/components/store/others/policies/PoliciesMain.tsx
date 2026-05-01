@@ -1,36 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
 import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import PolicyContent from "./ui/PolicyContent";
+import { usePolicies } from "@/hooks/store/usePolicies";
 
 export default function PoliciesMain() {
   const { setBreadcrumbsRoute } = useBreadcrumbsStore();
-  const [policyData, setPolicyData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: policyData, isLoading, error } = usePolicies();
 
   useEffect(() => {
-    setBreadcrumbsRoute("políticas y privacidad");
+    setBreadcrumbsRoute("policies and privacy");
   }, [setBreadcrumbsRoute]);
-
-  useEffect(() => {
-    const fetchPolicies = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch("/api/policies");
-        const result = await res.json();
-        const data = result.success ? result.data : result;
-        setPolicyData(data);
-      } catch (err) {
-        setError("Error al cargar políticas");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchPolicies();
-  }, []);
 
   return (
     <main className="bg-background w-full min-h-screen">
@@ -40,7 +22,7 @@ export default function PoliciesMain() {
         {isLoading && (
           <div className="w-full py-20 flex flex-col items-center gap-4 m-auto">
             <p className="animate-pulse text-secondary/60 tracking-widest uppercase text-sm">
-              Cargando...
+              Loading...
             </p>
           </div>
         )}
@@ -48,7 +30,7 @@ export default function PoliciesMain() {
         {(!isLoading && (error || !policyData)) && (
           <div className="w-full py-20 flex flex-col items-center gap-4 m-auto">
             <p className="text-md font-medium tracking-wider text-secondary">
-              {error || "No hay información disponible"}
+              {error || "No information available"}
             </p>
           </div>
         )}

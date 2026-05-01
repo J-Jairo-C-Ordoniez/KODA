@@ -1,13 +1,12 @@
-import { AuthService } from "@/core/modules/auth/sevices/auth.service";
+import authService from "@/core/modules/auth/services/auth.service";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const { email } = await req.json();
-    const authService = new AuthService();
     const result = await authService.requestPasswordReset(email);
     return NextResponse.json(result);
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 400 });
   }
 }

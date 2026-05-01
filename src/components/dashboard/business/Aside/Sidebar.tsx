@@ -19,7 +19,8 @@ const navItems: NavItem[] = [
     label: 'Resumen',
     href: '/dashboard/business',
     icon: Home,
-    roles: ["admin", "owner"] },
+    roles: ["admin", "owner"] 
+  },
   {
     label: 'Categorías',
     href: '/dashboard/business/categories',
@@ -70,21 +71,24 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[60] lg:hidden animate-in fade-in duration-300"
+          className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-50 lg:hidden animate-in fade-in duration-300"
           onClick={closeSidebar}
         />
       )}
 
       <aside className={cn(
-        "fixed lg:static inset-y-0 left-0 w-72 bg-background border-r border-foreground/5 flex flex-col z-[70] transition-transform duration-300 ease-in-out lg:translate-x-0",
+        "fixed lg:static inset-y-0 left-0 w-72 bg-background border-r border-foreground/5 flex flex-col z-50 transition-transform duration-300 ease-in-out lg:translate-x-0",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
 
         <div className="lg:hidden flex justify-end p-4">
-          <button onClick={closeSidebar} className="p-2 hover:bg-foreground/5 rounded-xl text-secondary">
+          <button 
+            onClick={closeSidebar} 
+            className="p-2 hover:bg-foreground/5 rounded-xl text-secondary"
+            aria-label="Cerrar menú"
+          >
             <X size={20} />
           </button>
         </div>
@@ -117,7 +121,7 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="p-6 border-t border-foreground/5 mt-auto">
+        <footer className="p-6 border-t border-foreground/5 mt-auto">
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
             className="cursor-pointer text-sm font-bold w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-colors"
@@ -125,7 +129,7 @@ export default function Sidebar() {
             <LogOut size={18} />
             Cerrar Sesión
           </button>
-        </div>
+        </footer>
       </aside>
     </>
   );

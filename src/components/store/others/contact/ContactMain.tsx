@@ -1,36 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
 import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import ContactContent from "./ui/ContactContent";
+import { useContact } from "@/hooks/store/useContact";
 
 export default function ContactMain() {
   const { setBreadcrumbsRoute } = useBreadcrumbsStore();
-  const [contact, setContact] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: contact, isLoading, error } = useContact();
 
   useEffect(() => {
-    setBreadcrumbsRoute("contacto");
+    setBreadcrumbsRoute("contact");
   }, [setBreadcrumbsRoute]);
-
-  useEffect(() => {
-    const fetchContact = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch("/api/contact");
-        const result = await res.json();
-        const data = result.success ? result.data : result;
-        setContact(data?.contact || data || null);
-      } catch (err) {
-        setError("Error al cargar información de contacto");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContact();
-  }, []);
 
   return (
     <main className="bg-background w-full min-h-screen overflow-x-hidden">
@@ -40,7 +22,7 @@ export default function ContactMain() {
         {isLoading && (
           <div className="w-full py-20 flex flex-col items-center gap-4 m-auto">
             <p className="animate-pulse text-secondary/60 tracking-widest uppercase text-sm">
-              Cargando...
+              Loading...
             </p>
           </div>
         )}
@@ -48,7 +30,7 @@ export default function ContactMain() {
         {(!isLoading && (error || !contact)) && (
           <div className="w-full py-20 flex flex-col items-center gap-4 m-auto">
             <p className="text-md font-medium tracking-wider text-secondary">
-              {error || "No hay información de contacto disponible"}
+              {error || "No contact information available"}
             </p>
           </div>
         )}

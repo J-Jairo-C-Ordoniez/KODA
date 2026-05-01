@@ -146,44 +146,45 @@ export default function Overview() {
         </>
       )}
 
-      {/* Modal para compartir */}
-      <Modal 
-        isOpen={isShareModalOpen} 
-        onClose={() => setIsShareModalOpen(false)} 
-        title="Compartir Catálogo"
-        description="Atrae más clientes permitiendo que cualquiera vea tus productos y realice pedidos."
-        icon={<Share2 size={32} className="text-navy" />}
-      >
-        <div className="space-y-8">
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary ml-1">Enlace Público</label>
-            <div className="flex flex-col gap-3">
-              <input 
-                readOnly
-                className="w-full px-6 py-4 rounded-2xl border border-foreground/10 bg-foreground/[0.02] font-bold text-navy text-sm outline-none"
-                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/${session?.user?.tenantSlug}`}
-              />
-              <button 
-                onClick={handleCopy}
-                className={`w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm transition-all active:scale-95 shadow-xl ${
-                  copied ? 'bg-green-500 text-white shadow-green-500/20' : 'bg-navy text-white hover:bg-navy/90 shadow-navy/20'
-                }`}
+      {isShareModalOpen && (
+        <Modal 
+          isOpen={isShareModalOpen} 
+          onClose={() => setIsShareModalOpen(false)} 
+          title="Compartir Catálogo"
+          description="Atrae más clientes permitiendo que cualquiera vea tus productos y realice pedidos."
+          icon={<Share2 size={32} className="text-navy" />}
+        >
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Enlace Público</label>
+              <div className="flex flex-col gap-3">
+                <input 
+                  readOnly
+                  className="w-full px-6 py-4 rounded-2xl border border-foreground/10 bg-foreground/2 font-bold text-navy text-sm outline-none"
+                  value={`${typeof window !== 'undefined' ? window.location.origin : ''}/${session?.user?.tenantSlug}`}
+                />
+                <button 
+                  onClick={handleCopy}
+                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm transition-all active:scale-95 shadow-xl ${
+                    copied ? 'bg-green-500 text-white shadow-green-500/20' : 'bg-navy text-white hover:bg-navy/90 shadow-navy/20'
+                  }`}
+                >
+                  {copied ? <><Check size={18} /> ¡Copiado con éxito!</> : <><Copy size={18} /> Copiar Enlace</>}
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-center">
+               <button 
+                onClick={() => setIsShareModalOpen(false)}
+                className="text-secondary text-xs font-black uppercase tracking-wider hover:text-navy transition-colors"
               >
-                {copied ? <><Check size={18} /> ¡Copiado con éxito!</> : <><Copy size={18} /> Copiar Enlace</>}
+                Cerrar Ventana
               </button>
             </div>
           </div>
-
-          <div className="pt-2 flex justify-center">
-             <button 
-              onClick={() => setIsShareModalOpen(false)}
-              className="text-secondary text-xs font-black uppercase tracking-[0.15em] hover:text-navy transition-colors"
-            >
-              Cerrar Ventana
-            </button>
-          </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
     </main>
   );
 }

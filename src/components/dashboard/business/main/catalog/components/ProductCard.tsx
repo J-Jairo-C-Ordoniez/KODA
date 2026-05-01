@@ -21,8 +21,7 @@ export default function ProductCard({
   return (
     <article 
       onClick={() => onOpenDetail(product.productId)}
-      className="bg-background border border-foreground/5 rounded-3xl transition-all group relative flex flex-col cursor-pointer min-h-[300px] hover:shadow-xl hover:shadow-navy/5 hover:border-navy/10"
-      style={{ zIndex: activeMenuId === product.productId ? 50 : 10 }}
+      className={`bg-background border border-foreground/5 rounded-3xl transition-all group relative flex flex-col cursor-pointer min-h-[300px] hover:shadow-xl hover:shadow-navy/5 hover:border-navy/10 ${activeMenuId === product.productId ? 'z-50' : 'z-10'}`}
     >
       <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-32 h-32 bg-navy/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
@@ -34,7 +33,7 @@ export default function ProductCard({
             <Package size={20} className="text-navy group-hover:text-white" />
           </div>
           <div className="flex gap-2 items-center" onClick={(e) => e.stopPropagation()}>
-            <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${product.isPublic ? 'bg-green-50 text-green-600' : 'bg-foreground/5 text-secondary'}`}>
+            <span className={`text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${product.isPublic ? 'bg-green-50 text-green-600' : 'bg-foreground/5 text-secondary'}`}>
               {product.isPublic ? 'Público' : 'Privado'}
             </span>
             
@@ -42,6 +41,7 @@ export default function ProductCard({
               <button 
                 onClick={() => setActiveMenuId(activeMenuId === product.productId ? null : product.productId)}
                 className="p-2 rounded-xl hover:bg-foreground/5 text-secondary transition-colors"
+                aria-label="Más opciones"
               >
                 <MoreVertical size={18} />
               </button>
@@ -78,11 +78,11 @@ export default function ProductCard({
           <div className="flex items-center flex-wrap gap-x-4 gap-y-2">
             <div className="flex items-center gap-2">
               <Tag size={12} className="text-navy" />
-              <span className="text-[10px] font-black text-secondary uppercase tracking-widest">{product.category?.name}</span>
+              <span className="text-xs font-black text-secondary uppercase tracking-widest">{product.category?.name}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-navy/20" />
-              <span className="text-[9px] font-bold text-secondary uppercase tracking-[0.15em]">{product.gender}</span>
+              <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{product.gender}</span>
             </div>
           </div>
 
@@ -99,14 +99,14 @@ export default function ProductCard({
                   </div>
                 ))}
                 {product.variants?.length > 3 && (
-                  <div className="w-8 h-8 rounded-full border-4 border-background bg-foreground/5 flex items-center justify-center text-[10px] font-black text-secondary shadow-sm">
+                  <div className="w-8 h-8 rounded-full border-4 border-background bg-foreground/5 flex items-center justify-center text-xs font-black text-secondary shadow-sm">
                     +{product.variants.length - 3}
                   </div>
                 )}
               </div>
               <div>
                 <p className="text-xs font-black text-primary leading-none">{product.variants?.length || 0}</p>
-                <p className="text-[9px] font-bold text-secondary uppercase tracking-widest">Variantes</p>
+                <p className="text-[10px] font-bold text-secondary uppercase tracking-widest">Variantes</p>
               </div>
             </div>
           </div>

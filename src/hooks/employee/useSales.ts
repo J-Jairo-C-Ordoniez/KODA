@@ -8,14 +8,12 @@ export function useSales(tenantId: string | undefined) {
     const [error, setError] = useState<string | null>(null);
 
     const fetchSalesData = useCallback(async () => {
-        console.log('Fetching sales data for tenant:', tenantId);
         if (!tenantId) return;
         setIsLoading(true);
         setError(null);
         try {
             const salesUrl = `/api/${tenantId}/sales`;
             const variantsUrl = `/api/${tenantId}/catalog/variants`;
-            console.log('Fetching:', salesUrl, variantsUrl);
             const [salesRes, variantsRes] = await Promise.all([
                 fetch(salesUrl),
                 fetch(variantsUrl)

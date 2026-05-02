@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Header from '../ui/Header';
 import Modal from '../categories/ui/Modal';
 import SalesHeader from './ui/SalesHeader';
-import SalesTable from './ui/SalesTable';
+import { SalesTable } from './ui/SalesTable';
 import SaleForm from './ui/SaleForm';
 import ActionDialog from '../categories/ui/ActionDialog';
 import { useSession } from 'next-auth/react';
 import { useSales } from '@/hooks/employee/useSales';
+import InvoiceModal from './ui/InvoiceModal';
 
 export default function SalesClient() {
     const { data: session } = useSession();
@@ -25,6 +26,8 @@ export default function SalesClient() {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newSaleId, setNewSaleId] = useState<string | null>(null);
+    const [selectedSaleForInvoice, setSelectedSaleForInvoice] = useState<any>(null);
     const [alertConfig, setAlertConfig] = useState({ isOpen: false, title: '', message: '', variant: 'primary', type: 'alert' });
 
     useEffect(() => {
@@ -36,6 +39,10 @@ export default function SalesClient() {
 
         if (result.success) {
             setIsModalOpen(false);
+            if (result.data?.saleId) {
+                setNewSaleId(result.data.saleId);
+                setTimeout(() => setNewSaleId(null), 5000);
+            }
             setAlertConfig({
                 isOpen: true,
                 title: 'Éxito',
@@ -86,7 +93,11 @@ export default function SalesClient() {
                         setSearchTerm={setSearchTerm}
                     />
 
-                    <SalesTable sales={filteredSales} />
+                    <SalesTable 
+                        sales={filteredSales} 
+                        newSaleId={newSaleId}
+                        onViewInvoice={setSelectedSaleForInvoice}
+                    />
                 </section>
             </div>
 
@@ -120,6 +131,12 @@ export default function SalesClient() {
                         confirmText="Aceptar"
                     />
                 </Modal>
+            )}
+            {selectedSaleForInvoice && (
+                <InvoiceModal 
+                    sale={selectedSaleForInvoice} 
+                    onClose={() => setSelectedSaleForInvoice(null)} 
+                />
             )}
         </main>
     );

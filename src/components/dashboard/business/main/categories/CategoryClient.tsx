@@ -7,19 +7,26 @@ import MainCategory from './ui/MainCategory';
 import Modal from './ui/Modal';
 import CategoryForm from './ui/CategoryForm';
 import ActionDialog from './ui/ActionDialog';
-import { useCategories } from '@/hooks/useCategories';
+import { useAdminCatalog } from '@/hooks/admin/useAdminCatalog';
+import { useSession } from 'next-auth/react';
 
 export default function CategoryClient() {
+  const { data: session } = useSession();
+  const tenantId = session?.user?.tenantId;
+
   const {
     categories,
     isLoading,
-    error,
-    setError,
+    error: hookError,
     isSaving: submitting,
-    fetchCategories,
+    fetchCatalogData: fetchCategories,
     saveCategory,
     deleteCategory
-  } = useCategories();
+  } = useAdminCatalog(tenantId);
+
+  const [localError, setLocalError] = useState<string | null>(null);
+  const error = localError || hookError;
+  const setError = (msg: string | null) => setLocalError(msg);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);

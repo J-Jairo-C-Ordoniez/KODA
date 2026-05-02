@@ -8,10 +8,14 @@ import ProductForm from './ui/ProductForm';
 import VariantForm from './ui/VariantForm';
 import Modal from '../categories/ui/Modal';
 import ActionDialog from '../categories/ui/ActionDialog';
+import { useAdminCatalog } from '@/hooks/admin/useAdminCatalog';
+import { useSession } from 'next-auth/react';
 import Header from '../ui/Header';
-import { useCatalog } from '@/hooks/useCatalog';
 
 export default function CatalogClient() {
+    const { data: session } = useSession();
+    const tenantId = session?.user?.tenantId;
+
     const {
         products,
         categories,
@@ -23,7 +27,7 @@ export default function CatalogClient() {
         deleteProduct,
         saveVariant,
         deleteVariant
-    } = useCatalog();
+    } = useAdminCatalog(tenantId);
 
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedProducts, setExpandedProducts] = useState({});

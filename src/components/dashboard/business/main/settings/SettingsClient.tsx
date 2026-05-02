@@ -3,9 +3,13 @@
 import React, { useEffect } from 'react';
 import Header from '../ui/Header';
 import MainSettings from './ui/mainSettings';
-import { useSettings } from '@/hooks/useSettings';
+import { useSettings } from '@/hooks/admin/useSettings';
+import { useSession } from 'next-auth/react';
 
 export default function SettingsPage() {
+    const { data: session } = useSession();
+    const tenantId = session?.user?.tenantId;
+
     const {
         aboutUs,
         policy,
@@ -14,7 +18,7 @@ export default function SettingsPage() {
         fetchSettingsData,
         savePolicyAction,
         saveAboutUsAction
-    } = useSettings();
+    } = useSettings(tenantId);
 
     useEffect(() => {
         fetchSettingsData();

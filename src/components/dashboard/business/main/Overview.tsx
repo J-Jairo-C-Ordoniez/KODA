@@ -30,7 +30,7 @@ export default function Overview() {
   const user = session?.user?.name || 'tu negocio';
 
   return (
-    <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto">
+    <main className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-8 lg:px-12">
       <SectionHeader
         title={`Bienvenido, ${user}`}
         subtitle="Aquí tienes un resumen de tu negocio hoy."

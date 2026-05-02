@@ -59,7 +59,7 @@ export default function Customers() {
   });
 
   return (
-    <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20 custom-scrollbar relative">
+    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20 relative">
       <Toaster toasts={toasts} removeToast={removeToast} />
       
       <SectionHeader 

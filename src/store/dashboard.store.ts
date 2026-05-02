@@ -1,31 +1,26 @@
 import { create } from 'zustand';
 
-interface SalesMetric {
-  revenue: number;
-  count: number;
-}
-
-interface SalesPeriods {
-  day: SalesMetric;
-  week: SalesMetric;
-  month: SalesMetric;
-}
-
-interface InventoryStats {
-  totalStock: number;
-  lowStockItems: any[];
+interface SalesData {
+  totalOrders: number;
+  totalRevenue: number;
 }
 
 interface DashboardStats {
-  sales: {
-    periods: SalesPeriods;
-    totalCount: number;
+  salesToday: SalesData;
+  salesMonth: SalesData;
+  debtCustomers: {
+    totalCustomersWithDebt: number;
   };
-  inventory: InventoryStats;
-  topProducts: any[];
+  lowStockItems: {
+    totalLowStockItems: number;
+  };
+  salesTrend: any[];
 }
 
 interface DashboardStore {
+  stats: DashboardStats | null;
+  isLoading: boolean;
+  error: string | null;
   isSidebarOpen: boolean;
   openSidebar: () => void;
   closeSidebar: () => void;

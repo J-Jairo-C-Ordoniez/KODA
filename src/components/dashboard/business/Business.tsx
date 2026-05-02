@@ -16,7 +16,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
             <Header />
             <div className="flex flex-1 overflow-hidden relative pb-6">
                 <Sidebar />
-                <div className="flex-1 overflow-y-auto custom-scrollbar bg-foreground/2">
+                <div className="flex-1 overflow-y-auto custom-scrollbar bg-background">
                     {children}
                 </div>
             </div>

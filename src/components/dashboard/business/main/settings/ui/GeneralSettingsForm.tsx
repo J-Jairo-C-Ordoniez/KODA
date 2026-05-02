@@ -39,34 +39,33 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
     <div className="space-y-10 relative z-10">
       <div className="space-y-8">
           <div className="flex items-center gap-3 pb-2 border-b border-foreground/5">
-            <Layout size={18} className="text-navy" />
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary">General Information</h4>
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary">Información General</h4>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Business Name</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Nombre del Negocio</label>
             <input 
               value={form.businessName} 
               onChange={(e) => setForm({ ...form, businessName: e.target.value })} 
               className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 shadow-inner" 
-              placeholder="E.g. Koda Boutique"
+              placeholder="Ej. Koda Boutique"
             />
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Business Type</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Tipo de Negocio</label>
             <div className="relative">
               <select 
                 value={form.type} 
                 onChange={(e) => setForm({ ...form, type: e.target.value })} 
                 className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 appearance-none cursor-pointer shadow-inner"
               >
-                <option value="ropa">Clothing & Fashion</option>
-                <option value="calzado">Footwear & Shoes</option>
-                <option value="accesorios">Accessories & Jewelry</option>
-                <option value="boutique">Multibrand Boutique</option>
-                <option value="deportes">Sporting Goods</option>
+                <option value="ropa">Ropa y Moda</option>
+                <option value="calzado">Calzado y Zapatos</option>
+                <option value="accesorios">Accesorios y Joyería</option>
+                <option value="boutique">Boutique Multimarca</option>
+                <option value="deportes">Artículos Deportivos</option>
               </select>
               <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
                   <Info size={16} />
@@ -77,7 +76,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">URL Identifier (Slug)</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Identificador URL (Slug)</label>
             <div className="relative group">
               <div className="absolute left-6 top-1/2 -translate-y-1/2 text-secondary/40 font-bold text-sm">koda.app/</div>
               <input 
@@ -86,11 +85,11 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
                 className="w-full pl-[92px] pr-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-black text-navy bg-foreground/2 shadow-inner" 
               />
             </div>
-            <p className="text-[9px] font-bold text-secondary/40 uppercase tracking-widest ml-1">This changes your public link. Use with caution.</p>
+            <p className="text-[9px] font-bold text-secondary/40 uppercase tracking-widest ml-1">Esto cambia tu enlace público. Úsalo con precaución.</p>
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Sales WhatsApp</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">WhatsApp de Ventas</label>
             <div className="relative">
               <Smartphone className="absolute left-6 top-1/2 -translate-y-1/2 text-navy" size={18} />
               <input 
@@ -104,13 +103,13 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
         </div>
 
         <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Brand Description</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Descripción de la Marca</label>
           <textarea 
             rows={3} 
             value={form.description} 
             onChange={(e) => setForm({ ...form, description: e.target.value })} 
             className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 resize-none shadow-inner" 
-            placeholder="Define your style, mission, or what makes your store unique..." 
+            placeholder="Define tu estilo, misión o lo que hace única a tu tienda..." 
           />
         </div>
       </div>
@@ -118,7 +117,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
       <div className="pt-6 border-t border-foreground/5 space-y-8">
         <div className="flex items-center gap-3">
             <Smartphone size={18} className="text-navy" />
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary">Social Media</h4>
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary">Redes Sociales</h4>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -164,7 +163,7 @@ export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks
           disabled={isSaving} 
           className="w-full md:w-auto px-16 py-5 rounded-[28px] bg-navy text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-navy/90 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 shadow-2xl shadow-navy/20 flex items-center justify-center gap-3"
         >
-          {isSaving ? 'Saving changes...' : <><CheckCircle size={20} /> Update Settings</>}
+          {isSaving ? 'Guardando cambios...' : <><CheckCircle size={20} /> Actualizar Configuración</>}
         </button>
       </div>
     </div>

@@ -16,81 +16,87 @@ export function CustomerPaymentModal({
 
   return (
     <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <header className="bg-background rounded-[40px] w-full max-w-md shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300">
-        <div className="p-8 border-b border-foreground/5 bg-foreground/1 flex items-center justify-between">
-          <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center">
-            <Wallet size={24} className="text-navy" />
+      <div className="bg-background rounded-[40px] w-full max-w-md shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300 flex flex-col">
+        <header className="p-8 border-b border-foreground/5 bg-navy/5 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center text-navy shadow-inner">
+              <Wallet size={24} />
+            </div>
+            <div>
+              <h3 className="text-xl font-black text-primary tracking-tight">Registrar Abono</h3>
+              <p className="text-secondary text-xs font-medium truncate max-w-[200px]">Cliente: {customer.name}</p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-xl font-black text-primary">Registrar Abono</h3>
-            <p className="text-secondary text-xs font-medium truncate max-w-[200px]">Cliente: {customer.name}</p>
-          </div>
-        </div>
-        <button onClick={onClose} className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-colors" aria-label="Cerrar">
-          <X size={24} />
-        </button>
-      </header>
+          <button 
+            onClick={onClose} 
+            className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-all active:scale-90" 
+            aria-label="Cerrar"
+          >
+            <X size={24} />
+          </button>
+        </header>
 
-      <div className="p-8 space-y-6">
-        <div className="p-6 rounded-3xl bg-red-50/50 border border-red-100 flex items-center justify-between">
-          <div>
-            <p className="text-xs font-black uppercase tracking-widest text-red-400 mb-1">Deuda actual</p>
-            <p className="text-2xl font-black text-red-600">${Number(customer.totalDebt).toLocaleString('es-ES')}</p>
-          </div>
-          <div className="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center text-red-600">
-            <CreditCard size={24} />
-          </div>
-        </div>
-
-        <form onSubmit={onSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Monto a abonar (COP)</label>
-            <div className="relative">
-              <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xl font-black text-navy">$</span>
-              <input
-                autoFocus
-                type="number"
-                required
-                min="1"
-                max={customer.totalDebt}
-                value={paymentAmount}
-                onChange={(e) => setPaymentAmount(e.target.value)}
-                className="w-full pl-12 pr-6 py-5 rounded-[24px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-black text-2xl text-primary bg-foreground/2"
-                placeholder="0"
-              />
+        <div className="p-8 space-y-8 flex-1 overflow-y-auto custom-scrollbar">
+          <div className="p-6 rounded-[32px] bg-red-50/50 border border-red-100 flex items-center justify-between shadow-inner">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-red-400 mb-1">Deuda actual</p>
+              <p className="text-3xl font-black text-red-600 tracking-tighter">${Number(customer.totalDebt).toLocaleString('es-ES')}</p>
+            </div>
+            <div className="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-red-600 shadow-sm">
+              <CreditCard size={28} />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Nota o Referencia</label>
-            <textarea
-              rows={2}
-              value={paymentNote}
-              onChange={(e) => setPaymentNote(e.target.value)}
-              className="w-full px-6 py-4 rounded-2xl border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-sm text-primary bg-foreground/2 resize-none"
-              placeholder="Ej. Transferencia Bancaria..."
-            />
-          </div>
+          <form onSubmit={onSubmit} className="space-y-8">
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Monto a abonar (COP)</label>
+              <div className="relative group">
+                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-black text-navy/40 group-focus-within:text-navy transition-colors">$</span>
+                <input
+                  autoFocus
+                  type="number"
+                  required
+                  min="1"
+                  max={customer.totalDebt}
+                  value={paymentAmount}
+                  onChange={(e) => setPaymentAmount(e.target.value)}
+                  className="w-full pl-12 pr-8 py-6 rounded-[24px] border-2 border-foreground/5 focus:border-navy focus:ring-8 focus:ring-navy/5 outline-none transition-all font-black text-3xl text-primary bg-foreground/2 placeholder:text-secondary/20"
+                  placeholder="0"
+                />
+              </div>
+            </div>
 
-          <div className="flex gap-4 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 py-4 rounded-2xl font-black text-xs uppercase tracking-widest text-secondary hover:bg-foreground/5 transition-all"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving || !paymentAmount}
-              className="flex-2 py-4 rounded-2xl bg-navy text-white font-black text-xs uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale"
-            >
-              {isSaving ? 'Procesando...' : <><Check size={16} /> Confirmar Abono</>}
-            </button>
-          </div>
-        </form>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Nota o Referencia</label>
+              <textarea
+                rows={2}
+                value={paymentNote}
+                onChange={(e) => setPaymentNote(e.target.value)}
+                className="w-full px-8 py-5 rounded-[24px] border-2 border-foreground/5 focus:border-navy focus:ring-8 focus:ring-navy/5 outline-none transition-all font-bold text-sm text-primary bg-foreground/2 resize-none placeholder:text-secondary/20"
+                placeholder="Ej. Transferencia Bancaria..."
+              />
+            </div>
+
+            <div className="flex gap-4 pt-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 py-5 rounded-[20px] font-black text-xs uppercase tracking-widest text-secondary hover:bg-foreground/5 transition-all active:scale-95"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={isSaving || !paymentAmount}
+                className="flex-2 py-5 rounded-[24px] bg-navy text-white font-black text-xs uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale"
+              >
+                {isSaving ? 'Procesando...' : <><Check size={18} /> Confirmar Abono</>}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div >
+    </div>
   );
 }
 
@@ -100,17 +106,21 @@ export function CustomerHistoryModal({ isOpen, onClose, customer, onRegisterPaym
   return (
     <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
       <div className="bg-background rounded-[40px] w-full max-w-lg shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300 flex flex-col max-h-[80vh]">
-        <header className="p-8 border-b border-foreground/5 bg-foreground/1 flex items-center justify-between">
+        <header className="p-8 border-b border-foreground/5 bg-navy/5 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center">
-              <Clock size={24} className="text-navy" />
+            <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center text-navy shadow-inner">
+              <Clock size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-black text-primary">Historial de Abonos</h3>
+              <h3 className="text-xl font-black text-primary tracking-tight">Historial de Abonos</h3>
               <p className="text-secondary text-xs font-medium truncate max-w-[200px]">{customer.name}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-colors" aria-label="Cerrar">
+          <button 
+            onClick={onClose} 
+            className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-all active:scale-90" 
+            aria-label="Cerrar"
+          >
             <X size={24} />
           </button>
         </header>

@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import Header from './ui/Header';
 import SalesPeriodMetrics from './ui/SalesPeriodMetrics';
 import SalesGlobalMetrics from './ui/SalesGlobalMetrics';
-import TopProducts from './ui/TopProducts';
 import LowStock from './ui/LowStock';
 import useDashboardStore from '@/store/dashboard.store';
 
@@ -16,7 +15,7 @@ export default function Main() {
     }, [fetchDashboardData]);
 
     return (
-        <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
+        <main className="min-h-full flex-1 transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
             <div className="container mx-auto space-y-8 pt-2">
                 <Header
                     title="Dashboard"
@@ -52,28 +51,24 @@ export default function Main() {
                         <section className="space-y-4">
                             <h2 className="text-primary/90 font-semibold leading-relaxed text-sm tracking-wider uppercase px-2 border-l-2 border-primary/90">Rendimiento Reciente</h2>
                             <SalesPeriodMetrics
-                                day={stats?.sales?.periods?.day}
-                                week={stats?.sales?.periods?.week}
-                                month={stats?.sales?.periods?.month}
+                                day={{ revenue: stats.salesToday.totalRevenue, count: stats.salesToday.totalOrders }}
+                                week={{ revenue: stats.salesMonth.totalRevenue / 4, count: Math.floor(stats.salesMonth.totalOrders / 4) }}
+                                month={{ revenue: stats.salesMonth.totalRevenue, count: stats.salesMonth.totalOrders }}
                             />
                         </section>
 
                         <section className="space-y-4">
                             <h2 className="text-primary/90 font-semibold leading-relaxed text-sm tracking-wider uppercase px-2 border-l-2 border-primary/90">Métricas Globales</h2>
                             <SalesGlobalMetrics
-                                totalRevenue={stats?.sales?.periods?.month?.revenue}
-                                salesCount={stats?.sales?.totalCount}
-                                totalItems={stats?.inventory?.totalStock}
+                                totalRevenue={stats.salesMonth.totalRevenue}
+                                salesCount={stats.salesMonth.totalOrders}
+                                totalItems={stats.lowStockItems.totalLowStockItems}
                             />
                         </section>
 
                         <section className="grid gap-6 lg:grid-cols-8">
                             <div className="col-span-8 lg:col-span-4">
-                                <TopProducts products={stats?.topProducts} />
-                            </div>
-
-                            <div className="col-span-8 lg:col-span-4">
-                                <LowStock items={stats?.inventory?.lowStockItems} />
+                                <LowStock items={[]} />
                             </div>
                         </section>
                     </>

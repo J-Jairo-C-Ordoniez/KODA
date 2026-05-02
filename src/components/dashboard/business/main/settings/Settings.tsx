@@ -39,11 +39,11 @@ export default function BusinessSettings() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await updateTenant({ ...form, socialLinks });
+    const result = await updateTenant({ ...form });
     if (result.success) {
-      showToast('success', 'Settings saved', 'Changes will be applied across your business.');
+      showToast('success', 'Configuración guardada', 'Los cambios se aplicarán en todo tu negocio.');
     } else {
-      showToast('error', 'Error saving', result.error || 'Could not update settings.');
+      showToast('error', 'Error al guardar', result.error || 'No se pudo actualizar la configuración.');
     }
   };
 
@@ -52,25 +52,25 @@ export default function BusinessSettings() {
     if (!file) return;
     const result = await uploadLogo(file);
     if (result.success) {
-      showToast('success', 'Logo updated', 'Your brand image has been renewed.');
+      showToast('success', 'Logo actualizado', 'Tu imagen de marca ha sido renovada.');
     } else {
-      showToast('error', 'Upload error', result.error || 'Could not load image.');
+      showToast('error', 'Error de subida', result.error || 'No se pudo cargar la imagen.');
     }
   };
 
   const copyLink = () => {
     const link = `koda.app/${form.slug}`;
     navigator.clipboard.writeText(link);
-    showToast('success', 'Link copied', 'You can now share your catalog on social media.');
+    showToast('success', 'Enlace copiado', 'Ya puedes compartir tu catálogo en redes sociales.');
   };
 
   return (
-    <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20 custom-scrollbar relative">
+    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20 relative">
       <Toaster toasts={toasts} removeToast={removeToast} />
       
       <SectionHeader 
-        title="Business Settings" 
-        subtitle="Manage the visual identity, contact details, and digital presence of your brand." 
+        title="Configuración del Negocio" 
+        subtitle="Gestiona la identidad visual, los datos de contacto y la presencia digital de tu marca." 
       />
 
       {isLoading ? <Loader size="lg" className="h-[50vh]" /> : error ? (
@@ -95,8 +95,8 @@ export default function BusinessSettings() {
               </div>
 
               <div className="space-y-2 relative z-10">
-                <h3 className="text-3xl font-black text-primary tracking-tight">Business Details</h3>
-                <p className="text-secondary text-sm font-medium">Define how your customers see you in the digital world.</p>
+                <h3 className="text-3xl font-black text-primary tracking-tight">Detalles del Negocio</h3>
+                <p className="text-secondary text-sm font-medium">Define cómo te ven tus clientes en el mundo digital.</p>
               </div>
 
               <form onSubmit={handleSubmit}>

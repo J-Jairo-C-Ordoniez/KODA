@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Package, Check } from 'lucide-react';
 import { useAdminCatalog } from '@/hooks/admin/useAdminCatalog';
 import Modal from '../categories/ui/Modal';
+import { Toaster, useToast } from '@/components/ui/Toast';
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface ProductModalProps {
 }
 
 export default function ProductModal({ isOpen, onClose, tenantId, categories, editingProduct, onSave, isSaving, size = 'md' }: ProductModalProps) {
+  const { toasts, showToast, removeToast } = useToast();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -51,12 +53,13 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
     try {
       const result = await onSave(formData, editingProduct);
       if (result.success) {
-        onClose();
+        showToast('success', editingProduct ? 'Producto actualizado' : 'Producto creado', 'Los cambios se han guardado correctamente.');
+        setTimeout(() => onClose(), 1500);
       } else {
-        alert(result.error || 'Error saving product');
+        showToast('error', 'Error', result.error || 'Error al guardar el producto');
       }
     } catch (err) {
-      alert('Connection error');
+      showToast('error', 'Error', 'Error de conexión');
     }
   };
 
@@ -69,6 +72,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
       description="Gestiona la información básica de tu producto."
       icon={<Package size={32} className="text-navy" />}
     >
+      <Toaster toasts={toasts} removeToast={removeToast} />
       <form onSubmit={handleSubmit} className="space-y-6 pt-2 overflow-y-auto max-h-[70vh] custom-scrollbar px-1">
         <div className="space-y-2">
           <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Nombre del Producto</label>

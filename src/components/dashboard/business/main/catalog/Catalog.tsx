@@ -13,7 +13,7 @@ import ProductDetail from './ProductDetail';
 import VariantModal from './VariantModal';
 import { Toaster, useToast } from '@/components/ui/Toast';
 import ProductCard from './components/ProductCard';
-import { DeleteProductModal } from './ui/DeleteProductModal';
+import { DeleteConfirmModal } from './ui/DeleteConfirmModal';
 
 export default function Catalog() {
   const { data: session } = useSession();
@@ -48,6 +48,7 @@ export default function Catalog() {
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [editingVariant, setEditingVariant] = useState<any>(null);
   const [productToDelete, setProductToDelete] = useState<any>(null);
+  const [variantToDelete, setVariantToDelete] = useState<any>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const { toasts, showToast, removeToast } = useToast();
 
@@ -102,6 +103,32 @@ export default function Catalog() {
     setIsDeleting(false);
   };
 
+  const handleOpenDeleteVariant = (variantId: string) => {
+    const variant = products.flatMap((p: any) => p.variants || []).find((v: any) => v.variantId === variantId);
+    setVariantToDelete(variant);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteVariant = async () => {
+    if (!variantToDelete) return;
+    setIsDeleting(true);
+    const result = await deleteVariant(variantToDelete.variantId);
+    if (result.success) {
+      showToast('success', 'Eliminado', 'Variante eliminada.');
+      setIsDeleteModalOpen(false);
+      setVariantToDelete(null);
+    } else {
+      showToast('error', 'Error', result.error);
+    }
+    setIsDeleting(false);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setProductToDelete(null);
+    setVariantToDelete(null);
+  };
+
   const handleSaveVariant = async (data: any) => {
     const result = await saveVariant(data, editingVariant, productIdFromUrl);
     if (result.success) {
@@ -127,14 +154,14 @@ export default function Catalog() {
 
   if (productIdFromUrl && selectedProduct) {
     return (
-      <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto pb-20 custom-scrollbar">
+      <main className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-8 lg:px-12">
         <Toaster toasts={toasts} removeToast={removeToast} />
         <ProductDetail 
           product={selectedProduct}
           onBack={handleCloseDetail}
           onAddVariant={() => { setEditingVariant(null); setIsVariantModalOpen(true); }}
           onEditVariant={(v: any) => { setEditingVariant(v); setIsVariantModalOpen(true); }}
-          onDeleteVariant={async (id: string) => { if (confirm('¿Eliminar variante?')) await deleteVariant(id); }}
+          onDeleteVariant={handleOpenDeleteVariant}
           onUpdateStock={updateVariantStock}
         />
         
@@ -161,12 +188,23 @@ export default function Catalog() {
             loading={isSaving}
           />
         )}
+
+        {isDeleteModalOpen && (
+          <DeleteConfirmModal
+            isOpen={isDeleteModalOpen}
+            onClose={handleCloseDeleteModal}
+            onConfirm={productToDelete ? confirmDeleteProduct : confirmDeleteVariant}
+            isDeleting={isDeleting}
+            title={productToDelete ? '¿Eliminar producto?' : '¿Eliminar variante?'}
+            itemName={productToDelete?.name || variantToDelete?.name}
+          />
+        )}
       </main>
     );
   }
 
   return (
-    <main className="space-y-8 bg-background w-full pt-6 px-4 sm:px-8 lg:px-12 overflow-y-auto pb-20 relative custom-scrollbar">
+    <main className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-8 lg:px-12 relative">
       <Toaster toasts={toasts} removeToast={removeToast} />
       <SectionHeader
         title="Catálogo"
@@ -227,11 +265,13 @@ export default function Catalog() {
       )}
 
       {isDeleteModalOpen && (
-        <DeleteProductModal
+        <DeleteConfirmModal
           isOpen={isDeleteModalOpen}
-          onClose={() => setIsDeleteModalOpen(false)}
-          onConfirm={confirmDeleteProduct}
+          onClose={handleCloseDeleteModal}
+          onConfirm={productToDelete ? confirmDeleteProduct : confirmDeleteVariant}
           isDeleting={isDeleting}
+          title={productToDelete ? '¿Eliminar producto?' : '¿Eliminar variante?'}
+          itemName={productToDelete?.name || variantToDelete?.name}
         />
       )}
     </main>

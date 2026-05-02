@@ -96,7 +96,7 @@ export default function Categories() {
   };
 
   return (
-    <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto pb-20 custom-scrollbar">
+    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20">
       <Toaster toasts={toasts} removeToast={removeToast} />
 
       <SectionHeader

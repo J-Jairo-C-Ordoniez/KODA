@@ -2,130 +2,175 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
+import { MessageCircle, Package, Star } from "lucide-react";
 
-export default function ProductInfo({ product, variant, allVariants, contact, setSelectedVariant }) {
+interface Props {
+  product: any;
+  variant: any;
+  allVariants: any[];
+  contact?: string;
+  setSelectedVariant: (v: any) => void;
+}
+
+export default function ProductInfo({ product, variant, allVariants, contact, setSelectedVariant }: Props) {
   const formatter = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
     minimumFractionDigits: 0
   });
 
+  const stock = variant?.inventories?.[0]?.stock ?? 0;
+  const isLowStock = stock > 0 && stock <= 5;
+  const isOutOfStock = stock === 0;
+
   const colors = useMemo(() => {
-    const uniqueColors = new Set<string>();
-    allVariants.forEach((v: any) => uniqueColors.add(v.color));
-    return Array.from(uniqueColors);
+    const seen = new Set<string>();
+    return allVariants.filter(v => { if (seen.has(v.color)) return false; seen.add(v.color); return true; });
   }, [allVariants]);
 
   const sizes = useMemo(() => {
-    return allVariants
-      .filter((v: any) => v.color === variant.color)
-      .map((v: any) => v.size as string);
+    return allVariants.filter((v: any) => v.color === variant.color);
   }, [allVariants, variant.color]);
 
-  const handleColorChange = (color) => {
-    const firstVariantOfColor = allVariants.find(v => v.color === color);
-    if (firstVariantOfColor) {
-      setSelectedVariant(firstVariantOfColor);
-    }
+  const handleColorChange = (color: string) => {
+    const first = allVariants.find(v => v.color === color);
+    if (first) setSelectedVariant(first);
   };
 
-  const handleSizeChange = (size) => {
-    const variantOfSize = allVariants.find(v => v.color === variant.color && v.size === size);
-    if (variantOfSize) {
-      setSelectedVariant(variantOfSize);
-    }
+  const handleSizeChange = (v: any) => {
+    setSelectedVariant(v);
   };
 
   const whatsappLink = useMemo(() => {
-    const priceStr = formatter.format(variant.price).replace('$', '$ ');
-    const message = `Hola, me interesa este producto:
-                    *${product.name} - ${variant.name}*
-                    Color: ${variant.color}
-                    Talla: ${variant.size}
-                    Precio: ${priceStr}
-                    SKU: ${variant.sku}`;
-
-    return `https://wa.me/57${contact}?text=${encodeURIComponent(message)}`;
-  }, [product, variant, contact]);
+    if (!contact) return null;
+    const priceStr = formatter.format(Number(variant.price));
+    const message = `¡Hola! 👋 Me interesa este producto:\n\n*${product.name} — ${variant.name}*\n📦 Color: ${variant.color}\n📐 Talla: ${variant.size}\n💰 Precio: ${priceStr} COP\n🔖 SKU: ${variant.sku}\n\n¿Está disponible?`;
+    const phone = contact.replace(/\D/g, '');
+    return `https://wa.me/57${phone}?text=${encodeURIComponent(message)}`;
+  }, [product, variant, contact, formatter]);
 
   return (
-    <section className="flex flex-col space-y-10">
-      <article>
-        <h2 className="text-secondary tracking-widest uppercase text-xs font-semibold pb-2">
-          {product.category?.name || "Detalles"}
-        </h2>
-        <h1 className="text-xl md:text-2xl font-medium tracking-widest text-primary uppercase border-b border-secondary/10 pb-2">
-          {variant.name}
+    <section className="flex flex-col gap-8 py-4">
+      {/* Category + Name */}
+      <div className="flex flex-col gap-2">
+        <p className="text-[11px] font-black uppercase tracking-widest text-secondary/60">
+          {product.category?.name || "Colección"}
+        </p>
+        <h1 className="text-3xl md:text-4xl font-black text-primary uppercase tracking-tight leading-tight">
+          {product.name}
         </h1>
-        <div className="flex justify-between items-center py-2 border-b border-secondary/10">
-          <span className="text-lg font-semibold text-primary">
-            {formatter.format(variant.price).replace('$', '$ ')} COP
+        <p className="text-base font-medium text-secondary/80 leading-relaxed mt-1">
+          {variant.name}
+        </p>
+      </div>
+
+      {/* Price */}
+      <div className="flex items-center gap-4">
+        <span className="text-3xl font-black text-primary">
+          {formatter.format(Number(variant.price))}
+          <span className="text-base font-medium text-secondary ml-2">COP</span>
+        </span>
+        {isLowStock && (
+          <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+            Últimas {stock} unidades
           </span>
-          <span className="text-xs tracking-wider font-medium border border-secondary/20 px-4 py-2 uppercase">
-            Popularidad: {variant.popularity}
+        )}
+        {isOutOfStock && (
+          <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full bg-red-50 text-red-700 border border-red-200">
+            Sin stock
           </span>
-        </div>
-      </article>
+        )}
+      </div>
 
-      <div className="space-y-6">
-        <div className="space-y-4">
-          <h3 className="text-xs tracking-wider font-bold text-primary/80 uppercase">
-            Detalles del Producto
-          </h3>
-          <p className="text-md font-medium tracking-wider text-secondary">
-            {product.description}
-          </p>
-        </div>
+      {/* Description */}
+      {product.description && (
+        <p className="text-sm font-medium text-secondary leading-relaxed border-t border-foreground/5 pt-6">
+          {product.description}
+        </p>
+      )}
 
-        <div className="space-y-4 pt-4">
-          <h3 className="text-xs tracking-wider font-bold text-primary/60 uppercase">
-            Color: <span className="text-primary">{variant.color}</span>
-          </h3>
-          <div className="flex gap-3">
-            {colors.map(color => (
+      {/* Color Selector */}
+      <div className="flex flex-col gap-3 border-t border-foreground/5 pt-6">
+        <p className="text-[11px] font-black uppercase tracking-widest text-secondary">
+          Color: <span className="text-primary">{variant.color}</span>
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {colors.map((v: any) => {
+            const isActive = v.color === variant.color;
+            return (
               <button
-                key={color}
-                onClick={() => handleColorChange(color)}
-                className="p-2 border border-secondary/60 transition-all hover:border-secondary cursor-pointer"
-                style={{ backgroundColor: color.toLowerCase() }}
-                title={color}
+                key={v.variantId}
+                onClick={() => handleColorChange(v.color)}
+                title={v.color}
+                className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wide transition-all border ${
+                  isActive
+                    ? 'bg-navy text-white border-navy shadow-lg shadow-navy/20'
+                    : 'bg-transparent text-secondary border-foreground/15 hover:border-navy/40 hover:text-primary'
+                }`}
               >
-                {color}
+                {v.color}
               </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-4 pt-4">
-          <h3 className="text-xs tracking-wider font-bold text-secondary uppercase">
-            Talla: <span className="text-primary">{variant.size}</span>
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {sizes.map(size => (
-              <button
-                key={size}
-                onClick={() => handleSizeChange(size)}
-                className={`min-w-[48px] h-12 flex items-center justify-center border text-xs font-medium tracking-widest transition-all ${variant.size === size
-                    ? 'bg-primary text-white border-primary'
-                    : 'bg-transparent text-secondary border-secondary/20 hover:border-primary/50'
-                  }`}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
 
-      <div className="pt-10">
-        <Link
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-primary/90 hover:bg-primary transition-colors duration-300 text-foreground px-6 py-4 rounded-md text-sm font-medium tracking-wider uppercase"
-        >
-          Comprar por WhatsApp
-        </Link>
+      {/* Size Selector */}
+      <div className="flex flex-col gap-3">
+        <p className="text-[11px] font-black uppercase tracking-widest text-secondary">
+          Talla: <span className="text-primary">{variant.size}</span>
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {sizes.map((v: any) => {
+            const isActive = v.variantId === variant.variantId;
+            const sizeStock = v.inventories?.[0]?.stock ?? 0;
+            const noStock = sizeStock === 0;
+            return (
+              <button
+                key={v.variantId}
+                onClick={() => !noStock && handleSizeChange(v)}
+                disabled={noStock}
+                className={`w-14 h-14 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border relative ${
+                  isActive
+                    ? 'bg-navy text-white border-navy shadow-lg shadow-navy/20'
+                    : noStock
+                    ? 'bg-foreground/3 text-secondary/30 border-foreground/5 cursor-not-allowed line-through'
+                    : 'bg-transparent text-secondary border-foreground/15 hover:border-navy/40 hover:text-primary cursor-pointer'
+                }`}
+              >
+                {v.size}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex flex-col gap-3 pt-4 border-t border-foreground/5">
+        {whatsappLink ? (
+          <Link
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`flex items-center justify-center gap-3 w-full py-5 rounded-3xl font-black text-sm uppercase tracking-widest transition-all ${
+              isOutOfStock
+                ? 'bg-foreground/5 text-secondary cursor-not-allowed pointer-events-none'
+                : 'bg-[#25D366] text-white hover:bg-[#1db954] hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-[#25D366]/20'
+            }`}
+          >
+            <MessageCircle size={22} fill="currentColor" />
+            {isOutOfStock ? 'Producto agotado' : 'Consultar por WhatsApp'}
+          </Link>
+        ) : (
+          <div className="flex items-center gap-3 w-full py-5 rounded-3xl bg-foreground/5 text-secondary justify-center text-sm font-black uppercase tracking-widest">
+            <Package size={20} />
+            Contacto no disponible
+          </div>
+        )}
+
+        <p className="text-center text-[11px] text-secondary/50 font-medium">
+          Precio en COP · Stock disponible: {stock} unidades
+        </p>
       </div>
     </section>
   );

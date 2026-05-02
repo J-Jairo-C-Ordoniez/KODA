@@ -32,25 +32,35 @@ const catalogRepository = {
 
     const whereClause: Prisma.VariantWhereInput = {
       isActive: true,
-      product: {
-        is: {
-          tenantId: tenantId,
-          ...(category && typeof category === 'string' && category.length > 0 && { categoryId: category }),
-          ...(gender && { gender: { in: [gender, 'mixto'] as any } }),
-        }
-      }
     };
+
+    // Build the product-level filter
+    const productFilter: any = {};
+    if (tenantId) productFilter.tenantId = tenantId;
+    if (category && category.length > 0) productFilter.categoryId = category;
+    if (gender) productFilter.gender = { in: [gender, 'mixto'] as any };
+
+    if (search && search.trim().length > 0) {
+      // When searching, use a broad OR across variant + product fields
+      whereClause.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { color: { contains: search, mode: 'insensitive' } },
+        { product: { name: { contains: search, mode: 'insensitive' } } },
+        { product: { description: { contains: search, mode: 'insensitive' } } },
+        { product: { category: { name: { contains: search, mode: 'insensitive' } } } },
+      ];
+      // Still scope to this tenant if provided
+      if (Object.keys(productFilter).length > 0) {
+        whereClause.product = { is: productFilter };
+      }
+    } else {
+      if (Object.keys(productFilter).length > 0) {
+        whereClause.product = { is: productFilter };
+      }
+    }
 
     if (color && color.length > 0) {
       whereClause.color = { in: color };
-    }
-
-    if (search) {
-      whereClause.OR = [
-        { name: { contains: search } },
-        { product: { name: { contains: search } } },
-        { product: { description: { contains: search } } }
-      ];
     }
 
     const skip = (page - 1) * limit;

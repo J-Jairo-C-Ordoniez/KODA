@@ -1,26 +1,31 @@
 import { useState, useEffect } from "react";
 
-export function useSearch() {
+export function useSearch(tenantId?: string) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [popular, setPopular] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
+  // Fetch popular/recommended variants on mount (scoped to tenant)
   useEffect(() => {
-    const fetchInitialData = async () => {
+    if (!tenantId) return;
+    const fetchPopular = async () => {
       try {
-        // Asumiendo que el controlador de variantes ahora soporta un flag 'popular'
-        const popRes = await fetch("/api/catalog/variants?popular=true&limit=4");
-        const popData = await popRes.json();
-        if (popData.success) setPopular(popData.data || []);
+        const res = await fetch(`/api/catalog/products?tenantId=${tenantId}&limit=6`);
+        const data = await res.json();
+        if (data.success) {
+          const items = Array.isArray(data.data) ? data.data : data.data?.items || [];
+          setPopular(items);
+        }
       } catch (error) {
         console.error("Error fetching popular data:", error);
       }
     };
-    fetchInitialData();
-  }, []);
+    fetchPopular();
+  }, [tenantId]);
 
+  // Debounced search
   useEffect(() => {
     const timer = setTimeout(() => {
       if (query.trim() === "") {
@@ -32,10 +37,14 @@ export function useSearch() {
       const fetchResults = async () => {
         setIsLoading(true);
         try {
-          const res = await fetch(`/api/catalog/products?search=${encodeURIComponent(query)}`);
+          const params = new URLSearchParams({ search: query });
+          if (tenantId) params.set("tenantId", tenantId);
+
+          const res = await fetch(`/api/catalog/products?${params.toString()}`);
           const data = await res.json();
           if (data.success) {
-            setResults(Array.isArray(data.data) ? data.data : data.data.items || []);
+            const items = Array.isArray(data.data) ? data.data : data.data?.items || [];
+            setResults(items);
             setHasSearched(true);
           }
         } catch (error) {
@@ -46,10 +55,10 @@ export function useSearch() {
       };
 
       fetchResults();
-    }, 500);
+    }, 400);
 
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, tenantId]);
 
   const clearSearch = () => {
     setQuery("");
@@ -64,6 +73,6 @@ export function useSearch() {
     popular,
     isLoading,
     hasSearched,
-    clearSearch
+    clearSearch,
   };
 }

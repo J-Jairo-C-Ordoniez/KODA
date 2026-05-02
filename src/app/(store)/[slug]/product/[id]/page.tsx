@@ -9,7 +9,8 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const response = await catalogController.getVariantById(id);
-  const variant = (response as any).success ? (response as any).data : null;
+  const json = (response as any).json ? await (response as any).json() : response;
+  const variant = (json as any).success ? (json as any).data : null;
 
   if (!variant) return { title: "Producto no encontrado" };
 

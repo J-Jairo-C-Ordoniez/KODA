@@ -46,10 +46,12 @@ const tenantRepository = {
         tenantId: true,
         slug: true,
         businessName: true,
+        description: true,
+        type: true,
         status: true,
+        whatsApp: true,
       }
     });
-
 
     return tenant;
   },

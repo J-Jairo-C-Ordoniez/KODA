@@ -9,8 +9,10 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const tenantId = searchParams.get('tenantId');
+    const search = searchParams.get('search') || '';
 
-    if (!tenantId) {
+    // tenantId is required for normal browsing but optional for search
+    if (!tenantId && !search) {
       return apiResponse.error("El ID de la tienda (tenantId) es requerido", 400);
     }
 
@@ -18,11 +20,12 @@ export async function GET(req: Request) {
       gender: searchParams.get('gender') || '',
       color: searchParams.get('color') ? [searchParams.get('color')] : [],
       category: searchParams.get('category') || '',
+      search,
       page: Number(searchParams.get('page')) || 1,
       limit: Number(searchParams.get('limit')) || 12,
     };
 
-    return await catalogController.getProducts(tenantId, filters);
+    return await catalogController.getProducts(tenantId || '', filters);
   } catch (error: any) {
     return apiResponse.error(error.message || "Error al procesar la petición", 500);
   }

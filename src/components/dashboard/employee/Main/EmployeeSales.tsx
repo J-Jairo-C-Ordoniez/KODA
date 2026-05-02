@@ -164,7 +164,15 @@ export default function EmployeeSales() {
       {isLoading ? (
         <Loader size="lg" className="h-[40vh]" />
       ) : error ? (
-        <p className="text-red-500 text-sm font-medium bg-red-50 p-4 rounded-2xl border border-red-100">{error}</p>
+        <div className="bg-red-50 p-6 rounded-2xl border border-red-100 flex flex-col items-center gap-4">
+          <p className="text-red-600 text-sm font-bold">{error}</p>
+          <button 
+            onClick={() => fetchSalesData()}
+            className="px-6 py-2 bg-red-600 text-white rounded-xl font-black text-xs hover:bg-red-700 transition-colors"
+          >
+            Reintentar conexión
+          </button>
+        </div>
       ) : filteredSales.length === 0 ? (
         <EmptyState
           icon={ShoppingCart}
@@ -176,7 +184,7 @@ export default function EmployeeSales() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-foreground20.02] border-b border-foreground/5">
+                <tr className="bg-foreground/2 border-b border-foreground/5">
                   <th className="text-left px-8 py-6 text-[10px] font-black uppercase tracking-widest text-secondary">Fecha / Hora</th>
                   <th className="text-left px-8 py-6 text-[10px] font-black uppercase tracking-widest text-secondary">Cliente</th>
                   <th className="text-left px-8 py-6 text-[10px] font-black uppercase tracking-widest text-secondary">Método</th>
@@ -188,7 +196,7 @@ export default function EmployeeSales() {
                 {filteredSales.map((sale: any) => (
                   <tr
                     key={sale.saleId}
-                    className={`hover:bg-foreground/1 transition-all duration-1000 group ${
+                    className={`hover:bg-foreground/1 transition-all duration-300 group ${
                       newSaleId === sale.saleId ? 'bg-green-50 ring-2 ring-green-500 ring-inset animate-pulse' : ''
                     }`}
                   >

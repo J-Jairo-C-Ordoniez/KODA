@@ -11,6 +11,20 @@ export function useCustomers(tenantId: string | undefined) {
     setIsLoading(true);
     try {
       const res = await fetch(`/api/${tenantId}/customers`);
+      
+      if (!res.ok) {
+        let errorMessage = 'Error al cargar clientes';
+        const clone = res.clone();
+        try {
+          const errorJson = await clone.json();
+          errorMessage = errorJson.error || errorMessage;
+        } catch (e) {
+          console.error('Error no-JSON:', await res.text());
+        }
+        setError(errorMessage);
+        return;
+      }
+
       const json = await res.json();
       if (json.success) {
         setCustomers(json.data || []);

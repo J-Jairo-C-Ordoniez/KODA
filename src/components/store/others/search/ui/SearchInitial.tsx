@@ -1,8 +1,6 @@
 import ProductCard from "@/components/store/Main/ui/ProductCard";
 
 export default function SearchInitial({ popular, setQuery }) {
-
-  console.log(popular);
   return (
     <section className="w-full">
       <div>

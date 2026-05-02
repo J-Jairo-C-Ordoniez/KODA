@@ -8,7 +8,7 @@ import SearchResults from "./ui/SearchResults";
 import SearchNoResults from "./ui/SearchNoResults";
 import { X } from "lucide-react";
 
-export default function SearchMain() {
+export default function SearchMain({ tenantId }: { tenantId?: string }) {
   const { breadcrumbs, setBreadcrumbsRoute } = useBreadcrumbsStore();
   const {
     query,
@@ -18,7 +18,7 @@ export default function SearchMain() {
     isLoading,
     hasSearched,
     clearSearch
-  } = useSearch();
+  } = useSearch(tenantId);
 
   return (
     <main className="bg-background w-full min-h-screen">

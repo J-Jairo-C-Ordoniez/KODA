@@ -29,7 +29,7 @@ export default function SearchPage({ params }: Props) {
         slug={tenant.slug}
         tenantId={tenant.tenantId}
       />
-      <SearchMain />
+      <SearchMain tenantId={tenant.tenantId} />
       <Footer />
     </>
   );

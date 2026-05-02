@@ -21,8 +21,12 @@ export function LandingStore({ slug }: Props) {
         return <div className="h-screen w-full flex items-center justify-center bg-background"><Loader size="lg" /></div>;
     }
 
-    if (!tenant || tenant.status === 'suspended') {
-        return redirect("/");
+    if (!tenant) {
+        redirect("/");
+    }
+    
+    if (tenant.status === 'suspended') {
+        redirect("/");
     }
 
     return (

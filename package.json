@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate --schema=src/infrastructure/db/schema/schema.prisma"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -45,6 +46,7 @@
     "typescript": "^5"
   },
   "prisma": {
+    "schema": "src/infrastructure/db/schema/schema.prisma",
     "seed": "ts-node src/infrastructure/db/seed.ts"
   }
 }

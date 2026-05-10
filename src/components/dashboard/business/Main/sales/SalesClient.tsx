@@ -89,14 +89,14 @@ export default function SalesClient() {
                     <SalesHeader
                         saleCount={sales.length}
                         onOpenSaleModal={() => setIsModalOpen(true)}
-                        searchTerm={searchTerm}
-                        setSearchTerm={setSearchTerm}
                     />
 
                     <SalesTable 
                         sales={filteredSales} 
                         newSaleId={newSaleId}
                         onViewInvoice={setSelectedSaleForInvoice}
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
                     />
                 </section>
             </div>

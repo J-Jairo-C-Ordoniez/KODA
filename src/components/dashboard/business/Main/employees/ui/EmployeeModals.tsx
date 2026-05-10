@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, X, Check, Edit3, Eye, EyeOff, TrendingUp, AlertTriangle, Trash2, Mail, Lock, User, Info, Calendar, CreditCard } from 'lucide-react';
+import { X, Check, Eye, EyeOff, TrendingUp, AlertTriangle, Trash2, Mail, Lock, User, Info, ShoppingCart, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 import Modal from '../../categories/ui/Modal';
 import Loader from '@/components/ui/Loader';

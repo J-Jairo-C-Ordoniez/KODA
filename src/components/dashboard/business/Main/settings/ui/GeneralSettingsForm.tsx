@@ -1,4 +1,7 @@
-import { Layout, Smartphone, Info, CheckCircle } from 'lucide-react';
+'use client';
+
+import { Smartphone, CheckCircle, Info, Store, Briefcase } from 'lucide-react';
+import Loader from '@/components/ui/Loader';
 
 interface GeneralSettingsProps {
   form: any;
@@ -35,135 +38,126 @@ function TwitterIcon({ className }: { className?: string }) {
 }
 
 export function GeneralSettingsForm({ form, setForm, socialLinks, setSocialLinks, isSaving }: GeneralSettingsProps) {
+  const inputClass = "w-full px-6 py-4 rounded-2xl border border-white/10 bg-background focus:border-contrast/30 focus:ring-4 focus:ring-contrast/5 outline-none transition-all font-bold text-sm text-primary placeholder:text-foreground-muted/20 shadow-inner";
+  const labelClass = "block text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted mb-2 ml-1 opacity-60";
+
   return (
-    <div className="space-y-10 relative z-10">
+    <div className="space-y-12 relative z-10">
       <div className="space-y-8">
-          <div className="flex items-center gap-3 pb-2 border-b border-foreground/5">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary">Información General</h4>
+          <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+            <div className="w-8 h-8 rounded-xl bg-contrast/10 flex items-center justify-center text-contrast">
+              <Store size={16} />
+            </div>
+            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">Información General</h4>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Nombre del Negocio</label>
-            <input 
-              value={form.businessName} 
-              onChange={(e) => setForm({ ...form, businessName: e.target.value })} 
-              className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 shadow-inner" 
-              placeholder="Ej. Koda Boutique"
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label className={labelClass}>Nombre del Negocio</label>
+              <input 
+                value={form.businessName} 
+                onChange={(e) => setForm({ ...form, businessName: e.target.value })} 
+                className={inputClass} 
+                placeholder="Ej. Koda Boutique"
+              />
+            </div>
 
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Tipo de Negocio</label>
-            <div className="relative">
-              <select 
-                value={form.type} 
-                onChange={(e) => setForm({ ...form, type: e.target.value })} 
-                className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 appearance-none cursor-pointer shadow-inner"
-              >
-                <option value="ropa">Ropa y Moda</option>
-                <option value="calzado">Calzado y Zapatos</option>
-                <option value="accesorios">Accesorios y Joyería</option>
-                <option value="boutique">Boutique Multimarca</option>
-                <option value="deportes">Artículos Deportivos</option>
-              </select>
-              <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-                  <Info size={16} />
+            <div className="space-y-1">
+              <label className={labelClass}>Tipo de Negocio</label>
+              <div className="relative group">
+                <select 
+                  value={form.type} 
+                  onChange={(e) => setForm({ ...form, type: e.target.value })} 
+                  className={`${inputClass} appearance-none cursor-pointer pr-12`}
+                >
+                  <option value="ropa">Ropa y Moda</option>
+                  <option value="calzado">Calzado y Zapatos</option>
+                  <option value="accesorios">Accesorios y Joyería</option>
+                  <option value="boutique">Boutique Multimarca</option>
+                  <option value="deportes">Artículos Deportivos</option>
+                </select>
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity">
+                    <Info size={16} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Identificador URL (Slug)</label>
-            <div className="relative group">
-              <div className="absolute left-6 top-1/2 -translate-y-1/2 text-secondary/40 font-bold text-sm">koda.app/</div>
-              <input 
-                value={form.slug} 
-                onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s/g, '-') })} 
-                className="w-full pl-[92px] pr-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-black text-navy bg-foreground/2 shadow-inner" 
-              />
+          <div className="grid grid-cols-1 gap-6">
+            <div className="space-y-1">
+              <label className={labelClass}>WhatsApp de Ventas</label>
+              <div className="relative group">
+                <Smartphone className="absolute left-6 top-1/2 -translate-y-1/2 text-foreground-muted/40 group-focus-within:text-contrast transition-colors" size={18} />
+                <input 
+                  value={form.whatsApp} 
+                  onChange={(e) => setForm({ ...form, whatsApp: e.target.value })} 
+                  className={`${inputClass} pl-14`} 
+                  placeholder="300 000 0000" 
+                />
+              </div>
             </div>
-            <p className="text-[9px] font-bold text-secondary/40 uppercase tracking-widest ml-1">Esto cambia tu enlace público. Úsalo con precaución.</p>
-          </div>
 
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">WhatsApp de Ventas</label>
-            <div className="relative">
-              <Smartphone className="absolute left-6 top-1/2 -translate-y-1/2 text-navy" size={18} />
-              <input 
-                value={form.whatsApp} 
-                onChange={(e) => setForm({ ...form, whatsApp: e.target.value })} 
-                className="w-full pl-14 pr-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 shadow-inner" 
-                placeholder="300 000 0000" 
+            <div className="space-y-1">
+              <label className={labelClass}>Descripción de la Marca</label>
+              <textarea 
+                rows={3} 
+                value={form.description} 
+                onChange={(e) => setForm({ ...form, description: e.target.value })} 
+                className={`${inputClass} resize-none min-h-[120px]`} 
+                placeholder="Define tu estilo, misión o lo que hace única a tu tienda..." 
               />
             </div>
           </div>
-        </div>
-
-        <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Descripción de la Marca</label>
-          <textarea 
-            rows={3} 
-            value={form.description} 
-            onChange={(e) => setForm({ ...form, description: e.target.value })} 
-            className="w-full px-6 py-4 rounded-[20px] border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-primary bg-foreground/2 resize-none shadow-inner" 
-            placeholder="Define tu estilo, misión o lo que hace única a tu tienda..." 
-          />
-        </div>
       </div>
 
-      <div className="pt-6 border-t border-foreground/5 space-y-8">
+      <div className="pt-8 border-t border-white/5 space-y-8">
         <div className="flex items-center gap-3">
-            <Smartphone size={18} className="text-navy" />
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary">Redes Sociales</h4>
+            <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
+              <Smartphone size={16} />
+            </div>
+            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">Redes Sociales</h4>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="space-y-3">
-            <div className="relative group">
-              <InstagramIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-navy group-focus-within:scale-110 transition-transform w-5 h-5" />
-              <input 
-                value={socialLinks.instagram} 
-                onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })} 
-                placeholder="Instagram @user"
-                className="w-full pl-14 pr-4 py-4 rounded-2xl border border-foreground/10 focus:border-navy outline-none transition-all font-bold text-xs bg-background shadow-sm" 
-              />
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="relative group">
+            <InstagramIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-foreground-muted/40 group-focus-within:text-pink-500 transition-colors w-5 h-5" />
+            <input 
+              value={socialLinks.instagram} 
+              onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })} 
+              placeholder="@usuario"
+              className={`${inputClass} pl-14 text-xs`} 
+            />
           </div>
-          <div className="space-y-3">
-            <div className="relative group">
-              <FacebookIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-navy group-focus-within:scale-110 transition-transform w-5 h-5" />
-              <input 
-                value={socialLinks.facebook} 
-                onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })} 
-                placeholder="Facebook URL"
-                className="w-full pl-14 pr-4 py-4 rounded-2xl border border-foreground/10 focus:border-navy outline-none transition-all font-bold text-xs bg-background shadow-sm" 
-              />
-            </div>
+          
+          <div className="relative group">
+            <FacebookIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-foreground-muted/40 group-focus-within:text-blue-500 transition-colors w-5 h-5" />
+            <input 
+              value={socialLinks.facebook} 
+              onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })} 
+              placeholder="Facebook URL"
+              className={`${inputClass} pl-14 text-xs`} 
+            />
           </div>
-          <div className="space-y-3">
-            <div className="relative group">
-              <TwitterIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-navy group-focus-within:scale-110 transition-transform w-5 h-5" />
-              <input 
-                value={socialLinks.twitter} 
-                onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })} 
-                placeholder="Twitter / X"
-                className="w-full pl-14 pr-4 py-4 rounded-2xl border border-foreground/10 focus:border-navy outline-none transition-all font-bold text-xs bg-background shadow-sm" 
-              />
-            </div>
+
+          <div className="relative group">
+            <TwitterIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-foreground-muted/40 group-focus-within:text-sky-400 transition-colors w-5 h-5" />
+            <input 
+              value={socialLinks.twitter} 
+              onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })} 
+              placeholder="Twitter / X"
+              className={`${inputClass} pl-14 text-xs`} 
+            />
           </div>
         </div>
       </div>
 
-      <div className="pt-10 flex justify-end">
+      <div className="pt-10">
         <button 
           type="submit" 
           disabled={isSaving} 
-          className="w-full md:w-auto px-16 py-5 rounded-[28px] bg-navy text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-navy/90 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 shadow-2xl shadow-navy/20 flex items-center justify-center gap-3"
+          className="w-full sm:w-auto px-12 py-5 rounded-[24px] bg-contrast text-white font-black text-[11px] uppercase tracking-[0.2em] hover:bg-contrast-hover transition-all disabled:opacity-50 shadow-2xl shadow-contrast/20 flex items-center justify-center gap-3 active:scale-95"
         >
-          {isSaving ? 'Guardando cambios...' : <><CheckCircle size={20} /> Actualizar Configuración</>}
+          {isSaving ? <Loader size="xs" color="border-white" /> : <><CheckCircle size={20} /> Guardar Cambios</>}
         </button>
       </div>
     </div>

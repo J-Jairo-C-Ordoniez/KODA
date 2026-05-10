@@ -9,24 +9,26 @@ interface AuthWrapperProps {
 export default function AuthWrapper({ children, title, subtitle }: AuthWrapperProps) {
   return (
     <main className="grow">
-      <header className="relative pt-24 pb-4 overflow-hidden bg-background bg-grid">
-        <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,var(--background)_100%)] pointer-events-none" />
-
-        <Container className="relative z-10 text-center space-y-6">
-          <h1 className="text-3xl lg:text-4xl font-black text-primary leading-tight tracking-tight">
+      <header className="relative pt-24 pb-12 overflow-hidden bg-background">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-contrast/6 blur-[90px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-foreground/10 to-transparent" />
+        <Container className="relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-foreground/10 mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-contrast" />
+            <p className="text-xs uppercase font-bold tracking-widest text-foreground-muted">KODA — Acceso</p>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black text-primary leading-tight tracking-tighter mb-5">
             {title}
           </h1>
-          {subtitle && (
-            <p className="text-md lg:text-lg text-primary/80 mx-auto font-medium leading-snug tracking-wider">
-              {subtitle}
-            </p>
-          )}
+          <p className="text-lg md:text-xl text-foreground-muted max-w-xl mx-auto font-medium leading-relaxed">
+            {subtitle}
+          </p>
         </Container>
       </header>
 
-      <Container className="flex flex-col items-center justify-center grow py-12 w-full max-w-2xl space-y-8">
-        <div className="w-full border border-foreground/5 rounded-2xl p-8 md:p-10 shadow-2xl shadow-navy/5">
+      {/* Form card */}
+      <Container className="flex flex-col items-center justify-center pb-24 w-full max-w-2xl">
+        <div className="w-full bg-background-elevated border border-foreground/8 rounded-[32px] p-8 md:p-12 shadow-2xl shadow-black/30">
           {children}
         </div>
       </Container>

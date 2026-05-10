@@ -1,4 +1,4 @@
-import { Tag, MoreVertical, Edit3, Trash2 } from 'lucide-react';
+import { Tag, MoreVertical, Edit3, Trash2, ArrowRight } from 'lucide-react';
 import { useRef, useEffect } from 'react';
 
 interface CategoryCardProps {
@@ -9,6 +9,7 @@ interface CategoryCardProps {
   onEdit: (e: React.MouseEvent, cat: any) => void;
   onDelete: (e: React.MouseEvent, cat: any) => void;
   onClick: (id: string) => void;
+  className?: string;
 }
 
 export function CategoryCard({
@@ -18,9 +19,13 @@ export function CategoryCard({
   setActiveMenuId,
   onEdit,
   onDelete,
-  onClick
+  onClick,
+  className,
 }: CategoryCardProps) {
   const menuRef = useRef<HTMLDivElement>(null);
+  const isHighlighted = highlightedId === cat.categoryId;
+  const isMenuOpen = activeMenuId === cat.categoryId;
+  const hasProducts = (cat._count?.products ?? 0) > 0;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -28,53 +33,68 @@ export function CategoryCard({
         setActiveMenuId(null);
       }
     };
-    if (activeMenuId === cat.categoryId) {
+    if (isMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [activeMenuId, cat.categoryId, setActiveMenuId]);
+  }, [isMenuOpen, setActiveMenuId]);
 
   return (
     <article
       onClick={() => onClick(cat.categoryId)}
-      className={`bg-background border rounded-[32px] p-8 flex flex-col gap-6 hover:shadow-2xl hover:shadow-navy/10 hover:border-navy/20 transition-all cursor-pointer group relative ${
-        highlightedId === cat.categoryId ? 'border-navy ring-4 ring-navy/10 scale-[1.02]' : 'border-foreground/5'
-      }`}
+      aria-label={`Categoría ${cat.name}, ${cat._count?.products ?? 0} productos`}
+      className={`
+        bg-background-elevated border rounded-[28px] p-6 flex flex-col gap-5
+        hover:border-contrast/30 hover:shadow-xl hover:shadow-contrast/5
+        transition-all duration-300 cursor-pointer group relative overflow-hidden
+        ${isHighlighted ? 'border-contrast ring-2 ring-contrast/15 scale-[1.01]' : 'border-foreground/8'}
+        ${className || ''}
+      `}
     >
-      <div className="absolute inset-0 rounded-[32px] overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-navy/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
-      </div>
-      
-      <div className={`flex items-start justify-between relative ${activeMenuId === cat.categoryId ? 'z-30' : 'z-10'}`}>
-        <div className="w-14 h-14 rounded-[20px] bg-navy/10 flex items-center justify-center group-hover:bg-navy group-hover:text-white transition-all shadow-inner">
-          <Tag size={24} className="text-navy group-hover:text-white" />
+      {/* Ambient glow on hover */}
+      <div
+        className="absolute -top-10 -right-10 w-32 h-32 bg-contrast/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        aria-hidden="true"
+      />
+
+      {/* Top row: icon + menu */}
+      <div className={`flex items-start justify-between ${isMenuOpen ? 'relative z-30' : 'relative z-10'}`}>
+        {/* Icon badge */}
+        <div className="w-12 h-12 rounded-2xl bg-contrast/10 border border-contrast/20 flex items-center justify-center group-hover:bg-contrast/20 transition-colors duration-300">
+          <Tag size={22} className="text-contrast" aria-hidden="true" />
         </div>
 
-        <div className="relative">
-          <button 
-            onClick={(e) => { e.stopPropagation(); setActiveMenuId(activeMenuId === cat.categoryId ? null : cat.categoryId); }}
-            className="p-2 rounded-xl hover:bg-foreground/5 text-secondary transition-colors"
+        {/* Actions menu */}
+        <div className="relative" ref={menuRef}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveMenuId(isMenuOpen ? null : cat.categoryId);
+            }}
+            aria-label="Opciones de categoría"
+            aria-expanded={isMenuOpen}
+            className="p-2 rounded-xl hover:bg-foreground/8 text-foreground-muted hover:text-primary transition-colors"
           >
-            <MoreVertical size={20} />
+            <MoreVertical size={18} aria-hidden="true" />
           </button>
 
-          {activeMenuId === cat.categoryId && (
-            <div ref={menuRef} className="absolute right-0 mt-2 w-52 bg-background border border-foreground/10 rounded-[24px] shadow-2xl z-50 p-2 animate-in fade-in zoom-in-95 duration-200">
-              <button 
+          {isMenuOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-background-elevated border border-foreground/10 rounded-2xl shadow-2xl shadow-black/40 z-50 p-1.5 animate-in fade-in zoom-in-95 duration-200">
+              <button
                 onClick={(e) => onEdit(e, cat)}
-                className="w-full px-4 py-4 flex items-center gap-3 text-sm font-black text-primary hover:bg-navy/5 hover:text-navy rounded-2xl transition-all group/item"
+                className="w-full px-4 py-3.5 flex items-center gap-3 text-sm font-bold text-primary hover:bg-foreground/5 rounded-xl transition-colors"
               >
-                <div className="w-8 h-8 rounded-xl bg-navy/5 flex items-center justify-center group-hover/item:bg-navy group-hover/item:text-white transition-colors">
-                  <Edit3 size={16} />
+                <div className="w-7 h-7 rounded-lg bg-foreground/5 flex items-center justify-center" aria-hidden="true">
+                  <Edit3 size={14} />
                 </div>
                 Editar
               </button>
-              <button 
+              <button
                 onClick={(e) => onDelete(e, cat)}
-                className="w-full px-4 py-4 flex items-center gap-3 text-sm font-black text-red-600 hover:bg-red-50 rounded-2xl transition-all group/item"
+                className="w-full px-4 py-3.5 flex items-center gap-3 text-sm font-bold text-red-400 hover:bg-red-500/8 rounded-xl transition-colors"
               >
-                <div className="w-8 h-8 rounded-xl bg-red-100/50 flex items-center justify-center group-hover/item:bg-red-500 group-hover/item:text-white transition-colors">
-                  <Trash2 size={16} />
+                <div className="w-7 h-7 rounded-lg bg-red-500/10 flex items-center justify-center" aria-hidden="true">
+                  <Trash2 size={14} />
                 </div>
                 Eliminar
               </button>
@@ -82,20 +102,37 @@ export function CategoryCard({
           )}
         </div>
       </div>
-      
-      <div className="space-y-2 relative z-10">
-        <p className="font-black text-primary text-xl truncate group-hover:text-navy transition-colors">{cat.name}</p>
+
+      {/* Content */}
+      <div className="flex-1 space-y-2 relative z-10">
+        <h3 className="font-black text-primary text-lg leading-tight tracking-tight group-hover:text-contrast transition-colors duration-300 truncate">
+          {cat.name}
+        </h3>
+
+        {/* Product count badge */}
         <div className="flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${cat._count?.products > 0 ? 'bg-green-500' : 'bg-secondary/30'}`} />
-          <p className="text-secondary text-xs font-black uppercase tracking-widest">{cat._count?.products || 0} productos</p>
+          <span
+            className={`w-2 h-2 rounded-full shrink-0 ${hasProducts ? 'bg-[#00C896]' : 'bg-foreground/20'}`}
+            aria-hidden="true"
+          />
+          <p className={`text-xs font-bold uppercase tracking-widest ${hasProducts ? 'text-[#00C896]' : 'text-foreground-muted'}`}>
+            {cat._count?.products ?? 0} {cat._count?.products === 1 ? 'producto' : 'productos'}
+          </p>
         </div>
       </div>
-      
+
+      {/* Description */}
       {cat.description && (
-        <p className="text-secondary text-sm font-medium line-clamp-2 leading-relaxed border-t border-foreground/5 pt-4 relative z-10">
+        <p className="text-foreground-muted text-sm font-medium line-clamp-2 leading-relaxed border-t border-foreground/5 pt-4 relative z-10">
           {cat.description}
         </p>
       )}
+
+      {/* Footer CTA */}
+      <div className="flex items-center gap-1.5 text-xs font-bold text-foreground-muted group-hover:text-contrast transition-colors duration-300 relative z-10">
+        <span>Ver productos</span>
+        <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+      </div>
     </article>
   );
 }

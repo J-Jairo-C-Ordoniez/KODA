@@ -1,31 +1,52 @@
-export function StatCard({ icon, label, value, color, onClick, active }: any) {
-  return (
-    <button 
-      onClick={onClick}
-      disabled={!onClick}
-      className={`p-5 rounded-3xl border border-foreground/5 flex items-center gap-4 text-left transition-all ${onClick ? 'hover:shadow-md hover:bg-foreground/1 cursor-pointer' : ''} ${active ? 'bg-navy/5 border-navy/20' : 'bg-background'}`}
-    >
-      <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center shrink-0`}>
-        {icon}
-      </div>
-      <div>
-        <p className="text-xs font-bold text-secondary uppercase tracking-widest leading-none">{label}</p>
-        <p className="text-xl font-black text-primary mt-1 leading-none">{value}</p>
-      </div>
-    </button>
-  );
+'use client';
+
+import React from 'react';
+
+interface InventoryNavItemProps {
+  label: string;
+  value: number;
+  icon: React.ReactNode;
+  active: boolean;
+  onClick: () => void;
+  activeColor: string;
 }
 
-export function TabButton({ children, active, onClick }: any) {
+export function InventoryNavItem({ label, value, icon, active, onClick, activeColor }: InventoryNavItemProps) {
   return (
-    <button 
+    <button
       onClick={onClick}
-      className={`px-8 py-3 rounded-t-2xl font-black text-sm transition-all relative ${
-        active ? 'text-navy' : 'text-secondary hover:text-primary'
-      }`}
+      className={`
+        relative flex items-center gap-2.5 px-4 py-2.5 rounded-full border transition-all duration-300 shrink-0 group
+        ${active 
+          ? `bg-background-elevated border-contrast/30 shadow-lg shadow-black/20` 
+          : 'bg-transparent border-foreground/5 hover:border-foreground/10 text-foreground-muted hover:text-primary'
+        }
+      `}
     >
-      {children}
-      {active && <div className="absolute bottom-[-2px] left-0 right-0 h-1 bg-navy rounded-full animate-in fade-in duration-300" />}
+      <div className={`
+        w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300
+        ${active ? activeColor : 'bg-foreground/5 text-foreground-muted group-hover:bg-foreground/10'}
+      `}>
+        {React.cloneElement(icon as React.ReactElement<any>, { 
+          size: 14,
+          className: active ? 'text-white' : 'text-foreground-muted group-hover:text-primary'
+        })}
+      </div>
+      
+      <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${active ? 'text-primary' : 'text-foreground-muted'}`}>
+        {label}
+      </span>
+
+      <div className={`
+        px-2 py-0.5 rounded-full text-[10px] font-black min-w-[24px] text-center transition-all duration-300
+        ${active ? 'bg-contrast text-white scale-110 shadow-sm' : 'bg-foreground/10 text-foreground-muted'}
+      `}>
+        {value}
+      </div>
+
+      {active && (
+        <div className="absolute inset-0 rounded-full border-2 border-contrast/10 animate-pulse pointer-events-none" />
+      )}
     </button>
   );
 }

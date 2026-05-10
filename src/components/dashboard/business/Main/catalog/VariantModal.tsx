@@ -21,8 +21,8 @@ export default function VariantModal({ isOpen, onClose, onSubmit, editingVariant
       onClose={onClose} 
       size={size}
       title={editingVariant ? 'Editar Variante' : 'Nueva Variante'}
-      description={editingVariant ? 'Actualiza los detalles de esta variante.' : 'Define el color, talla, precio y stock inicial.'}
-      icon={<Layers size={32} className="text-navy" />}
+      description={editingVariant ? 'Actualiza los detalles de esta variante.' : 'Define color, talla, precio y foto.'}
+      icon={<Layers size={24} className="text-contrast" />}
     >
       <div className="pt-2">
         <VariantForm 

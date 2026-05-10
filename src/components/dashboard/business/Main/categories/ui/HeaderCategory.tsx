@@ -2,7 +2,7 @@ import { Plus, Search } from 'lucide-react';
 
 export default function HeaderCategory({ handleOpenModal, setSearchTerm, searchTerm, categories }) {
     return (
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
                 <h3 className="text-primary/80 leading-relaxed text-sm tracking-wider font-medium uppercase">
                     Categorías Registradas:
@@ -11,19 +11,19 @@ export default function HeaderCategory({ handleOpenModal, setSearchTerm, searchT
             </div>
 
             <article className="flex items-center gap-4">
-                <div className="relative group">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary group-focus-within:text-primary transition-colors" />
+                <div className="relative group flex-1 sm:w-56">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground-muted group-focus-within:text-contrast transition-colors" />
                     <input
                         type="text"
-                        placeholder="Buscar..."
+                        placeholder="Buscar categoría..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-9 pr-4 text-primary tracking-wider w-full border border-secondary/10 p-3 rounded-sm placeholder:text-secondary/60 focus:outline-none focus:border-secondary/60 transition-colors"
+                        className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-background-elevated border border-foreground/10 focus:border-contrast focus:ring-4 focus:ring-contrast/15 outline-none transition-all font-bold text-primary placeholder:font-medium placeholder:text-foreground-muted text-sm shadow-sm"
                     />
                 </div>
                 <button
                     onClick={() => handleOpenModal()}
-                    className="flex items-center gap-2 bg-primary/90 hover:bg-primary transition-colors duration-300 text-foreground px-6 py-3 rounded-md cursor-pointer disabled:opacity-50"
+                    className="shrink-0 flex items-center gap-2 bg-contrast hover:bg-contrast-hover transition-all duration-300 text-white font-black text-sm px-6 py-3.5 rounded-2xl cursor-pointer shadow-lg shadow-contrast/20 active:scale-95 whitespace-nowrap"
                 >
                     <Plus className="h-4 w-4" />
                     Nueva Categoría

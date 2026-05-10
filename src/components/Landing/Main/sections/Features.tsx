@@ -1,64 +1,107 @@
+'use client';
+
+import { useRef } from 'react';
 import Container from '../../../ui/Container';
 import { ShoppingCart, UserCheck, BarChart3, Cloud } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Features() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const features = [
     {
       title: 'Inventario Inteligente',
       description: 'Controla tus productos con categorías dinámicas y recibe alertas de stock bajo.',
-      icon: <ShoppingCart size={24} className="text-navy" />,
-      color: 'bg-blue-50'
+      icon: <ShoppingCart size={40} className="text-white" />,
+      color: 'bg-[#FF7A00]',
+      textColor: 'text-white',
+      subTextColor: 'text-white/80'
     },
     {
       title: 'Gestión de Fiados',
-      description: 'Registro exacto de deudas y abonos. Automatiza el cobro sin perder rastro de ingresos.',
-      icon: <UserCheck size={24} className="text-navy" />,
-      color: 'bg-indigo-50'
+      description: 'Registro exacto de deudas y abonos. Automatiza el cobro sin perder rastro.',
+      icon: <UserCheck size={40} className="text-background" />,
+      color: 'bg-[#00C896]',
+      textColor: 'text-[#0E0E0E]',
+      subTextColor: 'text-[#0E0E0E]/80'
     },
     {
       title: 'Reportes en Vivo',
       description: 'Visualiza ganancias, ventas diarias y tendencias de productos en tiempo real.',
-      icon: <BarChart3 size={24} className="text-navy" />,
-      color: 'bg-purple-50'
+      icon: <BarChart3 size={40} className="text-white" />,
+      color: 'bg-[#3A86FF]',
+      textColor: 'text-white',
+      subTextColor: 'text-white/80'
     },
     {
       title: 'Siempre en la Nube',
       description: 'Datos seguros y accesibles 24/7. Tu negocio siempre contigo, donde quiera que estés.',
-      icon: <Cloud size={24} className="text-navy" />,
-      color: 'bg-sky-50'
+      icon: <Cloud size={40} className="text-white" />,
+      color: 'bg-[#7B61FF]',
+      textColor: 'text-white',
+      subTextColor: 'text-white/80'
     }
   ];
+
+  useGSAP(() => {
+    gsap.fromTo('.feature-header',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1, ease: 'power3.out', scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 80%',
+      }}
+    );
+
+    gsap.fromTo('.feature-card',
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out', scrollTrigger: {
+        trigger: '.feature-cards-container',
+        start: 'top 80%',
+      }}
+    );
+  }, { scope: containerRef });
 
   return (
     <section
       id="features"
-      className="pb-10 pt-24 bg-background"
+      ref={containerRef}
+      className="pb-32 pt-24 bg-background relative"
     >
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-foreground/10 to-transparent" />
       <Container>
-        <article className="flex flex-col lg:flex-row lg:items-end items-start justify-between gap-12 py-6">
-          <h2 className="uppercase w-full lg:w-fit text-center lg:text-left text-3xl lg:text-5xl 3xl:text-6xl font-black text-primary leading-tight tracking-tight">
-            Control Total en <br />
-            <span className="text-navy/80">Segundos.</span>
+        <article className="feature-header text-center mb-20 opacity-0">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-primary leading-tight tracking-tighter mb-6">
+            Todo tu negocio de <br />
+            principio a fin en un solo lugar.
           </h2>
-
-          <p className="text-md lg:text-lg text-primary/80 max-w-xl mx-auto lg:mx-0 font-medium leading-snug tracking-wider">
-            Diseñamos cada función para que sea más rápida que un cuaderno y más potente que cualquier hoja de cálculo.
+          <p className="text-xl text-foreground-muted max-w-3xl mx-auto font-medium leading-relaxed">
+            Desde la venta en mostrador hasta el control de inventario y fiados. Todos tus datos centralizados para que trabajes más rápido.
           </p>
         </article>
 
-        <article className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 py-6">
-          {features.map((f) => (
+        <article className="feature-cards-container grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {features.map((f, i) => (
             <div
               key={f.title}
-              className="flex flex-col p-8 rounded-3xl bg-background border border-foreground/5 hover:border-navy/20 hover:shadow-2xl hover:shadow-navy/10 transition-all duration-500 group"
+              className={`feature-card opacity-0 flex flex-col p-10 md:p-14 rounded-[40px] ${f.color} hover:scale-[1.02] transition-transform duration-500 shadow-2xl`}
             >
-              <div className={`w-14 h-14 ${f.color} rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500`}>
+              <div className="mb-12">
                 {f.icon}
               </div>
-              <h3 className="text-sm uppercase font-black tracking-widest text-primary mb-4">{f.title}</h3>
-              <p className="text-md text-secondary font-medium leading-relaxed">
-                {f.description}
-              </p>
+              <div className="mt-auto">
+                <h3 className={`text-2xl md:text-3xl font-black tracking-tight ${f.textColor} mb-4 leading-none`}>
+                  {f.title}
+                </h3>
+                <p className={`text-lg font-medium leading-relaxed ${f.subTextColor}`}>
+                  {f.description}
+                </p>
+              </div>
             </div>
           ))}
         </article>

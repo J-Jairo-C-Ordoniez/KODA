@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCustomers } from '@/hooks/admin/useCustomers';
 import { useSession } from 'next-auth/react';
@@ -6,6 +8,7 @@ import { Toaster, useToast } from '@/components/ui/Toast';
 import ProductSearch from '../components/ProductSearch';
 import CartList from '../components/CartList';
 import CustomerSection from '../components/CustomerSection';
+import { Check, X } from 'lucide-react';
 
 interface CartItem {
   variantId: string;
@@ -114,12 +117,18 @@ export default function SaleForm({ variants, onSubmit, onCancel, submitting }: a
     });
   };
 
+  const PAYMENT_METHODS = [
+    { id: 'cash', label: 'Efectivo' },
+    { id: 'transfer', label: 'Transf.' },
+    { id: 'debt', label: 'Fiado' }
+  ];
+
   return (
-    <div className="flex flex-col lg:flex-row gap-6 h-full max-h-[85vh] lg:h-[600px] overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-8 h-auto lg:h-[650px] lg:overflow-hidden">
       <Toaster toasts={toasts} removeToast={removeToast} />
       
       {/* Search Section */}
-      <div className="flex-1 min-h-[300px] lg:min-h-0">
+      <div className="flex-1 min-h-[300px] lg:min-h-0 flex flex-col">
         <ProductSearch 
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -130,7 +139,7 @@ export default function SaleForm({ variants, onSubmit, onCancel, submitting }: a
       </div>
 
       {/* Cart & Summary Section */}
-      <div className="w-full lg:w-[400px] flex flex-col bg-foreground/3 rounded-3xl border border-foreground/5 overflow-hidden shrink-0">
+      <div className="w-full lg:w-[400px] flex flex-col rounded-[32px] border border-white/10 overflow-hidden shrink-0">
         <div className="flex-1 overflow-hidden flex flex-col">
           <CartList 
             cart={cart}
@@ -141,23 +150,25 @@ export default function SaleForm({ variants, onSubmit, onCancel, submitting }: a
         </div>
 
         {/* Footer with Payment and Customer */}
-        <div className="p-6 bg-background border-t border-foreground/5 space-y-6 shadow-2xl shadow-black/5">
+        <div className="p-6 border-t border-white/10 space-y-6">
           <div className="space-y-4">
-            {/* Payment Options */}
-            <div className="grid grid-cols-3 gap-2">
-              {['cash', 'transfer', 'debt'].map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setPaymentMethod(m)}
-                  className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
-                    paymentMethod === m 
-                      ? 'bg-navy text-white shadow-lg shadow-navy/20 border-navy' 
-                      : 'bg-white border-foreground/10 text-secondary hover:border-navy/30'
-                  }`}
-                >
-                  {m === 'cash' ? 'Efectivo' : m === 'transfer' ? 'Transf.' : 'Fiado'}
-                </button>
-              ))}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-foreground-muted ml-1">Método de Pago</label>
+              <div className="grid grid-cols-3 gap-2">
+                {PAYMENT_METHODS.map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => setPaymentMethod(m.id)}
+                    className={`py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${
+                      paymentMethod === m.id 
+                        ? 'bg-contrast text-white shadow-lg shadow-contrast/20 border-contrast' 
+                        : 'bg-background border-white/10 text-foreground-muted hover:border-contrast/30'
+                    }`}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <CustomerSection 
@@ -168,25 +179,27 @@ export default function SaleForm({ variants, onSubmit, onCancel, submitting }: a
             />
           </div>
 
-          <div className="pt-4 border-t border-foreground/5 space-y-4">
+          <div className="pt-6 border-t border-white/10 space-y-4">
             <div className="flex justify-between items-end">
-              <p className="text-xs font-black uppercase tracking-widest text-secondary opacity-60">Total Venta</p>
-              <p className="text-3xl font-black text-primary tracking-tighter">${total.toLocaleString()}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted">Total a Pagar</p>
+              <p className="text-3xl font-black text-contrast tracking-tighter">${total.toLocaleString('es-ES')}</p>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 pt-2">
               <button 
                 onClick={onCancel} 
-                className="flex-1 py-4 text-xs font-black uppercase tracking-widest text-secondary hover:bg-foreground/5 rounded-2xl transition-all"
+                className="flex-1 py-4 text-[11px] font-black uppercase tracking-widest text-foreground-muted hover:bg-foreground/5 rounded-2xl transition-all border border-transparent hover:border-foreground/10"
               >
                 Cancelar
               </button>
               <button 
                 onClick={handleSubmit}
                 disabled={submitting || cart.length === 0 || (paymentMethod === 'debt' && !selectedCustomerId)}
-                className="flex-2 py-4 bg-navy text-white text-sm font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-navy/20 active:translate-y-0 transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
+                className="flex-[1.5] py-4 bg-contrast text-white text-[11px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-contrast/20 active:translate-y-0 transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none flex items-center justify-center gap-2"
               >
-                {submitting ? 'Procesando...' : 'Confirmar Venta'}
+                {submitting ? (
+                   <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Procesando...</span>
+                ) : <><Check size={16} /> Confirmar Venta</>}
               </button>
             </div>
           </div>

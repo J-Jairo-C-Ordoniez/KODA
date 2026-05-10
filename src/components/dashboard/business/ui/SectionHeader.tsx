@@ -6,12 +6,14 @@ interface SectionHeaderProps {
 
 export function SectionHeader({ title, subtitle, action }: SectionHeaderProps) {
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
       <div>
-        <h1 className="text-xl font-bold text-primary tracking-wider">{title}</h1>
-        {subtitle && <p className="text-secondary font-medium mt-1 tracking-wider">{subtitle}</p>}
+        <h1 className="text-2xl font-black text-primary tracking-tight">{title}</h1>
+        {subtitle && (
+          <p className="text-foreground-muted text-sm font-medium mt-1 leading-relaxed">{subtitle}</p>
+        )}
       </div>
-      {action && <div className="shrink-0">{action}</div>}
+      {action && <div className="shrink-0 w-full sm:w-auto">{action}</div>}
     </header>
   );
 }

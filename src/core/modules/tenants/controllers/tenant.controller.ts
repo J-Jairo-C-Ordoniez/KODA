@@ -29,6 +29,15 @@ const tenantController = {
         }
     },
 
+    async countSuspendedTenants() {
+        try {
+            const count = await tenantService.countSuspendedTenants();
+            return apiResponse.success(count);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
+        }
+    },
+
     async getMonthlyIncomes() {
         try {
             const incomes = await tenantService.getMonthlyIncomes();
@@ -89,6 +98,15 @@ const tenantController = {
             return apiResponse.success(tenant);
         } catch (error: any) {
             return apiResponse.error(error.message, 404);
+        }
+    },
+
+    async updateTenantStatus(tenantId: string, status: string) {
+        try {
+            const tenant = await tenantService.updateTenantStatus(tenantId, status);
+            return apiResponse.success(tenant);
+        } catch (error: any) {
+            return apiResponse.error(error.message, 500);
         }
     }
 }

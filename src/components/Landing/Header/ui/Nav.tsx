@@ -10,9 +10,10 @@ export default function Nav({ navLinks }: { navLinks: { name: string; href: stri
                 <Link
                     key={link.name}
                     href={link.href}
-                    className="text-xs uppercase font-medium tracking-wider text-primary/80 hover:text-accent hover:scale-106 transition-all duration-300"
+                    className="relative text-sm font-semibold tracking-wide text-foreground-muted hover:text-primary transition-colors duration-200 group"
                 >
                     {link.name}
+                    <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-contrast rounded-full transition-all duration-300 group-hover:w-full" />
                 </Link>
             ))}
         </nav>
@@ -21,47 +22,40 @@ export default function Nav({ navLinks }: { navLinks: { name: string; href: stri
 
 export function NavMobile({ navLinks, setIsMenuOpen }: { navLinks: { name: string; href: string }[]; setIsMenuOpen: (open: boolean) => void }) {
     return (
-        <div className="md:hidden fixed top-0 left-0 right-0 h-screen bg-background p-8 flex flex-col justify-between gap-6 shadow-xl animate-in slide-in-from-top-4 duration-300">
-            <div className="flex items-center justify-between">
+        <div className="md:hidden fixed inset-0 h-screen bg-background flex flex-col justify-between gap-6 animate-in slide-in-from-top-4 duration-300">
+            <header className="h-20 flex justify-between px-6 items-center border-b border-foreground/5">
                 <Logo type="light" />
-                <div className="flex gap-3">
-                    <Button
-                        href="/login"
-                        variant="outline"
-                        className="w-fit"
-                    >
-                        Ingresar
-                    </Button>
-                    <Button
-                        href="/register"
-                        variant="accent"
-                        className="w-fit"
-                    >
-                        Comenzar
-                    </Button>
-                </div>
+                <Button
+                    href="/register"
+                    variant="contrast"
+                    className="font-bold tracking-widest uppercase text-xs px-6"
+                >
+                    Comenzar
+                </Button>
+            </header>
+
+            <div className="flex flex-col justify-between pb-10 py-10 px-6 h-[calc(100vh-5rem)] overflow-x-hidden bg-background">
+                <nav className="flex flex-col gap-8">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            onClick={() => setIsMenuOpen(false)}
+                            className="text-2xl font-black tracking-tight text-primary hover:text-contrast transition-colors duration-300"
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </nav>
+
+                <Button
+                    variant="ambulance"
+                    className="w-fit mx-auto"
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    <X />
+                </Button>
             </div>
-
-            <nav className="flex flex-col gap-6">
-                {navLinks.map((link) => (
-                    <Link
-                        key={link.name}
-                        href={link.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="text-xs uppercase font-medium tracking-wider text-primary/80 hover:text-accent transition-color duration-300"
-                    >
-                        {link.name}
-                    </Link>
-                ))}
-            </nav>
-
-            <Button
-                variant="ambulance"
-                className="w-fit mx-auto"
-                onClick={() => setIsMenuOpen(false)}
-            >
-                <X />
-            </Button>
         </div>
     );
 }

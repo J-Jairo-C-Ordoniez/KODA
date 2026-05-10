@@ -2,32 +2,38 @@ import { LucideIcon } from 'lucide-react';
 
 interface StatCardProps {
   label: string;
-  value: string;
+  value: string | number;
   icon: LucideIcon;
-  color?: string;
+  iconColor?: string;
+  iconBg?: string;
   change?: string;
   trend?: 'up' | 'down' | 'neutral';
 }
 
-export function StatCard({ label, value, icon: Icon, color, change, trend }: StatCardProps) {
+export function StatCard({ label, value, icon: Icon, iconColor, iconBg, change, trend }: StatCardProps) {
   return (
-    <article className="bg-background border border-foreground/5 p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow group">
-      <div className="flex justify-between items-start mb-4">
-        <div className={`p-3 rounded-2xl transition-colors ${color || 'bg-navy/5 text-navy'}`}>
-          <Icon size={20} />
+    <article className="bg-background-elevated/50 lg:bg-background-elevated border border-white/5 lg:border-white/10 p-8 rounded-[32px] hover:border-contrast/20 transition-all duration-300 group shadow-xl shadow-black/5">
+      <div className="flex justify-between items-start mb-6">
+        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 ${iconBg || 'bg-contrast/10'} shadow-lg shadow-black/5`}>
+          <Icon size={22} className={iconColor || 'text-contrast'} aria-hidden="true" />
         </div>
         {change && (
-          <span className={`text-xs font-bold px-2 py-1 rounded-lg ${
-            trend === 'up' ? 'bg-green-500/10 text-green-600' :
-            trend === 'down' ? 'bg-red-500/10 text-red-600' :
-            'bg-foreground/5 text-secondary'
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border ${
+            trend === 'up'   ? 'bg-success/10 text-success border-success/20' :
+            trend === 'down' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                               'bg-foreground/5 text-foreground-muted border-foreground/10'
           }`}>
-            {change}
-          </span>
+            <span className="text-[10px] font-black tracking-tight">{change}</span>
+          </div>
         )}
       </div>
-      <p className="text-secondary text-sm font-medium mb-1">{label}</p>
-      <h3 className="text-2xl font-black text-primary">{value}</h3>
+      
+      <div className="space-y-1">
+        <p className="text-foreground-muted text-[10px] font-black uppercase tracking-[0.2em] opacity-60 leading-none">{label}</p>
+        <p className="text-3xl font-black text-primary tracking-tighter transition-all group-hover:scale-[1.02] origin-left">
+          {typeof value === 'number' ? value.toLocaleString('es-ES') : value}
+        </p>
+      </div>
     </article>
   );
 }

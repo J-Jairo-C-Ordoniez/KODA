@@ -60,6 +60,16 @@ const tenantService = {
     }
   },
 
+  async countSuspendedTenants() {
+    try {
+      const count = await tenantRepository.countSuspendedTenants();
+
+      return count;
+    } catch (error) {
+      return error;
+    }
+  },
+
   async getMonthlyIncomes() {
     try {
       return await tenantRepository.getMonthlyIncomes();
@@ -114,6 +124,14 @@ const tenantService = {
     try {
       const tenant = await tenantRepository.findBySlug(slug);
       return tenant;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  async updateTenantStatus(tenantId: string, status: string) {
+    try {
+      return await tenantRepository.updateTenantStatus(tenantId, status);
     } catch (error) {
       return error;
     }

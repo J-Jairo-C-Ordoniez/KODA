@@ -1,5 +1,21 @@
-import { Wallet, X, CreditCard, Check, Clock, Plus } from 'lucide-react';
-import { useState } from 'react';
+'use client';
+
+import React from 'react';
+import { X, Wallet, Check, History, Calendar, CreditCard, User, Info } from 'lucide-react';
+import Modal from '../../categories/ui/Modal';
+import Loader from '@/components/ui/Loader';
+
+interface CustomerPaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  customer: any;
+  onSubmit: (e: React.FormEvent) => void;
+  isSaving: boolean;
+  paymentAmount: string;
+  setPaymentAmount: (val: string) => void;
+  paymentNote: string;
+  setPaymentNote: (val: string) => void;
+}
 
 export function CustomerPaymentModal({
   isOpen,
@@ -11,161 +27,179 @@ export function CustomerPaymentModal({
   setPaymentAmount,
   paymentNote,
   setPaymentNote
-}: any) {
-  if (!isOpen || !customer) return null;
+}: CustomerPaymentModalProps) {
+  if (!customer) return null;
 
   return (
-    <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <div className="bg-background rounded-[40px] w-full max-w-md shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300 flex flex-col">
-        <header className="p-8 border-b border-foreground/5 bg-navy/5 flex items-center justify-between">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Registrar Abono"
+      size="lg"
+    >
+      <form onSubmit={onSubmit} className="space-y-8 px-1 py-2">
+        <div className="bg-background-elevated/40 p-6 rounded-[32px] border border-white/5 space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center text-navy shadow-inner">
-              <Wallet size={24} />
+            <div className="w-12 h-12 rounded-2xl bg-contrast/10 flex items-center justify-center text-contrast shrink-0">
+              <User size={24} />
             </div>
-            <div>
-              <h3 className="text-xl font-black text-primary tracking-tight">Registrar Abono</h3>
-              <p className="text-secondary text-xs font-medium truncate max-w-[200px]">Cliente: {customer.name}</p>
-            </div>
-          </div>
-          <button 
-            onClick={onClose} 
-            className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-all active:scale-90" 
-            aria-label="Cerrar"
-          >
-            <X size={24} />
-          </button>
-        </header>
-
-        <div className="p-8 space-y-8 flex-1 overflow-y-auto custom-scrollbar">
-          <div className="p-6 rounded-[32px] bg-red-50/50 border border-red-100 flex items-center justify-between shadow-inner">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-red-400 mb-1">Deuda actual</p>
-              <p className="text-3xl font-black text-red-600 tracking-tighter">${Number(customer.totalDebt).toLocaleString('es-ES')}</p>
-            </div>
-            <div className="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-red-600 shadow-sm">
-              <CreditCard size={28} />
+            <div className="min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted opacity-60">Cliente</p>
+              <h4 className="text-xl font-black text-primary tracking-tight truncate">{customer.name}</h4>
             </div>
           </div>
+          <div className="pt-4 border-t border-white/5 flex justify-between items-center">
+            <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted opacity-60">Deuda Actual</p>
+            <p className="text-2xl font-black text-red-400 tracking-tight">${Number(customer.totalDebt).toLocaleString('es-ES')}</p>
+          </div>
+        </div>
 
-          <form onSubmit={onSubmit} className="space-y-8">
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Monto a abonar (COP)</label>
-              <div className="relative group">
-                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-black text-navy/40 group-focus-within:text-navy transition-colors">$</span>
-                <input
-                  autoFocus
-                  type="number"
-                  required
-                  min="1"
-                  max={customer.totalDebt}
-                  value={paymentAmount}
-                  onChange={(e) => setPaymentAmount(e.target.value)}
-                  className="w-full pl-12 pr-8 py-6 rounded-[24px] border-2 border-foreground/5 focus:border-navy focus:ring-8 focus:ring-navy/5 outline-none transition-all font-black text-3xl text-primary bg-foreground/2 placeholder:text-secondary/20"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-widest text-secondary ml-1">Nota o Referencia</label>
-              <textarea
-                rows={2}
-                value={paymentNote}
-                onChange={(e) => setPaymentNote(e.target.value)}
-                className="w-full px-8 py-5 rounded-[24px] border-2 border-foreground/5 focus:border-navy focus:ring-8 focus:ring-navy/5 outline-none transition-all font-bold text-sm text-primary bg-foreground/2 resize-none placeholder:text-secondary/20"
-                placeholder="Ej. Transferencia Bancaria..."
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-foreground-muted ml-1">Monto del Abono</label>
+            <div className="relative group">
+              <span className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-black text-contrast group-focus-within:scale-110 transition-transform">$</span>
+              <input 
+                autoFocus
+                type="number" 
+                placeholder="0.00" 
+                value={paymentAmount}
+                onChange={(e) => setPaymentAmount(e.target.value)}
+                className="w-full pl-14 pr-6 py-6 rounded-[32px] bg-background-elevated border border-white/10 focus:border-contrast/30 focus:ring-4 focus:ring-contrast/5 outline-none transition-all font-black text-3xl text-primary"
               />
             </div>
+          </div>
 
-            <div className="flex gap-4 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="flex-1 py-5 rounded-[20px] font-black text-xs uppercase tracking-widest text-secondary hover:bg-foreground/5 transition-all active:scale-95"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={isSaving || !paymentAmount}
-                className="flex-2 py-5 rounded-[24px] bg-navy text-white font-black text-xs uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale"
-              >
-                {isSaving ? 'Procesando...' : <><Check size={18} /> Confirmar Abono</>}
-              </button>
-            </div>
-          </form>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-foreground-muted ml-1">Nota u Observación</label>
+            <textarea 
+              placeholder="Escribe un detalle opcional..." 
+              value={paymentNote}
+              onChange={(e) => setPaymentNote(e.target.value)}
+              rows={3}
+              className="w-full px-6 py-4 rounded-[24px] bg-background-elevated border border-white/10 focus:border-contrast/30 outline-none transition-all font-bold text-sm text-primary resize-none placeholder:text-foreground-muted/30"
+            />
+          </div>
         </div>
-      </div>
-    </div>
+
+        <div className="flex gap-4 pt-4">
+          <button 
+            type="button"
+            onClick={onClose} 
+            className="flex-1 py-4 text-[11px] font-black uppercase tracking-widest text-foreground-muted hover:bg-foreground/5 rounded-2xl transition-all"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit"
+            disabled={isSaving || !paymentAmount}
+            className="flex-[1.5] py-4 bg-contrast text-white text-[11px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-contrast/20 hover:bg-contrast-hover transition-all active:scale-95 disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-2"
+          >
+            {isSaving ? <Loader size="xs" color="border-white" /> : <><Check size={18} /> Confirmar Abono</>}
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 }
 
-export function CustomerHistoryModal({ isOpen, onClose, customer, onRegisterPayment }: any) {
-  if (!isOpen || !customer) return null;
+interface CustomerHistoryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  customer: any;
+  onRegisterPayment: () => void;
+}
+
+export function CustomerHistoryModal({
+  isOpen,
+  onClose,
+  customer,
+  onRegisterPayment
+}: CustomerHistoryModalProps) {
+  if (!customer) return null;
 
   return (
-    <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <div className="bg-background rounded-[40px] w-full max-w-lg shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300 flex flex-col max-h-[80vh]">
-        <header className="p-8 border-b border-foreground/5 bg-navy/5 flex items-center justify-between">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Historial de Pagos"
+      size="xl"
+    >
+      <div className="space-y-8 px-1 py-2">
+        <div className="bg-background-elevated/40 border border-white/5 rounded-[40px] p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center text-navy shadow-inner">
-              <Clock size={24} />
+            <div className="w-12 h-12 rounded-2xl bg-contrast/10 flex items-center justify-center text-contrast shrink-0">
+              <History size={24} />
             </div>
-            <div>
-              <h3 className="text-xl font-black text-primary tracking-tight">Historial de Abonos</h3>
-              <p className="text-secondary text-xs font-medium truncate max-w-[200px]">{customer.name}</p>
+            <div className="min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted opacity-60">Historial de</p>
+              <h4 className="text-xl font-black text-primary tracking-tight truncate">{customer.name}</h4>
             </div>
           </div>
           <button 
-            onClick={onClose} 
-            className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-all active:scale-90" 
-            aria-label="Cerrar"
+            onClick={onRegisterPayment}
+            className="w-full sm:w-auto px-8 py-4 bg-contrast text-white text-[11px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-contrast/20 hover:bg-contrast-hover transition-all active:scale-95"
           >
-            <X size={24} />
+            Nuevo Abono
           </button>
-        </header>
+        </div>
 
-        <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
-          {(!customer.payments || customer.payments.length === 0) ? (
-            <div className="py-12 text-center space-y-4">
-              <p className="text-secondary font-medium italic opacity-50">No hay abonos registrados para este cliente.</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {customer.payments.map((p: any) => (
-                <div key={p.paymentId} className="flex items-start gap-4 p-5 rounded-3xl bg-foreground/2 border border-foreground/5 hover:bg-white transition-all group">
-                  <div className="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center shrink-0">
-                    <Plus size={18} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-black text-primary tracking-tight">Abono Recibido</p>
-                      <p className="text-sm font-black text-green-600">+${Number(p.amount).toLocaleString('es-ES')}</p>
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 px-2">
+            <div className="w-1 h-4 bg-contrast rounded-full" />
+            <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Últimas Transacciones</h5>
+          </div>
+
+          <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            {customer.payments?.length === 0 ? (
+              <div className="py-20 text-center opacity-10 space-y-4">
+                <Calendar size={60} className="mx-auto" />
+                <p className="text-xs font-black uppercase tracking-widest">Sin pagos registrados</p>
+              </div>
+            ) : (
+              customer.payments?.map((payment: any) => (
+                <div key={payment.paymentId} className="flex items-center justify-between p-5 bg-background-elevated/50 border border-white/5 rounded-[24px] group hover:border-contrast/30 transition-all">
+                  <div className="flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-background-elevated flex items-center justify-center text-success border border-white/5 group-hover:bg-success/10 transition-colors">
+                      <CreditCard size={20} />
                     </div>
-                    <p className="text-xs font-bold text-secondary flex items-center gap-1 uppercase tracking-widest">
-                      <Clock size={10} /> {new Date(p.createdAt).toLocaleDateString('es-ES')} • {new Date(p.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                    {p.note && (
-                      <div className="mt-3 p-3 rounded-xl bg-background border border-foreground/5 text-xs font-medium text-secondary leading-relaxed">
-                        {p.note}
+                    <div>
+                      <p className="text-sm font-black text-primary tracking-tight">Abono Recibido</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-[9px] font-bold text-foreground-muted uppercase tracking-widest opacity-60">
+                          {new Date(payment.createdAt).toLocaleDateString('es-ES')}
+                        </p>
+                        <span className="w-1 h-1 rounded-full bg-foreground/20" />
+                        <p className="text-[9px] font-bold text-foreground-muted uppercase tracking-widest opacity-60">
+                          {new Date(payment.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-black text-success">+${Number(payment.amount).toLocaleString('es-ES')}</p>
+                    {payment.note && (
+                      <div className="flex items-center justify-end gap-1.5 mt-1 opacity-60">
+                        <Info size={10} className="text-foreground-muted" />
+                        <p className="text-[10px] font-medium text-foreground-muted max-w-[150px] truncate">{payment.note}</p>
                       </div>
                     )}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
-
-        <div className="p-8 border-t border-foreground/5 bg-foreground/1">
-          <button
-            onClick={onRegisterPayment}
-            className="w-full py-4 rounded-2xl bg-navy text-white font-black text-xs uppercase tracking-widest hover:bg-navy/90 transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2"
+        
+        <div className="pt-4 border-t border-white/5 flex justify-center">
+          <button 
+            onClick={onClose}
+            className="px-10 py-4 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:bg-foreground/5 rounded-2xl transition-all"
           >
-            <CreditCard size={16} /> Nuevo Abono
+            Cerrar Historial
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

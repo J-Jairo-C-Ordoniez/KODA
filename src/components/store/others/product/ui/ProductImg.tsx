@@ -7,12 +7,12 @@ export default function ProductImg({ variant }: { variant: any }) {
     const mainImage = variant?.images?.[0]?.content || null;
 
     return (
-        <div className="aspect-square relative bg-[#F4F4F4] rounded-[40px] overflow-hidden flex items-center justify-center border border-foreground/5 transition-all duration-500 shadow-sm">
+        <div className="aspect-square relative bg-background-elevated rounded-[48px] overflow-hidden flex items-center justify-center border border-white/5 transition-all duration-700 ease-out">
             {mainImage ? (
                 <Image
                     src={mainImage}
                     alt={variant.name || "Producto"}
-                    className="w-full h-full object-contain p-10 mix-blend-multiply transition-all duration-700 ease-out"
+                    className="w-full h-full object-contain p-16 transition-all duration-1000 ease-in-out"
                     width={1080}
                     height={1080}
                     loading="eager"

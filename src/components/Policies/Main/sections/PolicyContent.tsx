@@ -16,7 +16,7 @@ export default function PolicyContent({ title }: { title: string }) {
 
     if (isLoading) {
         return (
-            <Container className="py-20 text-center">
+            <Container className="py-20 flex justify-center">
                 <Loader />
             </Container>
         );
@@ -25,50 +25,48 @@ export default function PolicyContent({ title }: { title: string }) {
     if (error || !policy) {
         return (
             <Container className="py-20 text-center">
-                <p className="text-red-500 font-bold">Error: {error || "No se pudo cargar el contenido"}</p>
+                <p className="text-foreground-muted font-bold">No se pudo cargar el contenido.</p>
             </Container>
         );
     }
 
     return (
         <section className="pb-32 bg-background">
-            <Container className="max-w-6xl bg-background p-8 md:p-16">
-                {isLoading ? (
-                    <Loader />
-                ) : error ? (
-                    <Error message="No se pudieron cargar los planes. Intenta de nuevo más tarde." />
-                ) : (
-                    <>
-                        <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-12 border-b border-foreground/5 pb-4">
-                            Última actualización: {new Date(policy.content.lastUpdate).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
-                        </p>
+            <Container className="max-w-5xl">
+                {/* Last update */}
+                <p className="text-xs font-bold text-foreground-muted/50 uppercase tracking-widest mb-12 border-b border-foreground/5 pb-6">
+                    Última actualización:{' '}
+                    {new Date(policy.content.lastUpdate).toLocaleDateString('es-ES', {
+                        day: 'numeric', month: 'long', year: 'numeric'
+                    })}
+                </p>
 
-                        <div className="space-y-12">
-                            {policy.content.sections.map((section: Sections, idx: number) => (
-                                <article key={`section-${idx}`} className="space-y-4">
-                                    <h2 className="text-xl font-black text-primary tracking-tight">
-                                        {section.title}
-                                    </h2>
-                                    <p className="text-md text-secondary font-medium leading-snug tracking-wider">
-                                        {section.content}
-                                    </p>
-                                </article>
-                            ))}
-                        </div>
-
-                        <div className="mt-20 pt-12 border-t border-foreground/5 text-center">
-                            <p className="text-md text-secondary font-medium leading-snug tracking-wider">
-                                ¿Tienes dudas sobre nuestras políticas? <br />
+                {/* Sections */}
+                <div className="space-y-16">
+                    {policy.content.sections.map((section: Sections, idx: number) => (
+                        <article key={`section-${idx}`} className="space-y-4">
+                            <h2 className="text-xl md:text-2xl font-black text-primary tracking-tight">
+                                {section.title}
+                            </h2>
+                            <p className="text-base md:text-lg text-foreground-muted font-medium leading-relaxed">
+                                {section.content}
                             </p>
-                            <Link
-                                href="/help"
-                                className="inline-block mt-4 text-navy font-black hover:scale-105 transition-transform"
-                            >
-                                Ir al Centro de Ayuda
-                            </Link>
-                        </div>
-                    </>
-                )}
+                        </article>
+                    ))}
+                </div>
+
+                {/* Footer CTA */}
+                <div className="mt-24 pt-12 border-t border-foreground/5 text-center space-y-4">
+                    <p className="text-base text-foreground-muted font-medium leading-relaxed">
+                        ¿Tienes dudas sobre nuestras políticas?
+                    </p>
+                    <Link
+                        href="/help"
+                        className="inline-block text-contrast font-black text-sm uppercase tracking-widest hover:opacity-80 transition-opacity"
+                    >
+                        Ir al Centro de Ayuda →
+                    </Link>
+                </div>
             </Container>
         </section>
     );

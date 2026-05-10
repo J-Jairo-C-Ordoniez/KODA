@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Tag, Plus } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { useAdminCatalog } from '@/hooks/admin/useAdminCatalog';
 import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
 import { EmptyState } from '@/components/dashboard/business/ui/EmptyState';
@@ -27,10 +29,20 @@ export default function Categories() {
   const { toasts, showToast, removeToast } = useToast();
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (tenantId) fetchCatalogData();
   }, [tenantId, fetchCatalogData]);
+
+  useGSAP(() => {
+    if (!isLoading && !error && categories.length > 0) {
+      gsap.fromTo('.category-card', 
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+      );
+    }
+  }, { scope: containerRef, dependencies: [isLoading, error, categories] });
 
   const handleOpenCreate = () => {
     setEditingCategory(null);
@@ -96,7 +108,7 @@ export default function Categories() {
   };
 
   return (
-    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20">
+    <main ref={containerRef} className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-6 lg:px-10 pb-24">
       <Toaster toasts={toasts} removeToast={removeToast} />
 
       <SectionHeader
@@ -105,7 +117,7 @@ export default function Categories() {
         action={
           <button
             onClick={handleOpenCreate}
-            className="px-6 py-3 rounded-2xl bg-navy text-white font-bold text-sm hover:bg-navy/90 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 shadow-lg shadow-navy/20"
+            className="w-fit px-6 py-3 rounded-2xl bg-contrast text-white font-bold text-sm hover:bg-contrast-hover active:scale-[0.98] transition-all flex items-center gap-2 shadow-lg shadow-contrast/20"
           >
             <Plus size={16} /> Nueva Categoría
           </button>
@@ -113,11 +125,11 @@ export default function Categories() {
       />
 
       {isLoading ? <Loader /> : error ? (
-        <p className="text-red-500 text-sm font-medium bg-red-50 p-4 rounded-2xl border border-red-100">{error}</p>
+        <p role="alert" className="text-red-400 text-sm font-medium bg-red-500/8 p-4 rounded-2xl border border-red-500/15">{error}</p>
       ) : categories.length === 0 ? (
         <EmptyState icon={Tag} title="No hay categorías" description="Crea tu primera categoría para organizar tu catálogo." />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="categories-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {categories.map((cat: any) => (
             <CategoryCard
               key={cat.categoryId}
@@ -128,6 +140,7 @@ export default function Categories() {
               onEdit={handleOpenEdit}
               onDelete={handleOpenDelete}
               onClick={handleCategoryClick}
+              className="category-card"
             />
           ))}
         </div>

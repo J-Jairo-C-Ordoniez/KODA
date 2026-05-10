@@ -1,5 +1,9 @@
-import { Plus, X, Check, Edit3, Eye, EyeOff, TrendingUp, AlertTriangle, Trash2 } from 'lucide-react';
+'use client';
+
+import { Plus, X, Check, Edit3, Eye, EyeOff, TrendingUp, AlertTriangle, Trash2, Mail, Lock, User, Info, Calendar, CreditCard } from 'lucide-react';
 import { useState } from 'react';
+import Modal from '../../categories/ui/Modal';
+import Loader from '@/components/ui/Loader';
 
 const PAYMENT_LABELS: Record<string, string> = {
   cash: 'Efectivo',
@@ -21,36 +25,46 @@ function EmployeeFormFields({
   setShowPassword: (v: boolean) => void;
   isEdit?: boolean;
 }) {
-  const inputClass = "w-full px-5 py-4 rounded-2xl border-2 border-foreground/5 focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-sm text-primary bg-foreground/[0.02]";
-  const labelClass = "block text-xs font-black uppercase tracking-widest text-secondary mb-2 ml-1";
+  const inputClass = "w-full pl-12 pr-5 py-4 rounded-2xl border border-white/10 bg-background-elevated focus:border-contrast/30 focus:ring-4 focus:ring-contrast/5 outline-none transition-all font-bold text-sm text-primary placeholder:text-foreground-muted/30";
+  const labelClass = "block text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted mb-2 ml-1 opacity-60";
+  const iconClass = "absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted/40 group-focus-within:text-contrast transition-colors";
 
   return (
-    <>
-      <div>
+    <div className="space-y-6">
+      <div className="space-y-1">
         <label className={labelClass}>Nombre Completo</label>
-        <input
-          type="text"
-          required
-          value={formData.name}
-          onChange={e => setFormData((p: any) => ({ ...p, name: e.target.value }))}
-          className={inputClass}
-          placeholder="Ej. Carlos Rodriguez"
-        />
+        <div className="relative group">
+          <User size={18} className={iconClass} />
+          <input
+            type="text"
+            required
+            value={formData.name}
+            onChange={e => setFormData((p: any) => ({ ...p, name: e.target.value }))}
+            className={inputClass}
+            placeholder="Ej. Carlos Rodriguez"
+          />
+        </div>
       </div>
-      <div>
+      
+      <div className="space-y-1">
         <label className={labelClass}>Correo Electrónico</label>
-        <input
-          type="email"
-          required
-          value={formData.email}
-          onChange={e => setFormData((p: any) => ({ ...p, email: e.target.value }))}
-          className={inputClass}
-          placeholder="empleado@negocio.com"
-        />
+        <div className="relative group">
+          <Mail size={18} className={iconClass} />
+          <input
+            type="email"
+            required
+            value={formData.email}
+            onChange={e => setFormData((p: any) => ({ ...p, email: e.target.value }))}
+            className={inputClass}
+            placeholder="empleado@negocio.com"
+          />
+        </div>
       </div>
-      <div>
+
+      <div className="space-y-1">
         <label className={labelClass}>{isEdit ? 'Nueva Contraseña (opcional)' : 'Contraseña'}</label>
-        <div className="relative">
+        <div className="relative group">
+          <Lock size={18} className={iconClass} />
           <input
             type={showPassword ? 'text' : 'password'}
             required={!isEdit}
@@ -58,19 +72,18 @@ function EmployeeFormFields({
             value={formData.password}
             onChange={e => setFormData((p: any) => ({ ...p, password: e.target.value }))}
             className={`${inputClass} pr-14`}
-            placeholder={isEdit ? 'Dejar vacío para mantener actual' : 'Mínimo 6 caracteres'}
+            placeholder={isEdit ? 'Dejar vacío para no cambiar' : 'Mínimo 6 caracteres'}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors p-1"
-            aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground-muted/40 hover:text-contrast transition-colors p-1"
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -86,45 +99,36 @@ export function EmployeeFormModal({
 }: any) {
   const [showPassword, setShowPassword] = useState(false);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <div className="bg-background rounded-[40px] w-full max-w-md shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300">
-        <header className="p-8 border-b border-foreground/5 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center">
-              {isEdit ? <Edit3 size={22} className="text-navy" /> : <Plus size={24} className="text-navy" />}
-            </div>
-            <div>
-              <h3 className="text-xl font-black text-primary">{isEdit ? 'Editar Empleado' : 'Registrar Empleado'}</h3>
-              <p className="text-secondary text-xs font-medium truncate max-w-[180px]">
-                {isEdit ? employeeName : 'Estas son sus credenciales de acceso'}
-              </p>
-            </div>
-          </div>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-colors" aria-label="Cerrar">
-            <X size={24} />
-          </button>
-        </header>
-
-        <form onSubmit={onSubmit} className="p-8 space-y-5">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={isEdit ? `Editar: ${employeeName}` : 'Registrar Colaborador'}
+      size="lg"
+    >
+      <div className="px-1 py-2">
+        <form onSubmit={onSubmit} className="space-y-8">
           <EmployeeFormFields formData={formData} setFormData={setFormData} showPassword={showPassword} setShowPassword={setShowPassword} isEdit={isEdit} />
-          <div className="flex gap-4 pt-2">
-            <button type="button" onClick={onClose} className="flex-1 py-4 rounded-2xl font-black text-xs uppercase tracking-widest text-secondary hover:bg-foreground/5 transition-all">
+          
+          <div className="flex gap-4 pt-4 border-t border-white/5">
+            <button 
+              type="button" 
+              onClick={onClose} 
+              className="flex-1 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest text-foreground-muted hover:bg-foreground/5 transition-all"
+            >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-2 py-4 rounded-2xl bg-navy text-white font-black text-xs uppercase tracking-widest hover:bg-navy/90 hover:scale-[1.02] transition-all shadow-xl shadow-navy/20 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="flex-[1.5] py-4 rounded-2xl bg-contrast text-white font-black text-[11px] uppercase tracking-widest hover:bg-contrast-hover transition-all shadow-2xl shadow-contrast/20 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
             >
-              {isSaving ? 'Guardando...' : <><Check size={16} /> {isEdit ? 'Guardar Cambios' : 'Registrar'}</>}
+              {isSaving ? <Loader size="xs" color="border-white" /> : <><Check size={18} /> {isEdit ? 'Guardar Cambios' : 'Confirmar Registro'}</>}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }
 
@@ -132,93 +136,130 @@ export function EmployeeSalesModal({ isOpen, onClose, salesEmployee, totalSalesA
   if (!isOpen || !salesEmployee) return null;
 
   return (
-    <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <div className="bg-background rounded-[40px] w-full max-w-lg shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300 flex flex-col max-h-[85vh]">
-        <header className="p-8 border-b border-foreground/5 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-navy/10 flex items-center justify-center">
-              <TrendingUp size={22} className="text-navy" />
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Rendimiento del Empleado"
+      size="xl"
+    >
+      <div className="space-y-8 px-1 py-2">
+        <div className="bg-background-elevated/40 border border-white/5 rounded-[40px] p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-8 shadow-2xl shadow-black/10">
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-3xl bg-contrast/10 flex items-center justify-center text-contrast shrink-0">
+              <TrendingUp size={28} />
             </div>
-            <div>
-              <h3 className="text-xl font-black text-primary">Historial de Ventas</h3>
-              <p className="text-secondary text-xs font-medium">{salesEmployee.name} · {salesEmployee._count?.sales ?? 0} ventas registradas</p>
+            <div className="min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted opacity-60">Estadísticas de</p>
+              <h4 className="text-2xl font-black text-primary tracking-tight truncate">{salesEmployee.name}</h4>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-colors" aria-label="Cerrar">
-            <X size={24} />
-          </button>
-        </header>
-
-        <div className="px-8 pt-6 pb-4 grid grid-cols-2 gap-4 shrink-0">
-          <div className="p-4 rounded-2xl bg-green-50 border border-green-100">
-            <p className="text-[10px] font-black uppercase tracking-widest text-green-500 mb-1">Total Generado</p>
-            <p className="text-xl font-black text-green-700">${totalSalesAmount(salesEmployee).toLocaleString('es-ES')}</p>
-          </div>
-          <div className="p-4 rounded-2xl bg-navy/5 border border-navy/10">
-            <p className="text-[10px] font-black uppercase tracking-widest text-navy/60 mb-1">Número de Ventas</p>
-            <p className="text-xl font-black text-navy">{salesEmployee._count?.sales ?? 0}</p>
+          
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            <div className="flex-1 sm:flex-initial px-6 py-4 rounded-2xl bg-success/10 border border-success/20 text-center">
+              <p className="text-[9px] font-black uppercase tracking-widest text-success opacity-70 mb-1">Total Generado</p>
+              <p className="text-xl font-black text-success tracking-tighter">${totalSalesAmount(salesEmployee).toLocaleString('es-ES')}</p>
+            </div>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-3 custom-scrollbar">
-          {(!salesEmployee.sales || salesEmployee.sales.length === 0) ? (
-            <div className="py-12 text-center">
-              <p className="text-secondary font-medium italic opacity-50">Este empleado aún no ha registrado ventas.</p>
-            </div>
-          ) : (
-            salesEmployee.sales.map((sale: any) => (
-              <div key={sale.saleId} className="flex items-center justify-between p-4 rounded-2xl bg-foreground/2 border border-foreground/5 hover:bg-white transition-all">
-                <div>
-                  <p className="text-xs font-black text-primary tracking-tight">
-                    {PAYMENT_LABELS[sale.paymentMethod] || sale.paymentMethod}
-                  </p>
-                  <p className="text-xs text-secondary font-bold mt-0.5">
-                    {new Date(sale.createdAt).toLocaleDateString('es-ES')} · {new Date(sale.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-                <p className="text-sm font-black text-green-600">+${Number(sale.total).toLocaleString('es-ES')}</p>
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 px-2">
+            <div className="w-1 h-4 bg-contrast rounded-full" />
+            <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Historial de Ventas</h5>
+          </div>
+
+          <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            {(!salesEmployee.sales || salesEmployee.sales.length === 0) ? (
+              <div className="py-20 text-center opacity-10 space-y-4">
+                <ShoppingCart size={60} className="mx-auto" />
+                <p className="text-xs font-black uppercase tracking-widest">Sin ventas registradas</p>
               </div>
-            ))
-          )}
+            ) : (
+              salesEmployee.sales.map((sale: any) => (
+                <div key={sale.saleId} className="flex items-center justify-between p-5 bg-background-elevated/50 border border-white/5 rounded-[24px] group hover:border-contrast/30 transition-all">
+                  <div className="flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-background-elevated flex items-center justify-center text-contrast border border-white/5 group-hover:bg-contrast group-hover:text-white transition-all">
+                      <CreditCard size={20} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-primary tracking-tight">Venta Realizada</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-[9px] font-bold text-foreground-muted uppercase tracking-widest opacity-60">
+                          {new Date(sale.createdAt).toLocaleDateString('es-ES')}
+                        </p>
+                        <span className="w-1 h-1 rounded-full bg-foreground/20" />
+                        <p className="text-[9px] font-bold text-foreground-muted uppercase tracking-widest opacity-60">
+                          {PAYMENT_LABELS[sale.paymentMethod] || sale.paymentMethod}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-black text-primary tracking-tighter">${Number(sale.total).toLocaleString('es-ES')}</p>
+                    <div className="flex items-center justify-end gap-1 mt-1">
+                      <p className="text-[9px] font-medium text-foreground-muted opacity-40 uppercase tracking-widest">Registrada</p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+        
+        <div className="pt-4 border-t border-white/5 flex justify-center">
+          <button 
+            onClick={onClose}
+            className="px-10 py-4 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:bg-foreground/5 rounded-2xl transition-all"
+          >
+            Cerrar Historial
+          </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 
 export function DeleteConfirmModal({ isOpen, onClose, onConfirm, employee, isSaving }: any) {
-  if (!isOpen || !employee) return null;
-
   return (
-    <div className="fixed inset-0 bg-navy/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <div className="bg-background rounded-[40px] w-full max-w-sm shadow-2xl shadow-navy/20 border border-white/20 overflow-hidden scale-95 animate-in zoom-in-95 duration-300">
-        <div className="p-8 text-center space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center mx-auto">
-            <AlertTriangle size={28} className="text-red-500" />
-          </div>
-          <div>
-            <h3 className="text-xl font-black text-primary">¿Eliminar Empleado?</h3>
-            <p className="text-secondary text-sm font-medium mt-2">
-              <span className="font-black text-primary">{employee.name}</span> perderá el acceso al sistema inmediatamente.
-            </p>
-          </div>
-          <div className="flex gap-4 pt-2">
-            <button
-              onClick={onClose}
-              className="flex-1 py-4 rounded-2xl font-black text-xs uppercase tracking-widest text-secondary hover:bg-foreground/5 transition-all"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={onConfirm}
-              disabled={isSaving}
-              className="flex-[1.5] py-4 rounded-2xl bg-red-500 text-white font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              {isSaving ? 'Eliminando...' : <><Trash2 size={15} /> Eliminar</>}
-            </button>
-          </div>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Confirmar Acción"
+      size="lg"
+    >
+      <div className="p-4 text-center space-y-8">
+        <div className="w-20 h-20 rounded-3xl bg-red-500/10 flex items-center justify-center mx-auto text-red-500 shadow-2xl shadow-red-500/10">
+          <AlertTriangle size={40} />
+        </div>
+        
+        <div className="space-y-3">
+          <h3 className="text-2xl font-black text-primary tracking-tight">¿Desvincular Empleado?</h3>
+          <p className="text-sm font-medium text-foreground-muted leading-relaxed">
+            Estás a punto de eliminar a <span className="text-primary font-black">{employee?.name}</span> de tu equipo. Perderá acceso inmediato a la plataforma.
+          </p>
+        </div>
+
+        <div className="bg-red-500/5 border border-red-500/10 p-4 rounded-2xl flex items-center gap-3 text-left">
+          <Info size={16} className="text-red-400 shrink-0" />
+          <p className="text-[10px] font-bold text-red-400 uppercase tracking-tight">Esta acción no se puede deshacer si el empleado no tiene registros.</p>
+        </div>
+
+        <div className="flex gap-4 pt-2">
+          <button
+            onClick={onClose}
+            className="flex-1 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest text-foreground-muted hover:bg-foreground/5 transition-all"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isSaving}
+            className="flex-[1.5] py-4 rounded-2xl bg-red-500 text-white font-black text-[11px] uppercase tracking-widest hover:bg-red-600 transition-all shadow-2xl shadow-red-500/20 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+          >
+            {isSaving ? <Loader size="xs" color="border-white" /> : <><Trash2 size={16} /> Eliminar Definitivamente</>}
+          </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

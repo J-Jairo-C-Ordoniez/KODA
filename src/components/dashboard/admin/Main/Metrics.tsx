@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import Header from '@/components/dashboard/admin/Main/ui/Header';
+import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
+import { Plus } from 'lucide-react';
 import Loader from '@/components/ui/Loader';
 import Metric from '@/components/dashboard/admin/Main/ui/Metric';
 import { useTenantMetrics } from '@/hooks/superAdmin/useTenantMetrics';
@@ -14,12 +15,19 @@ export default function Metrics() {
   }, [fetchMetrics]);
 
   return (
-    <main className="space-y-10 bg-background w-full pt-8 px-12 overflow-y-auto">
-      <Header title="Métricas Generales" />
+    <main className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-6 lg:px-10 pb-24">
+      <SectionHeader
+        title="Métricas Generales"
+        action={
+          <button className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-contrast text-white font-bold text-sm hover:bg-contrast-hover active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg shadow-contrast/20">
+            <Plus size={16} aria-hidden="true" /> Nuevo Negocio
+          </button>
+        }
+      />
 
       {isLoading && <Loader />}
       {error && (
-        <p className="text-red-500 text-sm font-semibold bg-red-50 px-4 py-3 rounded-2xl border border-red-100">
+        <p className="text-red-500 text-sm font-semibold bg-red-50 px-4 py-3 rounded-2xl border border-red-100 w-fit">
           {error}
         </p>
       )}

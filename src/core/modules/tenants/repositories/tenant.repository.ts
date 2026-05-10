@@ -68,6 +68,18 @@ const tenantRepository = {
     }
   },
 
+  async countSuspendedTenants() {
+    try {
+      const count = await prisma.tenant.count({
+        where: { status: 'suspended' },
+      });
+
+      return count;
+    } catch (error) {
+      return error;
+    }
+  },
+
   async getMonthlyIncomes() {
     const ahora = new Date();
     const inicioMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
@@ -200,6 +212,13 @@ const tenantRepository = {
       orderBy: {
         createdAt: 'desc',
       },
+    });
+  },
+
+  async updateTenantStatus(tenantId: string, status: string) {
+    return await prisma.tenant.update({
+      where: { tenantId },
+      data: { status: status as SubscriptionStatus }
     });
   },
 }

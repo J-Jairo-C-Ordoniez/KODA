@@ -12,7 +12,10 @@ export function useCatalog(tenantId?: string) {
     const searchParamsStr = searchParams.toString();
 
     const fetchProducts = useCallback(async () => {
-        if (!tenantId) return;
+        if (!tenantId) {
+            setIsLoading(false);
+            return;
+        }
         
         setIsLoading(true);
         setError(null);

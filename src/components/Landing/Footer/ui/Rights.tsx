@@ -2,14 +2,14 @@ import Link from "next/link";
 
 export default function Rights() {
     return (
-        <article className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-xs uppercase font-medium tracking-[0.2em] text-background/40">
+        <article className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-primary/30 tracking-wide">
                 © {new Date().getFullYear()} KODA. Todos los derechos reservados.
             </p>
-            <div className="flex gap-8">
+            <div className="flex gap-6">
                 <Link
                     href="/help"
-                    className="text-xs uppercase font-medium tracking-wider text-background/80 hover:text-background hover:scale-106 transition-all duration-300"
+                    className="text-xs text-primary/40 hover:text-primary/80 transition-colors duration-200"
                 >
                     Centro de ayuda
                 </Link>

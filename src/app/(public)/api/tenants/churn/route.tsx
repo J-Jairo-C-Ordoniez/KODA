@@ -15,10 +15,10 @@ export async function GET(req: Request) {
 
   if (type === "MonthlyChurnCount") {
     const data = await tenantController.getMonthlyChurnCount();
-    return NextResponse.json(data);
+    return data;
   } else if (type === "ChurnRate") {
     const data = await tenantController.getChurnRate();
-    return NextResponse.json(data);
+    return data;
   }
 
   return NextResponse.json({ error: "Invalid type" }, { status: 400 });

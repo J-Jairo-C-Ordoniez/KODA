@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import CatalogHeader from './ui/CatalogHeader';
 import CatalogTable from './ui/CatalogTable';
 import ProductForm from './ui/ProductForm';
@@ -30,11 +32,13 @@ export default function CatalogClient() {
     } = useAdminCatalog(tenantId);
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('all');
     const [expandedProducts, setExpandedProducts] = useState({});
     const [productModal, setProductModal] = useState({ isOpen: false, editingProduct: null });
     const [variantModal, setVariantModal] = useState({ isOpen: false, editingVariant: null, productId: null });
     const [confirmConfig, setConfirmConfig] = useState({ isOpen: false, title: '', message: '', onConfirm: null });
     const [alertConfig, setAlertConfig] = useState({ isOpen: false, title: '', message: '', variant: 'primary' });
+    const containerRef = useRef(null);
 
     const searchParams = useSearchParams();
 
@@ -60,6 +64,15 @@ export default function CatalogClient() {
             }
         }
     }, [searchParams, products]);
+
+    useGSAP(() => {
+        if (!loading && !error && products.length > 0) {
+            gsap.fromTo('.catalog-card', 
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+            );
+        }
+    }, { scope: containerRef, dependencies: [loading, error, products, selectedCategory, searchTerm] });
 
     const toggleExpand = (productId) =>
         setExpandedProducts(prev => ({ ...prev, [productId]: !prev[productId] }));
@@ -144,13 +157,14 @@ export default function CatalogClient() {
         );
     }
 
-    const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredProducts = products.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.category.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory === 'all' || p.category.categoryId === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
 
     return (
-        <main className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
+        <main ref={containerRef} className="h-full flex-1 overflow-y-auto transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">
             <div className="container mx-auto space-y-8 pt-2">
                 <Header
                     title="Catálogo"
@@ -159,10 +173,13 @@ export default function CatalogClient() {
 
                 <section className="rounded-xl p-6 flex flex-col gap-6 relative">
                     <CatalogHeader
-                        productCount={products.length}
+                        productCount={filteredProducts.length}
                         onOpenProductModal={() => handleOpenProductModal()}
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
+                        categories={categories}
+                        selectedCategory={selectedCategory}
+                        setSelectedCategory={setSelectedCategory}
                     />
 
                     <CatalogTable

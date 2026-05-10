@@ -10,5 +10,5 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const tenants = await tenantController.getMonthlyIncomes();
-  return NextResponse.json(tenants);
+  return tenants;
 }

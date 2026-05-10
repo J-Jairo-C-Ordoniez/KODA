@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Loader2, Mail, Lock } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { AnimatePresence } from "framer-motion";
 import AuthWrapper from "@/components/Auth/Main/ui/AuthWrapper";
 import Button from "@/components/ui/Button";
 import Link from "next/link";
@@ -49,7 +48,6 @@ export default function Login() {
   };
 
   return (
-    <AnimatePresence mode="wait">
       <AuthWrapper
         title="Bienvenido de nuevo"
         subtitle="Accede a tu panel y mantén el control de tu negocio en tiempo real."
@@ -62,11 +60,11 @@ export default function Login() {
           )}
 
           <div className="space-y-2">
-            <label htmlFor="email" className="block text-xs font-medium uppercase tracking-widest text-secondary ml-1">
+            <label htmlFor="email" className="block text-xs font-bold uppercase tracking-widest text-foreground-muted mb-2">
               Correo Electrónico
             </label>
             <div className="relative group">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-navy transition-colors" size={18} />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted group-focus-within:text-contrast transition-colors duration-200" size={18} />
               <input
                 id="email"
                 name="email"
@@ -75,7 +73,7 @@ export default function Login() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 bg-background/50 border border-foreground/5 rounded-2xl focus:ring-2 focus:ring-navy/20 focus:border-navy outline-hidden transition-all font-medium placeholder:text-secondary/80"
+                className="w-full pl-12 pr-4 py-4 bg-background border border-foreground/8 rounded-2xl focus:ring-2 focus:ring-contrast/20 focus:border-contrast outline-none transition-all duration-200 font-medium text-primary placeholder:text-foreground-muted/50"
                 placeholder="admin@tunegocio.com"
               />
             </div>
@@ -83,15 +81,15 @@ export default function Login() {
 
           <div className="space-y-2">
             <div className="flex justify-between items-center ml-1">
-              <label htmlFor="password" className="block text-xs font-medium uppercase tracking-widest text-secondary">
+              <label htmlFor="password" className="block text-xs font-bold uppercase tracking-widest text-foreground-muted">
                 Contraseña
               </label>
-              <Link href="/forgot-password" title="Recuperar contraseña" className="text-xs font-medium uppercase tracking-widest text-navy hover:underline">
+              <Link href="/forgot-password" title="Recuperar contraseña" className="text-xs font-bold uppercase tracking-widest text-contrast hover:opacity-80 transition-opacity">
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>
             <div className="relative group">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-navy transition-colors" size={18} />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted group-focus-within:text-contrast transition-colors duration-200" size={18} />
               <input
                 id="password"
                 name="password"
@@ -99,7 +97,7 @@ export default function Login() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 bg-background/50 border border-foreground/5 rounded-2xl focus:ring-2 focus:ring-navy/20 focus:border-navy outline-hidden transition-all font-medium placeholder:text-secondary/80"
+                className="w-full pl-12 pr-4 py-4 bg-background border border-foreground/8 rounded-2xl focus:ring-2 focus:ring-contrast/20 focus:border-contrast outline-none transition-all duration-200 font-medium text-primary placeholder:text-foreground-muted/50"
                 placeholder="••••••••"
               />
             </div>
@@ -109,8 +107,8 @@ export default function Login() {
             <Button
               type="submit"
               disabled={loading}
-              variant="navy"
-              className="w-full py-4 rounded-2xl font-medium tracking-tight"
+              variant="contrast"
+              className="w-full py-4 rounded-2xl font-black tracking-widest uppercase text-sm"
             >
               {loading ? (
                 <>
@@ -125,13 +123,12 @@ export default function Login() {
           <div className="pt-6 border-t border-foreground/5">
             <p className="text-md text-primary/80 font-medium leading-snug tracking-wider">
               ¿No tienes cuenta?{" "}
-              <Link href="/register" className="font-medium text-navy hover:underline">
+              <Link href="/register" className="font-bold text-contrast hover:opacity-80 transition-opacity">
                 Regístrate
               </Link>
             </p>
           </div>
         </form>
       </AuthWrapper>
-    </AnimatePresence>
   );
 }

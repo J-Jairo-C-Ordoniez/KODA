@@ -15,5 +15,5 @@ export async function GET(req: Request) {
   const status = searchParams.get("status");
 
   const tenants = await tenantController.getTenantsFiltered(search, status);
-  return NextResponse.json(tenants);
+  return tenants;
 }

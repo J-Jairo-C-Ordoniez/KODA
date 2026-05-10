@@ -28,32 +28,23 @@ export default function Header() {
   ];
 
   return (
-    <header className={`h-16 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-background/80 backdrop-blur-md border-b border-foreground/5 shadow-sm' : 'bg-transparent'}`}>
+    <header className={`h-20 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-background/80 backdrop-blur-xl border-b border-foreground/5 shadow-sm' : 'bg-transparent'}`}>
       <Container className="flex items-center justify-between">
         <Logo type="light" />
 
         <Nav navLinks={navLinks} />
 
-        <div className="hidden md:flex items-center gap-6">
-          <Button
-            href="/login"
-            variant="ghost"
-            className="px-4 font-bold tracking-tight text-primary/80 hover:text-navy hover:scale-105 transition-all"
-          >
-            Ingresar
-          </Button>
-          <Button
-            href="/register"
-            variant="accent"
-            className="px-8 font-bold tracking-tight shadow-navy/20 hover:shadow-navy/40"
-          >
-            Comenzar
-          </Button>
-        </div>
+        <Button
+          href="/register"
+          variant="contrast"
+          className="hidden md:flex px-8 py-2.5 font-bold tracking-widest uppercase text-xs"
+        >
+          Comenzar
+        </Button>
 
         <Button
           variant="ambulance"
-          className="md:hidden p-2 rounded-full border-foreground/5 hover:bg-foreground/5"
+          className="md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}

@@ -32,39 +32,42 @@ export function SalesChart({ data }: SalesChartProps) {
         <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#000080" stopOpacity={0.1}/>
-              <stop offset="95%" stopColor="#000080" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#FF7A00" stopOpacity={0.3}/>
+              <stop offset="95%" stopColor="#FF7A00" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+          <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#2E2E2E" />
           <XAxis 
             dataKey="displayDate" 
             axisLine={false} 
             tickLine={false} 
-            tick={{ fontSize: 10, fill: '#94a3b8' }}
+            tick={{ fontSize: 10, fill: '#737373' }}
             minTickGap={20}
           />
           <YAxis 
             axisLine={false} 
             tickLine={false} 
-            tick={{ fontSize: 10, fill: '#94a3b8' }}
+            tick={{ fontSize: 10, fill: '#737373' }}
             tickFormatter={(value) => value >= 1000 ? `${value / 1000}k` : value}
           />
           <Tooltip 
             contentStyle={{ 
+              backgroundColor: '#0E0E0E',
               borderRadius: '16px', 
-              border: 'none', 
-              boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+              border: '1px solid #2E2E2E', 
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
               fontSize: '12px',
-              fontWeight: '600'
+              fontWeight: '600',
+              color: '#FFFFFF'
             }}
             formatter={(value: number) => [formatCurrency(value), 'Ventas']}
-            labelStyle={{ color: '#000080', marginBottom: '4px' }}
+            labelStyle={{ color: '#737373', marginBottom: '4px' }}
+            itemStyle={{ color: '#FF7A00' }}
           />
           <Area 
             type="monotone" 
             dataKey="revenue" 
-            stroke="#000080" 
+            stroke="#FF7A00" 
             strokeWidth={3}
             fillOpacity={1} 
             fill="url(#colorRevenue)" 

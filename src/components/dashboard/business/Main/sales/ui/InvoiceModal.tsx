@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Printer, Share2, X, MapPin, Phone, Mail, Calendar, User, CreditCard } from 'lucide-react';
+import { FileText, Printer, Share2, X, MapPin, Phone, Calendar, User, CreditCard, Clock, Tag } from 'lucide-react';
 import { useRef } from 'react';
 
 interface InvoiceModalProps {
@@ -26,13 +26,16 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
             <script src="https://cdn.tailwindcss.com"></script>
             <style>
               @media print {
-                body { padding: 0; margin: 0; }
+                body { padding: 0; margin: 0; background: white !important; color: black !important; }
                 .no-print { display: none !important; }
+                .printable-area { background: white !important; color: black !important; }
+                .printable-area * { border-color: #eee !important; color: black !important; }
+                .badge-debt { background: #fee2e2 !important; color: #b91c1c !important; border: 1px solid #fecaca !important; }
               }
             </style>
           </head>
-          <body>
-            <div class="p-10 font-sans">
+          <body class="bg-white">
+            <div class="p-10 font-sans printable-area">
               ${printContent.innerHTML}
             </div>
           </body>
@@ -56,29 +59,31 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
   });
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-navy/20 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-3xl rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-8 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="bg-background w-full max-w-4xl rounded-[40px] shadow-2xl border border-foreground/10 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300">
         {/* Actions Header */}
-        <div className="px-8 py-6 border-b border-foreground/5 flex items-center justify-between bg-foreground/[0.02]">
-          <div className="flex items-center gap-3 text-primary font-black uppercase tracking-widest text-xs">
-            <FileText size={20} className="text-navy" />
-            Factura #{invoiceNumber}
+        <div className="px-8 py-5 border-b border-foreground/5 flex items-center justify-between bg-background-elevated">
+          <div className="flex items-center gap-3 text-primary font-black uppercase tracking-widest text-[10px]">
+            <div className="w-8 h-8 rounded-xl bg-contrast/10 flex items-center justify-center text-contrast">
+              <FileText size={16} />
+            </div>
+            Detalle de Factura <span className="text-foreground-muted ml-1">#{invoiceNumber}</span>
           </div>
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-navy text-white text-xs font-black hover:bg-navy/90 transition-all shadow-lg shadow-navy/20"
+              className="hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-contrast text-white text-[10px] font-black uppercase tracking-widest hover:bg-contrast-hover transition-all shadow-lg shadow-contrast/20 active:scale-95"
             >
               <Printer size={16} /> Imprimir
             </button>
-            <button 
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-foreground/5 text-secondary text-xs font-black hover:bg-foreground/10 transition-all"
+            <button
+              className="hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-foreground/5 text-foreground-muted text-[10px] font-black uppercase tracking-widest hover:bg-foreground/10 transition-all active:scale-95"
             >
               <Share2 size={16} /> Compartir
             </button>
-            <button 
+            <button
               onClick={onClose}
-              className="ml-2 w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-50 text-secondary hover:text-red-500 transition-all"
+              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-500/10 text-foreground-muted hover:text-red-500 transition-all active:scale-90"
             >
               <X size={20} />
             </button>
@@ -86,110 +91,117 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
         </div>
 
         {/* Invoice Body (Scrollable) */}
-        <div className="flex-1 overflow-y-auto p-12 space-y-12 bg-white" ref={printRef}>
+        <div className="flex-1 overflow-y-auto p-6 md:p-12 space-y-12 bg-background custom-scrollbar" ref={printRef}>
           {/* Header Info */}
           <div className="flex flex-col md:flex-row justify-between gap-8 items-start">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                 <div className="w-14 h-14 rounded-2xl bg-navy flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-navy/20">
-                   {sale.tenant?.businessName?.charAt(0) || 'K'}
-                 </div>
-                 <div>
-                   <h2 className="text-3xl font-black text-primary tracking-tight">{sale.tenant?.businessName || 'KODA Business'}</h2>
-                   <p className="text-secondary font-medium text-sm">{sale.tenant?.description || 'Tienda de Moda & Accesorios'}</p>
-                 </div>
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-contrast flex items-center justify-center text-white font-black text-3xl shadow-2xl shadow-contrast/30">
+                  {sale.tenant?.businessName?.charAt(0) || 'K'}
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-primary tracking-tighter leading-none">{sale.tenant?.businessName || 'KODA Business'}</h2>
+                  <p className="text-foreground-muted font-bold text-xs uppercase tracking-widest mt-2">{sale.tenant?.description || 'Tienda Oficial'}</p>
+                </div>
               </div>
-              <div className="space-y-2 text-sm text-secondary font-medium">
-                <div className="flex items-center gap-2"><Phone size={14} className="text-navy" /> {sale.tenant?.whatsApp}</div>
-                <div className="flex items-center gap-2"><MapPin size={14} className="text-navy" /> Colombia</div>
+              <div className="space-y-2 text-[11px] text-foreground-muted font-bold uppercase tracking-widest">
+                <div className="flex items-center gap-3"><Phone size={14} className="text-contrast" /> {sale.tenant?.whatsApp}</div>
+                <div className="flex items-center gap-3"><MapPin size={14} className="text-contrast" /> Colombia • Tienda Virtual</div>
               </div>
             </div>
 
-            <div className="bg-foreground/[0.03] border border-foreground/5 p-6 rounded-[32px] min-w-[240px] space-y-4">
-              <div className="space-y-1">
-                <p className="text-xs font-black uppercase tracking-widest text-secondary">No. Factura</p>
-                <p className="text-2xl font-black text-navy tracking-tight">#{invoiceNumber}</p>
+            <div className="bg-background-elevated border border-foreground/10 p-8 rounded-[40px] min-w-[280px] space-y-6 shadow-xl shadow-black/20">
+              <div className="space-y-1 text-right md:text-left">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted opacity-50">Número de Control</p>
+                <p className="text-3xl font-black text-contrast tracking-tight">#{invoiceNumber}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4 border-t border-foreground/5 pt-4">
+              <div className="grid grid-cols-2 gap-6 border-t border-foreground/5 pt-6">
                 <div className="space-y-1">
-                  <p className="text-xs font-black uppercase tracking-widest text-secondary">Fecha</p>
-                  <p className="text-xs font-bold text-primary">{date}</p>
+                  <p className="text-[9px] font-black uppercase tracking-widest text-foreground-muted">Fecha Emisión</p>
+                  <p className="text-xs font-black text-primary">{date}</p>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-xs font-black uppercase tracking-widest text-secondary">Hora</p>
-                  <p className="text-xs font-bold text-primary">{time}</p>
+                <div className="space-y-1 text-right">
+                  <p className="text-[9px] font-black uppercase tracking-widest text-foreground-muted">Hora</p>
+                  <p className="text-xs font-black text-primary uppercase">{time}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-foreground/5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-10 border-t border-foreground/8">
             {/* Customer Details */}
             <div className="space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-widest text-secondary flex items-center gap-2">
-                <User size={12} className="text-navy" /> Cliente
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-foreground-muted flex items-center gap-2">
+                <User size={14} className="text-contrast" /> Datos del Cliente
               </h3>
-              <div className="space-y-1">
-                <p className="text-lg font-black text-primary">{sale.customer?.name || 'Consumidor Final'}</p>
-                {sale.customer?.phone && <p className="text-sm font-medium text-secondary">{sale.customer.phone}</p>}
-                {!sale.customer && <p className="text-xs italic text-secondary/50">Venta rápida sin registro de cliente</p>}
+              <div className="bg-background-elevated/50 p-6 rounded-3xl border border-foreground/5">
+                <p className="text-xl font-black text-primary tracking-tight">{sale.customer?.name || 'Consumidor Final'}</p>
+                {sale.customer?.phone && (
+                  <div className="flex items-center gap-2 mt-2 text-foreground-muted">
+                    <Phone size={12} />
+                    <p className="text-xs font-bold">{sale.customer.phone}</p>
+                  </div>
+                )}
+                {!sale.customer && <p className="text-[10px] font-bold uppercase tracking-widest text-foreground-muted/40 mt-2">Venta Rápida / Sin Registro</p>}
               </div>
             </div>
 
             {/* Payment Details */}
             <div className="space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-widest text-secondary flex items-center gap-2">
-                <CreditCard size={12} className="text-navy" /> Pago
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-foreground-muted flex items-center gap-2">
+                <CreditCard size={14} className="text-contrast" /> Estado del Pago
               </h3>
-              <div className="flex items-center gap-3">
-                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
-                   sale.paymentMethod === 'debt' ? 'bg-red-500 text-white' : 'bg-navy/5 text-navy'
-                 }`}>
-                   <CreditCard size={20} />
-                 </div>
-                 <div className="space-y-1">
-                   <p className={`text-sm font-black uppercase tracking-wide ${sale.paymentMethod === 'debt' ? 'text-red-600' : 'text-primary'}`}>
-                     {sale.paymentMethod === 'cash' ? 'Efectivo' : 
-                      sale.paymentMethod === 'transfer' ? 'Transferencia' : 
-                      sale.paymentMethod === 'debt' ? 'FIADO (CRÉDITO)' : 'Online'}
-                   </p>
-                   {sale.paymentMethod === 'debt' ? (
-                     <p className="text-xs font-bold text-red-500 uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded-full w-fit">PENDIENTE DE PAGO</p>
-                   ) : (
-                     <p className="text-xs font-medium text-secondary">Vendedor: {sale.user?.name}</p>
-                   )}
-                 </div>
+              <div className={`p-6 rounded-3xl border flex items-center gap-4 ${sale.paymentMethod === 'debt' ? 'bg-red-500/5 border-red-500/20' : 'bg-background-elevated/50 border-foreground/5'
+                }`}>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${sale.paymentMethod === 'debt' ? 'bg-red-500 text-white shadow-red-500/20' : 'bg-contrast text-white shadow-contrast/20'
+                  }`}>
+                  <CreditCard size={20} />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted opacity-60">Método Utilizado</p>
+                  <p className={`text-base font-black uppercase tracking-wider ${sale.paymentMethod === 'debt' ? 'text-red-400' : 'text-primary'}`}>
+                    {sale.paymentMethod === 'cash' ? 'Efectivo' :
+                      sale.paymentMethod === 'transfer' ? 'Transferencia' :
+                        sale.paymentMethod === 'debt' ? 'Fiado (Deuda)' : 'Online'}
+                  </p>
+                  {sale.paymentMethod === 'debt' && (
+                    <span className="inline-block text-[9px] font-black uppercase tracking-[0.2em] bg-red-500/10 text-red-500 px-2.5 py-1 rounded-lg border border-red-500/20 mt-1 badge-debt">Pendiente</span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Items Table */}
-          <div className="space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-widest text-secondary ml-2">Detalle de Productos</h3>
-            <div className="bg-foreground/[0.02] border border-foreground/5 rounded-[32px] overflow-hidden">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 ml-2">
+              <Tag size={14} className="text-contrast" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-foreground-muted">Detalle de Transacción</h3>
+            </div>
+            <div className="bg-background-elevated/30 border border-foreground/10 rounded-[32px] overflow-hidden">
               <table className="w-full">
-                <thead className="bg-foreground/[0.03] border-b border-foreground/5">
+                <thead className="bg-foreground/3 border-b border-foreground/8">
                   <tr>
-                    <th className="text-left px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Cant.</th>
-                    <th className="text-left px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Descripción</th>
-                    <th className="text-right px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Precio</th>
-                    <th className="text-right px-8 py-4 text-xs font-black uppercase tracking-widest text-secondary">Subtotal</th>
+                    <th className="text-left px-8 py-5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">Producto</th>
+                    <th className="text-center px-8 py-5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">Cant.</th>
+                    <th className="text-right px-8 py-5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">Unitario</th>
+                    <th className="text-right px-8 py-5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">Subtotal</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-foreground/5">
                   {sale.items?.map((item: any) => (
-                    <tr key={item.itemId}>
-                      <td className="px-8 py-4 text-sm font-black text-navy">{item.quantity}</td>
-                      <td className="px-8 py-4">
-                        <p className="text-sm font-bold text-primary">{item.variant?.product?.name || 'Producto'}</p>
-                        <p className="text-xs font-medium text-secondary uppercase tracking-tighter">
+                    <tr key={item.itemId} className="hover:bg-foreground/2 transition-colors">
+                      <td className="px-8 py-5">
+                        <p className="text-sm font-black text-primary tracking-tight uppercase">{item.variant?.product?.name || 'Producto'}</p>
+                        <p className="text-[10px] font-bold text-foreground-muted uppercase tracking-widest mt-1 opacity-60">
                           {item.variant?.name} {item.variant?.color && `• ${item.variant.color}`} {item.variant?.size && `• ${item.variant.size}`}
                         </p>
                       </td>
-                      <td className="px-8 py-4 text-right text-sm font-medium text-primary">
+                      <td className="px-8 py-5 text-center text-sm font-black text-primary">{item.quantity}</td>
+                      <td className="px-8 py-5 text-right text-sm font-bold text-foreground-muted">
                         ${Number(item.variant?.price || 0).toLocaleString()}
                       </td>
-                      <td className="px-8 py-4 text-right text-sm font-black text-primary">
+                      <td className="px-8 py-5 text-right text-base font-black text-primary">
                         ${(item.quantity * Number(item.variant?.price || 0)).toLocaleString()}
                       </td>
                     </tr>
@@ -200,29 +212,55 @@ export default function InvoiceModal({ sale, onClose }: InvoiceModalProps) {
           </div>
 
           {/* Totals */}
-          <div className="flex justify-end pt-8">
-            <div className="w-full max-w-xs space-y-4">
-               <div className="flex justify-between items-center px-4">
-                 <p className="text-xs font-bold text-secondary uppercase tracking-widest">Subtotal</p>
-                 <p className="text-sm font-bold text-primary">${Number(sale.total).toLocaleString()}</p>
-               </div>
-               <div className="flex justify-between items-center px-4">
-                 <p className="text-xs font-bold text-secondary uppercase tracking-widest">IVA (0%)</p>
-                 <p className="text-sm font-bold text-primary">$0</p>
-               </div>
-               <div className="h-px bg-foreground/5 mx-4" />
-               <div className="flex justify-between items-center bg-navy/5 p-6 rounded-2xl border border-navy/10">
-                 <p className="text-sm font-black text-navy uppercase tracking-[0.2em]">Total</p>
-                 <p className="text-3xl font-black text-navy tracking-tight">${Number(sale.total).toLocaleString()}</p>
-               </div>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-10 border-t border-foreground/10">
+            <div className="flex items-center gap-4 text-foreground-muted opacity-40">
+              <Clock size={20} />
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-widest">Atendido por</p>
+                <p className="text-xs font-bold">{sale.user?.name || 'Koda System'}</p>
+              </div>
+            </div>
+
+            <div className="w-full md:w-80 space-y-4">
+              <div className="flex justify-between items-center px-4">
+                <p className="text-[10px] font-black text-foreground-muted uppercase tracking-widest">Base Imponible</p>
+                <p className="text-sm font-bold text-primary">${Number(sale.total).toLocaleString()}</p>
+              </div>
+              <div className="flex justify-between items-center px-4">
+                <p className="text-[10px] font-black text-foreground-muted uppercase tracking-widest">Impuestos (0%)</p>
+                <p className="text-sm font-bold text-primary">$0</p>
+              </div>
+              <div className="bg-contrast rounded-3xl p-6 shadow-2xl shadow-contrast/20 border border-white/10 flex justify-between items-center">
+                <p className="text-[11px] font-black text-white uppercase tracking-[0.2em]">Total Final</p>
+                <p className="text-4xl font-black text-white tracking-tighter">${Number(sale.total).toLocaleString()}</p>
+              </div>
             </div>
           </div>
 
           {/* Footer Note */}
-          <div className="text-center pt-12 space-y-2 border-t border-foreground/5">
-             <p className="text-xs font-bold text-primary">¡Gracias por tu compra!</p>
-             <p className="text-xs font-medium text-secondary">Este documento es un comprobante de venta. Para cambios o garantías, presenta esta factura antes de 15 días.</p>
+          <div className="text-center pt-8 space-y-3">
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-8 h-px bg-foreground/10" />
+              <p className="text-[10px] font-black text-contrast uppercase tracking-[0.3em]">Gracias por tu compra</p>
+              <div className="w-8 h-px bg-foreground/10" />
+            </div>
+            <p className="text-[10px] font-bold text-foreground-muted uppercase tracking-widest leading-relaxed max-w-md mx-auto opacity-40">
+              Este documento es un comprobante de venta digital. Presenta este código para cambios o garantías antes de 15 días.
+            </p>
           </div>
+        </div>
+
+        {/* Mobile Actions Footer */}
+        <div className="sm:hidden p-6 bg-background-elevated border-t border-foreground/10 grid grid-cols-2 gap-4">
+          <button
+            onClick={handlePrint}
+            className="flex items-center justify-center gap-2 py-4 rounded-2xl bg-contrast text-white text-[10px] font-black uppercase tracking-widest"
+          >
+            <Printer size={16} /> Imprimir
+          </button>
+          <button className="flex items-center justify-center gap-2 py-4 rounded-2xl bg-foreground/5 text-foreground-muted text-[10px] font-black uppercase tracking-widest">
+            <Share2 size={16} /> Compartir
+          </button>
         </div>
       </div>
     </div>

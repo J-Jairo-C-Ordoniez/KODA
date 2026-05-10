@@ -21,37 +21,41 @@ export default function Modal({ isOpen, onClose, title, children, icon, descript
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-70 flex items-center justify-center p-4 animate-in fade-in duration-200">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-navy/20 backdrop-blur-md transition-opacity" 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
         onClick={onClose}
       />
       
       {/* Modal Container */}
-      <div className={`bg-background rounded-[40px] p-8 w-full ${sizeClasses[size]} shadow-2xl shadow-navy/20 border border-white/20 relative overflow-hidden animate-in zoom-in-95 duration-300 max-h-[95vh] flex flex-col`}>
+      <div className={`bg-background-elevated rounded-[32px] p-6 sm:p-8 w-full mx-4 ${sizeClasses[size]} shadow-2xl shadow-black/50 border border-foreground/8 relative animate-in zoom-in-95 duration-300 flex flex-col`} style={{ maxHeight: 'calc(100dvh - 40px)' }}>
+        {/* Orange accent glow top */}
+        <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-32 bg-contrast/8 rounded-full blur-3xl pointer-events-none" />
+        
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-xl hover:bg-foreground/5 text-secondary transition-colors z-20"
+          className="absolute top-5 right-5 p-2.5 rounded-xl hover:bg-foreground/8 text-foreground-muted hover:text-primary transition-all z-20 active:scale-90"
+          aria-label="Cerrar"
         >
-          <X size={20} />
+          <X size={18} />
         </button>
 
-        <div className="space-y-6 relative z-10 flex flex-col h-full">
+        <div className="space-y-5 relative z-10 flex flex-col h-full">
           {/* Header Section (Icons + Title) */}
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4">
             {icon && (
-              <div className="w-14 h-14 rounded-2xl bg-navy/10 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-contrast/10 border border-contrast/20 flex items-center justify-center shrink-0">
                 {icon}
               </div>
             )}
             <div className="space-y-0.5">
-              <h3 className="text-2xl font-black text-primary tracking-tight leading-none">
+              <h3 className="text-xl sm:text-2xl font-black text-primary tracking-tight leading-none">
                 {title}
               </h3>
               {description && (
-                <p className="text-secondary font-medium text-xs">
+                <p className="text-foreground-muted font-medium text-xs leading-relaxed">
                   {description}
                 </p>
               )}
@@ -59,7 +63,7 @@ export default function Modal({ isOpen, onClose, title, children, icon, descript
           </div>
 
           {/* Content Area - Scrollable internally */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 -mr-2">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 -mr-1 overscroll-contain">
             {children}
           </div>
         </div>

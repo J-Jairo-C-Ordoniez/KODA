@@ -57,42 +57,27 @@ export default function Sales() {
   );
 
   return (
-    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20 relative">
+    <main className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-6 lg:px-10 pb-24 relative">
       <Toaster toasts={toasts} removeToast={removeToast} />
       
       <SectionHeader
         title="Historial de Ventas"
         subtitle="Consulta y analiza todas las transacciones de tu negocio."
-        action={
-          <div className="flex gap-4">
-            <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-navy transition-colors" size={18} />
-              <input 
-                type="text" 
-                placeholder="Buscar venta..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 pr-6 py-3 rounded-2xl bg-foreground/5 border-transparent focus:bg-background focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-sm min-w-[280px]"
-              />
-            </div>
-            <button className="p-3 rounded-2xl bg-foreground/5 text-secondary hover:bg-navy hover:text-white transition-all shadow-sm" aria-label="Descargar reporte">
-              <Download size={20} />
-            </button>
-          </div>
-        }
       />
 
       {!isLoading && <SalesStats sales={sales} totalRevenue={totalRevenue} />}
 
       {isLoading ? <Loader size="lg" className="h-[40vh]" /> : error ? (
-        <p className="text-red-500 text-sm font-medium bg-red-50 p-4 rounded-2xl border border-red-100">{error}</p>
-      ) : filteredSales.length === 0 ? (
-        <EmptyState icon={ShoppingCart} title="Sin ventas" description="No hay registros que coincidan con tu búsqueda." />
+        <p role="alert" className="text-red-400 text-sm font-medium bg-red-500/8 p-4 rounded-2xl border border-red-500/15">{error}</p>
+      ) : filteredSales.length === 0 && !searchTerm ? (
+        <EmptyState icon={ShoppingCart} title="Sin ventas" description="No hay registros en el historial todavía." />
       ) : (
         <SalesTable 
           sales={filteredSales} 
           newSaleId={newSaleId} 
-          onViewInvoice={setSelectedSaleForInvoice} 
+          onViewInvoice={setSelectedSaleForInvoice}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
         />
       )}
 

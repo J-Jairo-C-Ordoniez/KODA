@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Users, Search } from 'lucide-react';
+import { Users, Search, X } from 'lucide-react';
 import { useCustomers } from '@/hooks/admin/useCustomers';
 import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
 import { EmptyState } from '@/components/dashboard/business/ui/EmptyState';
@@ -59,7 +59,7 @@ export default function Customers() {
   });
 
   return (
-    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20 relative">
+    <main className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-6 lg:px-10 pb-24 relative">
       <Toaster toasts={toasts} removeToast={removeToast} />
       
       <SectionHeader 
@@ -68,21 +68,29 @@ export default function Customers() {
         action={
           <div className="flex gap-4">
             <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-navy transition-colors" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted group-focus-within:text-contrast transition-colors duration-200" size={18} />
               <input 
                 type="text" 
-                placeholder="Nombre o teléfono..." 
+                placeholder="Buscar por nombre o teléfono..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 pr-6 py-3 rounded-2xl bg-foreground/5 border-transparent focus:bg-background focus:border-navy focus:ring-4 focus:ring-navy/5 outline-none transition-all font-bold text-sm min-w-[280px]"
+                className="pl-12 pr-6 py-3.5 rounded-2xl bg-background-elevated border border-foreground/8 focus:border-contrast/30 focus:ring-4 focus:ring-contrast/5 outline-none transition-all font-bold text-sm w-full sm:min-w-[320px] text-primary"
               />
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-lg hover:bg-foreground/5 text-foreground-muted transition-all"
+                >
+                  <X size={14} />
+                </button>
+              )}
             </div>
           </div>
         }
       />
 
       {isLoading ? <Loader size="lg" className="h-[40vh]" /> : error ? (
-        <p className="text-red-500 text-sm font-medium bg-red-50 p-4 rounded-2xl border border-red-100">{error}</p>
+        <p role="alert" className="text-red-400 text-sm font-medium bg-red-500/8 p-4 rounded-2xl border border-red-500/15">{error}</p>
       ) : filteredCustomers.length === 0 ? (
         <EmptyState 
           icon={Users} 

@@ -15,10 +15,13 @@ export async function GET(req: Request) {
 
   if (type === "all") {
     const count = await tenantController.countAllTenants();
-    return NextResponse.json(count);
+    return count;
   } else if (type === "active") {
     const count = await tenantController.countActiveTenants();
-    return NextResponse.json(count);
+    return count;
+  } else if (type === "suspended") {
+    const count = await tenantController.countSuspendedTenants();
+    return count;
   }
 
   return NextResponse.json({ error: "Invalid type" }, { status: 400 });

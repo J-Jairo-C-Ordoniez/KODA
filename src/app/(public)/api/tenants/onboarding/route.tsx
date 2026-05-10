@@ -11,5 +11,5 @@ export async function GET() {
   }
 
   const data = await tenantController.getOnboardingHealth();
-  return NextResponse.json(data);
+  return data;
 }

@@ -85,16 +85,16 @@ export default function Employees() {
     emp.sales?.reduce((acc: number, s: any) => acc + Number(s.total), 0) ?? 0;
 
   return (
-    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20 relative">
+    <main className="space-y-8 bg-background w-full min-h-full pt-6 px-4 sm:px-6 lg:px-10 pb-24 relative">
       <Toaster toasts={toasts} removeToast={removeToast} />
 
       <SectionHeader
-        title="Empleados"
-        subtitle="Gestiona el equipo de tu negocio. Registra, edita y consulta las ventas de cada colaborador."
+        title="Equipo de Trabajo"
+        subtitle="Gestiona los colaboradores de tu negocio y supervisa su rendimiento."
         action={
           <button
             onClick={openCreate}
-            className="flex items-center gap-2 bg-navy text-white px-5 py-3 rounded-2xl font-black text-sm hover:bg-navy/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-navy/20"
+            className="w-fit sm:w-auto flex items-center justify-center gap-3 bg-contrast text-white px-8 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-contrast-hover active:scale-95 transition-all shadow-2xl shadow-contrast/20"
           >
             <Plus size={18} />
             Registrar Empleado
@@ -105,7 +105,7 @@ export default function Employees() {
       {isLoading ? (
         <Loader size="lg" className="h-[40vh]" />
       ) : error ? (
-        <p className="text-red-500 text-sm font-medium bg-red-50 p-4 rounded-2xl border border-red-100">{error}</p>
+        <p role="alert" className="text-red-400 text-sm font-medium bg-red-500/8 p-4 rounded-2xl border border-red-500/15">{error}</p>
       ) : employees.length === 0 ? (
         <EmptyState
           icon={Users}

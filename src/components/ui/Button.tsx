@@ -5,7 +5,7 @@ interface ButtonProps {
   children: ReactNode;
   href?: string;
   onClick?: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'accent' | 'ambulance' | 'navy';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'contrast' | 'ambulance' | 'navy';
   className?: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
@@ -22,12 +22,12 @@ export default function Button({
   disabled = false,
   size = 'md'
 }: ButtonProps) {
-  const baseStyles = "cursor-pointer rounded-lg font-black tracking-wide transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100";
+  const baseStyles = "cursor-pointer rounded-lg font-light tracking-wider transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100";
   
   const sizes = {
-    sm: "px-4 py-2 text-xs",
-    md: "px-6 py-3 text-sm lg:text-md",
-    lg: "px-8 py-4 text-md lg:text-lg",
+    sm: "px-4 py-2 text-xs uppercase",
+    md: "px-6 py-3 text-xs uppercase lg:text-md",
+    lg: "px-8 py-4 text-xs uppercase lg:text-lg",
   };
 
   const variants = {
@@ -35,9 +35,9 @@ export default function Button({
     secondary: "bg-secondary text-background hover:bg-primary shadow-xl shadow-black/5",
     outline: "border-2 border-navy/20 text-navy hover:border-navy hover:bg-navy/5",
     ghost: "text-navy hover:bg-navy/5",
-    accent: "bg-navy text-background hover:opacity-90 shadow-xl shadow-navy/20",
+    contrast: "bg-contrast text-primary hover:opacity-90 hover:shadow-lg shadow-contrast/50",
     navy: "bg-navy text-background hover:opacity-90 shadow-xl shadow-navy/20",
-    ambulance: "bg-background border border-foreground/10 text-primary hover:bg-foreground hover:text-background shadow-sm hover:shadow-lg",
+    ambulance: "text-secondary hover:text-primary hover:scale-105 transition-all duration-300",
   };
 
   const combinedStyles = `${baseStyles} ${sizes[size]} ${variants[variant]} ${className}`;

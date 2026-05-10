@@ -58,45 +58,48 @@ export default function BusinessSettings() {
     }
   };
 
-  const copyLink = () => {
-    const link = `koda.app/${form.slug}`;
-    navigator.clipboard.writeText(link);
-    showToast('success', 'Enlace copiado', 'Ya puedes compartir tu catálogo en redes sociales.');
-  };
-
   return (
-    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-12 pb-20 relative">
+    <main className="space-y-10 bg-background w-full min-h-full pt-8 px-4 sm:px-6 lg:px-10 pb-24 relative">
       <Toaster toasts={toasts} removeToast={removeToast} />
       
       <SectionHeader 
-        title="Configuración del Negocio" 
-        subtitle="Gestiona la identidad visual, los datos de contacto y la presencia digital de tu marca." 
+        title="Mi Negocio" 
+        subtitle="Personaliza la identidad visual y los detalles operativos de tu marca." 
       />
 
-      {isLoading ? <Loader size="lg" className="h-[50vh]" /> : error ? (
-        <p className="text-red-500 text-sm font-medium bg-red-50 p-6 rounded-[32px] border border-red-100 flex items-center gap-3 animate-in fade-in duration-300">
-           <Info size={24} /> {error}
-        </p>
+      {isLoading ? (
+        <div className="flex items-center justify-center h-[50vh]">
+          <Loader size="lg" />
+        </div>
+      ) : error ? (
+        <div className="bg-red-500/5 border border-red-500/10 p-6 rounded-[32px] flex items-center gap-4">
+          <Info className="text-red-400 shrink-0" size={24} />
+          <p role="alert" className="text-red-400 text-sm font-bold uppercase tracking-tight">
+            {error}
+          </p>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
-          <BrandIdentityForm
-            logo={settings?.aboutUs?.logo}
-            slug={form.slug}
-            isUploading={isUploading}
-            fileInputRef={fileInputRef}
-            onLogoChange={handleLogoChange}
-            onCopyLink={copyLink}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Brand Identity */}
+          <div className="lg:col-span-4 xl:col-span-3">
+            <BrandIdentityForm
+              logo={settings?.aboutUs?.logo}
+              isUploading={isUploading}
+              fileInputRef={fileInputRef}
+              onLogoChange={handleLogoChange}
+            />
+          </div>
 
-          <div className="xl:col-span-2 space-y-10 h-full">
-            <div className="bg-background border border-foreground/5 rounded-[40px] p-10 space-y-12 shadow-sm relative overflow-hidden h-full">
-              <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                <SettingsIcon size={120} strokeWidth={1} />
+          {/* Right Column: General Settings */}
+          <div className="lg:col-span-8 xl:col-span-9">
+            <div className="bg-background-elevated/50 lg:bg-background-elevated border border-white/5 lg:border-white/10 rounded-[40px] p-8 sm:p-12 relative overflow-hidden shadow-2xl shadow-black/10">
+              <div className="absolute -right-20 -top-20 opacity-[0.02] pointer-events-none">
+                <SettingsIcon size={300} strokeWidth={1} />
               </div>
 
-              <div className="space-y-2 relative z-10">
-                <h3 className="text-3xl font-black text-primary tracking-tight">Detalles del Negocio</h3>
-                <p className="text-secondary text-sm font-medium">Define cómo te ven tus clientes en el mundo digital.</p>
+              <div className="relative z-10 space-y-4 mb-12">
+                <h3 className="text-3xl font-black text-primary tracking-tight">Detalles Operativos</h3>
+                <p className="text-foreground-muted text-sm font-medium opacity-60">Define la información principal de tu comercio para el público.</p>
               </div>
 
               <form onSubmit={handleSubmit}>

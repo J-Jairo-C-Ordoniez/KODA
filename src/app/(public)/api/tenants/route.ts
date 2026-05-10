@@ -17,5 +17,5 @@ export async function GET() {
   }
 
   const tenants = await tenantController.getAllTenants();
-  return NextResponse.json(tenants);
+  return tenants;
 }

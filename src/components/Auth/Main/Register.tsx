@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRegister } from "@/hooks/auth/useRegister";
 import Link from "next/link";
-import { AnimatePresence } from "framer-motion";
 import AuthWrapper from "@/components/Auth/Main/ui/AuthWrapper";
 import Steps from "@/components/Auth/Main/ui/Steps";
 import StepOne from "@/components/Auth/Main/ui/StepOne";
@@ -45,45 +44,41 @@ export default function Register() {
     };
 
     return (
-        <AnimatePresence mode="wait">
-            <AuthWrapper
-                title={step === 1 ? "Inicia tu camino" : "Crea tu cuenta"}
-                subtitle={step === 1 ? "Cuéntanos sobre tu negocio para empezar la configuración." : "Último paso para acceder a tu panel de control."}
-            >
-                <Steps step={step} />
+        <AuthWrapper
+            title={step === 1 ? "Inicia tu camino" : "Crea tu cuenta"}
+            subtitle={step === 1 ? "Cuéntanos sobre tu negocio para empezar la configuración." : "Último paso para acceder a tu panel de control."}
+        >
+            <Steps step={step} />
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    {error || alert && (
-                        <Error message={error || alert} />
-                    )}
+            <form className="space-y-6" onSubmit={handleSubmit}>
+                {error || alert && (
+                    <Error message={error || alert} />
+                )}
 
-                    <AnimatePresence mode="wait">
-                        {step === 1 ? (
-                            <StepOne
-                                formData={formData}
-                                handleChange={handleChange}
-                                nextStep={nextStep}
-                            />
-                        ) : (
-                            <StepTwo
-                                formData={formData}
-                                handleChange={handleChange}
-                                prevStep={() => setStep(1)}
-                                loading={isLoading}
-                            />
-                        )}
-                    </AnimatePresence>
+                {step === 1 ? (
+                    <StepOne
+                        formData={formData}
+                        handleChange={handleChange}
+                        nextStep={nextStep}
+                    />
+                ) : (
+                    <StepTwo
+                        formData={formData}
+                        handleChange={handleChange}
+                        prevStep={() => setStep(1)}
+                        loading={isLoading}
+                    />
+                )}
 
-                    <div className="pt-6 border-t border-foreground/5">
-                        <p className="text-md text-primary/80 font-medium leading-snug tracking-wider">
-                            ¿Ya tienes cuenta?{" "}
-                            <Link href="/login" className="font-medium text-navy hover:underline">
-                                Inicia sesión
-                            </Link>
-                        </p>
-                    </div>
-                </form>
-            </AuthWrapper>
-        </AnimatePresence>
+                <div className="pt-6 border-t border-foreground/5">
+                    <p className="text-md text-primary/80 font-medium leading-snug tracking-wider">
+                        ¿Ya tienes cuenta?{" "}
+                        <Link href="/login" className="font-medium text-navy hover:underline">
+                            Inicia sesión
+                        </Link>
+                    </p>
+                </div>
+            </form>
+        </AuthWrapper>
     );
 }

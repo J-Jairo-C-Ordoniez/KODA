@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Package, Plus, Search, X, Edit3, Trash2, Check, Info } from 'lucide-react';
+import { Package, Plus, Search, X, Edit3, Trash2, Check, Info, DollarSign } from 'lucide-react';
 import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
 import Loader from '@/components/ui/Loader';
 import Metric from '@/components/dashboard/admin/Main/ui/Metric';
-import Table from '@/components/dashboard/admin/Main/ui/Table';
 import { usePlans } from '@/hooks/superAdmin/usePlans';
 import { useToast, Toaster } from '@/components/ui/Toast';
 
@@ -174,7 +173,7 @@ export default function Plans() {
                 </thead>
                 <tbody>
                   {filteredPlans.map((plan) => (
-                    <tr key={plan.planId} className="group bg-foreground/2 hover:bg-foreground/[0.04] transition-all">
+                    <tr key={plan.planId} className="group bg-foreground/2 hover:bg-foreground/4 transition-all">
                       <td className="py-5 pl-6 rounded-l-2xl border-y border-l border-foreground/5">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-contrast/10 flex items-center justify-center text-contrast font-bold">
@@ -225,7 +224,7 @@ export default function Plans() {
       )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
           <div className="bg-background-elevated border border-foreground/10 rounded-[32px] p-8 w-full max-w-2xl shadow-2xl relative my-8">
             <button 
               onClick={() => setIsModalOpen(false)}

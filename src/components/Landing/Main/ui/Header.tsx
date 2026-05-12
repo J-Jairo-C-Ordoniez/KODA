@@ -18,7 +18,7 @@ export default function Header() {
                 </Link>
                 <Link
                     href="#pricing"
-                    className="inline-block text-center px-8 py-4 bg-transparent border border-foreground/20 text-primary font-bold rounded-xl hover:bg-background-elevated transition-all"
+                    className="inline-block text-center px-8 py-4 bg-transparent border border-foreground/20 text-primary font-bold rounded-xl hover:bg-foreground/10 -elevated transition-all"
                 >
                     Ver planes
                 </Link>

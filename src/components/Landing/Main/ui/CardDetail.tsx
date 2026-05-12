@@ -1,26 +1,25 @@
+import { LucideIcon } from 'lucide-react';
+
 interface CardDetailProps {
     title: string;
     description: string;
-    color: string;
-    children: React.ReactNode;
+    icon: LucideIcon;
 }
 
-export default function CardDetail({ title, description, color, children }: CardDetailProps) {
+export default function CardDetail({ title, description, icon: Icon }: CardDetailProps) {
     return (
-        <article className="scrolly-card opacity-0 flex flex-col md:flex-row items-center gap-10 bg-background-elevated border border-foreground/5 rounded-4xl p-8 md:p-12 shadow-2xl">
-            <div className="flex-1 space-y-6">
-                <h3 className="text-3xl md:text-4xl font-black text-primary leading-tight tracking-tight">
-                    {title}
-                </h3>
-
-                <p className="text-lg text-foreground-muted leading-relaxed">
-                    {description}
-                </p>
+        <article className="scrolly-card group opacity-0 relative flex flex-col gap-6 bg-background-elevated/40 backdrop-blur-xl border border-foreground/10 rounded-4xl p-2 md:p-8 hover:border-contrast/30 transition-all duration-500 hover:shadow-[0_0_40px_-15px_rgba(255,122,0,0.15)]">
+            <div className="w-14 h-14 rounded-2xl bg-lirear-to-br from-background-elevated to-background border border-foreground/10 flex items-center justify-center text-contrast group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shadow-xl">
+                <Icon size={28} strokeWidth={1.5} />
             </div>
 
-            <div className="scrolly-img flex-1 w-full bg-background rounded-3xl border border-foreground/10 aspect-square md:aspect-4/3 flex items-center justify-center relative overflow-hidden transform-gpu">
-                {children}
-            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-primary leading-tight tracking-tight group-hover:text-contrast transition-colors duration-300">
+                {title}
+            </h3>
+
+            <p className="text-base md:text-lg text-foreground-muted leading-relaxed font-medium">
+                {description}
+            </p>
         </article>
     );
 }

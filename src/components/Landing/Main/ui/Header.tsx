@@ -9,7 +9,7 @@ export default function Header() {
             <p className="mx-auto hero-desc max-w-2xl text-lg md:text-2xl text-foreground-muted font-medium leading-relaxed mb-12">
                 Tu plataforma inteligente para inventario, ventas y crecimiento continuo.
             </p>
-            <nav className="hero-buttons flex flex-col sm:flex-row gap-4 mb-20 w-full justify-center">
+            <nav className="hero-buttons flex flex-col sm:flex-row gap-4 mb-20 w-full justify-center items-center">
                 <Link
                     href="/register"
                     className="w-fit inline-block text-center px-8 py-4 bg-foreground text-background font-black rounded-xl hover:bg-secondary transition-all duration-300"
@@ -18,7 +18,7 @@ export default function Header() {
                 </Link>
                 <Link
                     href="#pricing"
-                    className="inline-block text-center px-8 py-4 bg-transparent border border-foreground/20 text-primary font-bold rounded-xl hover:bg-foreground/10 -elevated transition-all"
+                    className="w-fit inline-block text-center px-8 py-4 bg-transparent border border-foreground/20 text-primary font-bold rounded-xl hover:bg-foreground/10 -elevated transition-all"
                 >
                     Ver planes
                 </Link>

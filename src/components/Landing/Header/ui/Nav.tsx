@@ -41,6 +41,7 @@ export function NavMobile({ navLinks, setIsMenuOpen }: { navLinks: { name: strin
                             key={link.name}
                             href={link.href}
                             className="relative bordertext-sm font-semibold tracking-wide text-foreground-muted hover:text-primary transition-colors duration-200 group"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             {link.name}
                             <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-contrast rounded-full transition-all duration-300 group-hover:w-full" />

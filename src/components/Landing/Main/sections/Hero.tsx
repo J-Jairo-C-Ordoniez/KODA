@@ -20,7 +20,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full flex flex-col items-center bg-background px-4 pt-32 lg:pt-48 pb-24 overflow-hidden"
+      className="relative w-full flex flex-col items-center bg-background px-4 pt-16 lg:pt-40 pb-12 overflow-hidden"
     >
       <div className="container relative z-10 w-full max-w-5xl flex flex-col items-center text-center">
         <Header />

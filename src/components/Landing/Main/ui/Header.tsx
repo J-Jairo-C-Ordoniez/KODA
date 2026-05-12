@@ -12,7 +12,7 @@ export default function Header() {
             <nav className="hero-buttons flex flex-col sm:flex-row gap-4 mb-20 w-full justify-center">
                 <Link
                     href="/register"
-                    className="inline-block text-center px-8 py-4 bg-foreground text-background font-black rounded-xl hover:bg-secondary transition-all duration-300"
+                    className="w-fit inline-block text-center px-8 py-4 bg-foreground text-background font-black rounded-xl hover:bg-secondary transition-all duration-300"
                 >
                     Obtén una prueba gratuita
                 </Link>

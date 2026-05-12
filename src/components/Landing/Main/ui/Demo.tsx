@@ -1,7 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { Search, ShoppingBag, CreditCard, CheckCircle2, Clock, Package, Zap, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 
 type Phase = 'pos' | 'success' | 'metrics';
 
@@ -15,7 +14,6 @@ const NOW = new Date().toLocaleString('es-CO', { hour: '2-digit', minute: '2-dig
 
 export default function Demo() {
     const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-
     const [phase, setPhase] = useState<Phase>('pos');
     const [searchText, setSearchText] = useState('');
     const [cart, setCart] = useState<typeof PRODUCTS>([]);
@@ -37,7 +35,6 @@ export default function Demo() {
         setPhase('pos'); setSearchText(''); setCart([]); setHighlighted(null); setPaying(false);
         await sleep(600);
 
-        // --- Add product 1 ---
         await typeText('Camisa Denim');
         setHighlighted(0);
         await sleep(600);
@@ -48,7 +45,6 @@ export default function Demo() {
         gsap.fromTo('.ci-0', { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' });
         await sleep(900);
 
-        // --- Add product 2 ---
         setSearchText('');
         await sleep(150);
         await typeText('Pantalón Cargo');
@@ -62,7 +58,6 @@ export default function Demo() {
         setHighlighted(null);
         await sleep(800);
 
-        // --- Cobrar ---
         for (let i = 0; i < 3; i++) {
             gsap.to('.demo-cobrar', { boxShadow: '0 0 22px rgba(255,122,0,0.7)', duration: 0.25, yoyo: true, repeat: 1 });
             await sleep(500);
@@ -71,7 +66,6 @@ export default function Demo() {
         gsap.to('.demo-cobrar', { scale: 0.94, duration: 0.1, yoyo: true, repeat: 1 });
         await sleep(450);
 
-        // --- Transition: POS → Success ---
         gsap.to('.demo-pos', { opacity: 0, scale: 0.97, duration: 0.4, ease: 'power2.in' });
         await sleep(420);
         setPhase('success');
@@ -83,7 +77,6 @@ export default function Demo() {
         gsap.fromTo('.s-lines > *', { opacity: 0, y: 8 }, { opacity: 1, y: 0, stagger: 0.13, duration: 0.4, ease: 'power3.out' });
         await sleep(2600);
 
-        // --- Transition: Success → Metrics ---
         gsap.to('.demo-success', { opacity: 0, scale: 0.97, duration: 0.4, ease: 'power2.in' });
         await sleep(420);
         setPhase('metrics');
@@ -93,7 +86,6 @@ export default function Demo() {
         gsap.fromTo('.m-card', { opacity: 0, y: 18 }, { opacity: 1, y: 0, stagger: 0.14, duration: 0.45, ease: 'power3.out' });
         await sleep(3800);
 
-        // --- Reset loop ---
         gsap.to('.demo-metrics', { opacity: 0, duration: 0.5 });
         await sleep(600);
         runDemo();
@@ -110,21 +102,18 @@ export default function Demo() {
         <article className="hero-demo-card relative w-full rounded-4xl bg-background-elevated border border-foreground/10 ring-1 ring-contrast/25 overflow-hidden shadow-[0_0_80px_rgba(255,122,0,0.10)] p-3 md:p-5">
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-32 bg-contrast/12 blur-[70px] rounded-full pointer-events-none" />
 
-            <div className="flex items-center gap-2 mb-3 px-1">
+            <header className="flex items-center gap-2 mb-3 px-1">
                 <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
                 <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
                     {phase === 'pos' && 'Punto de Venta • En vivo'}
                     {phase === 'success' && 'Venta Registrada'}
                     {phase === 'metrics' && 'Resumen de la Venta'}
                 </span>
-            </div>
+            </header>
 
             <div className="relative w-full bg-background border border-foreground/10 rounded-2xl overflow-hidden shadow-2xl min-h-[340px] md:min-h-[380px]">
-
-                {/* ── POS ── */}
                 {phase === 'pos' && (
                     <div className="demo-pos flex flex-col md:flex-row w-full h-full">
-                        {/* Products */}
                         <div className="flex-1 p-5 border-b md:border-b-0 md:border-r border-foreground/5 flex flex-col gap-4">
                             <div className="flex items-center gap-2 bg-background-elevated border border-foreground/10 rounded-xl px-4 py-2.5">
                                 <Search size={14} className="text-foreground-muted shrink-0" />
@@ -149,7 +138,6 @@ export default function Demo() {
                             </div>
                         </div>
 
-                        {/* Cart */}
                         <div className="w-full md:w-60 p-5 flex flex-col">
                             <div className="flex items-center gap-2 mb-4">
                                 <CreditCard size={13} className="text-contrast" />
@@ -184,7 +172,6 @@ export default function Demo() {
                     </div>
                 )}
 
-                {/* ── SUCCESS ── */}
                 {phase === 'success' && (
                     <div className="demo-success flex flex-col items-center justify-center w-full min-h-[340px] md:min-h-[380px] p-8 gap-5">
                         <div className="s-check w-20 h-20 rounded-full bg-success/15 border border-success/30 flex items-center justify-center shadow-[0_0_40px_rgba(0,200,150,0.25)]">
@@ -211,7 +198,6 @@ export default function Demo() {
                     </div>
                 )}
 
-                {/* ── METRICS ── */}
                 {phase === 'metrics' && (
                     <div className="demo-metrics flex flex-col w-full min-h-[340px] md:min-h-[380px] p-6 gap-4">
                         <p className="text-xs font-black uppercase tracking-widest text-foreground-muted mb-1">Resumen en tiempo real</p>

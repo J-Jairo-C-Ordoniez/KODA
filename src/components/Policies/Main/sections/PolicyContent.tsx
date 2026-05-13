@@ -21,7 +21,7 @@ export default function PolicyContent({ title }: { title: string }) {
                 {isLoading ? (
                     <Loader />
                 ) : error ? (
-                    <Error message="" />
+                    <Error message="No se pudo obtener los términos y condiciones en este momento. Por favor, intenta nuevamente más tarde." />
                 ) : (
                     <>
                         <Time time={policy.content.lastUpdate} />

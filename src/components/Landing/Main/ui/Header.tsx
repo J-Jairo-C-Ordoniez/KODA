@@ -6,7 +6,7 @@ export default function Header() {
             <h1 className="hero-title text-4xl md:text-7xl lg:text-8xl font-black text-primary leading-none tracking-tighter mb-8">
                 Por fin, el control total para tu negocio.
             </h1>
-            <p className="mx-auto hero-desc max-w-2xl text-lg md:text-2xl text-foreground-muted font-medium leading-relaxed mb-12">
+            <p className="mx-auto hero-desc max-w-2xl text-foreground-muted text-xl md:text-2xl font-medium leading-relaxed mb-10">
                 Tu plataforma inteligente para inventario, ventas y crecimiento continuo.
             </p>
             <nav className="hero-buttons flex flex-col sm:flex-row gap-4 mb-20 w-full justify-center items-center">

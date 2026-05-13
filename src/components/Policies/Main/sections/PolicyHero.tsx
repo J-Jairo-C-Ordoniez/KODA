@@ -1,5 +1,3 @@
-import Container from "@/components/ui/Container";
-
 interface PolicyHeroProps {
     title: string;
     subtitle?: string;
@@ -7,30 +5,23 @@ interface PolicyHeroProps {
 
 export default function PolicyHero({ title, subtitle }: PolicyHeroProps) {
     return (
-        <section className="relative pt-24 pb-20 flex justify-center overflow-hidden bg-background">
-            {/* Subtle glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-contrast/6 blur-[100px] rounded-full pointer-events-none" />
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+        <section className="relative py-16 flex justify-center overflow-hidden bg-background">
+            <div className="container relative z-10 w-full max-w-5xl flex flex-col items-center text-center">
+                <p className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-contrast/10 border border-contrast/20 text-contrast text-[10px] md:text-xs font-bold uppercase tracking-wider mx-auto lg:mx-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-contrast animate-ping" />
+                    Legal y Privacidad
+                </p>
 
-            <Container className="relative z-10 text-center">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-foreground/10 mb-8">
-                    <span className="w-1.5 h-1.5 rounded-full bg-contrast" />
-                    <p className="text-xs uppercase font-bold tracking-widest text-foreground-muted">
-                        Legal &amp; Privacidad
-                    </p>
-                </div>
-
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-primary leading-tight tracking-tighter mb-6">
+                <h1 className="text-5xl md:text-7xl pt-4 font-black text-primary leading-none tracking-tighter mb-8">
                     {title}
                 </h1>
 
                 {subtitle && (
-                    <p className="text-lg md:text-xl text-foreground-muted max-w-2xl mx-auto font-medium leading-relaxed">
+                    <p className="mx-auto max-w-2xl text-foreground-muted text-xl md:text-2xl font-medium leading-relaxed">
                         {subtitle}
                     </p>
                 )}
-            </Container>
+            </div>
         </section>
     );
 }

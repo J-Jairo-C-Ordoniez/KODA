@@ -66,8 +66,8 @@ export default function CardPricing({ plan, isPopular, index = 0 }: { plan: Plan
           href="/register"
           className={`w-full py-4 md:py-5 text-xs md:text-sm font-black tracking-widest uppercase rounded-2xl transition-all duration-300 ${
             isPopular
-              ? 'bg-contrast text-white hover:bg-contrast-hover shadow-xl shadow-contrast/30'
-              : 'bg-foreground/5 border border-foreground/15 hover:border-foreground/40 hover:bg-foreground/10 text-primary'
+              ? 'bg-contrast text-background hover:bg-contrast-hover shadow-xl'
+              : 'bg-foreground/5 border border-foreground/15 hover:border-foreground/40 hover:bg-foreground/10 text-background'
           }`}
         >
           Elegir {plan.name}

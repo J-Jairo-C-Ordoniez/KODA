@@ -76,10 +76,10 @@ export default function Integrations() {
   return (
     <section
       ref={containerRef}
-      className="pb-30 pt-16 bg-background relative overflow-hidden"
+      className="pb-16 pt-8 bg-background relative overflow-hidden"
     >
       <div className="max-w-7xl container mx-auto px-6 relative z-10">
-        <header className="integration-header opacity-0 text-center mb-28">
+        <header className="integration-header opacity-0 text-center mb-20">
           <h2 className="text-5xl md:text-7xl font-black text-primary mb-8 tracking-tighter leading-[1.1] md:leading-[0.9] max-w-4xl mx-auto">
             Todo lo que necesitas,<br />
             <span className="text-foreground-muted">en un solo lugar.</span>

@@ -8,7 +8,7 @@ export default function OtherBusiness() {
             <div className="absolute -left-20 -bottom-20 w-60 h-60 bg-accent/5 blur-[80px] rounded-full pointer-events-none" />
 
             <article className="space-y-6 text-center lg:text-left max-w-2xl relative z-10">
-                <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-contrast/10 border border-contrast/20 text-contrast text-base md:text-xs font-bold uppercase tracking-wider mx-auto lg:mx-0">
+                <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-contrast/10 border border-contrast/20 text-contrast text-[10px] md:text-xs font-bold uppercase tracking-wider mx-auto lg:mx-0">
                     <span className="w-1.5 h-1.5 rounded-full bg-contrast animate-ping" />
                     Consultoría personalizada
                 </p>

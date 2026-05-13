@@ -86,7 +86,7 @@ export default function Features() {
 
       <div className="max-w-7xl container mx-auto px-6 relative z-10">
         <header className="feature-header text-center mb-24 opacity-0">
-          <h2 className="text-4xl md:text-7xl font-black text-primary mb-8 tracking-tighter leading-[1.1] md:leading-[0.9] max-w-4xl mx-auto">
+          <h2 className="text-5xl md:text-7xl font-black text-primary mb-8 tracking-tighter leading-[1.1] md:leading-[0.9] max-w-4xl mx-auto">
             Todo tu negocio de principio a fin en un solo lugar.
           </h2>
 

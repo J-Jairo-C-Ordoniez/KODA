@@ -16,7 +16,7 @@ export default function PolicyContent({ title }: { title: string }) {
     const { policy, isLoading, error } = usePolicies(title);
 
     return (
-        <section className="relative w-full flex flex-col items-center bg-background px-4 pt-16 lg:pt-40 pb-12 overflow-hidden">
+        <section className="relative w-full flex flex-col items-center bg-background px-4 pt-8 lg:pt-10 pb-12 overflow-hidden">
             <div className="mx-auto container relative z-10 w-full max-w-5xl flex flex-col items-center">
                 {isLoading ? (
                     <Loader />

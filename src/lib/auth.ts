@@ -12,19 +12,30 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        if (!credentials?.email || !credentials?.password) {
+          console.log("[AUTH] Faltan credenciales");
+          return null;
+        }
 
         try {
+          console.log(`[AUTH] Intentando login para: ${credentials.email}`);
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
             include: { tenant: true }
           });
 
-          if (!user) return null;
+          if (!user) {
+            console.log("[AUTH] Usuario no encontrado en la DB");
+            return null;
+          }
 
           const isValid = await bcrypt.compare(credentials.password, user.password);
-          if (!isValid) return null;
+          if (!isValid) {
+            console.log("[AUTH] Contraseña incorrecta");
+            return null;
+          }
 
+          console.log("[AUTH] Login exitoso");
           return {
             id: user.userId,
             name: user.name,
@@ -34,6 +45,7 @@ export const authOptions: AuthOptions = {
             tenantSlug: user.tenant?.slug || null
           };
         } catch (error: any) {
+          console.error("[AUTH] Error atrapado en authorize:", error);
           throw new Error(error.message || "Ocurrió un problema durante la autenticación.");
         }
       }

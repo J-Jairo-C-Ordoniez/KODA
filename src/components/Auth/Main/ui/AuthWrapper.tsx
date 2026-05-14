@@ -27,11 +27,11 @@ export default function AuthWrapper({ children, title, subtitle }: AuthWrapperPr
       </header>
 
       {/* Form card */}
-      <Container className="flex flex-col items-center justify-center pb-24 w-full max-w-2xl">
-        <div className="w-full bg-background-elevated border border-foreground/8 rounded-[32px] p-8 md:p-12 shadow-2xl shadow-black/30">
+      <section className="flex flex-col items-center justify-center pb-24 w-full px-4 md:px-0 max-w-2xl mx-auto">
+        <div className="w-full bg-background-elevated/40 backdrop-blur-xl border border-foreground/10 rounded-4xl md:rounded-[2.5rem] p-6 sm:p-8 md:p-12 shadow-2xl shadow-black/30">
           {children}
         </div>
-      </Container>
+      </section>
     </main>
   );
 }

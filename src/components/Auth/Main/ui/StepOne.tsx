@@ -4,8 +4,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Button from "@/components/ui/Button";
 
-const inputClass = "w-full pl-12 pr-4 py-4 bg-background border border-foreground/8 rounded-2xl focus:ring-2 focus:ring-contrast/20 focus:border-contrast outline-none transition-all duration-200 font-medium text-primary placeholder:text-foreground-muted/50";
-const labelClass = "block text-xs font-bold uppercase tracking-widest text-foreground-muted mb-2";
+const inputClass = "w-full pl-12 pr-4 py-3 md:py-4 bg-background border border-foreground/8 rounded-xl md:rounded-2xl focus:ring-2 focus:ring-contrast/20 focus:border-contrast outline-none transition-all duration-200 text-sm md:text-base font-medium text-primary placeholder:text-foreground-muted/50";
+const labelClass = "block text-[10px] md:text-xs font-bold uppercase tracking-widest text-foreground-muted mb-2";
 const iconClass = "absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted group-focus-within:text-contrast transition-colors duration-200";
 
 export default function StepOne({ formData, handleChange, nextStep }: { formData: any, handleChange: any, nextStep: any }) {
@@ -19,7 +19,8 @@ export default function StepOne({ formData, handleChange, nextStep }: { formData
     }, { scope: containerRef });
 
     return (
-        <div ref={containerRef} className="space-y-6">
+        <fieldset ref={containerRef} className="space-y-6 w-full">
+            <legend className="sr-only">Paso 1: Información de tu negocio</legend>
             <div className="space-y-1.5">
                 <label htmlFor="businessName" className={labelClass}>Nombre del Negocio</label>
                 <div className="relative group">
@@ -77,11 +78,11 @@ export default function StepOne({ formData, handleChange, nextStep }: { formData
                     type="button"
                     onClick={nextStep}
                     variant="contrast"
-                    className="w-full py-4 rounded-2xl font-black tracking-widest uppercase text-sm"
+                    className="w-full py-3 md:py-4 rounded-xl md:rounded-2xl font-black tracking-widest uppercase text-xs md:text-sm"
                 >
                     Continuar →
                 </Button>
             </div>
-        </div>
+        </fieldset>
     );
 }

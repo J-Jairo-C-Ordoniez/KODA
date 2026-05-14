@@ -10,6 +10,8 @@ interface ButtonProps {
   type?: 'button' | 'submit';
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  title?: string;
+  "aria-label"?: string;
 }
 
 export default function Button({ 
@@ -20,7 +22,9 @@ export default function Button({
   className = '', 
   type = 'button',
   disabled = false,
-  size = 'md'
+  size = 'md',
+  title,
+  "aria-label": ariaLabel,
 }: ButtonProps) {
   const baseStyles = "cursor-pointer rounded-lg font-light tracking-wider transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100";
   
@@ -44,14 +48,14 @@ export default function Button({
 
   if (href && !disabled) {
     return (
-      <Link href={href} className={combinedStyles}>
+      <Link href={href} className={combinedStyles} title={title} aria-label={ariaLabel}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={combinedStyles}>
+    <button type={type} onClick={onClick} disabled={disabled} className={combinedStyles} title={title} aria-label={ariaLabel}>
       {children}
     </button>
   );

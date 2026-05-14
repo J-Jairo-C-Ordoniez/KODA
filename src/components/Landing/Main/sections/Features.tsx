@@ -16,40 +16,40 @@ export default function Features() {
 
   const features = [
     {
-      title: 'Inventario Inteligente',
-      description: 'Controla tus productos con categorías dinámicas y recibe alertas de stock bajo.',
-      icon: <ShoppingCart size={40} className="text-white" />,
-      color: 'bg-[#FF7A00]',
-      textColor: 'text-white',
-      subTextColor: 'text-white/80',
-      gradient: 'bg-white'
+      title: 'Inventario con Variantes',
+      description: 'Stock real, manejo avanzado de variantes (tallas y colores) y alertas de escasez automáticas.',
+      icon: <ShoppingCart size={40} className="text-contrast" />,
+      color: 'bg-background-elevated/40 backdrop-blur-xl border border-foreground/10',
+      textColor: 'text-primary',
+      subTextColor: 'text-foreground-muted',
+      gradient: 'bg-contrast/20'
     },
     {
-      title: 'Gestión de Fiados',
-      description: 'Registro exacto de deudas y abonos. Automatiza el cobro sin perder rastro.',
-      icon: <UserCheck size={40} className="text-background" />,
-      color: 'bg-[#00C896]',
-      textColor: 'text-[#0E0E0E]',
-      subTextColor: 'text-[#0E0E0E]/80',
-      gradient: 'bg-black'
+      title: 'Control de Fiados Exacto',
+      description: 'Sabe quién debe, cuánto debe y registra abonos con fechas. Cero libretas perdidas.',
+      icon: <UserCheck size={40} className="text-primary" />,
+      color: 'bg-background-elevated/40 backdrop-blur-xl border border-foreground/10',
+      textColor: 'text-primary',
+      subTextColor: 'text-foreground-muted',
+      gradient: 'bg-primary/10'
     },
     {
-      title: 'Reportes en Vivo',
-      description: 'Visualiza ganancias, ventas diarias y tendencias de productos en tiempo real.',
-      icon: <BarChart3 size={40} className="text-white" />,
-      color: 'bg-[#3A86FF]',
-      textColor: 'text-white',
-      subTextColor: 'text-white/80',
-      gradient: 'bg-white'
+      title: 'Cuentas Claras',
+      description: 'Métricas de rentabilidad en tiempo real. Toma decisiones basadas en datos financieros reales.',
+      icon: <BarChart3 size={40} className="text-navy" />,
+      color: 'bg-background-elevated/40 backdrop-blur-xl border border-foreground/10',
+      textColor: 'text-primary',
+      subTextColor: 'text-foreground-muted',
+      gradient: 'bg-navy/20'
     },
     {
-      title: 'Siempre en la Nube',
-      description: 'Datos seguros y accesibles 24/7. Tu negocio siempre contigo, donde quiera que estés.',
-      icon: <Cloud size={40} className="text-white" />,
-      color: 'bg-[#7B61FF]',
-      textColor: 'text-white',
-      subTextColor: 'text-white/80',
-      gradient: 'bg-white'
+      title: 'Auditoría de Empleados',
+      description: 'El sistema sabe exactamente quién registró cada venta, quién recibió cada abono y a qué hora.',
+      icon: <Cloud size={40} className="text-contrast" />,
+      color: 'bg-background-elevated/40 backdrop-blur-xl border border-foreground/10',
+      textColor: 'text-primary',
+      subTextColor: 'text-foreground-muted',
+      gradient: 'bg-contrast/10'
     }
   ];
 
@@ -79,19 +79,20 @@ export default function Features() {
     <section
       id="features"
       ref={containerRef}
-      className="pb-32 pt-24 bg-background relative overflow-hidden"
+      className="py-16 md:py-20 bg-background relative overflow-hidden"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-contrast/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-foreground/10 to-transparent" />
 
       <div className="max-w-7xl container mx-auto px-6 relative z-10">
-        <header className="feature-header text-center mb-24 opacity-0">
+        <header className="feature-header text-center mb-16 md:mb-20 opacity-0">
           <h2 className="text-5xl md:text-7xl font-black text-primary mb-8 tracking-tighter leading-[1.1] md:leading-[0.9] max-w-4xl mx-auto">
-            Todo tu negocio de principio a fin en un solo lugar.
+            El poder detrás <br className="hidden md:block" />
+            del <span className="text-contrast">mostrador.</span>
           </h2>
 
           <p className="text-foreground-muted text-lg md:text-2xl font-medium max-w-2xl leading-relaxed mx-auto">
-            Desde la venta en mostrador hasta el control de inventario y fiados. Todos tus datos centralizados para que trabajes más rápido.
+            Mientras tú atiendes, KODA controla el inventario, los fiados y el rendimiento de tus empleados. Todo en silencio, todo en tiempo real.
           </p>
         </header>
 

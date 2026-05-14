@@ -1,4 +1,5 @@
 import Hero from "./sections/Hero";
+import Accompaniment from "./sections/Accompaniment";
 import Details from "./sections/Details";
 import Features from "./sections/Features";
 import Integrations from "./sections/Integrations";
@@ -8,6 +9,7 @@ export default function Main() {
     return (
         <main className="grow">
             <Hero />
+            <Accompaniment />
             <Details />
             <Features />
             <Integrations />

@@ -6,8 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CardDetail from '@/components/Landing/Main/ui/CardDetail';
 import Link from 'next/link';
 import gsap from 'gsap';
-import { Package, Wallet, CheckCircle2, ArrowRight } from 'lucide-react';
-
+import { MousePointerClick, Search, WifiOff, CheckCircle2, ArrowRight } from 'lucide-react';
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -31,11 +30,11 @@ export default function Details() {
 
     cards.forEach((card: any, i) => {
       gsap.fromTo(card,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
+          duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: card,
@@ -55,7 +54,7 @@ export default function Details() {
         <header className="scrolly-header lg:col-span-5 opacity-0 lg:sticky lg:top-32">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-foreground/10 text-contrast text-sm font-bold mb-8">
             <CheckCircle2 size={16} />
-            <span>Eficiencia garantizada</span>
+            <span>Usabilidad garantizada</span>
           </div>
 
           <h2 className="text-5xl md:text-7xl font-black text-primary mb-8 tracking-tighter leading-[0.9]">
@@ -65,7 +64,7 @@ export default function Details() {
           </h2>
 
           <p className="text-foreground-muted text-xl md:text-2xl font-medium max-w-md leading-relaxed mb-10">
-            Únete a los negocios que ya orquestan sus ventas, inventarios y clientes en un solo lugar.
+            Únete a los negocios que ya orquestan sus ventas con el sistema más rápido y fácil de usar.
           </p>
 
           <Link
@@ -77,26 +76,24 @@ export default function Details() {
           </Link>
         </header>
 
-        <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div className="lg:col-span-7 flex flex-col gap-6 md:gap-8">
           <CardDetail
-            icon={Package}
-            title="Inventario y ventas sincronizados"
-            description="Cada vez que realizas una venta, tu inventario se actualiza en tiempo real. Olvídate de los cuadernos y las cuentas manuales que generan pérdidas."
+            icon={MousePointerClick}
+            title="Ventas en 3 clics"
+            description="El flujo más rápido del mercado. Desde que buscas una prenda hasta que registras el pago, sin dar vueltas innecesarias ni confundir a tus empleados."
           />
 
           <CardDetail
-            icon={Wallet}
-            title="Control de fiados sin estrés"
-            description="Registra a tus clientes recurrentes y mantén un historial claro de lo que deben y lo que han pagado. Tu dinero siempre rastreado."
+            icon={Search}
+            title="Buscador Ultra-rápido"
+            description="Encuentra tus productos por talla, color o nombre en milisegundos. Olvídate de memorizar códigos complejos, el sistema te entiende."
           />
 
-          <div className="md:col-span-2">
-            <CardDetail
-              icon={CheckCircle2}
-              title="Reportes automáticos"
-              description="Visualiza el rendimiento de tu negocio con gráficas claras. Toma decisiones basadas en datos, no en suposiciones."
-            />
-          </div>
+          <CardDetail
+            icon={WifiOff}
+            title="A prueba de caídas"
+            description="¿Se cortó el internet? No hay problema. El sistema no se congela, puedes seguir vendiendo y KODA sincronizará todo automáticamente cuando vuelva la conexión."
+          />
         </div>
       </div>
     </section>

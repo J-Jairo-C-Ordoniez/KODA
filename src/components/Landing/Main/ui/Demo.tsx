@@ -1,235 +1,210 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
-import { Search, ShoppingBag, CreditCard, CheckCircle2, Clock, Package, Zap, TrendingUp } from 'lucide-react';
+import { TrendingUp, Package, Users, ShoppingCart, AlertCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import gsap from 'gsap';
 
-type Phase = 'pos' | 'success' | 'metrics';
+const BUSINESS_NAME = 'Ropa Estilo libre';
 
-const PRODUCTS = [
-    { id: 0, name: 'Camisa Denim', price: 45000, sku: 'CAM-M-AZ' },
-    { id: 1, name: 'Pantalón Cargo', price: 85000, sku: 'PAN-32-KH' },
+const INITIAL_SALES = [
+    { id: 1, product: 'Camisa Denim Azul', amount: 45000, time: '10:12', employee: 'María' },
+    { id: 2, product: 'Pantalón Cargo Khaki', amount: 85000, time: '10:31', employee: 'Juan' },
+    { id: 3, product: 'Blusa Floral S', amount: 38000, time: '10:55', employee: 'María' },
 ];
 
-const INV = `#KDA-${Math.floor(1000 + Math.random() * 9000)}`;
-const NOW = new Date().toLocaleString('es-CO', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' });
+const NEW_SALES = [
+    { id: 4, product: 'Jeans Slim Negros', amount: 72000, time: '11:03', employee: 'Juan', isNew: true },
+    { id: 5, product: 'Vestido Casual M', amount: 95000, time: '11:18', employee: 'María', isNew: true },
+];
+
+const STOCK_ALERT = { product: 'Camisa Denim Azul', stock: 2, variant: 'Talla M' };
 
 export default function Demo() {
     const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-    const [phase, setPhase] = useState<Phase>('pos');
-    const [searchText, setSearchText] = useState('');
-    const [cart, setCart] = useState<typeof PRODUCTS>([]);
-    const [highlighted, setHighlighted] = useState<number | null>(null);
-    const [paying, setPaying] = useState(false);
+    const [sales, setSales] = useState(INITIAL_SALES);
+    const [metrics, setMetrics] = useState({ totalVentas: 168000, totalPedidos: 3, stockAlerta: 1, fiados: 4 });
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [newSaleIdx, setNewSaleIdx] = useState(0);
+    const [ready, setReady] = useState(false);
 
     const sleep = (ms: number) =>
         new Promise<void>((res) => { const t = setTimeout(res, ms); timers.current.push(t); });
 
-    const typeText = useCallback(async (text: string) => {
-        for (let i = 0; i <= text.length; i++) {
-            setSearchText(text.slice(0, i));
-            await sleep(70);
-        }
-        await sleep(350);
-    }, []);
-
     const runDemo = useCallback(async () => {
-        setPhase('pos'); setSearchText(''); setCart([]); setHighlighted(null); setPaying(false);
-        await sleep(600);
+        // Reset
+        setSales(INITIAL_SALES);
+        setMetrics({ totalVentas: 168000, totalPedidos: 3, stockAlerta: 1, fiados: 4 });
+        setAlertVisible(false);
+        setNewSaleIdx(0);
+        setReady(false);
+        await sleep(400);
 
-        await typeText('Camisa Denim');
-        setHighlighted(0);
-        await sleep(600);
-        gsap.to('.dp-0', { scale: 0.91, duration: 0.1, yoyo: true, repeat: 1 });
-        await sleep(250);
-        setCart([PRODUCTS[0]]);
-        await sleep(50);
-        gsap.fromTo('.ci-0', { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' });
-        await sleep(900);
+        // Fade in the whole card
+        gsap.fromTo('.demo-dashboard', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' });
+        await sleep(300);
 
-        setSearchText('');
-        await sleep(150);
-        await typeText('Pantalón Cargo');
-        setHighlighted(1);
-        await sleep(600);
-        gsap.to('.dp-1', { scale: 0.91, duration: 0.1, yoyo: true, repeat: 1 });
-        await sleep(250);
-        setCart((p) => [...p, PRODUCTS[1]]);
-        await sleep(50);
-        gsap.fromTo('.ci-1', { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' });
-        setHighlighted(null);
-        await sleep(800);
+        // Animate metrics cards in
+        gsap.fromTo('.m-stat', { opacity: 0, y: 16 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.5, ease: 'power3.out' });
+        setReady(true);
+        await sleep(1200);
 
-        for (let i = 0; i < 3; i++) {
-            gsap.to('.demo-cobrar', { boxShadow: '0 0 22px rgba(255,122,0,0.7)', duration: 0.25, yoyo: true, repeat: 1 });
-            await sleep(500);
-        }
-        setPaying(true);
-        gsap.to('.demo-cobrar', { scale: 0.94, duration: 0.1, yoyo: true, repeat: 1 });
-        await sleep(450);
+        // Animate rows in
+        gsap.fromTo('.sale-row', { opacity: 0, x: -10 }, { opacity: 1, x: 0, stagger: 0.1, duration: 0.4, ease: 'power2.out' });
+        await sleep(1800);
 
-        gsap.to('.demo-pos', { opacity: 0, scale: 0.97, duration: 0.4, ease: 'power2.in' });
-        await sleep(420);
-        setPhase('success');
-        await sleep(40);
-        gsap.fromTo('.demo-success', { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power3.out' });
+        // New sale arrives — row 1
+        setSales(p => [NEW_SALES[0], ...p.slice(0, 3)]);
+        setMetrics(m => ({ ...m, totalVentas: m.totalVentas + NEW_SALES[0].amount, totalPedidos: m.totalPedidos + 1 }));
         await sleep(80);
-        gsap.fromTo('.s-check', { scale: 0, rotation: -40, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.65, ease: 'back.out(2)' });
-        await sleep(180);
-        gsap.fromTo('.s-lines > *', { opacity: 0, y: 8 }, { opacity: 1, y: 0, stagger: 0.13, duration: 0.4, ease: 'power3.out' });
-        await sleep(2600);
+        gsap.fromTo('.sale-row-new', { opacity: 0, x: -16, backgroundColor: 'rgba(255,122,0,0.12)' }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' });
+        gsap.fromTo('.stat-ventas', { scale: 1.06 }, { scale: 1, duration: 0.4, ease: 'power2.out' });
+        await sleep(1800);
 
-        gsap.to('.demo-success', { opacity: 0, scale: 0.97, duration: 0.4, ease: 'power2.in' });
-        await sleep(420);
-        setPhase('metrics');
-        await sleep(40);
-        gsap.fromTo('.demo-metrics', { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power3.out' });
-        await sleep(150);
-        gsap.fromTo('.m-card', { opacity: 0, y: 18 }, { opacity: 1, y: 0, stagger: 0.14, duration: 0.45, ease: 'power3.out' });
-        await sleep(3800);
+        // Stock alert appears
+        setAlertVisible(true);
+        await sleep(60);
+        gsap.fromTo('.stock-alert', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' });
+        await sleep(2200);
 
-        gsap.to('.demo-metrics', { opacity: 0, duration: 0.5 });
+        // New sale arrives — row 2
+        setSales(p => [NEW_SALES[1], ...p.slice(0, 3)]);
+        setMetrics(m => ({ ...m, totalVentas: m.totalVentas + NEW_SALES[1].amount, totalPedidos: m.totalPedidos + 1 }));
+        await sleep(80);
+        gsap.fromTo('.sale-row-new', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' });
+        gsap.fromTo('.stat-ventas', { scale: 1.06 }, { scale: 1, duration: 0.4, ease: 'power2.out' });
+        await sleep(2800);
+
+        // Fade out and restart
+        gsap.to('.demo-dashboard', { opacity: 0, duration: 0.5 });
         await sleep(600);
         runDemo();
-    }, [typeText]);
+    }, []);
 
     useEffect(() => {
-        const t = setTimeout(() => runDemo(), 1800);
+        const t = setTimeout(() => runDemo(), 1200);
         timers.current.push(t);
         return () => timers.current.forEach(clearTimeout);
     }, [runDemo]);
 
-    const total = cart.reduce((a, b) => a + b.price, 0);
+    const fmt = (n: number) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(n);
+
     return (
         <article className="hero-demo-card relative w-full rounded-4xl bg-background-elevated border border-foreground/10 ring-1 ring-contrast/25 overflow-hidden shadow-[0_0_80px_rgba(255,122,0,0.10)] p-3 md:p-5">
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-32 bg-contrast/12 blur-[70px] rounded-full pointer-events-none" />
 
-            <header className="flex items-center gap-2 mb-3 px-1">
-                <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
-                    {phase === 'pos' && 'Punto de Venta • En vivo'}
-                    {phase === 'success' && 'Venta Registrada'}
-                    {phase === 'metrics' && 'Resumen de la Venta'}
-                </span>
+            <header className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                    <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
+                        {BUSINESS_NAME} · Panel Principal
+                    </span>
+                </div>
+                <span className="text-[10px] text-foreground-muted font-mono">En vivo</span>
             </header>
 
-            <div className="relative w-full bg-background border border-foreground/10 rounded-2xl overflow-hidden shadow-2xl min-h-[340px] md:min-h-[380px]">
-                {phase === 'pos' && (
-                    <div className="demo-pos flex flex-col md:flex-row w-full h-full">
-                        <div className="flex-1 p-5 border-b md:border-b-0 md:border-r border-foreground/5 flex flex-col gap-4">
-                            <div className="flex items-center gap-2 bg-background-elevated border border-foreground/10 rounded-xl px-4 py-2.5">
-                                <Search size={14} className="text-foreground-muted shrink-0" />
-                                <span className="text-sm text-primary font-mono tracking-wide">
-                                    {searchText}<span className="opacity-60 animate-pulse">|</span>
-                                </span>
+            <div className="demo-dashboard opacity-0 relative w-full bg-background border border-foreground/10 rounded-2xl overflow-hidden shadow-2xl">
+
+                {/* Stats bar */}
+                <div className="grid grid-cols-4 divide-x divide-foreground/5 border-b border-foreground/5">
+                    {[
+                        { label: 'Ventas hoy', value: fmt(metrics.totalVentas), icon: <TrendingUp size={13} className="text-success" />, trend: '+12%', cls: 'stat-ventas' },
+                        { label: 'Pedidos', value: metrics.totalPedidos, icon: <ShoppingCart size={13} className="text-[#3A86FF]" />, trend: `hoy`, cls: '' },
+                        { label: 'Stock bajo', value: metrics.stockAlerta, icon: <Package size={13} className="text-contrast" />, trend: 'alerta', cls: '' },
+                        { label: 'Fiados', value: metrics.fiados, icon: <Users size={13} className="text-[#7B61FF]" />, trend: 'activos', cls: '' },
+                    ].map((s) => (
+                        <div key={s.label} className={`m-stat opacity-0 flex flex-col gap-1 px-3 py-3 md:px-4 ${s.cls}`}>
+                            <div className="flex items-center gap-1.5 text-foreground-muted">
+                                {s.icon}
+                                <span className="text-[9px] uppercase tracking-widest font-bold">{s.label}</span>
                             </div>
-                            <div className="grid grid-cols-2 gap-3 flex-1">
-                                {PRODUCTS.map((p) => (
+                            <p className="text-base md:text-lg font-black text-primary leading-none">{s.value}</p>
+                            <p className="text-[9px] text-foreground-muted">{s.trend}</p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Main content */}
+                <div className="flex flex-col md:flex-row min-h-[260px] md:min-h-[300px]">
+
+                    {/* Sales feed */}
+                    <div className="flex-1 flex flex-col p-4 border-b md:border-b-0 md:border-r border-foreground/5 overflow-hidden">
+                        <p className="text-[9px] uppercase tracking-widest font-black text-foreground-muted mb-3">Últimas ventas</p>
+                        <div className="flex flex-col gap-2 overflow-hidden">
+                            {sales.slice(0, 4).map((sale, i) => {
+                                const isNewSale = (sale as any).isNew;
+                                return (
                                     <div
-                                        key={p.id}
-                                        className={`dp-${p.id} flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-300 ${highlighted === p.id
-                                            ? 'border-contrast bg-contrast/8 shadow-[0_0_16px_rgba(255,122,0,0.22)]'
-                                            : 'border-foreground/5 bg-background-elevated'
-                                            }`}
+                                        key={sale.id}
+                                        className={`${isNewSale ? 'sale-row-new' : 'sale-row'} ${i === 0 ? 'opacity-0' : ''} flex items-center justify-between px-3 py-2 rounded-xl border ${isNewSale ? 'border-contrast/30 bg-contrast/5' : 'border-foreground/5 bg-background-elevated'}`}
                                     >
-                                        <ShoppingBag size={22} className={highlighted === p.id ? 'text-contrast' : 'text-foreground-muted'} />
-                                        <p className="text-xs font-bold text-primary mt-2 text-center leading-tight">{p.name}</p>
-                                        <p className="text-[10px] text-foreground-muted mt-0.5">${p.price.toLocaleString('es-CO')}</p>
+                                        <div className="flex items-center gap-2 overflow-hidden">
+                                            <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isNewSale ? 'bg-contrast/15' : 'bg-foreground/5'}`}>
+                                                <ShoppingCart size={11} className={isNewSale ? 'text-contrast' : 'text-foreground-muted'} />
+                                            </div>
+                                            <div className="overflow-hidden">
+                                                <p className="text-[11px] font-bold text-primary truncate leading-tight">{sale.product}</p>
+                                                <p className="text-[9px] text-foreground-muted">{sale.employee} · {sale.time}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-1 shrink-0">
+                                            <ArrowUpRight size={10} className="text-success" />
+                                            <span className="text-[11px] font-black text-primary font-mono">{fmt(sale.amount)}</span>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="w-full md:w-60 p-5 flex flex-col">
-                            <div className="flex items-center gap-2 mb-4">
-                                <CreditCard size={13} className="text-contrast" />
-                                <span className="text-[10px] font-black text-primary uppercase tracking-widest">Venta Rápida</span>
-                            </div>
-                            <div className="flex-1 space-y-2 min-h-[80px]">
-                                {cart.length === 0 && (
-                                    <div className="flex items-center justify-center h-16 opacity-25">
-                                        <p className="text-[10px] text-foreground-muted uppercase tracking-widest">Agrega productos</p>
-                                    </div>
-                                )}
-                                {cart.map((item, i) => (
-                                    <div key={i} className={`ci-${i} flex justify-between items-center bg-background-elevated rounded-lg px-3 py-2 border border-foreground/5`}>
-                                        <span className="text-xs font-semibold text-primary truncate max-w-[90px]">{item.name}</span>
-                                        <span className="text-[10px] font-mono text-foreground-muted">${item.price.toLocaleString('es-CO')}</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="border-t border-foreground/5 pt-3 mt-3">
-                                <div className="flex justify-between items-center mb-3">
-                                    <span className="text-[10px] uppercase tracking-widest font-bold text-foreground-muted">Total</span>
-                                    <span className="text-xl font-black text-primary">${total.toLocaleString('es-CO')}</span>
-                                </div>
-                                <button
-                                    className={`demo-cobrar w-full py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${cart.length > 0 ? 'bg-contrast text-white' : 'bg-foreground/5 text-foreground-muted'
-                                        }`}
-                                >
-                                    {paying ? '⚡ Procesando...' : 'Cobrar'}
-                                </button>
-                            </div>
+                                );
+                            })}
                         </div>
                     </div>
-                )}
 
-                {phase === 'success' && (
-                    <div className="demo-success flex flex-col items-center justify-center w-full min-h-[340px] md:min-h-[380px] p-8 gap-5">
-                        <div className="s-check w-20 h-20 rounded-full bg-success/15 border border-success/30 flex items-center justify-center shadow-[0_0_40px_rgba(0,200,150,0.25)]">
-                            <CheckCircle2 size={40} className="text-success" />
-                        </div>
-                        <div className="s-lines flex flex-col items-center gap-2 text-center">
-                            <h3 className="text-2xl md:text-3xl font-black text-primary">Venta Registrada</h3>
-                            <p className="text-foreground-muted text-sm font-medium">El inventario se actualizó automáticamente</p>
-                            <div className="mt-3 px-6 py-3 bg-background-elevated border border-foreground/10 rounded-2xl flex flex-col gap-1.5 w-full max-w-xs">
-                                <div className="flex justify-between text-xs">
-                                    <span className="text-foreground-muted uppercase tracking-wider font-bold">Factura</span>
-                                    <span className="text-primary font-mono font-bold">{INV}</span>
-                                </div>
-                                <div className="flex justify-between text-xs">
-                                    <span className="text-foreground-muted uppercase tracking-wider font-bold">Fecha</span>
-                                    <span className="text-primary font-mono">{NOW}</span>
-                                </div>
-                                <div className="flex justify-between text-xs pt-1.5 border-t border-foreground/5 mt-1">
-                                    <span className="text-foreground-muted uppercase tracking-wider font-bold">Total</span>
-                                    <span className="text-success font-black font-mono">${total.toLocaleString('es-CO')}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                    {/* Right panel: inventory + fiados */}
+                    <div className="w-full md:w-52 flex flex-col gap-3 p-4">
+                        <div>
+                            <p className="text-[9px] uppercase tracking-widest font-black text-foreground-muted mb-2">Inventario crítico</p>
 
-                {phase === 'metrics' && (
-                    <div className="demo-metrics flex flex-col w-full min-h-[340px] md:min-h-[380px] p-6 gap-4">
-                        <p className="text-xs font-black uppercase tracking-widest text-foreground-muted mb-1">Resumen en tiempo real</p>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 flex-1">
-                            {[
-                                { icon: <Clock size={18} className="text-[#3A86FF]" />, bg: 'bg-[#3A86FF]/10 border-[#3A86FF]/20', label: 'Tiempo de cobro', value: '< 0.4s', sub: 'Ultrarápido' },
-                                { icon: <TrendingUp size={18} className="text-success" />, bg: 'bg-success/10 border-success/20', label: 'Total cobrado', value: `$${total.toLocaleString('es-CO')}`, sub: '2 productos' },
-                                { icon: <Package size={18} className="text-[#7B61FF]" />, bg: 'bg-[#7B61FF]/10 border-[#7B61FF]/20', label: 'Stock actualizado', value: '-2 unid.', sub: 'Automático' },
-                                { icon: <Zap size={18} className="text-contrast" />, bg: 'bg-contrast/10 border-contrast/20', label: 'Ventas hoy', value: '8 ventas', sub: '+3 vs ayer' },
-                            ].map((m) => (
-                                <div key={m.label} className={`m-card flex flex-col gap-3 p-4 rounded-2xl border ${m.bg} bg-background-elevated`}>
-                                    <div className={`w-8 h-8 ${m.bg} border rounded-xl flex items-center justify-center`}>
-                                        {m.icon}
-                                    </div>
+                            {alertVisible && (
+                                <div className="stock-alert opacity-0 flex items-start gap-2 p-2.5 rounded-xl border border-contrast/30 bg-contrast/5">
+                                    <AlertCircle size={13} className="text-contrast shrink-0 mt-0.5" />
                                     <div>
-                                        <p className="text-[10px] uppercase tracking-widest text-foreground-muted font-bold leading-tight">{m.label}</p>
-                                        <p className="text-lg font-black text-primary mt-1 leading-none">{m.value}</p>
-                                        <p className="text-[10px] text-foreground-muted mt-1">{m.sub}</p>
+                                        <p className="text-[10px] font-black text-primary leading-tight">{STOCK_ALERT.product}</p>
+                                        <p className="text-[9px] text-foreground-muted">{STOCK_ALERT.variant} · Solo {STOCK_ALERT.stock} uds.</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {!alertVisible && (
+                                <div className="flex items-center justify-center h-12 opacity-20">
+                                    <p className="text-[9px] text-foreground-muted uppercase tracking-widest">Sin alertas</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="border-t border-foreground/5 pt-3">
+                            <p className="text-[9px] uppercase tracking-widest font-black text-foreground-muted mb-2">Fiados activos</p>
+                            {[
+                                { name: 'Carlos M.', amount: 120000, trend: 'down' },
+                                { name: 'Lina R.', amount: 45000, trend: 'up' },
+                            ].map((f) => (
+                                <div key={f.name} className="sale-row opacity-0 flex justify-between items-center py-1.5">
+                                    <span className="text-[10px] font-bold text-primary">{f.name}</span>
+                                    <div className="flex items-center gap-1">
+                                        {f.trend === 'down'
+                                            ? <ArrowDownRight size={10} className="text-contrast" />
+                                            : <ArrowUpRight size={10} className="text-success" />
+                                        }
+                                        <span className="text-[10px] font-mono text-foreground-muted">{fmt(f.amount)}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
+
                         <div className="mt-auto pt-3 border-t border-foreground/5 flex items-center justify-between">
-                            <p className="text-[10px] text-foreground-muted uppercase tracking-widest font-bold">Próxima venta</p>
-                            <div className="flex items-center gap-2">
+                            <span className="text-[9px] text-foreground-muted uppercase tracking-widest font-bold">Sistema</span>
+                            <div className="flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                                <span className="text-[10px] text-success font-bold">Sistema listo</span>
+                                <span className="text-[9px] text-success font-bold">Activo</span>
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
             </div>
         </article>
-    )
-}
+    );
+}

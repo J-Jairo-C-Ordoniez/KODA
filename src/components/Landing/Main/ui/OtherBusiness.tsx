@@ -25,9 +25,10 @@ export default function OtherBusiness() {
 
             <Button
                 href="https://wa.me/573114195398"
-                className="group/btn relative overflow-hidden flex items-center justify-center gap-3 px-10 py-5 bg-foreground text-background font-black rounded-2xl hover:scale-105 transition-all duration-300 shadow-2xl shrink-0"
+                variant="contrast"
+                className="group/btn relative overflow-hidden flex items-center justify-center gap-3 px-10 py-5 font-black rounded-2xl transition-all duration-300 shadow-2xl shrink-0"
             >
-                <MessageSquare size={20} fill="white" className="group-hover/btn:rotate-12 transition-transform" />
+                <MessageSquare size={20} className="text-primary group-hover/btn:rotate-12 transition-transform" />
                 <span>HABLEMOS POR WHATSAPP</span>
             </Button>
         </aside>

@@ -7,7 +7,7 @@ interface AuthWrapperProps {
 export default function AuthWrapper({ children, title, subtitle }: AuthWrapperProps) {
   return (
     <main className="grow">
-      <header className="pt-16 pb-12 overflow-hidden bg-background">
+      <header className="px-6 md:px-0 py-12 overflow-hidden bg-background">
         <div className="relative z-10 text-center">
           <h1 className="text-4xl md:text-6xl font-black text-primary leading-tight tracking-tighter mb-5">
             {title}

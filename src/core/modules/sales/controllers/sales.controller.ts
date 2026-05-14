@@ -1,5 +1,6 @@
 import { apiResponse } from '@/core/utils/apiResponse';
 import salesService from '../services/sales.service';
+import { PaginationOptions } from '../repositories/sales.repository';
 import { z } from 'zod';
 import { PaymentMethod } from '@prisma/client';
 
@@ -35,18 +36,18 @@ const salesController = {
     }
   },
 
-  async getSales(tenantId: string) {
+  async getSales(tenantId: string, pagination?: PaginationOptions) {
     try {
-      const sales = await salesService.getAllSales(tenantId);
+      const sales = await salesService.getAllSales(tenantId, pagination);
       return apiResponse.success(sales);
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al obtener ventas', 500);
     }
   },
 
-  async getSalesByUser(tenantId: string, userId: string) {
+  async getSalesByUser(tenantId: string, userId: string, pagination?: PaginationOptions) {
     try {
-      const sales = await salesService.getSalesByUser(tenantId, userId);
+      const sales = await salesService.getSalesByUser(tenantId, userId, pagination);
       return apiResponse.success(sales);
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al obtener ventas del empleado', 500);

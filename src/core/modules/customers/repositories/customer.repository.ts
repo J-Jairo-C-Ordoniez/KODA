@@ -1,14 +1,24 @@
 import prisma from '@/infrastructure/db/client';
+import { PaginationOptions } from '@/core/modules/sales/repositories/sales.repository';
 
 const customerRepository = {
-  async getCustomersByTenant(tenantId: string) {
+  async getCustomersByTenant(tenantId: string, { page = 1, limit = 50 }: PaginationOptions = {}) {
+    const skip = (page - 1) * limit;
     return prisma.customer.findMany({
       where: { tenantId },
-      include: {
-        sales: { orderBy: { createdAt: 'desc' }, take: 10 },
-        payments: { orderBy: { createdAt: 'desc' }, take: 20 },
+      select: {
+        customerId: true,
+        name: true,
+        phone: true,
+        totalDebt: true,
+        createdAt: true,
+        _count: {
+          select: { sales: true, payments: true }
+        }
       },
       orderBy: { totalDebt: 'desc' },
+      skip,
+      take: limit,
     });
   },
 

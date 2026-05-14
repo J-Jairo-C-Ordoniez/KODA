@@ -2,12 +2,16 @@ import prisma from '@/infrastructure/db/client';
 import { CreateSaleDTO } from '../services/sales.service';
 import { PaymentMethod } from '@prisma/client';
 
+export interface PaginationOptions {
+  page?: number;
+  limit?: number;
+}
+
 const salesRepository = {
   async createSale(tenantId: string, userId: string, data: CreateSaleDTO) {
     return prisma.$transaction(async (tx) => {
       const variantIds = data.items.map(item => item.variantId);
       
-      // Fetch all variants with their current inventory in one query
       const variants = await tx.variant.findMany({
         where: { 
           variantId: { in: variantIds },
@@ -33,7 +37,6 @@ const salesRepository = {
           throw new Error(`Stock insuficiente para la variante: ${variant.name}`);
         }
 
-        // Update inventory
         await tx.inventory.update({
           where: { inventoryId: inventory.inventoryId },
           data: { stock: { decrement: item.quantity } }
@@ -72,7 +75,8 @@ const salesRepository = {
     });
   },
 
-  async getSalesByTenant(tenantId: string) {
+  async getSalesByTenant(tenantId: string, { page = 1, limit = 50 }: PaginationOptions = {}) {
+    const skip = (page - 1) * limit;
     return prisma.sale.findMany({
       where: { tenantId },
       include: {
@@ -80,29 +84,22 @@ const salesRepository = {
           include: {
             variant: {
               include: {
-                product: {
-                  select: { name: true }
-                }
+                product: { select: { name: true } }
               }
             }
           }
         },
         user: { select: { name: true } },
-        customer: true,
-        tenant: {
-          select: {
-            businessName: true,
-            whatsApp: true,
-            description: true
-          }
-        }
+        customer: { select: { customerId: true, name: true, phone: true } },
       },
       orderBy: { createdAt: 'desc' },
-      take: 50
+      skip,
+      take: limit,
     });
   },
 
-  async getSalesByUser(tenantId: string, userId: string) {
+  async getSalesByUser(tenantId: string, userId: string, { page = 1, limit = 50 }: PaginationOptions = {}) {
+    const skip = (page - 1) * limit;
     return prisma.sale.findMany({
       where: { tenantId, userId },
       include: {
@@ -116,13 +113,11 @@ const salesRepository = {
           }
         },
         user: { select: { name: true } },
-        customer: true,
-        tenant: {
-          select: { businessName: true, whatsApp: true, description: true }
-        }
+        customer: { select: { customerId: true, name: true, phone: true } },
       },
       orderBy: { createdAt: 'desc' },
-      take: 100
+      skip,
+      take: limit,
     });
   },
 
@@ -192,10 +187,8 @@ const salesRepository = {
       }
     });
 
-    // Group by day
     const trendMap: Record<string, number> = {};
     
-    // Initialize last 30 days with 0
     for (let i = 0; i <= 30; i++) {
       const d = new Date();
       d.setDate(d.getDate() - i);

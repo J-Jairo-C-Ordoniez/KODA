@@ -1,9 +1,10 @@
 import customerRepository from '../repositories/customer.repository';
+import { PaginationOptions } from '@/core/modules/sales/repositories/sales.repository';
 
 const customerService = {
-  async getCustomers(tenantId: string) {
+  async getCustomers(tenantId: string, pagination?: PaginationOptions) {
     if (!tenantId) throw new Error('Tenant ID requerido');
-    return customerRepository.getCustomersByTenant(tenantId);
+    return customerRepository.getCustomersByTenant(tenantId, pagination);
   },
 
   async createCustomer(tenantId: string, data: { name: string; phone: string }) {

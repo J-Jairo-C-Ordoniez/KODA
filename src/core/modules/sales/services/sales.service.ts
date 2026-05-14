@@ -1,4 +1,4 @@
-import salesRepository from '../repositories/sales.repository';
+import salesRepository, { PaginationOptions } from '../repositories/sales.repository';
 import { PaymentMethod } from '@prisma/client';
 
 export interface SaleItemData {
@@ -23,17 +23,17 @@ const salesService = {
     }
   },
 
-  async getAllSales(tenantId: string) {
+  async getAllSales(tenantId: string, pagination?: PaginationOptions) {
     try {
-      return await salesRepository.getSalesByTenant(tenantId);
+      return await salesRepository.getSalesByTenant(tenantId, pagination);
     } catch (error: any) {
       throw new Error(`Error al obtener ventas: ${error.message}`);
     }
   },
 
-  async getSalesByUser(tenantId: string, userId: string) {
+  async getSalesByUser(tenantId: string, userId: string, pagination?: PaginationOptions) {
     try {
-      return await salesRepository.getSalesByUser(tenantId, userId);
+      return await salesRepository.getSalesByUser(tenantId, userId, pagination);
     } catch (error: any) {
       throw new Error(`Error al obtener ventas del empleado: ${error.message}`);
     }

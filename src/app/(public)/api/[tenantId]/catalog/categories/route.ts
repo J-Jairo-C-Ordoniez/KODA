@@ -1,28 +1,20 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { apiResponse } from "@/core/utils/apiResponse";
+import { NextRequest } from 'next/server';
+import { apiResponse } from '@/core/utils/apiResponse';
+import { getTenantContext, requireRole } from '@/core/utils/tenantContext';
 import categoryController from '@/core/modules/catalog/controllers/category.controller';
 
-export async function GET(req: Request, { params }: { params: Promise<{ tenantId: string }> }) {
-  const { tenantId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    console.log('[API] Unauthorized access to categories:', { sessionTenant: session?.user?.tenantId, paramTenant: tenantId });
-    return apiResponse.error('No autorizado', 401);
-  }
-
-  const response = await categoryController.getAllCategories(tenantId);
-  return response;
+export async function GET(req: NextRequest) {
+  const { tenantId } = getTenantContext(req);
+  if (!tenantId) return apiResponse.error('No autorizado', 401);
+  return await categoryController.getAllCategories(tenantId);
 }
 
-export async function POST(req: Request, { params }: { params: Promise<{ tenantId: string }> }) {
-  const { tenantId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    return apiResponse.error('No autorizado', 401);
-  }
+export async function POST(req: NextRequest) {
+  const { tenantId, role } = getTenantContext(req);
+  if (!tenantId) return apiResponse.error('No autorizado', 401);
+
+  const denied = requireRole(role, ['owner', 'admin', 'superAdmin']);
+  if (denied) return denied;
 
   try {
     const data = await req.json();

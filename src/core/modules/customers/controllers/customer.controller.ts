@@ -1,10 +1,11 @@
 import customerService from '../services/customer.service';
 import { apiResponse } from '@/core/utils/apiResponse';
+import { PaginationOptions } from '@/core/modules/sales/repositories/sales.repository';
 
 const customerController = {
-  async getCustomers(tenantId: string) {
+  async getCustomers(tenantId: string, pagination?: PaginationOptions) {
     try {
-      const customers = await customerService.getCustomers(tenantId);
+      const customers = await customerService.getCustomers(tenantId, pagination);
       return apiResponse.success(customers);
     } catch (error: any) {
       return apiResponse.error(error.message, 400);

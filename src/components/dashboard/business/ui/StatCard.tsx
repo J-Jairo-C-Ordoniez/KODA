@@ -28,9 +28,9 @@ export function StatCard({ label, value, icon: Icon, iconColor, iconBg, change, 
         )}
       </div>
       
-      <div className="space-y-1">
-        <p className="text-foreground-muted text-[10px] font-black uppercase tracking-[0.2em] opacity-60 leading-none">{label}</p>
-        <p className="text-3xl font-black text-primary tracking-tighter transition-all group-hover:scale-[1.02] origin-left">
+      <div className="space-y-2.5">
+        <p className="text-foreground/80 text-sm font-medium tracking-tight leading-none">{label}</p>
+        <p className="text-4xl font-bold text-primary tracking-tighter transition-all group-hover:scale-[1.02] origin-left">
           {typeof value === 'number' ? value.toLocaleString('es-ES') : value}
         </p>
       </div>

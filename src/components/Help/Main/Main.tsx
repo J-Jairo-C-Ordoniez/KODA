@@ -27,7 +27,7 @@ export default function Main() {
     ];
 
     return (
-        <main className="grow">
+        <main className="grow px-6">
             <Hero
                 title="¿En qué podemos ayudarte?"
                 subtitle="¿Tienes dudas o necesitas asistencia técnica? Estamos aquí para garantizar que tu negocio nunca se detenga."

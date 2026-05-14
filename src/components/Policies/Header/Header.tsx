@@ -4,11 +4,9 @@ import { useState, useEffect } from 'react';
 import Container from '@/components/ui/Container';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
-import { Menu, X } from 'lucide-react';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);

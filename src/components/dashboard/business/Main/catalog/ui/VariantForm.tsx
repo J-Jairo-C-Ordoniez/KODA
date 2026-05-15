@@ -27,7 +27,7 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
         <span className="text-contrast">{icon}</span>
         <span className="text-sm font-semibold text-primary tracking-tight">{label}</span>
       </legend>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 items-start">
         {children}
       </div>
     </fieldset>
@@ -61,7 +61,7 @@ export default function VariantForm({ editingVariant, onSubmit, onCancel, loadin
         <VariantStatusToggle isActive={isActive} setIsActive={setIsActive} />
       </Fieldset>
 
-      <div className="flex gap-3 pt-4 border-t border-foreground/5 mt-4">
+      <div className="flex gap-3 sticky bottom-0 bg-background-elevated pt-4 pb-2 border-t border-foreground/5 mt-4 z-10">
         <button
           type="button"
           onClick={onCancel}

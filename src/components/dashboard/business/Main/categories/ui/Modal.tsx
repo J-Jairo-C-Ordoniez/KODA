@@ -21,7 +21,7 @@ export default function Modal({ isOpen, onClose, title, children, icon, descript
   };
 
   return (
-    <div className="fixed inset-0 z-70 flex items-center justify-center p-4 animate-in fade-in duration-200" role="presentation">
+    <div className="fixed inset-0 z-70 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200" role="presentation">
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
         onClick={onClose}
@@ -33,7 +33,7 @@ export default function Modal({ isOpen, onClose, title, children, icon, descript
         aria-modal="true"
         aria-labelledby="modal-title"
         aria-describedby={description ? "modal-description" : undefined}
-        className={`bg-background-elevated rounded-4xl p-5 sm:p-8 w-full mx-2 sm:mx-4 ${sizeClasses[size]} shadow-2xl shadow-black/50 border border-foreground/8 relative animate-in zoom-in-95 duration-300 flex flex-col`} 
+        className={`bg-background-elevated rounded-4xl p-5 sm:p-8 w-full ${sizeClasses[size]} shadow-2xl shadow-black/50 border border-foreground/8 relative animate-in zoom-in-95 duration-300 flex flex-col`} 
         style={{ maxHeight: 'calc(100dvh - 32px)' }}
       >
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-32 bg-contrast/8 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
@@ -46,7 +46,7 @@ export default function Modal({ isOpen, onClose, title, children, icon, descript
           <X size={18} />
         </button>
 
-        <article className="space-y-5 relative z-10 flex flex-col h-full">
+        <article className="space-y-5 relative z-10 flex flex-col flex-1 min-h-0">
           <header className="flex items-center gap-4">
             {icon && (
               <div className="w-12 h-12 rounded-2xl bg-contrast/10 border border-contrast/20 flex items-center justify-center shrink-0" aria-hidden="true">

@@ -8,7 +8,7 @@ export default function VariantStatusToggle({ isActive, setIsActive }: any) {
       <button
         type="button"
         onClick={() => setIsActive(!isActive)}
-        className="w-full p-3 rounded-2xl border border-foreground/10 bg-background flex items-center justify-between gap-2 hover:border-contrast/30 transition-all h-[calc(100%-24px)] mt-1"
+        className="w-full p-3.5 rounded-2xl border border-foreground/10 bg-background flex items-center justify-between gap-2 hover:border-contrast/30 transition-all"
         aria-pressed={isActive}
       >
         <span className="flex items-center gap-2">

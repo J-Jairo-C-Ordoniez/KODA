@@ -75,7 +75,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
       <Toaster toasts={toasts} removeToast={removeToast} />
       <form onSubmit={handleSubmit} className="space-y-5 pt-2">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-foreground-muted ml-1">Nombre del Producto</label>
+          <label className="text-sm font-medium text-foreground/80 tracking-tight ml-1">Nombre del producto</label>
           <input
             type="text"
             required
@@ -87,7 +87,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-foreground-muted ml-1">Descripción del Producto</label>
+          <label className="text-sm font-medium text-foreground/80 tracking-tight ml-1">Descripción del producto</label>
           <textarea
             rows={3}
             value={formData.description}
@@ -98,7 +98,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-foreground-muted ml-1">Categoría</label>
+          <label className="text-sm font-medium text-foreground/80 tracking-tight ml-1">Categoría</label>
           <div className="relative">
             <select
               required
@@ -118,14 +118,14 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-foreground-muted ml-1">Género</label>
+          <label className="text-sm font-medium text-foreground/80 tracking-tight ml-1">Género</label>
           <div className="grid grid-cols-3 gap-2">
             {['hombre', 'mujer', 'mixto'].map(g => (
               <button
                 key={g}
                 type="button"
                 onClick={() => setFormData({ ...formData, gender: g })}
-                className={`py-3.5 rounded-2xl border font-black text-xs uppercase tracking-widest transition-all active:scale-95 ${
+                className={`py-3.5 rounded-2xl border font-semibold text-sm capitalize transition-all active:scale-95 ${
                   formData.gender === g 
                     ? 'bg-contrast text-white border-contrast shadow-lg shadow-contrast/20' 
                     : 'bg-background text-foreground-muted border-foreground/10 hover:border-contrast/30 hover:text-primary'
@@ -138,9 +138,9 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
         </div>
 
         <div className="p-5 rounded-2xl bg-background border border-foreground/8 flex items-center justify-between gap-4">
-          <div className="space-y-0.5">
-            <p className="font-black text-primary text-xs uppercase tracking-widest">Público</p>
-            <p className="text-foreground-muted text-xs font-medium leading-relaxed">Mostrar en el catálogo para clientes.</p>
+          <div className="space-y-1">
+            <p className="font-semibold text-primary text-sm tracking-tight">Público</p>
+            <p className="text-foreground/60 text-sm font-medium leading-relaxed">Mostrar en el catálogo para clientes.</p>
           </div>
           <button
             type="button"
@@ -152,18 +152,18 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
           </button>
         </div>
 
-        <div className="flex gap-3 sticky bottom-0 bg-background-elevated pt-4 border-t border-foreground/5 -mx-6 px-6 sm:-mx-8 sm:px-8 mt-2">
+        <div className="flex gap-3 sticky bottom-0 bg-background-elevated pt-4 pb-4 border-t border-foreground/5 -mx-6 px-6 sm:-mx-8 sm:px-8 mt-4 z-10">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-4 rounded-2xl border border-foreground/10 font-bold text-sm text-foreground-muted hover:bg-foreground/5 hover:text-primary transition-all active:scale-95"
+            className="flex-1 py-4 rounded-2xl border border-foreground/10 font-semibold text-sm text-foreground/80 hover:bg-foreground/5 hover:text-primary transition-all active:scale-95"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={isSaving}
-            className="flex-1 py-4 rounded-2xl bg-contrast text-white font-black text-sm hover:bg-contrast-hover disabled:opacity-50 transition-all shadow-lg shadow-contrast/25 active:scale-[0.98] flex items-center justify-center gap-2"
+            className="flex-1 py-4 rounded-2xl bg-contrast text-white font-bold text-sm hover:bg-contrast-hover disabled:opacity-50 transition-all shadow-lg shadow-contrast/25 active:scale-[0.98] flex items-center justify-center gap-2"
           >
             {isSaving ? (
               <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Guardando...</span>

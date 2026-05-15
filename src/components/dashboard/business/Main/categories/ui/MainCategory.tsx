@@ -9,7 +9,7 @@ export default function MainCategory({ handleOpenModal, categories, handleDelete
         <section className="mt-6 w-full">
             <table className="w-full text-left border-separate border-spacing-y-4 lg:border-spacing-y-2">
                 <thead className="hidden lg:table-header-group">
-                    <tr className="text-xs font-semibold uppercase text-secondary tracking-widest text-center">
+                    <tr className="text-xs font-medium uppercase text-foreground/60 tracking-wider text-center">
                         <th className="pb-2 px-4 w-12 text-center border-b border-primary/10">ID</th>
                         <th className="pb-2 px-2 border-b border-primary/10">Categoría</th>
                         <th className="pb-2 px-4 text-center border-b border-primary/10">Productos</th>
@@ -28,25 +28,25 @@ export default function MainCategory({ handleOpenModal, categories, handleDelete
                     ) : (
                         filteredCategories.map((cat) => (
                             <tr key={cat.categoryId} className="group transition-all duration-200 block lg:table-row bg-foreground lg:bg-transparent rounded-2xl lg:rounded-none border border-primary/10 lg:border-none p-4 lg:p-0 shadow-sm lg:shadow-none">
-                                <td className="block lg:table-cell lg:rounded-l-xl py-2 lg:py-3 px-2 lg:px-4 text-xs font-bold lg:text-center text-primary/70 lg:group-hover:bg-primary/10 transition-colors border-b border-primary/5 lg:border-none mb-2 lg:mb-0">
+                                <td className="block lg:table-cell lg:rounded-l-xl py-2 lg:py-3 px-2 lg:px-4 text-xs font-medium lg:text-center text-primary/70 lg:group-hover:bg-primary/10 transition-colors border-b border-primary/5 lg:border-none mb-2 lg:mb-0">
                                     <div className="flex items-center justify-between lg:justify-center">
-                                        <span className="lg:hidden text-xs font-bold uppercase text-secondary">ID</span>
+                                        <span className="lg:hidden text-xs font-medium text-foreground/60">ID</span>
                                         <span>{cat.categoryId}</span>
                                     </div>
                                 </td>
-                                <td className="block lg:table-cell py-2 lg:py-3 px-2 lg:px-4 text-xs font-bold lg:text-center text-primary/70 lg:group-hover:bg-primary/10 transition-colors">
+                                <td className="block lg:table-cell py-2 lg:py-3 px-2 lg:px-4 text-xs lg:text-center text-primary/70 lg:group-hover:bg-primary/10 transition-colors">
                                     <div className="flex items-center justify-between lg:justify-center">
-                                        <span className="lg:hidden text-xs font-bold uppercase text-secondary">Categoría</span>
-                                        <p className="text-primary/80 leading-relaxed text-sm tracking-wider font-medium">
+                                        <span className="lg:hidden text-xs font-medium text-foreground/60">Categoría</span>
+                                        <p className="text-primary text-sm tracking-tight font-medium">
                                             {cat.name}
                                         </p>
                                     </div>
                                 </td>
 
-                                <td className="block lg:table-cell py-2 lg:py-3 px-2 lg:px-4 text-xs font-bold lg:text-center text-primary/70 lg:group-hover:bg-primary/10 transition-colors">
+                                <td className="block lg:table-cell py-2 lg:py-3 px-2 lg:px-4 text-xs lg:text-center text-primary/70 lg:group-hover:bg-primary/10 transition-colors">
                                     <div className="flex items-center justify-between lg:justify-center">
-                                        <span className="lg:hidden text-xs font-bold uppercase text-secondary">Productos</span>
-                                        <p className="text-primary/80 leading-relaxed text-sm tracking-wider font-semibold">
+                                        <span className="lg:hidden text-xs font-medium text-foreground/60">Productos</span>
+                                        <p className="text-foreground/80 text-sm tracking-tight font-medium">
                                             {cat._count?.products || 0} producto{cat._count?.products !== 1 ? 's' : ''}
                                         </p>
                                     </div>
@@ -54,7 +54,7 @@ export default function MainCategory({ handleOpenModal, categories, handleDelete
 
                                 <td className="block lg:table-cell lg:rounded-r-xl py-4 lg:py-3 px-2 lg:px-4 lg:text-right lg:group-hover:bg-primary/10 transition-colors border-t border-primary/5 lg:border-none mt-2 lg:mt-0">
                                     <div className="flex items-center justify-between lg:justify-end">
-                                        <span className="lg:hidden text-xs font-bold uppercase text-secondary">Acciones</span>
+                                        <span className="lg:hidden text-xs font-medium text-foreground/60">Acciones</span>
                                         <div className="flex justify-end gap-2">
                                             <button
                                                 onClick={() => handleOpenModal(cat)}

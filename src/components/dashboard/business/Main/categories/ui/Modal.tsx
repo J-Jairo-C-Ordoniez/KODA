@@ -33,8 +33,8 @@ export default function Modal({ isOpen, onClose, title, children, icon, descript
         aria-modal="true"
         aria-labelledby="modal-title"
         aria-describedby={description ? "modal-description" : undefined}
-        className={`bg-background-elevated rounded-[32px] p-6 sm:p-8 w-full mx-4 ${sizeClasses[size]} shadow-2xl shadow-black/50 border border-foreground/8 relative animate-in zoom-in-95 duration-300 flex flex-col`} 
-        style={{ maxHeight: 'calc(100dvh - 40px)' }}
+        className={`bg-background-elevated rounded-4xl p-5 sm:p-8 w-full mx-2 sm:mx-4 ${sizeClasses[size]} shadow-2xl shadow-black/50 border border-foreground/8 relative animate-in zoom-in-95 duration-300 flex flex-col`} 
+        style={{ maxHeight: 'calc(100dvh - 32px)' }}
       >
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-32 bg-contrast/8 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
         
@@ -65,7 +65,7 @@ export default function Modal({ isOpen, onClose, title, children, icon, descript
             </div>
           </header>
 
-          <main className="flex-1 overflow-y-auto custom-scrollbar pr-1 -mr-1 overscroll-contain">
+          <main className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain">
             {children}
           </main>
         </article>

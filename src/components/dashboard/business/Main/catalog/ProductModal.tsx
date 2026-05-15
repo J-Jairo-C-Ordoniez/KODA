@@ -69,11 +69,10 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
       onClose={onClose} 
       size={size}
       title={editingProduct ? 'Editar Producto' : 'Nuevo Producto'}
-      description="Gestiona la información básica de tu producto."
       icon={<Package size={24} className="text-contrast" />}
     >
       <Toaster toasts={toasts} removeToast={removeToast} />
-      <form onSubmit={handleSubmit} className="space-y-5 pt-2">
+      <form onSubmit={handleSubmit} className="space-y-4 pt-1">
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground/80 tracking-tight ml-1">Nombre del producto</label>
           <input
@@ -81,7 +80,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
             required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-5 py-4 rounded-2xl border border-foreground/10 focus:border-contrast focus:ring-4 focus:ring-contrast/15 outline-none transition-all font-bold text-primary bg-background text-sm placeholder:text-foreground-muted placeholder:font-medium"
+            className="w-full px-4 py-3 rounded-2xl border border-foreground/10 focus:border-contrast focus:ring-4 focus:ring-contrast/15 outline-none transition-all font-medium text-primary bg-background text-sm placeholder:text-foreground-muted/70"
             placeholder="Ej. Gorras de béisbol"
           />
         </div>
@@ -89,11 +88,11 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground/80 tracking-tight ml-1">Descripción del producto</label>
           <textarea
-            rows={3}
+            rows={2}
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-5 py-4 rounded-2xl border border-foreground/10 focus:border-contrast focus:ring-4 focus:ring-contrast/15 outline-none transition-all font-bold text-primary bg-background text-sm placeholder:text-foreground-muted placeholder:font-medium resize-none"
-            placeholder="Materiales, ajuste y detalles del producto..."
+            className="w-full px-4 py-3 rounded-2xl border border-foreground/10 focus:border-contrast focus:ring-4 focus:ring-contrast/15 outline-none transition-all font-medium text-primary bg-background text-sm placeholder:text-foreground-muted/70 resize-none"
+            placeholder="Materiales, ajuste y detalles..."
           />
         </div>
 
@@ -104,7 +103,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
               required
               value={formData.categoryId}
               onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-              className="w-full px-5 py-4 rounded-2xl border border-foreground/10 focus:border-contrast focus:ring-4 focus:ring-contrast/15 outline-none transition-all font-bold text-primary bg-background text-sm appearance-none cursor-pointer"
+              className="w-full px-4 py-3 rounded-2xl border border-foreground/10 focus:border-contrast focus:ring-4 focus:ring-contrast/15 outline-none transition-all font-medium text-primary bg-background text-sm appearance-none cursor-pointer"
             >
               <option value="" disabled>Seleccionar categoría</option>
               {categories.map(cat => (
@@ -125,7 +124,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
                 key={g}
                 type="button"
                 onClick={() => setFormData({ ...formData, gender: g })}
-                className={`py-3.5 rounded-2xl border font-semibold text-sm capitalize transition-all active:scale-95 ${
+                className={`py-2.5 rounded-2xl border font-semibold text-sm capitalize transition-all active:scale-95 ${
                   formData.gender === g 
                     ? 'bg-contrast text-white border-contrast shadow-lg shadow-contrast/20' 
                     : 'bg-background text-foreground-muted border-foreground/10 hover:border-contrast/30 hover:text-primary'
@@ -137,7 +136,7 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-background border border-foreground/8 flex items-center justify-between gap-4">
+        <div className="p-4 rounded-2xl bg-background border border-foreground/8 flex items-center justify-between gap-4">
           <div className="space-y-1">
             <p className="font-semibold text-primary text-sm tracking-tight">Público</p>
             <p className="text-foreground/60 text-sm font-medium leading-relaxed">Mostrar en el catálogo para clientes.</p>
@@ -152,18 +151,18 @@ export default function ProductModal({ isOpen, onClose, tenantId, categories, ed
           </button>
         </div>
 
-        <div className="flex gap-3 sticky bottom-0 bg-background-elevated pt-4 pb-4 border-t border-foreground/5 -mx-6 px-6 sm:-mx-8 sm:px-8 mt-4 z-10">
+        <div className="flex gap-3 sticky bottom-0 bg-background-elevated pt-4 pb-2 border-t border-foreground/5 mt-4 z-10">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-4 rounded-2xl border border-foreground/10 font-semibold text-sm text-foreground/80 hover:bg-foreground/5 hover:text-primary transition-all active:scale-95"
+            className="flex-1 py-3.5 rounded-2xl border border-foreground/10 font-semibold text-sm text-foreground/80 hover:bg-foreground/5 hover:text-primary transition-all active:scale-95"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={isSaving}
-            className="flex-1 py-4 rounded-2xl bg-contrast text-white font-bold text-sm hover:bg-contrast-hover disabled:opacity-50 transition-all shadow-lg shadow-contrast/25 active:scale-[0.98] flex items-center justify-center gap-2"
+            className="flex-1 py-3.5 rounded-2xl bg-contrast text-white font-bold text-sm hover:bg-contrast-hover disabled:opacity-50 transition-all shadow-lg shadow-contrast/25 active:scale-[0.98] flex items-center justify-center gap-2"
           >
             {isSaving ? (
               <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Guardando...</span>

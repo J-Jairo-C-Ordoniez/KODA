@@ -1,7 +1,4 @@
-"use client";
-
-import { useState, useEffect } from 'react';
-import { X, Layers, Check } from 'lucide-react';
+import { Layers } from 'lucide-react';
 import VariantForm from './ui/VariantForm';
 import Modal from '../categories/ui/Modal';
 
@@ -21,7 +18,6 @@ export default function VariantModal({ isOpen, onClose, onSubmit, editingVariant
       onClose={onClose} 
       size={size}
       title={editingVariant ? 'Editar Variante' : 'Nueva Variante'}
-      description={editingVariant ? 'Actualiza los detalles de esta variante.' : 'Define color, talla, precio y foto.'}
       icon={<Layers size={24} className="text-contrast" />}
     >
       <div className="pt-2">

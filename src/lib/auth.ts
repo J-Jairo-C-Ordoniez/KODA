@@ -13,19 +13,16 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log("[AUTH] Faltan credenciales");
           return null;
         }
 
         try {
-          console.log(`[AUTH] Intentando login para: ${credentials.email}`);
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
             include: { tenant: true }
           });
 
           if (!user) {
-            console.log("[AUTH] Usuario no encontrado en la DB");
             return null;
           }
 
@@ -35,7 +32,6 @@ export const authOptions: AuthOptions = {
             return null;
           }
 
-          console.log("[AUTH] Login exitoso");
           return {
             id: user.userId,
             name: user.name,
@@ -45,7 +41,6 @@ export const authOptions: AuthOptions = {
             tenantSlug: user.tenant?.slug || null
           };
         } catch (error: any) {
-          console.error("[AUTH] Error atrapado en authorize:", error);
           throw new Error(error.message || "Ocurrió un problema durante la autenticación.");
         }
       }

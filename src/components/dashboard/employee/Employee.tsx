@@ -6,11 +6,13 @@ import { EmployeeFloatingSaleButton } from "./ui/EmployeeFloatingSaleButton";
 
 function EmployeeDashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="grid grid-cols-2 h-screen box-border relative">
+        <div className="flex flex-col h-screen overflow-hidden bg-background">
             <Header />
-            <div className="col-span-full flex h-[calc(100vh-5rem)]">
+            <div className="flex flex-1 overflow-hidden relative pb-6">
                 <EmployeeSidebar />
-                {children}
+                <div className="flex-1 overflow-y-auto custom-scrollbar bg-background">
+                    {children}
+                </div>
             </div>
             <EmployeeFloatingSaleButton />
         </div>

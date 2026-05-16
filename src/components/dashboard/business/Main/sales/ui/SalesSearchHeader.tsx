@@ -7,7 +7,7 @@ interface SalesSearchHeaderProps {
 
 export default function SalesSearchHeader({ searchTerm, setSearchTerm }: SalesSearchHeaderProps) {
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-2">
+    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
       <div className="flex items-center gap-3">
         <figure className="w-8 h-8 rounded-xl bg-contrast/10 flex items-center justify-center text-contrast shrink-0" aria-hidden="true">
           <ShoppingBag size={16} />
@@ -25,7 +25,7 @@ export default function SalesSearchHeader({ searchTerm, setSearchTerm }: SalesSe
           placeholder="Buscar por vendedor o cliente..." 
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full sm:w-[280px] pl-11 pr-10 py-3 rounded-2xl bg-background-elevated border border-foreground/8 focus:border-contrast/30 focus:ring-4 focus:ring-contrast/5 outline-none transition-all font-bold text-xs text-primary placeholder:text-foreground-muted/40"
+          className="w-full md:w-[280px] pl-11 pr-10 py-3 rounded-2xl bg-background-elevated border border-foreground/8 focus:border-contrast/30 focus:ring-4 focus:ring-contrast/5 outline-none transition-all font-bold text-xs text-primary placeholder:text-foreground-muted/40"
           aria-label="Buscar por vendedor o cliente"
         />
         {searchTerm && (

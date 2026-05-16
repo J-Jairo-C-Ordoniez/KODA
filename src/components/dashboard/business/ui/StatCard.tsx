@@ -12,7 +12,7 @@ interface StatCardProps {
 
 export function StatCard({ label, value, icon: Icon, iconColor, iconBg, change, trend }: StatCardProps) {
   return (
-    <article className="bg-background-elevated/50 lg:bg-background-elevated border border-white/5 lg:border-white/10 p-8 rounded-[32px] hover:border-contrast/20 transition-all duration-300 group shadow-xl shadow-black/5">
+    <article className="bg-background-elevated/50 lg:bg-background-elevated border border-white/5 lg:border-white/10 p-5 sm:p-6 lg:p-8 rounded-3xl lg:rounded-[32px] hover:border-contrast/20 transition-all duration-300 group shadow-xl shadow-black/5">
       <div className="flex justify-between items-start mb-6">
         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 ${iconBg || 'bg-contrast/10'} shadow-lg shadow-black/5`}>
           <Icon size={22} className={iconColor || 'text-contrast'} aria-hidden="true" />
@@ -30,7 +30,7 @@ export function StatCard({ label, value, icon: Icon, iconColor, iconBg, change, 
       
       <div className="space-y-2.5">
         <p className="text-foreground/80 text-sm font-medium tracking-tight leading-none">{label}</p>
-        <p className="text-4xl font-bold text-primary tracking-tighter transition-all group-hover:scale-[1.02] origin-left">
+        <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary tracking-tighter transition-all group-hover:scale-[1.02] origin-left">
           {typeof value === 'number' ? value.toLocaleString('es-ES') : value}
         </p>
       </div>

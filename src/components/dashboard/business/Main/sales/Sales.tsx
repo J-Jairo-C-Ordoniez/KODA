@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ShoppingCart } from 'lucide-react';
 import { useSales } from '@/hooks/employee/useSales';
 import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
@@ -19,6 +19,8 @@ import { SalesTable } from './ui/SalesTable';
 export default function Sales() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const tenantId = session?.user?.tenantId;
   const { sales, variants, isLoading, isSaving, error, page, hasMore, fetchSalesData, saveSale } = useSales(tenantId);
   const { stats, fetchStats } = useDashboardStats();
@@ -39,10 +41,17 @@ export default function Sales() {
     }
   }, [searchParams]);
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (searchParams.has('newSale')) {
+      router.replace(pathname, { scroll: false });
+    }
+  };
+
   const handleSaleSubmit = async (data: any) => {
     const result = await saveSale(data);
     if (result.success) {
-      setIsModalOpen(false);
+      handleCloseModal();
       showToast('success', 'Venta registrada', 'La transacción se completó con éxito.');
       fetchStats();
       if (result.data?.saleId) {
@@ -97,14 +106,14 @@ export default function Sales() {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
         title="Registrar Nueva Venta"
         size="2xl"
       >
         <SaleForm
           variants={variants}
           onSubmit={handleSaleSubmit}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={handleCloseModal}
           submitting={isSaving}
         />
       </Modal>

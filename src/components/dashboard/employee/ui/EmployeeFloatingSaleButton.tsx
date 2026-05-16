@@ -2,23 +2,29 @@
 
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export function EmployeeFloatingSaleButton() {
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
 
-  const handleClick = () => {
-    router.push('/dashboard/employee/sales?newSale=true');
-  };
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
 
   return (
     <button
-      onClick={handleClick}
-      className="fixed bottom-8 right-8 z-60 flex items-center gap-3 bg-navy text-white px-6 py-4 rounded-3xl shadow-2xl shadow-navy/30 hover:scale-[1.05] hover:bg-navy/90 active:scale-95 transition-all group"
+      onClick={() => router.push('/dashboard/employee/sales?newSale=true')}
+      aria-label="Registrar nueva venta"
+      title="Registrar nueva venta"
+      className="fixed bottom-6 right-5 sm:right-8 z-60 flex items-center gap-2.5 bg-contrast/90 hover:bg-contrast text-white px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-lg shadow-contrast/20 hover:shadow-contrast/30 hover:scale-[1.04] active:scale-95 transition-all duration-200 backdrop-blur-sm"
     >
-      <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center group-hover:rotate-90 transition-transform">
-        <Plus size={20} />
-      </div>
-      <span className="font-black text-sm tracking-tight">Registrar Venta</span>
+      <Plus size={17} aria-hidden="true" strokeWidth={2.5} />
+      <span className="hidden sm:block font-black text-xs tracking-widest uppercase">
+        Nueva venta
+      </span>
     </button>
   );
 }

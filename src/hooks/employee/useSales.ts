@@ -6,13 +6,15 @@ export function useSales(tenantId: string | undefined) {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
 
-    const fetchSalesData = useCallback(async () => {
+    const fetchSalesData = useCallback(async (pageNum = 1) => {
         if (!tenantId) return;
         setIsLoading(true);
         setError(null);
         try {
-            const salesUrl = `/api/${tenantId}/sales`;
+            const salesUrl = `/api/${tenantId}/sales?page=${pageNum}&limit=12`;
             const variantsUrl = `/api/${tenantId}/catalog/variants`;
             const [salesRes, variantsRes] = await Promise.all([
                 fetch(salesUrl),
@@ -24,7 +26,6 @@ export function useSales(tenantId: string | undefined) {
                 let errorMessage = 'Error en el servidor';
                 
                 try {
-                    // Clone to avoid "body stream already read"
                     const clone = failedRes.clone();
                     try {
                         const errorJson = await clone.json();
@@ -32,7 +33,6 @@ export function useSales(tenantId: string | undefined) {
                     } catch (e) {
                         const textError = await failedRes.text();
                         console.error('API Error Response (Non-JSON):', textError);
-                        // If it's HTML, don't show the whole HTML to the user
                         if (textError.includes('<!DOCTYPE html>')) {
                             errorMessage = `Error ${failedRes.status}: El servidor no respondió correctamente`;
                         } else {
@@ -57,7 +57,10 @@ export function useSales(tenantId: string | undefined) {
             const variantsJson = await variantsRes.json();
 
             if (salesJson.success) {
-                setSales(salesJson.data || []);
+                const newData = salesJson.data || [];
+                setSales(newData);
+                setHasMore(newData.length === 12);
+                setPage(pageNum);
             } else {
                 setError(salesJson.error || 'Error al cargar ventas');
             }
@@ -87,7 +90,7 @@ export function useSales(tenantId: string | undefined) {
             const json = await res.json();
 
             if (json.success) {
-                await fetchSalesData();
+                await fetchSalesData(1);
                 return { success: true, data: json.data };
             } else {
                 return { success: false, error: json.error || 'No se pudo registrar la venta' };
@@ -105,6 +108,8 @@ export function useSales(tenantId: string | undefined) {
         isLoading,
         isSaving,
         error,
+        page,
+        hasMore,
         fetchSalesData,
         saveSale
     };

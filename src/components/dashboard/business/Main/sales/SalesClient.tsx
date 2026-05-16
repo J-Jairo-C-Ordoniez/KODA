@@ -20,6 +20,8 @@ export default function SalesClient() {
         variants,
         isLoading: loading,
         isSaving: submitting,
+        page,
+        hasMore,
         fetchSalesData: fetchData,
         saveSale
     } = useSales(tenantId);
@@ -61,11 +63,16 @@ export default function SalesClient() {
         }
     };
 
-    const filteredSales = sales.filter(s =>
-        s.saleId.toString().includes(searchTerm) ||
-        s.variant.product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        s.variant.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredSales = sales.filter(s => {
+        const term = searchTerm.toLowerCase();
+        if (s.saleId.toString().includes(term)) return true;
+        if (s.user?.name?.toLowerCase().includes(term)) return true;
+        if (s.customer?.name?.toLowerCase().includes(term)) return true;
+        return s.items?.some((item: any) => 
+            item.variant?.product?.name?.toLowerCase().includes(term) ||
+            item.variant?.name?.toLowerCase().includes(term)
+        );
+    });
 
     if (loading && sales.length === 0) {
         return (
@@ -97,6 +104,10 @@ export default function SalesClient() {
                         onViewInvoice={setSelectedSaleForInvoice}
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
+                        hasMore={hasMore || false}
+                        loading={loading}
+                        page={page}
+                        onPageChange={(newPage) => fetchData(newPage)}
                     />
                 </section>
             </div>

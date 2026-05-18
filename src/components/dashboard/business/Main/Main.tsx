@@ -5,14 +5,14 @@ import Header from './ui/Header';
 import SalesPeriodMetrics from './ui/SalesPeriodMetrics';
 import SalesGlobalMetrics from './ui/SalesGlobalMetrics';
 import LowStock from './ui/LowStock';
-import useDashboardStore from '@/store/dashboard.store';
+import { useDashboardStats } from '@/hooks/admin/useDashboardStats';
 
 export default function Main() {
-    const { stats, isLoading, error, fetchDashboardData } = useDashboardStore();
+    const { stats, isLoading, error, fetchStats } = useDashboardStats();
 
     useEffect(() => {
-        fetchDashboardData();
-    }, [fetchDashboardData]);
+        fetchStats();
+    }, [fetchStats]);
 
     return (
         <main className="min-h-full flex-1 transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-10">

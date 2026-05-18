@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
+import { Product, Category, Variant } from '@/core/modules/catalog/types';
 
 export function useAdminCatalog(tenantId: string | undefined) {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -31,8 +32,7 @@ export function useAdminCatalog(tenantId: string | undefined) {
     }
   }, [tenantId]);
 
-  // --- Products ---
-  const saveProduct = async (data: any, editingProduct: any = null) => {
+  const saveProduct = async (data: Partial<Product>, editingProduct: Product | null = null) => {
     if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     setIsSaving(true);
     try {
@@ -82,7 +82,7 @@ export function useAdminCatalog(tenantId: string | undefined) {
   };
 
   // --- Variants ---
-  const saveVariant = async (data: any, editingVariant: any = null, productId: string | null = null) => {
+  const saveVariant = async (data: Partial<Variant>, editingVariant: Variant | null = null, productId: string | null = null) => {
     if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     setIsSaving(true);
     try {
@@ -154,7 +154,7 @@ export function useAdminCatalog(tenantId: string | undefined) {
   };
 
   // --- Categories ---
-  const saveCategory = async (data: { name: string, description?: string, icon?: string }, editingCategory: any = null) => {
+  const saveCategory = async (data: { name: string, description?: string, icon?: string }, editingCategory: Category | null = null) => {
     if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
     setIsSaving(true);
     try {

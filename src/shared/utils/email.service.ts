@@ -20,20 +20,20 @@ export const emailService = {
 
     try {
       const info = await transporter.sendMail({
-        from: `"Moda y Estilo Equipo" <${process.env.SMTP_USER}>`,
+        from: `"Koda Team" <${process.env.SMTP_USER}>`,
         to: to,
         subject: "Código de Recuperación de Contraseña",
         text: `Tu código de recuperación es: ${code}. Este código expirará en 1 hora.`,
         html: `
           <div style="font-family: Arial, sans-serif; p-4">
             <h2 style="color: #333;">Recuperación de Contraseña</h2>
-            <p>Has solicitado restablecer tu contraseña en Moda y Estilo. Utiliza el siguiente código para continuar:</p>
+            <p>Has solicitado restablecer tu contraseña en Koda. Utiliza el siguiente código para continuar:</p>
             <div style="background-color: #f4f4f4; padding: 10px 20px; font-size: 24px; font-weight: bold; letter-spacing: 5px; display: inline-block; margin: 20px 0;">
               ${code}
             </div>
             <p>Este código es válido por <strong>1 hora</strong>. Si no solicitaste este cambio, puedes ignorar este correo.</p>
             <br/>
-            <p>Atentamente,<br/>Equipo Moda y Estilo</p>
+            <p>Atentamente,<br/>Equipo Koda</p>
           </div>
         `,
       });

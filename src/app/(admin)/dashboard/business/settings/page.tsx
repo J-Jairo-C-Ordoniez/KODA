@@ -1,7 +1,7 @@
-import { SettingsP } from '@/components/dashboard/business/Business';
+import Settings from '@/components/dashboard/business/Main/settings/Settings';
 
 export const metadata = { title: 'Mi Negocio | KODA' };
 
 export default function SettingsPage() {
-  return <SettingsP />;
+  return <Settings />;
 }

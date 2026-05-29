@@ -26,18 +26,18 @@ export default function Overview() {
     if (!isLoading && !error && stats) {
       gsap.fromTo(
         '.ov-stat',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.3, stagger: 0.05, ease: 'power2.out' }
       );
       gsap.fromTo(
         '.ov-chart',
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.3 }
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', delay: 0.15 }
       );
       gsap.fromTo(
         '.ov-side',
-        { opacity: 0, x: 20 },
-        { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out', delay: 0.35, stagger: 0.1 }
+        { opacity: 0, x: 10 },
+        { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out', delay: 0.2, stagger: 0.05 }
       );
     }
   }, { scope: containerRef, dependencies: [isLoading, error, stats] });

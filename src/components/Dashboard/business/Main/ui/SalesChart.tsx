@@ -1,6 +1,7 @@
 'use client';
 
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { formatCurrency } from '@/lib/formatters';
 
 interface SalesTrend {
   date: string;
@@ -17,14 +18,6 @@ export function SalesChart({ data }: SalesChartProps) {
     ...item,
     displayDate: item.date.split('-').slice(1).join('-')
   }));
-
-  const formatCurrency = (value: number) => 
-    new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
 
   return (
     <div className="w-full h-[300px]">

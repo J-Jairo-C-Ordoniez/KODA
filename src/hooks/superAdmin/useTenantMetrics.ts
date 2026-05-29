@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Store, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
+import { formatCurrency, formatPercentage } from '@/lib/formatters';
 
 interface TenantMetric {
   label: string;
@@ -38,12 +39,6 @@ export function useTenantMetrics() {
         return;
       }
 
-      const cop = (val: number) => new Intl.NumberFormat('es-CO', {
-        style: 'currency', currency: 'COP', minimumFractionDigits: 0
-      }).format(val);
-      const pct = (val: number) => new Intl.NumberFormat('es-CO', {
-        style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1
-      }).format(val);
 
       const activeVal = Number(activeData.data) || 0;
       const mrrVal = Number(mrrData.data) || 0;
@@ -60,13 +55,13 @@ export function useTenantMetrics() {
         },
         {
           label: 'MRR (Ingresos Mensuales)',
-          value: cop(mrrVal),
+          value: formatCurrency(mrrVal),
           icon: DollarSign,
           color: mrrVal < 50000 ? 'bg-red-500/10 text-red-400' : mrrVal > 1000000 ? 'bg-[#00C896]/10 text-[#00C896]' : 'bg-yellow-500/10 text-yellow-400',
         },
         {
           label: 'Tasa de Conversión',
-          value: pct(onboardingPercentage / 100),
+          value: formatPercentage(onboardingPercentage / 100),
           icon: onboardingPercentage < 30 ? TrendingDown : TrendingUp,
           color: onboardingPercentage < 30 ? 'bg-red-500/10 text-red-400' : 'bg-[#00C896]/10 text-[#00C896]',
         },
@@ -78,7 +73,7 @@ export function useTenantMetrics() {
         },
         {
           label: 'Churn Rate',
-          value: pct(churnRatePercentage / 100),
+          value: formatPercentage(churnRatePercentage / 100),
           icon: churnRatePercentage < 5 ? TrendingUp : TrendingDown,
           color: churnRatePercentage < 5 ? 'bg-[#00C896]/10 text-[#00C896]' : churnRatePercentage > 10 ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-400',
         },

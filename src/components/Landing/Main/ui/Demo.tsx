@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
+import { formatCurrency } from '@/lib/formatters';
 import { TrendingUp, Package, Users, ShoppingCart, AlertCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import gsap from 'gsap';
 
@@ -84,7 +85,7 @@ export default function Demo() {
         return () => timers.current.forEach(clearTimeout);
     }, [runDemo]);
 
-    const fmt = (n: number) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(n);
+
 
     return (
         <article className="hero-demo-card relative w-full rounded-4xl bg-background-elevated border border-foreground/10 ring-1 ring-contrast/25 overflow-hidden shadow-[0_0_80px_rgba(255,122,0,0.10)] p-3 md:p-5">
@@ -100,12 +101,12 @@ export default function Demo() {
                 <span className="text-[10px] text-foreground-muted font-mono">En vivo</span>
             </header>
 
-            <div className="demo-dashboard opacity-0 relative w-full bg-background border border-foreground/10 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="demo-dashboard opacity-0 relative w-full glass-panel rounded-2xl overflow-hidden shadow-2xl">
 
                 {/* Stats bar */}
                 <div className="grid grid-cols-4 divide-x divide-foreground/5 border-b border-foreground/5">
                     {[
-                        { label: 'Ventas hoy', value: fmt(metrics.totalVentas), icon: <TrendingUp size={13} className="text-success" />, trend: '+12%', cls: 'stat-ventas' },
+                        { label: 'Ventas hoy', value: formatCurrency(metrics.totalVentas), icon: <TrendingUp size={13} className="text-success" />, trend: '+12%', cls: 'stat-ventas' },
                         { label: 'Pedidos', value: metrics.totalPedidos, icon: <ShoppingCart size={13} className="text-[#3A86FF]" />, trend: `hoy`, cls: '' },
                         { label: 'Stock bajo', value: metrics.stockAlerta, icon: <Package size={13} className="text-contrast" />, trend: 'alerta', cls: '' },
                         { label: 'Fiados', value: metrics.fiados, icon: <Users size={13} className="text-[#7B61FF]" />, trend: 'activos', cls: '' },
@@ -146,7 +147,7 @@ export default function Demo() {
                                         </div>
                                         <div className="flex items-center gap-1 shrink-0">
                                             <ArrowUpRight size={10} className="text-success" />
-                                            <span className="text-[11px] font-black text-primary font-mono">{fmt(sale.amount)}</span>
+                                            <span className="text-[11px] font-black text-primary font-mono">{formatCurrency(sale.amount)}</span>
                                         </div>
                                     </div>
                                 );
@@ -189,7 +190,7 @@ export default function Demo() {
                                             ? <ArrowDownRight size={10} className="text-contrast" />
                                             : <ArrowUpRight size={10} className="text-success" />
                                         }
-                                        <span className="text-[10px] font-mono text-foreground-muted">{fmt(f.amount)}</span>
+                                        <span className="text-[10px] font-mono text-foreground-muted">{formatCurrency(f.amount)}</span>
                                     </div>
                                 </div>
                             ))}

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, sfmono-regular, monospace;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   --color-background: #0E0E0E;
   --color-background-elevated: #111216;
   --color-background-glass: rgba(14, 14, 14, 0.7);
@@ -35,11 +35,22 @@ body {
 }
 
 @layer utilities {
-  .bg-grid {
-    background-size: 40px 40px;
-    background-image:
-      linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  .bg-organic {
+    background: radial-gradient(circle at 50% -20%, rgba(255, 122, 0, 0.15), transparent 60%),
+                radial-gradient(circle at 100% 40%, rgba(46, 83, 128, 0.1), transparent 50%),
+                var(--background);
+  }
+
+  .glass-panel {
+    background: rgba(17, 18, 22, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(250, 250, 250, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(250, 250, 250, 0.3);
   }
 
   .animate-toast-progress {
@@ -79,10 +90,10 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 128, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 128, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }

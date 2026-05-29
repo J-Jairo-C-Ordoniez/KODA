@@ -1,10 +1,6 @@
 import { CreditCard, CalendarClock } from 'lucide-react';
 import { SubscriptionInfo } from '@/hooks/admin/useDashboardStats';
-
-const COP = (n: number) =>
-  new Intl.NumberFormat('es-CO', {
-    style: 'currency', currency: 'COP', minimumFractionDigits: 0,
-  }).format(n);
+import { formatCurrency } from '@/lib/formatters';
 
 function daysUntil(dateStr: string) {
   const diff = new Date(dateStr).getTime() - Date.now();
@@ -55,7 +51,7 @@ export function PlanStatusCard({ subscription }: PlanStatusCardProps) {
           <div className="bg-background/50 rounded-xl p-3.5 space-y-1">
             <dt className="text-foreground/80 text-sm font-medium tracking-tight">Precio</dt>
             <dd className="font-bold text-base text-primary">
-              {COP(subscription.planPrice)}
+              {formatCurrency(subscription.planPrice)}
               <span className="font-normal text-sm text-foreground/60">
                 /{subscription.interval === 'monthly' ? 'mes' : subscription.interval === 'yearly' ? 'año' : subscription.interval}
               </span>

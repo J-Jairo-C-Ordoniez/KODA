@@ -1,5 +1,6 @@
 import { Check, Star } from "lucide-react";
 import Button from "../../../ui/Button";
+import { formatCurrency } from "@/lib/formatters";
 
 interface Plan {
   planId: string;
@@ -42,11 +43,7 @@ export default function CardPricing({ plan, isPopular, index = 0 }: { plan: Plan
 
         <div className="flex items-baseline gap-2 mb-8 md:mb-10">
           <span className="text-4xl md:text-6xl font-black tracking-tighter text-primary group-hover:text-contrast transition-colors">
-            {new Intl.NumberFormat('es-CO', {
-              style: 'currency',
-              currency: 'COP',
-              minimumFractionDigits: 0
-            }).format(Number(plan.price))}
+            {formatCurrency(Number(plan.price))}
           </span>
           <span className="font-bold text-xs md:text-sm uppercase tracking-widest text-foreground-muted">/mes</span>
         </div>

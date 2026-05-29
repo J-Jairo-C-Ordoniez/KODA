@@ -20,9 +20,12 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full flex flex-col items-center bg-background px-4 pt-16 lg:pt-40 pb-12 overflow-hidden"
+      className="relative w-full flex flex-col items-center min-h-screen justify-center bg-organic px-4 pt-20 lg:pt-32 pb-20 overflow-hidden"
     >
-      <div className="container relative z-10 w-full max-w-5xl flex flex-col items-center text-center">
+      {/* Decorative grid pattern */}
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-[0.03] pointer-events-none" />
+      
+      <div className="container relative z-10 w-full max-w-6xl flex flex-col items-center text-center">
         <Header />
         <Demo />
       </div>

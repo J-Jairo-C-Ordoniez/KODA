@@ -4,16 +4,12 @@ import Image from 'next/image';
 import Link from "next/link";
 import { ArrowRight, Package } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { formatCurrency } from '@/lib/formatters';
 
 export default function ProductCard({ product }: { product: any }) {
   const params = useParams();
   const slug = params?.slug as string;
   
-  const formatter = new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0
-  });
 
   if (!product) {
     return (
@@ -90,7 +86,7 @@ export default function ProductCard({ product }: { product: any }) {
           </div>
           <div className="shrink-0 pt-0.5">
             <span className="text-lg font-black text-primary tracking-tighter">
-              {formatter.format(variant.price)}
+            {formatCurrency(variant.price)}
             </span>
           </div>
         </div>

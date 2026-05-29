@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { MessageCircle, Package, ShieldCheck, Zap, Info } from "lucide-react";
+import { formatCurrency } from "@/lib/formatters";
 
 interface Props {
   product: any;
@@ -13,11 +14,6 @@ interface Props {
 }
 
 export default function ProductInfo({ product, variant, allVariants, contact, setSelectedVariant }: Props) {
-  const formatter = new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0
-  });
 
   const stock = variant?.inventories?.[0]?.stock ?? 0;
   const isLowStock = stock > 0 && stock <= 5;
@@ -47,11 +43,11 @@ export default function ProductInfo({ product, variant, allVariants, contact, se
 
   const whatsappLink = useMemo(() => {
     if (!contact) return null;
-    const priceStr = formatter.format(Number(variant.price));
+    const priceStr = formatCurrency(Number(variant.price));
     const message = `Hola, me interesa este producto:\n\n*${product.name} — ${variant.name}*\nColor: ${variant.color}\nTalla: ${variant.size}\nPrecio: ${priceStr} COP\nSKU: ${variant.sku}\n\n¿Está disponible?`;
     const phone = contact.replace(/\D/g, '');
     return `https://wa.me/57${phone}?text=${encodeURIComponent(message)}`;
-  }, [product, variant, contact, formatter]);
+  }, [product, variant, contact]);
 
   return (
     <section className="flex flex-col gap-10">
@@ -82,7 +78,7 @@ export default function ProductInfo({ product, variant, allVariants, contact, se
       <div className="flex flex-wrap items-center gap-6 py-6 border-y border-white/5">
         <div className="flex items-baseline gap-2">
           <span className="text-4xl font-black text-primary tracking-tighter">
-            {formatter.format(Number(variant.price))}
+          {formatCurrency(Number(variant.price))}
           </span>
           <span className="text-sm font-black text-foreground-muted uppercase tracking-widest opacity-40">COP</span>
         </div>

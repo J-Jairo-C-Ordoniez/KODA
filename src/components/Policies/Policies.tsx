@@ -6,9 +6,13 @@ import Cookies from "@/components/Policies/Main/Cookies";
 
 function PolicyLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-organic relative overflow-hidden">
+            {/* Decorative grid pattern */}
+            <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-[0.03] pointer-events-none" />
             <Header />
-            {children}
+            <main className="grow flex flex-col relative z-10 w-full max-w-4xl mx-auto px-6 py-12 glass-panel rounded-4xl my-10">
+                {children}
+            </main>
             <Footer />
         </div>
     );

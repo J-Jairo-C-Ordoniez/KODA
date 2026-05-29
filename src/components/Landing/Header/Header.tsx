@@ -6,6 +6,7 @@ import Logo from '../../ui/Logo';
 import Nav, { NavMobile } from './ui/Nav';
 import Button from '../../ui/Button';
 import { Menu, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,7 +18,6 @@ export default function Header() {
     };
 
     window.addEventListener('scroll', handleScroll);
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -28,35 +28,51 @@ export default function Header() {
   ];
 
   return (
-    <header className={`h-20 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-background/80 backdrop-blur-xl border-b border-foreground/5 shadow-sm' : 'bg-transparent'}`}>
+    <header 
+      className={cn(
+        "h-20 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500",
+        isScrolled 
+          ? "bg-background/70 backdrop-blur-2xl border-b border-foreground/10 shadow-lg shadow-black/20" 
+          : "bg-transparent"
+      )}
+    >
       <Container className="flex items-center justify-between">
         <Logo type="light" />
 
-        <Nav navLinks={navLinks} />
+        <div className="hidden md:block" aria-label="Main navigation">
+          <Nav navLinks={navLinks} />
+        </div>
 
         <Button
           href="/register"
           variant="contrast"
-          className="hidden md:flex px-8 py-2.5 font-bold tracking-widest uppercase text-xs"
+          className="hidden md:flex px-8 py-2.5 font-bold tracking-widest uppercase text-xs hover:scale-105 transition-transform"
+          aria-label="Comenzar registro"
         >
           Comenzar
         </Button>
 
         <Button
-          variant="ambulance"
+          variant="ghost"
+          size="icon"
           className="md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
+          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </Button>
       </Container>
 
       {isMenuOpen && (
-        <NavMobile
-          navLinks={navLinks}
-          setIsMenuOpen={setIsMenuOpen}
-        />
+        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú móvil">
+           <NavMobile
+             navLinks={navLinks}
+             setIsMenuOpen={setIsMenuOpen}
+           />
+        </div>
       )}
     </header>
   );
-};
+}

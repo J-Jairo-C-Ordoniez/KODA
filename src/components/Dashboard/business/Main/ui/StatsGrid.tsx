@@ -1,11 +1,7 @@
 import { ShoppingCart, TrendingUp, Users, AlertTriangle } from 'lucide-react';
 import { StatCard } from '@/components/dashboard/business/ui/StatCard';
 import { DashboardStats } from '@/hooks/admin/useDashboardStats';
-
-const COP = (n: number) =>
-  new Intl.NumberFormat('es-CO', {
-    style: 'currency', currency: 'COP', minimumFractionDigits: 0,
-  }).format(n);
+import { formatCurrency } from '@/lib/formatters';
 
 interface StatsGridProps {
   stats: DashboardStats;
@@ -21,7 +17,7 @@ export function StatsGrid({ stats }: StatsGridProps) {
           icon={ShoppingCart}
           iconBg="bg-contrast/10"
           iconColor="text-contrast"
-          change={COP(stats.salesToday.totalRevenue)}
+          change={formatCurrency(stats.salesToday.totalRevenue)}
           trend="up"
         />
       </article>
@@ -32,7 +28,7 @@ export function StatsGrid({ stats }: StatsGridProps) {
           icon={TrendingUp}
           iconBg="bg-success/10"
           iconColor="text-success"
-          change={COP(stats.salesMonth.totalRevenue)}
+          change={formatCurrency(stats.salesMonth.totalRevenue)}
           trend="up"
         />
       </article>

@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { Store, Search, ArrowRight, CheckCircle, XCircle, Plus } from 'lucide-react';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
 import Loader from '@/components/ui/Loader';
-import Metric from '@/components/dashboard/admin/Main/ui/Metric';
-import Table from '@/components/dashboard/admin/Main/ui/Table';
+import Metric from '@/components/Dashboard/admin/Main/ui/Metric';
+import Table from '@/components/Dashboard/admin/Main/ui/Table';
 import { useTenants } from '@/hooks/superAdmin/useTenants';
 
 export default function Ecosystem() {

@@ -1,7 +1,7 @@
 'use client';
 
-import NavLeft from '@/components/store/Header/ui/NavLeft';
-import NavRight from '@/components/store/Header/ui/NavRight';
+import NavLeft from '@/components/Store/Header/ui/NavLeft';
+import NavRight from '@/components/Store/Header/ui/NavRight';
 import Link from 'next/link';
 
 interface Props {

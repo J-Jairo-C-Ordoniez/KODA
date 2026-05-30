@@ -1,9 +1,9 @@
-import Header from "@/components/dashboard/admin/Header/Header";
-import Ecosystem from "@/components/dashboard/admin/Main/Ecosystem";
-import Metrics from "@/components/dashboard/admin/Main/Metrics";
-import Subscriptions from "@/components/dashboard/admin/Main/Subscriptions";
-import Plans from "@/components/dashboard/admin/Main/Plans";
-import Sidebar from "@/components/dashboard/admin/Aside/Sidebar";
+import Header from "@/components/Dashboard/admin/Header/Header";
+import Ecosystem from "@/components/Dashboard/admin/Main/Ecosystem";
+import Metrics from "@/components/Dashboard/admin/Main/Metrics";
+import Subscriptions from "@/components/Dashboard/admin/Main/Subscriptions";
+import Plans from "@/components/Dashboard/admin/Main/Plans";
+import Sidebar from "@/components/Dashboard/admin/Aside/Sidebar";
 
 export function MetricsP() {
     return (

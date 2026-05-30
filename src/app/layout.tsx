@@ -1,6 +1,6 @@
 import { Outfit, Inter } from "next/font/google";
 import "../styles/globals.css";
-import { Providers } from "@/components/shared/Providers";
+import { Providers } from "@/components/Shared/Providers";
 
 const outfit = Outfit({
   variable: "--font-outfit",

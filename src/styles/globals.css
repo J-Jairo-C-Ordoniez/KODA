@@ -36,9 +36,32 @@ body {
 
 @layer utilities {
   .bg-organic {
-    background: radial-gradient(circle at 50% -20%, rgba(255, 122, 0, 0.15), transparent 60%),
-                radial-gradient(circle at 100% 40%, rgba(46, 83, 128, 0.1), transparent 50%),
-                var(--background);
+    background:
+      /* Aurora top — warm brand glow */
+      radial-gradient(ellipse 100% 60% at 50% -5%, rgba(255,122,0,0.14) 0%, transparent 65%),
+      /* Aurora left — cool depth */
+      radial-gradient(ellipse 70% 60% at -5% 55%, rgba(46,83,128,0.10) 0%, transparent 65%),
+      /* Aurora bottom-right — warm echo */
+      radial-gradient(ellipse 60% 45% at 105% 90%, rgba(255,122,0,0.06) 0%, transparent 60%),
+      var(--background);
+  }
+
+  /*
+   * Film grain — premium noise texture (used by Linear, Vercel, Stripe).
+   * High-frequency feTurbulence creates analog-film-like grain, not a grid.
+   */
+  .bg-grain::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .glass-panel {

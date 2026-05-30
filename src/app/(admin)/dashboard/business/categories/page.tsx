@@ -1,4 +1,4 @@
-import Categories from '@/components/dashboard/business/Main/categories/Categories';
+import Categories from '@/components/Dashboard/business/Main/categories/Categories';
 
 export const metadata = { title: 'Categorías | KODA' };
 

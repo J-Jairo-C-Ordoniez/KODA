@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { Package, Plus, Search, X, Edit3, Trash2, Check, Info, DollarSign } from 'lucide-react';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
 import Loader from '@/components/ui/Loader';
-import Metric from '@/components/dashboard/admin/Main/ui/Metric';
+import Metric from '@/components/Dashboard/admin/Main/ui/Metric';
 import { usePlans } from '@/hooks/superAdmin/usePlans';
 import { useToast, Toaster } from '@/components/ui/Toast';
 

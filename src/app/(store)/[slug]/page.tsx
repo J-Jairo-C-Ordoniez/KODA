@@ -1,5 +1,5 @@
 import React from "react";
-import { LandingStore } from "@/components/store/Store";
+import { LandingStore } from "@/components/Store/Store";
 import { Metadata } from 'next';
 import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
 

@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import Header from '@/components/store/Header/Header';
-import SearchMain from '@/components/store/others/search/SearchMain';
-import Footer from '@/components/store/Footer/Footer';
+import Header from '@/components/Store/Header/Header';
+import SearchMain from '@/components/Store/others/search/SearchMain';
+import Footer from '@/components/Store/Footer/Footer';
 import Loader from '@/components/ui/Loader';
 import { useTenantBySlug } from '@/hooks/publicCatalog/useTenantBySlug';
 import { redirect } from 'next/navigation';

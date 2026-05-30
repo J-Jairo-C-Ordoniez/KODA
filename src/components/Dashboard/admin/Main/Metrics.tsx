@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
 import { Plus } from 'lucide-react';
 import Loader from '@/components/ui/Loader';
-import Metric from '@/components/dashboard/admin/Main/ui/Metric';
+import Metric from '@/components/Dashboard/admin/Main/ui/Metric';
 import { useTenantMetrics } from '@/hooks/superAdmin/useTenantMetrics';
 
 export default function Metrics() {

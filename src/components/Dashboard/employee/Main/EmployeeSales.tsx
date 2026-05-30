@@ -7,16 +7,16 @@ import {
   TrendingUp, ArrowUpRight, Wallet, Package, Star
 } from 'lucide-react';
 import { useSales } from '@/hooks/employee/useSales';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
-import { EmptyState } from '@/components/dashboard/business/ui/EmptyState';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
+import { EmptyState } from '@/components/Dashboard/business/ui/EmptyState';
 import Loader from '@/components/ui/Loader';
 import { useSession } from 'next-auth/react';
-import Modal from '@/components/dashboard/business/Main/categories/ui/Modal';
-import SaleForm from '@/components/dashboard/business/Main/sales/ui/SaleForm';
-import InvoiceModal from '@/components/dashboard/business/Main/sales/ui/InvoiceModal';
+import Modal from '@/components/Dashboard/business/Main/categories/ui/Modal';
+import SaleForm from '@/components/Dashboard/business/Main/sales/ui/SaleForm';
+import InvoiceModal from '@/components/Dashboard/business/Main/sales/ui/InvoiceModal';
 import { Toaster, useToast } from '@/components/ui/Toast';
-import { StatCard } from '@/components/dashboard/business/ui/StatCard';
-import { SalesTable } from '@/components/dashboard/business/Main/sales/ui/SalesTable';
+import { StatCard } from '@/components/Dashboard/business/ui/StatCard';
+import { SalesTable } from '@/components/Dashboard/business/Main/sales/ui/SalesTable';
 
 const PAYMENT_LABELS: Record<string, string> = {
   cash: 'Efectivo',

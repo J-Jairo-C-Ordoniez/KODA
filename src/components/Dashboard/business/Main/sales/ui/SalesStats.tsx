@@ -1,7 +1,7 @@
 'use client';
 
 import { DollarSign, ShoppingBag, CreditCard } from 'lucide-react';
-import { StatCard } from '@/components/dashboard/business/ui/StatCard';
+import { StatCard } from '@/components/Dashboard/business/ui/StatCard';
 
 interface SalesStatsProps {
   stats: any;

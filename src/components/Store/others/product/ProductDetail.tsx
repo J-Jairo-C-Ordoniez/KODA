@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import useBreadcrumbsStore from "@/store/breadcrumbs.store";
-import Breadcrumbs from "@/components/store/Main/ui/Breadcrumbs";
+import Breadcrumbs from "@/components/Store/Main/ui/Breadcrumbs";
 import ProductInfo from "./ui/ProductInfo";
 import ProductImg from "./ui/ProductImg";
 import { useProductDetail } from "@/hooks/publicCatalog/useProductDetail";

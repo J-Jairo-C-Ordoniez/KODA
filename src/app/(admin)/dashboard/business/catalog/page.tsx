@@ -1,4 +1,4 @@
-import Catalog from '@/components/dashboard/business/Main/catalog/Catalog';
+import Catalog from '@/components/Dashboard/business/Main/catalog/Catalog';
 
 export const metadata = { title: 'Catálogo | KODA' };
 

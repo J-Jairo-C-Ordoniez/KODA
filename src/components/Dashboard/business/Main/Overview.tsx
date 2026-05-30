@@ -6,7 +6,7 @@ import { useGSAP } from '@gsap/react';
 import { AlertTriangle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useDashboardStats } from '@/hooks/admin/useDashboardStats';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
 import Loader from '@/components/ui/Loader';
 import { StatsGrid } from './ui/StatsGrid';
 import { SalesTrendCard } from './ui/SalesTrendCard';

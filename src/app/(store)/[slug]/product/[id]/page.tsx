@@ -1,4 +1,4 @@
-import ProductClientWrapper from '@/components/store/others/product/ProductClientWrapper';
+import ProductClientWrapper from '@/components/Store/others/product/ProductClientWrapper';
 import catalogController from '@/core/modules/catalog/controllers/catalog.controller';
 import { Metadata } from 'next';
 

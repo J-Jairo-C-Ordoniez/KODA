@@ -1,6 +1,6 @@
-import Header from '../../../../components/store/Header/Header';
-import Footer from '../../../../components/store/Footer/Footer';
-import PoliciesMain from '../../../../components/store/others/policies/PoliciesMain';
+import Header from '../../../../components/Store/Header/Header';
+import Footer from '../../../../components/Store/Footer/Footer';
+import PoliciesMain from '../../../../components/Store/others/policies/PoliciesMain';
 
 export default function PoliciesPage() {
   return (

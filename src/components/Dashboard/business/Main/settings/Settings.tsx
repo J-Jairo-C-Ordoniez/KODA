@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Settings as SettingsIcon, Info } from 'lucide-react';
 import { useBusinessSettings } from '@/hooks/admin/useBusinessSettings';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
 import Loader from '@/components/ui/Loader';
 import { useSession } from 'next-auth/react';
 import { Toaster, useToast } from '@/components/ui/Toast';

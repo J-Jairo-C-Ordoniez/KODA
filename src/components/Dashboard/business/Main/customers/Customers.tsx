@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Users, Search, X } from 'lucide-react';
 import { useCustomers } from '@/hooks/admin/useCustomers';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
-import { EmptyState } from '@/components/dashboard/business/ui/EmptyState';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
+import { EmptyState } from '@/components/Dashboard/business/ui/EmptyState';
 import Loader from '@/components/ui/Loader';
 import { useSession } from 'next-auth/react';
 import { Toaster, useToast } from '@/components/ui/Toast';

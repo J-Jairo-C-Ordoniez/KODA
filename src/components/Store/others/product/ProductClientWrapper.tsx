@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import Header from '@/components/store/Header/Header';
-import Footer from '@/components/store/Footer/Footer';
-import ProductDetail from '@/components/store/others/product/ProductDetail';
+import Header from '@/components/Store/Header/Header';
+import Footer from '@/components/Store/Footer/Footer';
+import ProductDetail from '@/components/Store/others/product/ProductDetail';
 import { redirect } from 'next/navigation';
 import { useTenantBySlug } from '@/hooks/publicCatalog/useTenantBySlug';
 import Loader from '@/components/ui/Loader';

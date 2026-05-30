@@ -1,4 +1,4 @@
-import { MetricsP } from "@/components/dashboard/admin/Admin";
+import { MetricsP } from "@/components/Dashboard/admin/Admin";
 
 export const metadata = {
   title: "Métricas | KODA",

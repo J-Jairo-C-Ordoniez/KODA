@@ -1,4 +1,4 @@
-import { EmployeeCustomersP } from '@/components/dashboard/employee/Employee';
+import { EmployeeCustomersP } from '@/components/Dashboard/employee/Employee';
 
 export const metadata = { title: 'Clientes y Fiados | KODA' };
 

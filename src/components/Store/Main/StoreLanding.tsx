@@ -2,7 +2,7 @@
 
 import Breadcrumbs from "./ui/Breadcrumbs";
 import FilterBar from "./ui/FilterBar";
-import ProductGrid from "@/components/store/Main/ui/ProductGrid";
+import ProductGrid from "@/components/Store/Main/ui/ProductGrid";
 import Loader from "@/components/ui/Loader";
 import { useCatalog } from "@/hooks/publicCatalog/useCatalog";
 

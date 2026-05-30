@@ -1,4 +1,4 @@
-import { PlansP } from "@/components/dashboard/admin/Admin";
+import { PlansP } from "@/components/Dashboard/admin/Admin";
 
 export const metadata = {
   title: "Gestión de Planes | Super Admin",

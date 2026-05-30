@@ -1,5 +1,5 @@
 import { ShoppingCart, TrendingUp, Users, AlertTriangle } from 'lucide-react';
-import { StatCard } from '@/components/dashboard/business/ui/StatCard';
+import { StatCard } from '@/components/Dashboard/business/ui/StatCard';
 import { DashboardStats } from '@/hooks/admin/useDashboardStats';
 import { formatCurrency } from '@/lib/formatters';
 

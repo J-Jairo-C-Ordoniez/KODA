@@ -1,4 +1,4 @@
-import ProductCard from "@/components/store/Main/ui/ProductCard";
+import ProductCard from "@/components/Store/Main/ui/ProductCard";
 
 export default function SearchInitial({ popular, setQuery }) {
   return (

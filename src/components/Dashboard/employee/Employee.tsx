@@ -1,7 +1,7 @@
-import Header from "@/components/dashboard/business/Header/Header";
+import Header from "@/components/Dashboard/business/Header/Header";
 import EmployeeSidebar from "./Aside/EmployeeSidebar";
 import EmployeeSales from "./Main/EmployeeSales";
-import Customers from "@/components/dashboard/business/Main/customers/Customers";
+import Customers from "@/components/Dashboard/business/Main/customers/Customers";
 import { EmployeeFloatingSaleButton } from "./ui/EmployeeFloatingSaleButton";
 
 function EmployeeDashboardLayout({ children }: { children: React.ReactNode }) {

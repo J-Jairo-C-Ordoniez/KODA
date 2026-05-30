@@ -1,4 +1,4 @@
-import Overview from '@/components/dashboard/business/Main/Overview';
+import Overview from '@/components/Dashboard/business/Main/Overview';
 
 export const metadata = { title: 'Dashboard | KODA' };
 

@@ -1,4 +1,4 @@
-import { EcoP } from "@/components/dashboard/admin/Admin";
+import { EcoP } from "@/components/Dashboard/admin/Admin";
 
 export const metadata = {
   title: "Ecosistema | KODA",

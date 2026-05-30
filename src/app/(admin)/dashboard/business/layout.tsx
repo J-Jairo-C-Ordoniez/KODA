@@ -1,6 +1,6 @@
-import Header from '@/components/dashboard/business/Header/Header';
-import Sidebar from '@/components/dashboard/business/Aside/Sidebar';
-import { FloatingSaleButton } from '@/components/dashboard/business/ui/FloatingSaleButton';
+import Header from '@/components/Dashboard/business/Header/Header';
+import Sidebar from '@/components/Dashboard/business/Aside/Sidebar';
+import { FloatingSaleButton } from '@/components/Dashboard/business/ui/FloatingSaleButton';
 
 export default function BusinessDashboardLayout({ children }: { children: React.ReactNode }) {
   return (

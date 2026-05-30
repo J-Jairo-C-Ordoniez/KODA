@@ -11,8 +11,8 @@ import {
 } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useInventory } from '@/hooks/admin/useInventory';
-import { SectionHeader } from '@/components/dashboard/business/ui/SectionHeader';
-import { EmptyState } from '@/components/dashboard/business/ui/EmptyState';
+import { SectionHeader } from '@/components/Dashboard/business/ui/SectionHeader';
+import { EmptyState } from '@/components/Dashboard/business/ui/EmptyState';
 import Loader from '@/components/ui/Loader';
 import { InventoryNavItem } from './ui/InventoryWidgets';
 import { VariantStockRow } from './ui/VariantStockRow';

@@ -1,56 +1,58 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import Container from '../../ui/Container';
+import { useState, useRef } from 'react';
 import Logo from '../../ui/Logo';
-import Nav, { NavMobile } from './ui/Nav';
 import Button from '../../ui/Button';
+import Container from '../../ui/Container';
+import gsap from 'gsap';
+import Nav, { NavMobile } from './ui/Nav';
+import { useGSAP } from '@gsap/react';
 import { Menu, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/utils/cn';
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  useGSAP(() => {
+    gsap.fromTo(
+      headerRef.current,
+      { y: -16, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.1 }
+    );
+  }, { scope: headerRef });
 
   const navLinks = [
     { name: 'Inicio', href: '#inicio' },
-    { name: 'Características', href: '#features' },
+    { name: 'Transición', href: '#transicion' },
+    { name: 'Control', href: '#control' },
+    { name: 'Catálogo', href: '#catalogo' },
     { name: 'Precios', href: '#pricing' }
   ];
 
   return (
-    <header 
-      className={cn(
-        "h-20 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500",
-        isScrolled 
-          ? "bg-background/70 backdrop-blur-2xl border-b border-foreground/10 shadow-lg shadow-black/20" 
-          : "bg-transparent"
-      )}
+    <header
+      ref={headerRef}
+      className={cn("h-16 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500 bg-transparent")}
     >
-      <Container className="flex items-center justify-between">
+      <Container className="flex items-center justify-between gap-8">
         <Logo type="light" />
+        <Nav navLinks={navLinks} />
 
-        <div className="hidden md:block" aria-label="Main navigation">
-          <Nav navLinks={navLinks} />
+        <div className="hidden md:flex items-center gap-3 shrink-0">
+          <Button
+            href="/login"
+            variant="ghost"
+          >
+            Entrar
+          </Button>
+          <Button
+            href="/register"
+            variant="contrast"
+          >
+            Comenzar
+          </Button>
         </div>
-
-        <Button
-          href="/register"
-          variant="contrast"
-          className="hidden md:flex px-8 py-2.5 font-bold tracking-widest uppercase text-xs hover:scale-105 transition-transform"
-          aria-label="Comenzar registro"
-        >
-          Comenzar
-        </Button>
 
         <Button
           variant="ghost"
@@ -61,16 +63,27 @@ export default function Header() {
           aria-controls="mobile-menu"
           aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMenuOpen
+            ? <X
+              size={24}
+              className="text-foreground"
+              aria-label="Cerrar menú"
+            />
+            : <Menu
+              size={24}
+              className="text-foreground-muted"
+              aria-label="Abrir menú"
+            />
+          }
         </Button>
       </Container>
 
       {isMenuOpen && (
         <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú móvil">
-           <NavMobile
-             navLinks={navLinks}
-             setIsMenuOpen={setIsMenuOpen}
-           />
+          <NavMobile
+            navLinks={navLinks}
+            setIsMenuOpen={setIsMenuOpen}
+          />
         </div>
       )}
     </header>

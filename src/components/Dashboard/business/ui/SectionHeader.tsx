@@ -9,9 +9,9 @@ export function SectionHeader({ title, subtitle, action, children }: SectionHead
   return (
     <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-black text-primary tracking-tight">{title}</h1>
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">{title}</h1>
         {subtitle && (
-          <p className="text-foreground-muted text-sm font-medium mt-1 leading-relaxed">{subtitle}</p>
+          <p className="text-foreground-muted text-xs font-medium mt-1 leading-relaxed">{subtitle}</p>
         )}
       </div>
       {(action || children) && (

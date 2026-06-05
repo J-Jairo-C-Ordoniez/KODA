@@ -8,14 +8,14 @@ interface SalesTrendCardProps {
 
 export function SalesTrendCard({ salesTrend }: SalesTrendCardProps) {
   return (
-    <article className="ov-chart lg:col-span-2 bg-background-elevated border border-white/10 p-6 rounded-3xl">
+    <article className="ov-chart lg:col-span-2 bg-[#181818] border border-[#262626] p-6 rounded-2xl">
       <header className="flex items-center gap-4 mb-6">
-        <div className="w-10 h-10 rounded-2xl bg-foreground/5 flex items-center justify-center text-foreground-muted shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-foreground/5 flex items-center justify-center text-foreground-muted shrink-0">
           <BarChart3 size={18} aria-hidden="true" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-primary tracking-tight">Tendencia de ventas</h2>
-          <p className="text-foreground/80 text-sm font-medium tracking-tight mt-1">
+          <h2 className="text-lg font-bold text-foreground tracking-tight">Tendencia de ventas</h2>
+          <p className="text-foreground-muted text-xs font-medium tracking-tight mt-0.5">
             Últimos 30 días
           </p>
         </div>

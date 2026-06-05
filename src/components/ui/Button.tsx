@@ -4,22 +4,22 @@ import { cn } from "@/lib/utils"
 import Link from 'next/link'
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-lg font-light tracking-wider transition-all duration-300 active:scale-95 disabled:pointer-events-none disabled:opacity-50 disabled:active:scale-100",
+  "inline-flex items-center justify-center gap-2 rounded-lg font-medium tracking-wider transition-all duration-200 active:scale-95 disabled:pointer-events-none disabled:opacity-50 disabled:active:scale-100 cursor-pointer",
   {
     variants: {
       variant: {
-        primary: "bg-primary text-background hover:bg-navy shadow-lg shadow-black/5",
-        secondary: "bg-secondary text-background hover:bg-primary shadow-xl shadow-black/5",
-        outline: "border-2 border-navy/20 text-navy hover:border-navy hover:bg-navy/5",
-        ghost: "text-navy hover:bg-navy/5",
-        contrast: "bg-contrast text-primary hover:opacity-90 hover:shadow-lg shadow-contrast/50",
-        navy: "bg-navy text-background hover:opacity-90 shadow-xl shadow-navy/20",
-        ambulance: "text-secondary hover:text-primary hover:scale-105 transition-all duration-300",
+        primary:   "bg-primary text-background hover:bg-primary/90",
+        secondary: "bg-[#0e100e] text-foreground border border-[#1E211E] hover:bg-[#161916]",
+        outline:   "border border-[#1E211E] text-foreground hover:bg-[#0e100e]",
+        ghost:     "text-foreground-muted hover:text-foreground hover:bg-foreground/5 text-[11px]",
+        contrast:  "bg-accent text-[#060706] font-bold hover:bg-accent-hover",
+        navy:      "bg-[#3A3D3B] text-foreground hover:bg-[#4a4d4a]",
+        ambulance: "text-foreground-muted hover:text-foreground hover:scale-105 transition-all duration-200",
       },
       size: {
-        sm: "px-4 py-2 text-xs uppercase",
-        md: "px-6 py-3 text-xs uppercase lg:text-md",
-        lg: "px-8 py-4 text-xs uppercase lg:text-lg",
+        sm:   "px-3.5 py-2 text-[11px] font-bold uppercase tracking-wider",
+        md:   "px-5 py-2.5 text-xs font-bold uppercase tracking-wider",
+        lg:   "px-7 py-3.5 text-sm font-bold uppercase tracking-wider",
         icon: "h-10 w-10",
       },
     },

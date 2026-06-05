@@ -1,16 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-  LogOut, ChevronRight, Home, Package, Settings,
-  Tag, BarChart3, ShoppingCart, Users, UserCog, X
-} from 'lucide-react';
-import gsap from 'gsap';
-import { cn } from '@/shared/utils/cn';
-import { signOut } from 'next-auth/react';
-import useDashboardStore from '@/store/dashboard.store';
+  LogOut, Home, Package, Settings,
+  Tag, BarChart3, ShoppingCart, Users, UserCog
+} from "lucide-react";
+import { cn } from "@/shared/utils/cn";
+import { signOut } from "next-auth/react";
 
 interface NavItem {
   label: string;
@@ -19,129 +16,67 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Resumen',           href: '/dashboard/business',            icon: Home },
-  { label: 'Categorías',        href: '/dashboard/business/categories', icon: Tag },
-  { label: 'Catálogo',          href: '/dashboard/business/catalog',    icon: Package },
-  { label: 'Inventario',        href: '/dashboard/business/inventory',  icon: BarChart3 },
-  { label: 'Ventas',            href: '/dashboard/business/sales',      icon: ShoppingCart },
-  { label: 'Clientes / Fiados', href: '/dashboard/business/customers',  icon: Users },
-  { label: 'Empleados',         href: '/dashboard/business/employees',  icon: UserCog },
-  { label: 'Mi Negocio',        href: '/dashboard/business/settings',   icon: Settings },
+  { label: "Resumen",           href: "/dashboard/business",            icon: Home },
+  { label: "Categorías",        href: "/dashboard/business/categories", icon: Tag },
+  { label: "Catálogo",          href: "/dashboard/business/catalog",    icon: Package },
+  { label: "Inventario",        href: "/dashboard/business/inventory",  icon: BarChart3 },
+  { label: "Ventas",            href: "/dashboard/business/sales",      icon: ShoppingCart },
+  { label: "Clientes / Fiados", href: "/dashboard/business/customers",  icon: Users },
+  { label: "Empleados",         href: "/dashboard/business/employees",  icon: UserCog },
+  { label: "Mi Negocio",        href: "/dashboard/business/settings",   icon: Settings },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { isSidebarOpen, closeSidebar } = useDashboardStore();
-  const sidebarRef = useRef<HTMLElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const sidebar = sidebarRef.current;
-    const overlay = overlayRef.current;
-    if (!sidebar || !overlay) return;
-
-    const ctx = gsap.matchMedia();
-
-    ctx.add('(max-width: 1023px)', () => {
-      if (isSidebarOpen) {
-        gsap.to(overlay, { opacity: 1, pointerEvents: 'auto', duration: 0.25, ease: 'power2.out' });
-        gsap.fromTo(sidebar, { x: '-100%' }, { x: '0%', duration: 0.32, ease: 'power3.out' });
-        gsap.fromTo(
-          sidebar.querySelectorAll('nav a, nav button'),
-          { opacity: 0, x: -12 },
-          { opacity: 1, x: 0, stagger: 0.04, duration: 0.25, ease: 'power2.out', delay: 0.15 }
-        );
-      } else {
-        gsap.to(overlay, { opacity: 0, pointerEvents: 'none', duration: 0.2, ease: 'power2.in' });
-        gsap.to(sidebar, { x: '-100%', duration: 0.28, ease: 'power3.in' });
-      }
-    });
-
-    ctx.add('(min-width: 1024px)', () => {
-      gsap.set(sidebar, { clearProps: 'all' });
-      gsap.set(overlay, { clearProps: 'all' });
-    });
-
-    return () => ctx.revert();
-  }, [isSidebarOpen]);
 
   return (
-    <>
-      <div
-        ref={overlayRef}
-        className="fixed inset-0 bg-background/60 backdrop-blur-sm z-40 lg:hidden opacity-0 pointer-events-none"
-        onClick={closeSidebar}
-        aria-hidden="true"
-      />
-
-      <aside
-        ref={sidebarRef}
-        role="navigation"
-        aria-label="Menú principal"
-        aria-hidden={!isSidebarOpen}
-        className={cn(
-          'fixed lg:static inset-y-0 left-0 w-72 bg-background border-r border-foreground/5 flex flex-col z-50',
-          '-translate-x-full lg:translate-x-0'
-        )}
-      >
-        <div className="lg:hidden flex justify-end p-4">
-          <button
-            onClick={closeSidebar}
-            className="p-2.5 hover:bg-foreground/5 rounded-xl text-foreground-muted hover:text-primary transition-colors"
-            aria-label="Cerrar menú de navegación"
-          >
-            <X size={20} aria-hidden="true" />
-          </button>
-        </div>
-
-        <nav className="flex-1 pt-4 lg:pt-8 px-3 space-y-1 overflow-y-auto" aria-label="Navegación principal">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={closeSidebar}
-                aria-current={isActive ? 'page' : undefined}
+    <aside
+      role="navigation"
+      aria-label="Menú principal"
+      className="hidden lg:flex w-60 bg-background border-r border-border flex-col shrink-0 h-full"
+    >
+      <nav className="flex-1 pt-6 px-2 space-y-0.5 overflow-y-auto custom-scrollbar" aria-label="Navegación principal">
+        <p className="px-4 pb-3 text-[10px] font-bold tracking-[0.15em] uppercase text-foreground-muted/50">
+          Negocio
+        </p>
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={isActive ? "page" : undefined}
+              className={cn(
+                "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-150 group",
+                isActive
+                  ? "bg-accent/8 text-accent border-l-2 border-accent"
+                  : "text-foreground-muted hover:bg-foreground/4 hover:text-foreground border-l-2 border-transparent"
+              )}
+            >
+              <item.icon
+                size={16}
                 className={cn(
-                  'flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 group',
-                  isActive
-                    ? 'bg-contrast/10 text-contrast border border-contrast/15'
-                    : 'text-foreground-muted hover:bg-foreground/5 hover:text-primary'
+                  "shrink-0 transition-colors",
+                  isActive ? "text-accent" : "text-foreground-muted group-hover:text-foreground"
                 )}
-              >
-                <span className="flex items-center gap-3">
-                  <item.icon
-                    size={18}
-                    className={cn(
-                      'shrink-0 transition-colors',
-                      isActive ? 'text-contrast' : 'text-foreground-muted group-hover:text-primary'
-                    )}
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm font-semibold tracking-tight">{item.label}</span>
-                </span>
-                <ChevronRight
-                  size={12}
-                  className={cn('transition-all', isActive ? 'opacity-100 text-contrast' : 'opacity-0 group-hover:opacity-40')}
-                  aria-hidden="true"
-                />
-              </Link>
-            );
-          })}
-        </nav>
+                aria-hidden="true"
+              />
+              <span className="text-xs font-medium tracking-wide">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
 
-        <footer className="p-4 border-t border-foreground/5 mt-auto">
-          <button
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="cursor-pointer text-sm font-bold w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-red-400 hover:bg-red-500/8 hover:text-red-300 transition-all duration-200"
-            aria-label="Cerrar sesión"
-          >
-            <LogOut size={18} aria-hidden="true" />
-            Cerrar Sesión
-          </button>
-        </footer>
-      </aside>
-    </>
+      <footer className="p-3 border-t border-border">
+        <button
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="cursor-pointer text-xs font-medium w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-foreground-muted hover:bg-red-500/8 hover:text-red-400 transition-all duration-150 border-l-2 border-transparent"
+          aria-label="Cerrar sesión"
+        >
+          <LogOut size={16} aria-hidden="true" />
+          Cerrar Sesión
+        </button>
+      </footer>
+    </aside>
   );
 }

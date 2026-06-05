@@ -52,18 +52,22 @@ export default function Pricing() {
     <section
       id="pricing"
       ref={containerRef}
-      className="pb-32 pt-16 bg-background relative overflow-hidden"
+      className="pb-32 pt-28 bg-background relative overflow-hidden border-t border-primary/5"
     >
-      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-foreground/10 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-contrast/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(62,207,178,0.035) 0%, transparent 70%)' }}
+      />
 
       <div className="max-w-7xl container mx-auto px-6 relative z-10">
-        <header className="pricing-header opacity-0 text-center mb-20 md:mb-28">
-          <h2 className="text-4xl md:text-7xl font-black text-primary mb-8 tracking-tighter leading-[1.1] md:leading-[0.9] max-w-4xl mx-auto">
+        <header className="pricing-header opacity-0 text-center mb-20 md:mb-24 space-y-5">
+          <p className='w-fit mx-auto px-4 py-2 border border-accent/50 bg-accent/10 text-accent rounded-full'>
+            Tarifas simples
+          </p>
+
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white leading-[1.05]">
             Planes a tu Medida
           </h2>
-          <p className="text-foreground-muted text-lg md:text-2xl font-medium max-w-2xl leading-relaxed mx-auto">
+          <p className="text-foreground-muted text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
             Sin contratos forzosos. Sin sorpresas. Cancela cuando quieras.
           </p>
         </header>
@@ -75,7 +79,7 @@ export default function Pricing() {
         ) : error ? (
           <Error message="No se pudieron cargar los planes. Intenta de nuevo más tarde." />
         ) : (
-          <div className="pricing-cards grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 max-w-6xl mx-auto items-start">
+          <div className="pricing-cards grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-start">
             {plans.length > 0 ? plans.map((plan: any, idx: number) => (
               <CardPricing key={plan.planId} plan={plan} isPopular={idx === 1} index={idx} />
             )) : (

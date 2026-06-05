@@ -4,6 +4,7 @@ import Metrics from "@/components/Dashboard/admin/Main/Metrics";
 import Subscriptions from "@/components/Dashboard/admin/Main/Subscriptions";
 import Plans from "@/components/Dashboard/admin/Main/Plans";
 import Sidebar from "@/components/Dashboard/admin/Aside/Sidebar";
+import AdminBottomNav from "@/components/Dashboard/admin/Aside/AdminBottomNav";
 
 export function MetricsP() {
     return (
@@ -41,12 +42,13 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex flex-col h-screen overflow-hidden bg-background">
             <Header />
-            <div className="flex flex-1 overflow-hidden relative pb-6">
+            <div className="flex flex-1 overflow-hidden relative pb-0 lg:pb-6">
                 <Sidebar />
-                <div className="flex-1 overflow-y-auto custom-scrollbar bg-background">
+                <div className="flex-1 overflow-y-auto custom-scrollbar bg-background pb-20 lg:pb-0">
                     {children}
                 </div>
             </div>
+            <AdminBottomNav />
         </div>
     );
 }

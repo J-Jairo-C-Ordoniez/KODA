@@ -1,15 +1,17 @@
-import { Outfit, Inter } from "next/font/google";
+import { DM_Sans, Playfair_Display } from "next/font/google";
 import "../styles/globals.css";
 import { Providers } from "@/components/Shared/Providers";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 import { Metadata } from "next";
@@ -59,7 +61,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html
-      className={`${outfit.variable} ${inter.variable}`}
+      lang="es"
+      className={`${playfair.variable} ${dmSans.variable}`}
     >
       <body>
         <Providers>

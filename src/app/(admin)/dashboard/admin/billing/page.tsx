@@ -1,4 +1,4 @@
-import { BillingP } from "@/components/Dashboard/admin/Admin";
+import { BillingP } from "@/features/super-admin/components/Admin";
 
 export const metadata = {
   title: "Suscripciones | Super Admin",

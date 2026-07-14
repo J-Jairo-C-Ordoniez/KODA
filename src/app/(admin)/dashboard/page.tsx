@@ -1,4 +1,4 @@
-import Loader from "@/components/ui/Loader";
+import Loader from "@/shared/components/Loader";
 
 export default function DashboardCheckpoint() {
   return (

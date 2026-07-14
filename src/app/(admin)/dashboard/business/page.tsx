@@ -1,7 +1,7 @@
-import Overview from '@/components/Dashboard/business/Main/Overview';
+import Summary from '@/components/Dashboard/business/Main/Summary/Summary';
 
-export const metadata = { title: 'Dashboard | KODA' };
+export const metadata = { title: 'Dashboard' };
 
-export default function OverviewPage() {
-  return <Overview />;
+export default function SummaryPage() {
+  return <Summary />;
 }

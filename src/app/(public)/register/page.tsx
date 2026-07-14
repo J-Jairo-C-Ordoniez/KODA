@@ -1,4 +1,4 @@
-import { RegisterP } from "@/components/Auth/Auth";
+import { RegisterP } from "@/features/auth/components/Auth";
 
 export const metadata = {
   title: "KODA | Registrarse",

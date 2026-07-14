@@ -6,8 +6,7 @@ import BusinessBottomNav from '@/components/Dashboard/business/Aside/BusinessBot
 export default function BusinessDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">
-      <Header />
-      <div className="flex flex-1 overflow-hidden relative pb-0 lg:pb-6">
+      <div className="flex flex-1 overflow-hidden relative h-full">
         <Sidebar />
         <div className="flex-1 overflow-y-auto custom-scrollbar bg-background pb-20 lg:pb-0">
           {children}

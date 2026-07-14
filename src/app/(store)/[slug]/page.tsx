@@ -1,5 +1,5 @@
 import React from "react";
-import { LandingStore } from "@/components/Store/Store";
+/* import { LandingStore } from "@/components/Store/Store"; */
 import { Metadata } from 'next';
 import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
 
@@ -23,5 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function StorePage({ params }: Props) {
     const { slug } = await params;
-    return <LandingStore slug={slug} />;
+    return (
+      <main className="min-h-svh">
+        <h1>Pagina de Tienda</h1>
+      </main>
+    )
 }

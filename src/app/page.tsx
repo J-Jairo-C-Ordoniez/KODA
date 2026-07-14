@@ -1,7 +1,7 @@
-import LandingPage from "@/components/Landing/LandingPage";
-import { getServerSession } from "next-auth/next";
+import LandingPage from "@/features/landing/components/LandingPage";
+/* import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/lib/auth"; */
 
 export const metadata = {
   title: "KODA",
@@ -9,11 +9,11 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  /* const session = await getServerSession(authOptions);
 
   if (session) {
     redirect("/dashboard");
-  }
+  } */
 
   return (
     <LandingPage />

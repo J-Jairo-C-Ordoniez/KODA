@@ -1,4 +1,4 @@
-import { LoginP } from "@/components/Auth/Auth";
+import { LoginP } from "@/features/auth/components/Auth";
 
 export const metadata = {
   title: "KODA | Acceder",

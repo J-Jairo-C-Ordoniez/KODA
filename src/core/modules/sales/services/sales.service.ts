@@ -64,7 +64,34 @@ const salesService = {
     } catch (error: any) {
       throw new Error(`Error al obtener tendencia de ventas: ${error.message}`);
     }
-  }
+  },
+
+  async getSalesTodayItems(tenantId?: string) {
+    try {
+      if (!tenantId) return { totalItems: 0 };
+      return await salesRepository.getSalesTodayItems(tenantId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener prendas vendidas hoy: ${error.message}`);
+    }
+  },
+
+  async getPaymentsToday(tenantId?: string) {
+    try {
+      if (!tenantId) return { totalRevenue: 0, totalPayments: 0 };
+      return await salesRepository.getPaymentsToday(tenantId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener abonos del día: ${error.message}`);
+    }
+  },
+
+  async getUrgentAlerts(tenantId?: string) {
+    try {
+      if (!tenantId) return { zeroStockCount: 0, severeDebtsCount: 0, total: 0 };
+      return await salesRepository.getUrgentAlerts(tenantId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener alertas urgentes: ${error.message}`);
+    }
+  },
 };
 
 export default salesService;

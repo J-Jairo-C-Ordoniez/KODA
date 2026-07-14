@@ -11,6 +11,9 @@ const dashboardController = {
       const [
         salesToday,
         salesMonth,
+        salesTodayItems,
+        paymentsToday,
+        urgentAlerts,
         debtCustomers,
         lowStockItems,
         salesTrend,
@@ -18,6 +21,9 @@ const dashboardController = {
       ] = await Promise.all([
         salesService.getSalesToday(tenantId),
         salesService.getSalesMonth(tenantId),
+        salesService.getSalesTodayItems(tenantId),
+        salesService.getPaymentsToday(tenantId),
+        salesService.getUrgentAlerts(tenantId),
         customerService.getCustomersWithDebt(tenantId),
         inventoryService.getLowStockItems(tenantId),
         salesService.getSalesTrend(tenantId),
@@ -28,11 +34,16 @@ const dashboardController = {
       ]);
 
       return apiResponse.success({
+        // Vista General – El pulso de hoy
         salesToday,
+        salesTodayItems,
+        paymentsToday,
+        urgentAlerts,
+        salesTrend,
+        // Métricas globales reutilizables en otras secciones
         salesMonth,
         debtCustomers,
         lowStockItems,
-        salesTrend,
         subscription: subscription
           ? {
               planName: subscription.plan.name,

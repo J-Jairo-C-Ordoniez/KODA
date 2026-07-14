@@ -206,7 +206,88 @@ const salesRepository = {
     return Object.entries(trendMap)
       .map(([date, revenue]) => ({ date, revenue }))
       .sort((a, b) => a.date.localeCompare(b.date));
-  }
+  },
+
+  // Total de prendas (unidades) vendidas hoy — suma de SaleItem.quantity
+  async getSalesTodayItems(tenantId: string) {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const result = await prisma.saleItem.aggregate({
+      where: {
+        sale: {
+          tenantId,
+          createdAt: { gte: startOfDay, lte: endOfDay },
+        },
+      },
+      _sum: { quantity: true },
+    });
+
+    return { totalItems: result._sum.quantity ?? 0 };
+  },
+
+  // Ingresos por abonos (pagos de fiados - Capa 6) recibidos hoy
+  async getPaymentsToday(tenantId: string) {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const result = await prisma.payment.aggregate({
+      where: {
+        tenantId,
+        createdAt: { gte: startOfDay, lte: endOfDay },
+      },
+      _sum: { amount: true },
+      _count: { paymentId: true },
+    });
+
+    return {
+      totalRevenue: Number(result._sum.amount ?? 0),
+      totalPayments: result._count.paymentId ?? 0,
+    };
+  },
+
+  // Alertas urgentes: variantes con stock = 0 y clientes con deuda grave (> 30 días sin abonar)
+  async getUrgentAlerts(tenantId: string) {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const [zeroStockCount, severeDebtsCount] = await Promise.all([
+      // Variantes activas con stock en 0
+      prisma.inventory.count({
+        where: {
+          stock: 0,
+          variant: { isActive: true, product: { tenantId } },
+        },
+      }),
+      // Clientes con deuda > 0 cuyo último pago tiene más de 30 días (o nunca han abonado)
+      prisma.customer.count({
+        where: {
+          tenantId,
+          totalDebt: { gt: 0 },
+          OR: [
+            // Nunca han pagado pero tienen deuda
+            { payments: { none: {} } },
+            // Último pago fue hace más de 30 días
+            {
+              payments: {
+                none: { createdAt: { gte: thirtyDaysAgo } },
+              },
+            },
+          ],
+        },
+      }),
+    ]);
+
+    return {
+      zeroStockCount,
+      severeDebtsCount,
+      total: zeroStockCount + severeDebtsCount,
+    };
+  },
 };
 
 export default salesRepository;

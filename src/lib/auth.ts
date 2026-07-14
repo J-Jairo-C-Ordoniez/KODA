@@ -15,7 +15,6 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
-
         try {
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
@@ -46,6 +45,7 @@ export const authOptions: AuthOptions = {
       }
     })
   ],
+  
   pages: {
     signIn: '/login', 
   },

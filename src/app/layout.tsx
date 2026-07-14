@@ -1,6 +1,8 @@
 import { DM_Sans, Playfair_Display } from "next/font/google";
+import Providers from "@/shared/components/Providers";
+import { Metadata } from "next";
+
 import "../styles/globals.css";
-import { Providers } from "@/components/Shared/Providers";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -14,15 +16,13 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-import { Metadata } from "next";
-
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://koda.app'),
   title: {
-    default: "Koda | Plataforma Premium de Gestión y Punto de Venta",
+    default: "Koda",
     template: "%s | Koda"
   },
-  description: "Koda es la plataforma integral para administrar tu negocio, ventas, inventario y empleados con una interfaz moderna, rápida y segura.",
+  description: "Koda es una plataforma integral para administrar negocios, ventas, inventario, fiados y empleados con una interfaz moderna, rápida y segura.",
   keywords: ["software de ventas", "punto de venta", "POS", "gestión de inventario", "administración de negocios", "facturación", "SaaS", "Koda"],
   authors: [{ name: "Koda Team" }],
   creator: "Koda",
@@ -42,14 +42,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_CO",
     url: "/",
-    title: "Koda | Plataforma Premium de Gestión y Punto de Venta",
-    description: "Koda es la plataforma integral para administrar tu negocio, ventas, inventario y empleados.",
+    title: "Koda",
+    description: "Koda es una plataforma integral para administrar negocios, ventas, inventario, fiados y empleados.",
     siteName: "Koda",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Koda | Plataforma Premium de Gestión y Punto de Venta",
-    description: "Koda es la plataforma integral para administrar tu negocio, ventas, inventario y empleados.",
+    title: "Koda",
+    description: "Koda es una plataforma integral para administrar negocios, ventas, inventario, fiados y empleados.",
   },
   icons: {
     icon: '/icon.svg',

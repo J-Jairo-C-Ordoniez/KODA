@@ -21,7 +21,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="h-16 flex justify-center items-center sticky top-0 w-full z-50 transition-all duration-500">
+    <header className="h-16 flex justify-center items-center w-full transition-all duration-500">
       <Container className="flex items-center justify-between">
         <div className="w-[70%] h-16 bg-transparent flex items-center px-40 py-4">
           <Logo />

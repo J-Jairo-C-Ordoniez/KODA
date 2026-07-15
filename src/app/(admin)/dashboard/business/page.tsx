@@ -1,7 +1,9 @@
-import Summary from '@/components/Dashboard/business/Main/Summary/Summary';
+/* import Summary from '@/components/Dashboard/business/Main/Summary/Summary'; */
 
 export const metadata = { title: 'Dashboard' };
 
 export default function SummaryPage() {
-  return <Summary />;
+  return (
+    <p>Summary</p>
+  )
 }

@@ -1,4 +1,3 @@
-import Container from '@/shared/components/Container';
 import Brand from '@/features/landing/components/Footer/ui/Brand';
 import Nav from '@/features/landing/components/Footer/ui/Nav';
 import Legal from '@/features/landing/components/Footer/ui/Legal'; 

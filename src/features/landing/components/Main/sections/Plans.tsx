@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { useLandingPlans } from "@/features/landing/hooks/useLandingPlans";
+import useLandingPlans from "@/features/landing/hooks/useLandingPlans";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 

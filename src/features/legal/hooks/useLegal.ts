@@ -1,16 +1,15 @@
-import fetchPlansApi from "@/features/landing/api/landing.api";
-import { Plan } from "@/features/landing/api/landing.api";
 import { useReducer, useEffect } from "react";
+import fetchPolicyApi, { Policy } from "@/features/legal/api/legal.api";
 
 type State = {
-  plans: Plan[];
+  policy: Policy | null;
   isLoading: boolean;
   error: string | null;
 };
 
 type Action =
   | { type: "FETCH_START" }
-  | { type: "FETCH_SUCCESS"; payload: any[] }
+  | { type: "FETCH_SUCCESS"; payload: Policy }
   | { type: "FETCH_ERROR"; payload: string };
 
 function reducer(state: State, action: Action): State {
@@ -18,7 +17,7 @@ function reducer(state: State, action: Action): State {
     case "FETCH_START":
       return { ...state, isLoading: true, error: null };
     case "FETCH_SUCCESS":
-      return { ...state, plans: action.payload, isLoading: false, error: null };
+      return { ...state, policy: action.payload, isLoading: false, error: null };
     case "FETCH_ERROR":
       return { ...state, isLoading: false, error: action.payload };
     default:
@@ -26,26 +25,28 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export default function useLandingPlans() {
+export default function useLegal(title: string) {
   const [state, dispatch] = useReducer(reducer, {
-    plans: [],
+    policy: null,
     isLoading: true,
     error: null,
   });
 
   useEffect(() => {
-    const fetchPlans = async () => {
+    const loadPolicy = async () => {
+      if (!title) return;
+
       dispatch({ type: "FETCH_START" });
       try {
-        const data = await fetchPlansApi();
+        const data = await fetchPolicyApi(title);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err: any) {
         dispatch({ type: "FETCH_ERROR", payload: err.message });
       }
     };
 
-    fetchPlans();
-  }, []);
+    loadPolicy();
+  }, [title]);
 
   return state;
 }

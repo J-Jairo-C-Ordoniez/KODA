@@ -44,3 +44,11 @@ export const formatNumber = (value: number | undefined | null): string => {
   if (value === undefined || value === null) return '0';
   return NUMBER_FORMATTER.format(value);
 };
+
+export const dateFormatter = (date: Date): string => {
+  return date.toLocaleDateString('es-CO', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};

@@ -1,6 +1,6 @@
 import Header from "@/features/legal/components/Header/Header";
 import Footer from "@/features/legal/components/Footer/Footer"
-import Main from "@/features/legal/components/Main.tsx/Main"
+import Main from "@/features/legal/components/Main/Main"
 
 function LayautLegal({ children }: { children: React.ReactNode }) {
     return (

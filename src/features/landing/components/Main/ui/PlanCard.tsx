@@ -11,7 +11,7 @@ interface Plan {
   feature: string[];
 }
 
-export default function CardPricing({ plan, isPopular }: { plan: Plan; isPopular?: boolean }) {
+export default function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: boolean }) {
   return (
     <article
       className={`relative flex flex-col rounded-4xl border p-8 transition-all duration-300 w-full md:w-[380px] ${isPopular

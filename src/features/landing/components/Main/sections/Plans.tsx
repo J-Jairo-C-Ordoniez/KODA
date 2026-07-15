@@ -7,7 +7,7 @@ import gsap from "gsap";
 
 import Loader from "@/shared/components/Loader";
 import Error from "@/shared/components/Error";
-import CardPricing from "@/features/landing/components/Main/ui/CardPricing";
+import PlanCard from "@/features/landing/components/Main/ui/PlanCard";
 
 export default function Plans() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,7 +42,7 @@ export default function Plans() {
         {!isLoading && !error && (
           <div className="grid md:grid-cols-2 gap-8 justify-center">
             {plans.map(plan => (
-              <CardPricing
+              <PlanCard
                 key={plan.planId}
                 plan={plan}
                 isPopular={plan.name === "Empresarial"}

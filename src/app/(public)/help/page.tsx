@@ -1,7 +1,7 @@
-import Help from "@/components/Help/Help";
+import Help from "@/features/help/components/Help";
 
 export const metadata = {
-    title: "KODA | Centro de Ayuda",
+    title: "Centro de Ayuda",
     description: "Centro de ayuda y soporte técnico para usuarios de KODA.",
 };
 

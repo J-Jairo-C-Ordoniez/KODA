@@ -66,7 +66,7 @@ export default function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: 
         </ul>
 
         <Button
-          href="/register"
+          href="/auth/register"
           variant={isPopular ? "primary" : "secondary"}
         >
           Elegir {plan.name}

@@ -9,7 +9,7 @@ export default function Menu({ setIsMenuOpen }: { setIsMenuOpen: (open: boolean)
             >
                 <div className="flex md:flex-row flex-col pt-40 md:pt-60 items-start gap-4">
                     <Button
-                        href="/login"
+                        href="/auth/login"
                         variant="secondary"
                         onClick={() => setIsMenuOpen(false)}
                     >
@@ -17,7 +17,7 @@ export default function Menu({ setIsMenuOpen }: { setIsMenuOpen: (open: boolean)
                     </Button>
 
                     <Button
-                        href="/register"
+                        href="/auth/register"
                         variant="primary"
                         onClick={() => setIsMenuOpen(false)}
                     >

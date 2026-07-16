@@ -1,8 +1,21 @@
 import prisma from "@/infrastructure/db/client";
 import { SubscriptionStatus } from "@prisma/client";
 
+export interface RegisterTenantData {
+  businessName: string;
+  whatsApp: string;
+  type: string;
+  slug: string;
+}
+
+export interface RegisterAdminData {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const tenantRepository = {
-  async createTenantWithAdmin(tenantData: any, adminData: any) {
+  async createTenantWithAdmin(tenantData: RegisterTenantData, adminData: RegisterAdminData) {
     return await prisma.$transaction(async (tx) => {
       const tenant = await tx.tenant.create({
         data: {

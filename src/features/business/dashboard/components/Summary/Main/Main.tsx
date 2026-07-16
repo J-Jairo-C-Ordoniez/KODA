@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { SectionHeader } from '@/features/business/dashboard/components/Summary/Main/ui/SectionHeader';
-import Loader from '@/shared/components/ui/Loader';
+import Loader from '@/shared/components/Loader';
 import { PlanStatusCard } from '../../ui/PlanStatusCard';
 import { DigitalStoreCTA } from '../../ui/DigitalStoreCTA';
 import { DashboardStats } from '@/features/business/dashboard/hooks/useDashboardStats';

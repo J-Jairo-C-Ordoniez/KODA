@@ -85,10 +85,10 @@ export default function HeroContent() {
         className="hero-cta flex flex-col gap-3 sm:flex-row"
         aria-label="Acciones principales"
       >
-        <Button href="/register" variant="primary">
+        <Button href="/auth/register" variant="primary">
           Probar
         </Button>
-        <Button href="#transicion" variant="secondary">
+        <Button href="#features" variant="secondary">
           Ver cómo funciona
         </Button>
       </nav>

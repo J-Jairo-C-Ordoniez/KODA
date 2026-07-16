@@ -1,12 +1,12 @@
-import { RegisterP } from "@/features/auth/components/Auth";
+import { Register } from "@/features/auth/components/Auth";
 
 export const metadata = {
-  title: "KODA | Registrarse",
+  title: "Registrarse",
   description: "Regístrate en KODA.",
 };
 
 export default function RegisterPage() {
   return (
-    <RegisterP />
+    <Register />
   );
 }

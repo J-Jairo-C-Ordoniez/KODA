@@ -1,15 +1,15 @@
 "use client";
 
 import AuthWrapper from "@/features/auth/components/Main/ui/AuthWrapper";
-import LoginForm from "@/features/auth/components/Main/ui/LoginForm";
+import LoginForm from "@/features/auth/components/Main/sections/LoginForm";
 
-export default function Login() {
+export default function MainLogin() {
   return (
-      <AuthWrapper
-        title="Bienvenido de nuevo"
-        subtitle="Accede a tu panel y mantén el control de tu negocio en tiempo real."
-      >
-        <LoginForm />
-      </AuthWrapper>
+    <AuthWrapper
+      title="Bienvenido de nuevo"
+      subtitle="Accede a tu panel de control y gestiona tu negocio en tiempo real, sin distracciones."
+    >
+      <LoginForm />
+    </AuthWrapper>
   );
 }

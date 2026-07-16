@@ -1,24 +1,30 @@
 import Header from "@/features/auth/components/Header/Header";
 import Footer from "@/features/auth/components/Footer/Footer";
-import Login from "@/features/auth/components/Main/Login";
-import Register from "@/features/auth/components/Main/Register";
+import MainLogin from "@/features/auth/components/Main/Login";
+import MainRegister from "@/features/auth/components/Main/Register";
 
-export function LoginP() {
+function AuthPageLayout({ children }: { children: React.ReactNode; }) {
     return (
-        <div className="flex flex-col min-h-screen">
+        <>
             <Header />
-            <Login />
+            {children}
             <Footer />
-        </div>
+        </>
     );
 }
 
-export function RegisterP() {
+export function Login() {
     return (
-        <div className="flex flex-col min-h-screen">
-            <Header />
-            <Register />
-            <Footer />
-        </div>
+        <AuthPageLayout>
+            <MainLogin />
+        </AuthPageLayout>
+    );
+}
+
+export function Register() {
+    return (
+        <AuthPageLayout>
+            <MainRegister />
+        </AuthPageLayout>
     );
 }

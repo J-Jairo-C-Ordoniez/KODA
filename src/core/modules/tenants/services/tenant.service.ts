@@ -1,10 +1,14 @@
 import tenantRepository from "../repositories/tenant.repository";
 import { slugify } from "@/core/utils/slugify";
 import bcrypt from "bcryptjs";
+import { RegisterTenantData, RegisterAdminData } from "../repositories/tenant.repository";
+
+
+interface RegisterFormData extends RegisterTenantData, RegisterAdminData {}
 
 
 const tenantService = {
-  async registerBusiness(data: any) {
+  async registerBusiness(data: RegisterFormData) {
     try {
       let slug = slugify(data.businessName);
       const existingTenant = await tenantRepository.findBySlug(slug);
@@ -18,12 +22,12 @@ const tenantService = {
       const tenantData = {
         businessName: data.businessName,
         type: data.type,
-        whatsApp: data.whatsapp,
+        whatsApp: data.whatsApp,
         slug: slug,
       };
 
       const adminData = {
-        name: data.ownerName,
+        name: data.name,
         email: data.email,
         password: hashedPassword,
       };

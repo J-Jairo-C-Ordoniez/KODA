@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Package, ShoppingCart, Users, UserCog } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
-import Logo from "@/shared/components/ui/Logo";
+import Logo from "@/shared/components/Logo";
 
 interface NavItem {
   label: string;

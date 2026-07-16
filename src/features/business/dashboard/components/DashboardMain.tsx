@@ -5,7 +5,7 @@ import Header from './ui/Header';
 import SalesPeriodMetrics from './ui/SalesPeriodMetrics';
 import SalesGlobalMetrics from './ui/SalesGlobalMetrics';
 import LowStock from './ui/LowStock';
-import { useDashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
+import { useDashboardStats } from '@/features/dashboard/business/hooks/useTabStats';
 
 export default function Main() {
     const { stats, isLoading, error, fetchStats } = useDashboardStats();

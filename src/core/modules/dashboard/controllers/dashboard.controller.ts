@@ -22,13 +22,13 @@ const dashboardController = {
   async getGeneralStats(tenantId?: string) {
     if (!tenantId) return apiResponse.error('Tenant requerido', 400);
     try {
-      const [salesTodayItems, paymentsToday, urgentAlerts, salesTrend] = await Promise.all([
-        salesService.getSalesTodayItems(tenantId),
+      const [salesToday, paymentsToday, urgentAlerts, salesTrend] = await Promise.all([
+        salesService.getSalesToday(tenantId),
         salesService.getPaymentsToday(tenantId),
         salesService.getUrgentAlerts(tenantId),
         salesService.getSalesTrend(tenantId),
       ]);
-      return apiResponse.success({ salesTodayItems, paymentsToday, urgentAlerts, salesTrend });
+      return apiResponse.success({ salesToday, paymentsToday, urgentAlerts, salesTrend });
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al obtener vista general', 500);
     }
@@ -37,8 +37,11 @@ const dashboardController = {
   async getFinanceStats(tenantId?: string) {
     if (!tenantId) return apiResponse.error('Tenant requerido', 400);
     try {
-      const salesMonth = await salesService.getSalesMonth(tenantId);
-      return apiResponse.success({ salesMonth });
+      const [salesMonth, debtCustomers] = await Promise.all([
+        salesService.getSalesMonth(tenantId),
+        customerService.getCustomersWithDebt(tenantId),
+      ]);
+      return apiResponse.success({ salesMonth, debtCustomers });
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al obtener finanzas', 500);
     }

@@ -6,43 +6,31 @@ import { useSession } from 'next-auth/react';
 import Loader from '@/shared/components/Loader';
 /* import { PlanStatusCard } from '../../ui/PlanStatusCard';
 import { DigitalStoreCTA } from '../../ui/DigitalStoreCTA'; */
-import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
 
-import ViewGeneral from '../Sections/ViewGeneral';
-import Finances from '../Sections/Finances';
-import Inventory from '../Sections/Inventory';
+import ViewGeneral from '@/features/dashboard/business/components/main/sections/summary/Main/Sections/ViewGeneral';
+import Finances from '@/features/dashboard/business/components/main/sections/summary/Main/Sections/Finances';
+import Inventory from '@/features/dashboard/business/components/main/sections/summary/Main/Sections/Inventory';
 
-interface SummaryMainProps {
-  activeTab: string;
-  stats: DashboardStats | null;
-  isLoading: boolean;
-}
-
-export default function SummaryMain({ activeTab, stats, isLoading }: SummaryMainProps) {
+export default function SummaryMain({ activeTab }: any) {
   const { data: session } = useSession();
   const [shareOpen, setShareOpen] = useState(false);
-
-  if (isLoading && !stats) {
-    return (
-      <div className="flex items-center justify-center h-[50vh]">
-        <Loader />
-      </div>
-    );
-  }
 
   return (
     <main className="space-y-8">
       {activeTab === "view-general" && (
-        <ViewGeneral stats={stats} />
+        <ViewGeneral activeTab={activeTab} />
+
       )}
 
       {activeTab === "finances" && (
-        <Finances stats={stats} />
+        <Finances activeTab={activeTab} />
       )}
 
+      {/* 
+
       {activeTab === "inventory" && (
-        <Inventory stats={stats} />
-      )}
+        <Inventory activeTab={activeTab} />
+      )} */}
 
       {activeTab === "my-store" && (
         <>

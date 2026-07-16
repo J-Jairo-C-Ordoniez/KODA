@@ -5,7 +5,7 @@ import { AlertTriangle, TrendingUp, Clock, Package, Star } from 'lucide-react';
 // Asumiendo que StatCard es tu componente de KPIs original adaptado a estos colores
 /* import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs';
 import { InventoryListCard, InventoryListItem } from '@/features/business/dashboard/components/Summary/Main/ui/InventoryListCard'; */
-import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
+import { DashboardStats } from '@/features/dashboard/business/hooks/useTabStats';
 
 interface InventoryProps {
     stats: DashboardStats | null;

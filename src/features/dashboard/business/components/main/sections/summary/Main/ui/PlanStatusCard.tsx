@@ -1,5 +1,5 @@
 import { CreditCard, CalendarClock } from 'lucide-react';
-import { SubscriptionInfo } from '@/features/dashboard/business/hooks/useDashboardStats';
+import { SubscriptionInfo } from '@/features/dashboard/business/hooks/useTabStats';
 import { formatCurrency } from '@/lib/formatters';
 
 function daysUntil(dateStr: string) {

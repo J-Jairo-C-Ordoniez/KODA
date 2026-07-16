@@ -1,19 +1,17 @@
-'use client';
+"use client";
 
-import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
-import { SalesTrendCard } from '../ui/SalesTrendCard';
-/* import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs'; */
-import { formatCurrency } from '@/lib/formatters';
-import { ShoppingCart, Wallet, AlertTriangle } from 'lucide-react';
+import useTabStats from "@/features/dashboard/business/hooks/useTabStats";
+import { GeneralStats } from "@/features/dashboard/business/api/dashboard.api";
+import { Wallet, AlertTriangle, ShoppingCart } from "lucide-react";
+import { formatCurrency } from "@/lib/formatters";
 
-interface ViewGeneralProps {
-    stats: DashboardStats | null;
-}
+import Loader from "@/shared/components/Loader";
+import Error from "@/shared/components/Error";
+import KPIs from "@/features/dashboard/business/components/main/sections/summary/Main/ui/KPIs";
+import { SalesTrendCard } from "@/features/dashboard/business/components/main/sections/summary/Main/ui/SalesTrendCard";
 
-export default function ViewGeneral({ stats }: ViewGeneralProps) {
-    const alerts = stats?.urgentAlerts;
-    const hasAlerts = (alerts?.total ?? 0) > 0;
-    const paymentsCount = stats?.paymentsToday?.totalPayments ?? 0;
+export default function ViewGeneral({ activeTab }: { activeTab: string; }) {
+    const { data, isLoading, error } = useTabStats<GeneralStats>(activeTab);
 
     return (
         <section className="space-y-6">
@@ -21,78 +19,98 @@ export default function ViewGeneral({ stats }: ViewGeneralProps) {
                 <h2 className="text-2xl font-bold text-primary tracking-tight">
                     Resumen del día
                 </h2>
+
                 <p className="text-primary/50 text-lg font-medium mt-1">
                     Métricas de ingresos, abonos y alertas operativas en tiempo real.
                 </p>
             </header>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* <KPIs
-                    title="Ventas Hoy"
-                    value={formatCurrency(stats?.salesToday?.totalRevenue ?? 0)}
-                    icon={ShoppingCart}
-                    badge={{ text: `${stats?.salesTodayItems?.totalItems ?? 0} prendas` }}
-                    footer={
-                        <p className="text-xs text-primary/50">
-                            <strong className="text-primary">
-                                {stats?.salesToday?.totalOrders ?? 0}
-                            </strong> {stats?.salesToday?.totalOrders !== 1 ? 'transacciones registradas' : 'transacción registrada'}
-                        </p>
-                    }
-                />
+            {isLoading && <Loader />}
+            {error && <Error message={error} />}
 
-                <KPIs
-                    title="Ingresos por Abonos"
-                    value={formatCurrency(stats?.paymentsToday?.totalRevenue ?? 0)}
-                    icon={Wallet}
-                    iconClassName="bg-emerald-50 text-emerald-600"
-                    badge={paymentsCount > 0 ? {
-                        text: `${paymentsCount} abono${paymentsCount !== 1 ? 's' : ''}`,
-                        className: "text-emerald-700 bg-emerald-50 border-emerald-100"
-                    } : undefined}
+            {data && (
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <KPIs
+                            title="Ventas del día"
+                            value={formatCurrency(data.salesToday.totalRevenue)}
+                            icon={ShoppingCart}
+                            badge={{ text: `${data.salesToday.totalOrders} venta${data.salesToday.totalOrders !== 1 ? "s" : ""}` }}
+                            footer={
+                                <p className="text-xs text-primary/50">
+                                    Ingresos acumulados del período consultado
+                                </p>
+                            }
+                        />
 
-                    footer={
-                        <p className="text-xs text-primary/50">
-                            {paymentsCount === 0
-                                ? 'Sin pagos de fiados hoy'
-                                : 'Recaudado de clientes con fiado'}
-                        </p>
-                    }
-                />
+                        <KPIs
+                            title="Abonos recibidos"
+                            value={formatCurrency(data.paymentsToday.totalRevenue)}
+                            icon={Wallet}
+                            iconClassName="bg-emerald-50 text-emerald-600"
+                            badge={data.paymentsToday.totalPayments > 0
+                                ? {
+                                    text: `${data.paymentsToday.totalPayments} abono${data.paymentsToday.totalPayments !== 1 ? "s" : ""}`,
+                                    className: "text-emerald-700 bg-emerald-50 border-emerald-100",
+                                }
+                                : undefined
+                            }
+                            footer={
+                                <p className="text-xs text-primary/50">
+                                    {data.paymentsToday.totalPayments === 0
+                                        ? "No se registraron abonos"
+                                        : "Pagos realizados por clientes con deuda"}
+                                </p>
+                            }
+                        />
 
-                <KPIs
-                    title="Alertas Urgentes"
-                    value={alerts?.total ?? 0}
-                    icon={AlertTriangle}
-                    iconClassName={hasAlerts ? 'bg-amber-100 text-amber-600' : 'bg-primary text-background'}
-                    valueClassName={hasAlerts ? 'text-amber-700' : 'text-primary'}
-                    badge={hasAlerts ? {
-                        text: "REQUIERE ATENCIÓN",
-                        className: "text-amber-700 bg-amber-100 border-amber-200 animate-pulse"
-                    } : undefined}
-                    footer={
-                        <ul className="space-y-0.5">
-                            {(alerts?.zeroStockCount ?? 0) > 0 && (
-                                <li className="text-xs text-amber-600 font-medium">
-                                    {alerts!.zeroStockCount} variante{alerts!.zeroStockCount !== 1 ? 's' : ''} sin stock
-                                </li>
-                            )}
-                            {(alerts?.severeDebtsCount ?? 0) > 0 && (
-                                <li className="text-xs text-amber-600 font-medium">
-                                    {alerts!.severeDebtsCount} deuda{alerts!.severeDebtsCount !== 1 ? 's' : ''} vencida{alerts!.severeDebtsCount !== 1 ? 's' : ''} (+30 días)
-                                </li>
-                            )}
-                            {!hasAlerts && (
-                                <li className="text-xs text-primary/80 font-medium">
-                                    Sin alertas urgentes hoy
-                                </li>
-                            )}
-                        </ul>
-                    }
-                /> */}
-            </div>
+                        <KPIs
+                            title="Alertas críticas"
+                            value={data.urgentAlerts.total}
+                            icon={AlertTriangle}
+                            iconClassName={data.urgentAlerts.total > 0
+                                ? "bg-amber-100 text-amber-600"
+                                : "bg-primary text-background"
+                            }
+                            valueClassName={data.urgentAlerts.total > 0
+                                ? "text-amber-700"
+                                : "text-primary"
+                            }
+                            badge={data.urgentAlerts.total > 0
+                                ? { text: "REQUIERE ATENCIÓN", className: "text-amber-700 bg-amber-100 border-amber-200 animate-pulse" }
+                                : undefined
+                            }
+                            footer={
+                                <ul className="space-y-0.5">
+                                    {data.urgentAlerts.zeroStockCount > 0 && (
+                                        <li className="text-xs text-amber-600 font-medium">
+                                            {data.urgentAlerts.zeroStockCount} producto
+                                            {data.urgentAlerts.zeroStockCount !== 1 ? "s" : ""} sin stock
+                                        </li>
+                                    )}
 
-            <SalesTrendCard salesTrend={stats?.salesTrend} />
+                                    {data.urgentAlerts.severeDebtsCount > 0 && (
+                                        <li className="text-xs text-amber-600 font-medium">
+                                            {data.urgentAlerts.severeDebtsCount} deuda
+                                            {data.urgentAlerts.severeDebtsCount !== 1 ? "s" : ""} crítica
+                                            {data.urgentAlerts.severeDebtsCount !== 1 ? "s" : ""}
+                                        </li>
+                                    )}
+
+                                    {data.urgentAlerts.total === 0 && (
+                                        <li className="text-xs text-primary/80 font-medium">
+                                            Todo está bajo control
+                                        </li>
+                                    )}
+                                </ul>
+                            }
+                        />
+
+                    </div>
+
+                    <SalesTrendCard salesTrend={data.salesTrend} />
+                </>
+            )}
         </section>
     );
 }

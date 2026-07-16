@@ -1,18 +1,20 @@
+import useTabStats from "@/features/dashboard/business/hooks/useTabStats";
+import { FinanceStats } from "@/features/dashboard/business/api/dashboard.api";
 import { formatCurrency } from '@/lib/formatters';
+
+import Loader from "@/shared/components/Loader";
+import Error from "@/shared/components/Error";
+import KPIs from "@/features/dashboard/business/components/main/sections/summary/Main/ui/KPIs";
 import { Wallet, TrendingUp, Percent, Info } from 'lucide-react';
-import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
 /* import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs';
 import PendingCollectionsCard, { Debtor } from '@/features/business/dashboard/components/Summary/Main/ui/PendingCollectionsCard';
 import PaymentMethodsCard, { PaymentStat } from '@/features/business/dashboard/components/Summary/Main/ui/PaymentMethodsCard'; */
 
 
-interface FinancesProps {
-    stats: DashboardStats | null;
-}
+export default function Finances({ activeTab }: { activeTab: string; }) {
+    const { data, isLoading, error } = useTabStats<FinanceStats>(activeTab);
 
-export default function Finances({ stats }: FinancesProps) {
-    const totalRevenue = stats?.salesMonth?.totalRevenue ?? 0;
-
+    console.log(data);
     // modificar por datos reales
     /* const mockDebtors: Debtor[] = [
         {
@@ -58,33 +60,47 @@ export default function Finances({ stats }: FinancesProps) {
                     Control de liquidez, dinero en la calle y utilidades estimadas.
                 </p>
             </header>
+            {isLoading && <Loader />}
+            {error && <Error message={error} />}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* <KPIs
-                    title="Ventas Mes Actual"
-                    value={formatCurrency(totalRevenue)}
-                    icon={TrendingUp}
-                    iconClassName="bg-blue-50 text-blue-600"
-                    badge={{
-                        text: `${stats?.salesMonth?.totalOrders ?? 0} ventas`,
-                        className: "bg-emerald-50 text-emerald-700 border-emerald-100"
-                    }}
-                /> */}
+            {data && (
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <KPIs
+                            title="Ventas Mes Actual"
+                            value={formatCurrency(data.salesMonth.totalRevenue)}
+                            icon={TrendingUp}
+                            iconClassName="bg-blue-50 text-blue-600"
+                            badge={{
+                                text: `${data.salesMonth.totalOrders} ventas`,
+                                className: "bg-emerald-50 text-emerald-700 border-emerald-100"
+                            }}
+                            footer={
+                                <p className="text-xs text-primary/50">
+                                    Ingresos acumulados del período consultado
+                                </p>
+                            }
+                        />
 
-                {/* revisarel valor de los abonos y el valor total adeudado en la calle */}
-                {/* <KPIs
-                    title="Dinero en la Calle"
-                    value={formatCurrency(1820000)}
-                    icon={Wallet}
-                    iconClassName="bg-amber-50 text-amber-600"
-                    badge={{
-                        text: `${stats?.debtCustomers?.totalCustomersWithDebt ?? 0} deudores`,
-                        className: "bg-gray-100 text-gray-600 border-gray-200"
-                    }}
-                /> */}
+                        {/* <KPIs
+                            title="Dinero en la Calle"
+                            value={formatCurrency(1820000)}
+                            icon={Wallet}
+                            iconClassName="bg-amber-50 text-amber-600"
+                            badge={{
+                                text: `${stats?.debtCustomers?.totalCustomersWithDebt ?? 0} deudores`,
+                                className: "bg-gray-100 text-gray-600 border-gray-200"
+                            }}
+                            footer={
+                                <p className="text-xs text-primary/50">
+                                    Pagos realizados por clientes con deuda
+                                </p>
+                            }
+                        /> */}
 
-                {/* revisar traer los datos de la api para la utilidad y el margen de utilidad  */}
-                {/* <KPIs
+
+                        {/* revisar traer los datos de la api para la utilidad y el margen de utilidad  */}
+                        {/* <KPIs
                     title="Utilidad Estimada"
                     value={formatCurrency(totalRevenue * 0.42)}
                     icon={Percent}
@@ -94,12 +110,15 @@ export default function Finances({ stats }: FinancesProps) {
                         className: "bg-emerald-50 text-emerald-700 border-emerald-100"
                     }}
                 /> */}
-            </div>
+                    </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* <PendingCollectionsCard debtors={mockDebtors} />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* <PendingCollectionsCard debtors={mockDebtors} />
                 <PaymentMethodsCard stats={mockPaymentStats} /> */}
-            </div>
-        </section>
+                    </div>
+                </>
+            )
+            }
+        </section >
     );
 }

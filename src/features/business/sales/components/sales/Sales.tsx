@@ -6,7 +6,7 @@ import { ShoppingCart } from 'lucide-react';
 import { useSales } from '@/hooks/employee/useSales';
 import { SectionHeader } from '@/features/business/dashboard/components/Summary/Main/ui/SectionHeader';
 import { EmptyState } from '@/features/business/dashboard/components/business-ui/EmptyState';
-import { useDashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
+import { useDashboardStats } from '@/features/dashboard/business/hooks/useTabStats';
 import Loader from '@/shared/components/ui/Loader';
 import { useSession } from 'next-auth/react';
 import Modal from '../categories/ui/Modal';

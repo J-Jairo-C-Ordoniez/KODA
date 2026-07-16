@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { SectionHeader } from '@/features/business/dashboard/components/Summary/Main/ui/SectionHeader';
+/* import { SectionHeader } from '@/features/business/dashboard/components/Summary/Main/ui/SectionHeader'; */
 import Loader from '@/shared/components/Loader';
-import { PlanStatusCard } from '../../ui/PlanStatusCard';
-import { DigitalStoreCTA } from '../../ui/DigitalStoreCTA';
-import { DashboardStats } from '@/features/business/dashboard/hooks/useDashboardStats';
+/* import { PlanStatusCard } from '../../ui/PlanStatusCard';
+import { DigitalStoreCTA } from '../../ui/DigitalStoreCTA'; */
+import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
 
-import ViewGeneral from './Sections/ViewGeneral';
-import Finances from './Sections/Finances';
-import Inventory from './Sections/Inventory';
+import ViewGeneral from '../Sections/ViewGeneral';
+import Finances from '../Sections/Finances';
+import Inventory from '../Sections/Inventory';
 
 interface SummaryMainProps {
   activeTab: string;
@@ -46,24 +46,24 @@ export default function SummaryMain({ activeTab, stats, isLoading }: SummaryMain
 
       {activeTab === "my-store" && (
         <>
-          <SectionHeader
+          {/*  <SectionHeader
             title="Mi Tienda"
             subtitle="Administra la facturación de tu plataforma y el catálogo público digital."
-          />
+          /> */}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* SaaS Plan Widget (Capa 0) */}
-            <div>
+            {/*  <div>
               <PlanStatusCard subscription={stats?.subscription ?? null} />
-            </div>
+            </div> */}
 
             {/* Digital Store Escaparate (Capa 7) */}
-            <div className="flex flex-col gap-6">
+            {/*  <div className="flex flex-col gap-6">
               <DigitalStoreCTA
                 tenantSlug={session?.user?.tenantSlug}
                 onShare={() => setShareOpen(true)}
               />
-            </div>
+            </div> */}
           </div>
         </>
       )}

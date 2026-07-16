@@ -2,6 +2,14 @@ import subscriptionRepository from "../repositories/subscription.repository";
 import { PaymentMethod } from "@prisma/client";
 
 const subscriptionService = {
+  async getSubscription(tenantId: string) {
+    try {
+      return await subscriptionRepository.getSubscriptionByTenantId(tenantId);
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getAllSubscriptions() {
     try {
       return await subscriptionRepository.getAllSubscriptions();

@@ -1,6 +1,6 @@
 import { ShoppingCart, TrendingUp, Users, AlertTriangle } from 'lucide-react';
 import { StatCard } from '@/features/business/dashboard/components/Summary/Main/ui/StatCard';
-import { DashboardStats } from '@/features/business/dashboard/hooks/useDashboardStats';
+import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
 import { formatCurrency } from '@/lib/formatters';
 
 interface StatsGridProps {

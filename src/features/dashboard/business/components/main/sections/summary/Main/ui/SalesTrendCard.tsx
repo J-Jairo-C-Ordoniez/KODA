@@ -1,6 +1,6 @@
 import { BarChart3 } from 'lucide-react';
 import { SalesChart } from './SalesChart';
-import { TrendPoint } from '@/features/business/dashboard/hooks/useDashboardStats';
+import { TrendPoint } from '@/features/dashboard/business/hooks/useDashboardStats';
 
 interface SalesTrendCardProps {
   salesTrend?: TrendPoint[];

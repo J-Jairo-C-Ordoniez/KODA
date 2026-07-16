@@ -1,5 +1,5 @@
 import { CreditCard, CalendarClock } from 'lucide-react';
-import { SubscriptionInfo } from '@/features/business/dashboard/hooks/useDashboardStats';
+import { SubscriptionInfo } from '@/features/dashboard/business/hooks/useDashboardStats';
 import { formatCurrency } from '@/lib/formatters';
 
 function daysUntil(dateStr: string) {
@@ -21,15 +21,13 @@ export function PlanStatusCard({ subscription }: PlanStatusCardProps) {
 
   return (
     <article
-      className={`ov-side bg-[#181818] border p-5 rounded-2xl flex flex-col gap-3 ${
-        daysWarning ? 'border-warning/30' : 'border-[#262626]'
-      }`}
+      className={`ov-side bg-[#181818] border p-5 rounded-2xl flex flex-col gap-3 ${daysWarning ? 'border-warning/30' : 'border-[#262626]'
+        }`}
       aria-label="Estado del plan"
     >
       <header className="flex items-center gap-3">
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
-          daysWarning ? 'bg-warning/10' : 'bg-accent/10'
-        }`}>
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${daysWarning ? 'bg-warning/10' : 'bg-accent/10'
+          }`}>
           <CreditCard size={16} className={daysWarning ? 'text-warning' : 'text-accent'} aria-hidden="true" />
         </div>
         <div className="min-w-0">
@@ -58,9 +56,8 @@ export function PlanStatusCard({ subscription }: PlanStatusCardProps) {
             </dd>
           </div>
           {days !== null && (
-            <div className={`col-span-2 rounded-xl p-3 flex items-center gap-2 ${
-              daysWarning ? 'bg-warning/10 border border-warning/20' : 'bg-[#111111]'
-            }`}>
+            <div className={`col-span-2 rounded-xl p-3 flex items-center gap-2 ${daysWarning ? 'bg-warning/10 border border-warning/20' : 'bg-[#111111]'
+              }`}>
               <CalendarClock size={13} className={daysWarning ? 'text-warning' : 'text-foreground-muted'} aria-hidden="true" />
               <span className={`text-xs font-bold ${daysWarning ? 'text-warning' : 'text-foreground-muted'}`}>
                 {daysWarning

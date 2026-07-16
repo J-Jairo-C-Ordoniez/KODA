@@ -2,6 +2,12 @@ import prisma from "@/infrastructure/db/client";
 import { PaymentMethod, SubscriptionStatus } from "@prisma/client";
 
 const subscriptionRepository = {
+  async getSubscriptionByTenantId(tenantId: string) {
+    return await prisma.subscription.findUnique({
+      where: { tenantId },
+      include: { plan: true }
+    });
+  },
   async getAllSubscriptions() {
     return await prisma.tenant.findMany({
       include: {

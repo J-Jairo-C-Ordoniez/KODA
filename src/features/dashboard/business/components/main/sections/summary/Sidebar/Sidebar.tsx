@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Plus } from "lucide-react";
 
 export type MenuItem = {
     id: string;

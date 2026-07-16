@@ -1,8 +1,8 @@
 'use client';
 
-import { DashboardStats } from '@/features/business/dashboard/hooks/useDashboardStats';
+import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
 import { SalesTrendCard } from '../ui/SalesTrendCard';
-import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs';
+/* import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs'; */
 import { formatCurrency } from '@/lib/formatters';
 import { ShoppingCart, Wallet, AlertTriangle } from 'lucide-react';
 
@@ -27,7 +27,7 @@ export default function ViewGeneral({ stats }: ViewGeneralProps) {
             </header>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <KPIs
+                {/* <KPIs
                     title="Ventas Hoy"
                     value={formatCurrency(stats?.salesToday?.totalRevenue ?? 0)}
                     icon={ShoppingCart}
@@ -89,7 +89,7 @@ export default function ViewGeneral({ stats }: ViewGeneralProps) {
                             )}
                         </ul>
                     }
-                />
+                /> */}
             </div>
 
             <SalesTrendCard salesTrend={stats?.salesTrend} />

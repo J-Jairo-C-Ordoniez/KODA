@@ -1,9 +1,9 @@
 import { formatCurrency } from '@/lib/formatters';
 import { Wallet, TrendingUp, Percent, Info } from 'lucide-react';
-import { DashboardStats } from '@/features/business/dashboard/hooks/useDashboardStats';
-import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs';
+import { DashboardStats } from '@/features/dashboard/business/hooks/useDashboardStats';
+/* import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs';
 import PendingCollectionsCard, { Debtor } from '@/features/business/dashboard/components/Summary/Main/ui/PendingCollectionsCard';
-import PaymentMethodsCard, { PaymentStat } from '@/features/business/dashboard/components/Summary/Main/ui/PaymentMethodsCard';
+import PaymentMethodsCard, { PaymentStat } from '@/features/business/dashboard/components/Summary/Main/ui/PaymentMethodsCard'; */
 
 
 interface FinancesProps {
@@ -14,7 +14,7 @@ export default function Finances({ stats }: FinancesProps) {
     const totalRevenue = stats?.salesMonth?.totalRevenue ?? 0;
 
     // modificar por datos reales
-    const mockDebtors: Debtor[] = [
+    /* const mockDebtors: Debtor[] = [
         {
             id: "cuid1_maria",
             name: "Maria Camila Ortiz",
@@ -39,15 +39,15 @@ export default function Finances({ stats }: FinancesProps) {
             daysPending: 45,
             isOverdue: true
         }
-    ];
+    ]; */
 
     // modificar por datos reales
-    const mockPaymentStats: PaymentStat[] = [
+    /* const mockPaymentStats: PaymentStat[] = [
         { method: 'transfer', amount: 3250000, percentage: 65 },
         { method: 'cash', amount: 1250000, percentage: 25 },
         { method: 'debt', amount: 500000, percentage: 10 },
     ];
-
+ */
     return (
         <section className="space-y-6">
             <header>
@@ -60,7 +60,7 @@ export default function Finances({ stats }: FinancesProps) {
             </header>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <KPIs
+                {/* <KPIs
                     title="Ventas Mes Actual"
                     value={formatCurrency(totalRevenue)}
                     icon={TrendingUp}
@@ -69,10 +69,10 @@ export default function Finances({ stats }: FinancesProps) {
                         text: `${stats?.salesMonth?.totalOrders ?? 0} ventas`,
                         className: "bg-emerald-50 text-emerald-700 border-emerald-100"
                     }}
-                />
+                /> */}
 
                 {/* revisarel valor de los abonos y el valor total adeudado en la calle */}
-                <KPIs
+                {/* <KPIs
                     title="Dinero en la Calle"
                     value={formatCurrency(1820000)}
                     icon={Wallet}
@@ -81,10 +81,10 @@ export default function Finances({ stats }: FinancesProps) {
                         text: `${stats?.debtCustomers?.totalCustomersWithDebt ?? 0} deudores`,
                         className: "bg-gray-100 text-gray-600 border-gray-200"
                     }}
-                />
+                /> */}
 
                 {/* revisar traer los datos de la api para la utilidad y el margen de utilidad  */}
-                <KPIs
+                {/* <KPIs
                     title="Utilidad Estimada"
                     value={formatCurrency(totalRevenue * 0.42)}
                     icon={Percent}
@@ -93,12 +93,12 @@ export default function Finances({ stats }: FinancesProps) {
                         text: "Margen est. 42%",
                         className: "bg-emerald-50 text-emerald-700 border-emerald-100"
                     }}
-                />
+                /> */}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <PendingCollectionsCard debtors={mockDebtors} />
-                <PaymentMethodsCard stats={mockPaymentStats} />
+                {/* <PendingCollectionsCard debtors={mockDebtors} />
+                <PaymentMethodsCard stats={mockPaymentStats} /> */}
             </div>
         </section>
     );

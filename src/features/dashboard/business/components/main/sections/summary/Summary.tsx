@@ -8,7 +8,7 @@ import SummaryMain from "@/features/dashboard/business/components/main/sections/
 import useSidebarStats from "@/features/dashboard/business/hooks/useSidebarStats";
 
 export default function SummaryPage() {
-  const [activeTab, setActiveTab] = useState("finances");
+  const [activeTab, setActiveTab] = useState("view-general");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { data } = useSidebarStats();
 

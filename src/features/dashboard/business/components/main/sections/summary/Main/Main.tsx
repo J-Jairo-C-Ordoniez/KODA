@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 /* import { SectionHeader } from '@/features/business/dashboard/components/Summary/Main/ui/SectionHeader'; */
-import Loader from '@/shared/components/Loader';
 /* import { PlanStatusCard } from '../../ui/PlanStatusCard';
 import { DigitalStoreCTA } from '../../ui/DigitalStoreCTA'; */
 
@@ -19,18 +18,15 @@ export default function SummaryMain({ activeTab }: any) {
     <main className="space-y-8">
       {activeTab === "view-general" && (
         <ViewGeneral activeTab={activeTab} />
-
       )}
 
       {activeTab === "finances" && (
         <Finances activeTab={activeTab} />
       )}
 
-      {/* 
-
       {activeTab === "inventory" && (
         <Inventory activeTab={activeTab} />
-      )} */}
+      )}
 
       {activeTab === "my-store" && (
         <>

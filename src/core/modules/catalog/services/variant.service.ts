@@ -75,7 +75,16 @@ const variantService = {
     } catch (error: any) {
       console.error(`Error al incrementar popularidad: ${error.message}`);
     }
-  }
+  },
+
+  async getTotalStock(tenantId?: string) {
+    try {
+      return await variantRepository.getTotalStock(tenantId);
+    } catch (error: any) {
+      console.error(`Error al obtener stock total: ${error.message}`);
+      return 0;
+    }
+  },
 };
 
 export default variantService;

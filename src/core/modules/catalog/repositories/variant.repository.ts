@@ -111,7 +111,19 @@ const variantRepository = {
         }
       }
     });
-  }
+  },
+
+  async getTotalStock(tenantId?: string) {
+    const result = await prisma.inventory.aggregate({
+      _sum: { stock: true },
+      where: tenantId ? {
+        variant: {
+          product: { tenantId }
+        }
+      } : {}
+    });
+    return result._sum.stock || 0;
+  },
 };
 
 export default variantRepository;

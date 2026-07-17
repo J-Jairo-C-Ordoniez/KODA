@@ -11,11 +11,11 @@ const salesRepository = {
   async createSale(tenantId: string, userId: string, data: CreateSaleDTO) {
     return prisma.$transaction(async (tx) => {
       const variantIds = data.items.map(item => item.variantId);
-      
+
       const variants = await tx.variant.findMany({
-        where: { 
+        where: {
           variantId: { in: variantIds },
-          product: { tenantId } 
+          product: { tenantId }
         },
         include: {
           inventories: true
@@ -27,7 +27,7 @@ const salesRepository = {
 
       for (const item of data.items) {
         const variant = variantMap.get(item.variantId);
-        
+
         if (!variant) {
           throw new Error(`Variante ${item.variantId} no encontrada o no pertenece a este comercio`);
         }
@@ -71,7 +71,7 @@ const salesRepository = {
 
       return sale;
     }, {
-      timeout: 10000 
+      timeout: 10000
     });
   },
 
@@ -167,6 +167,58 @@ const salesRepository = {
     };
   },
 
+  async getProfitMonth(tenantId: string) {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    thirtyDaysAgo.setHours(0, 0, 0, 0);
+
+    const items = await prisma.saleItem.findMany({
+      where: {
+        sale: {
+          tenantId,
+          createdAt: {
+            gte: thirtyDaysAgo,
+          },
+        },
+      },
+      select: {
+        quantity: true,
+        priceAtSale: true,
+        variant: {
+          select: {
+            cost: true,
+          },
+        },
+      },
+    });
+
+    let totalRevenue = 0;
+    let totalCost = 0;
+
+    for (const item of items) {
+      const quantity = item.quantity;
+      const price = Number(item.priceAtSale);
+      const cost = Number(item.variant.cost);
+
+      totalRevenue += price * quantity;
+      totalCost += cost * quantity;
+    }
+
+    const totalProfit = totalRevenue - totalCost;
+
+    const margin =
+      totalRevenue > 0
+        ? Number(((totalProfit / totalRevenue) * 100).toFixed(1))
+        : 0;
+
+    return {
+      totalRevenue,
+      totalCost,
+      totalProfit,
+      margin,
+    };
+  },
+
   async getSalesTrend(tenantId: string) {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -188,7 +240,7 @@ const salesRepository = {
     });
 
     const trendMap: Record<string, number> = {};
-    
+
     for (let i = 0; i <= 30; i++) {
       const d = new Date();
       d.setDate(d.getDate() - i);

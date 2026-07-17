@@ -44,8 +44,27 @@ export interface GeneralStats {
   salesTrend: TrendPoint[];
 }
 
+export interface ProfitPeriod {
+  totalRevenue: number;
+  totalCost: number;
+  totalProfit: number;
+  margin: number;
+}
+
+export interface Debtor {
+  id: string;
+  name: string;
+  phone?: string;
+  totalDebt: number;
+  daysPending: number;
+  isOverdue: boolean;
+}
+
 export interface FinanceStats {
   salesMonth: SalePeriod;
+  profitMonth: ProfitPeriod;
+  debtCustomers: { totalDebt: number; totalCustomersWithDebt: number };
+  topDebtors: Debtor[];
 }
 
 export interface ConfigStats {

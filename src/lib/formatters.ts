@@ -29,11 +29,11 @@ export const formatCurrency = (value: number | undefined | null): string => {
 
 /**
  * Formatea un número como porcentaje
- * Ejemplo: 0.15 -> "15.0%"
+ * Ejemplo: 10 -> "10%"
  */
 export const formatPercentage = (value: number | undefined | null): string => {
-  if (value === undefined || value === null) return '0.0%';
-  return PERCENTAGE_FORMATTER.format(value);
+  if (value === undefined || value === null) return '0%';
+  return `${value}%`;
 };
 
 /**

@@ -1,88 +1,85 @@
-import { TrendingUp, Info } from 'lucide-react';
-import { formatCurrency } from '@/lib/formatters';
+import { formatCurrency, formatPercentage } from '@/lib/formatters';
 
-type PaymentMethodType = 'cash' | 'transfer' | 'online' | 'debt';
-
-export interface PaymentStat {
-    method: PaymentMethodType;
-    amount: number;
-    percentage: number;
+export interface ProfitPeriod {
+    totalRevenue: number;
+    totalCost: number;
+    totalProfit: number;
+    margin: number;
 }
 
-interface PaymentMethodsCardProps {
-    stats: PaymentStat[];
+interface ProfitMarginCardProps {
+    profitData: ProfitPeriod;
 }
 
-const METHOD_CONFIG: Record<PaymentMethodType, { label: string; colorClass: string }> = {
-    transfer: { label: 'Transferencia', colorClass: 'bg-gray-800' },
-    cash: { label: 'Efectivo', colorClass: 'bg-emerald-500' },
-    online: { label: 'Pago en Línea', colorClass: 'bg-blue-500' },
-    debt: { label: 'Crédito / Fiado', colorClass: 'bg-amber-500' },
-};
-
-export default function PaymentMethodsCard({ stats }: PaymentMethodsCardProps) {
-    const sortedStats = [...stats].sort((a, b) => b.percentage - a.percentage);
+export default function ProfitMarginCard({ profitData }: ProfitMarginCardProps) {
+    const { totalRevenue, totalCost, totalProfit, margin } = profitData;
+    const costPercentage = totalRevenue > 0 ? (totalCost / totalRevenue) * 100 : 0;
+    const profitPercentage = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0;
 
     return (
-        <article className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300 flex flex-col h-full">
-            <h3 className="text-lg font-bold text-primary tracking-tight mb-4 flex items-center gap-2">
-                <TrendingUp
-                    size={18}
-                    aria-hidden="true"
-                />
-                Métodos de Pago
-            </h3>
-
-            <div className="space-y-5 flex-1">
-                {sortedStats.length === 0 ? (
-                    <p className="text-sm text-primary/60 text-center py-6">
-                        No hay datos de pago aún.
+        <section
+            className="bg-background-card border border-primary/5 hover:shadow-sm rounded-2xl p-5 md:p-6 transition-all duration-300 flex flex-col gap-5"
+            aria-labelledby="margin-title"
+        >
+            <header className="flex flex-col gap-3">
+                    <h3
+                        id="margin-title"
+                        className="text-base font-semibold text-primary tracking-tight"
+                    >
+                        Estructura de Márgenes (Mes)
+                    </h3>
+                    <p className="text-xs text-primary/60">
+                        Relación entre costos e ingresos netos
                     </p>
-                ) : (
-                    sortedStats.map((stat) => {
-                        const config = METHOD_CONFIG[stat.method];
+            </header>
 
-                        return (
-                            <div key={stat.method}>
-                                <div className="flex justify-between text-sm mb-2">
-                                    <span className="text-primary/60 font-medium">
-                                        {config.label} ({stat.percentage.toFixed(0)}%)
-                                    </span>
-                                    <span className="text-primary font-bold">
-                                        {formatCurrency(stat.amount)}
-                                    </span>
-                                </div>
-                                <div
-                                    className="w-full bg-primary/5 h-3 rounded-full overflow-hidden"
-                                    aria-hidden="true"
-                                >
-                                    <div
-                                        className={`${config.colorClass} h-full rounded-full transition-all duration-500`}
-                                        style={{ width: `${stat.percentage}%` }}
-                                        role="progressbar"
-                                        aria-valuenow={stat.percentage}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                        aria-label={`Porcentaje de pagos con ${config.label}`}
-                                    />
-                                </div>
-                            </div>
-                        );
-                    })
-                )}
+            <div className="relative h-2.5 w-full bg-primary/5 rounded-full overflow-hidden flex">
+                <div
+                    className="bg-primary/20 h-full transition-all duration-700 ease-out"
+                    style={{ width: `${costPercentage}%` }}
+                    title={`Costos: ${formatPercentage(costPercentage)}`}
+                />
+                <div
+                    className="bg-emerald-400 h-full transition-all duration-700 ease-out"
+                    style={{ width: `${profitPercentage}%` }}
+                    title={`Utilidad: ${formatPercentage(profitPercentage)}`}
+                />
             </div>
 
-            <aside className="mt-6 p-5 rounded-xl bg-primary/5 border border-primary/10 flex gap-3">
-                <Info
-                    size={20}
-                    className="text-primary/60 shrink-0 mt-1"
-                    aria-hidden="true"
-                />
+            <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-primary/20" aria-hidden="true" />
+                        <span className="text-xs font-medium text-primary/60 uppercase tracking-wider">
+                            Costos
+                        </span>
+                    </div>
+                    <span className="text-sm font-bold text-primary tabular-nums">
+                        {formatCurrency(totalCost)}
+                    </span>
+                </div>
 
-                <p className="text-xs text-primary/60 leading-relaxed">
-                    Distribución calculada automáticamente según el total de ventas registradas en el periodo actual.
-                </p>
-            </aside>
-        </article>
+                <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
+                        <span className="text-xs font-medium text-primary/60 uppercase tracking-wider">
+                            Utilidad
+                        </span>
+                    </div>
+                    <span className="text-sm font-bold text-emerald-600 tabular-nums">
+                        {formatCurrency(totalProfit)}
+                    </span>
+                </div>
+            </div>
+
+            <footer className="mt-1 pt-4 border-t border-primary/5 flex items-center justify-between">
+                <span className="text-xs font-medium text-primary/60">
+                    Ingreso Total (Ventas)
+                </span>
+                <span className="text-sm font-bold text-primary tabular-nums">
+                    {formatCurrency(totalRevenue)}
+                </span>
+            </footer>
+        </section>
     );
 }

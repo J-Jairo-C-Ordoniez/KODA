@@ -61,14 +61,72 @@ const customerRepository = {
           gt: 0
         }
       },
+      _sum: {
+        totalDebt: true,
+      },
       _count: {
         tenantId: true,
       }
     });
 
-    return { totalCustomersWithDebt: result._count.tenantId || 0 };
+    return {
+      totalCustomersWithDebt: result._count.tenantId || 0,
+      totalDebt: result._sum.totalDebt || 0,
+    };
 
-  }
+  },
+
+  async getTopDebtors(tenantId: string) {
+    const customers = await prisma.customer.findMany({
+      where: {
+        tenantId,
+        totalDebt: {
+          gt: 0,
+        },
+      },
+      select: {
+        customerId: true,
+        name: true,
+        phone: true,
+        totalDebt: true,
+        sales: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 1,
+          select: {
+            createdAt: true,
+          },
+        },
+      },
+      orderBy: {
+        totalDebt: "desc",
+      },
+      take: 5,
+    });
+
+    const today = new Date();
+
+    return customers.map((customer) => {
+      const lastSale = customer.sales[0]?.createdAt;
+
+      const daysPending = lastSale
+        ? Math.floor(
+          (today.getTime() - lastSale.getTime()) /
+          (1000 * 60 * 60 * 24)
+        )
+        : 0;
+
+      return {
+        id: customer.customerId,
+        name: customer.name,
+        phone: customer.phone,
+        totalDebt: Number(customer.totalDebt),
+        daysPending,
+        isOverdue: daysPending > 30,
+      };
+    });
+  },
 };
 
 export default customerRepository;

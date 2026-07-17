@@ -1,15 +1,7 @@
 import { Wallet, MessageCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatters';
+import { Debtor } from '@/features/dashboard/business/api/dashboard.api';
 import Link from 'next/link';
-
-export interface Debtor {
-    id: string;
-    name: string;
-    phone: string;
-    totalDebt: number;
-    daysPending: number;
-    isOverdue: boolean;
-}
 
 interface PendingCollectionsCardProps {
     debtors: Debtor[];
@@ -17,69 +9,80 @@ interface PendingCollectionsCardProps {
 
 export default function PendingCollectionsCard({ debtors }: PendingCollectionsCardProps) {
     return (
-        <article className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300">
-            <header className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-primary tracking-tight flex items-center gap-2">
+        <section
+            className="bg-background-card border border-primary/5 rounded-2xl p-5 md:p-6 transition-shadow hover:shadow-sm"
+            aria-labelledby="collections-title"
+        >
+            <header className="mb-5 flex items-center gap-3 pb-4 border-b border-primary/5">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 bg-amber-50 text-amber-600">
                     <Wallet
                         size={20}
-                        className="text-amber-500"
                         aria-hidden="true"
                     />
+                </div>
+                <h2
+                    id="collections-title"
+                    className="text-base font-semibold text-primary tracking-tight"
+                >
                     Cuentas por Cobrar
-                </h3>
-                <span className="text-xs font-medium text-primary/60 bg-primary/5 px-2 py-1 rounded-md">
-                    {debtors.length} activos
-                </span>
+                </h2>
             </header>
 
             {debtors.length === 0 ? (
-                <p className="text-sm text-primary/60 text-center py-6">
-                    No hay cuentas por cobrar pendientes. ¡Excelente!
-                </p>
+                <div className="py-8 text-center">
+                    <p className="text-sm font-medium text-primary/60">
+                        No hay cuentas pendientes.
+                    </p>
+                </div>
             ) : (
-                <ul className="divide-y divide-primary/5">
+                <ul className="flex flex-col">
                     {debtors.map((debtor) => (
-                        <li 
-                            key={debtor.id} 
-                            className="flex justify-between items-center py-3 first:pt-0 last:pb-0 group"
+                        <li
+                            key={debtor.id}
+                            className="group flex items-center justify-between py-3 border-b border-primary/5 last:border-0 last:pb-0 first:pt-0"
                         >
-                            <div className="flex flex-col gap-1">
-                                <p className="text-sm font-semibold text-primary line-clamp-1">
+                            <div className="flex flex-col gap-1.5">
+                                <p className="text-sm font-medium text-primary line-clamp-1">
                                     {debtor.name}
                                 </p>
-                                <div className="flex items-center gap-2">
-                                    <p className="text-xs text-primary/60">
+                                <div className="flex items-center gap-2 text-xs">
+                                    <span className="text-primary/50 font-medium">
                                         Hace {debtor.daysPending} {debtor.daysPending === 1 ? 'día' : 'días'}
-                                    </p>
+                                    </span>
 
-                                    {debtor.phone && (
-                                        <Link
-                                            href={`https://wa.me/57${debtor.phone}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-primary/30 hover:text-emerald-500 transition-colors"
-                                            aria-label={`Contactar a ${debtor.name} por WhatsApp`}
-                                        >
-                                            <MessageCircle size={20} />
-                                        </Link>
+                                    {debtor.isOverdue && (
+                                        <>
+                                            <span className="w-1 h-1 rounded-full bg-red-400" aria-hidden="true"></span>
+                                            <span className="text-red-500 font-semibold tracking-wide">
+                                                Vencida
+                                            </span>
+                                        </>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="text-right flex flex-col items-end gap-1">
-                                <p className="text-sm font-bold text-primary">
+                            <div className="flex items-center gap-3">
+                                <span className="text-sm font-bold text-primary tabular-nums">
                                     {formatCurrency(debtor.totalDebt)}
-                                </p>
-                                {debtor.isOverdue && (
-                                    <span className="text-xs font-bold text-red-700 uppercase tracking-wider bg-red-50 px-1.5 py-0.5 rounded border border-red-100">
-                                        Vencida
-                                    </span>
+                                </span>
+
+                                {debtor.phone && (
+                                    <Link
+                                        href={`https://wa.me/57${debtor.phone}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-2 -mr-2 rounded-xl text-primary/20 hover:text-emerald-500 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all duration-200"
+                                        aria-label={`Enviar mensaje de WhatsApp a ${debtor.name}`}
+                                        title="Contactar por WhatsApp"
+                                    >
+                                        <MessageCircle size={18} strokeWidth={2.5} />
+                                    </Link>
                                 )}
                             </div>
                         </li>
                     ))}
                 </ul>
             )}
-        </article>
+        </section>
     );
 }

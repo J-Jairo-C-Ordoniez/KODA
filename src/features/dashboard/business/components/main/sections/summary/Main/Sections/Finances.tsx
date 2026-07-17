@@ -1,55 +1,17 @@
+import { Wallet, TrendingUp, PiggyBank } from 'lucide-react';
 import useTabStats from "@/features/dashboard/business/hooks/useTabStats";
 import { FinanceStats } from "@/features/dashboard/business/api/dashboard.api";
-import { formatCurrency } from '@/lib/formatters';
+import { formatCurrency, formatPercentage } from '@/lib/formatters';
 
 import Loader from "@/shared/components/Loader";
 import Error from "@/shared/components/Error";
 import KPIs from "@/features/dashboard/business/components/main/sections/summary/Main/ui/KPIs";
-import { Wallet, TrendingUp, Percent, Info } from 'lucide-react';
-/* import KPIs from '@/features/business/dashboard/components/Summary/Main/ui/KPIs';
-import PendingCollectionsCard, { Debtor } from '@/features/business/dashboard/components/Summary/Main/ui/PendingCollectionsCard';
-import PaymentMethodsCard, { PaymentStat } from '@/features/business/dashboard/components/Summary/Main/ui/PaymentMethodsCard'; */
+import PendingCollectionsCard from '@/features/dashboard/business/components/main/sections/summary/Main/ui/PendingCollectionsCard';
+import ProfitMarginCard from '@/features/dashboard/business/components/main/sections/summary/Main/ui/PaymentMethodsCard';
 
 
 export default function Finances({ activeTab }: { activeTab: string; }) {
     const { data, isLoading, error } = useTabStats<FinanceStats>(activeTab);
-
-    console.log(data);
-    // modificar por datos reales
-    /* const mockDebtors: Debtor[] = [
-        {
-            id: "cuid1_maria",
-            name: "Maria Camila Ortiz",
-            phone: "3001234567",
-            totalDebt: 180000,
-            daysPending: 35,
-            isOverdue: true
-        },
-        {
-            id: "cuid2_andres",
-            name: "Andrés Felipe Ramos",
-            phone: "3159876543",
-            totalDebt: 120000,
-            daysPending: 8,
-            isOverdue: false
-        },
-        {
-            id: "cuid3_liliana",
-            name: "Liliana Restrepo",
-            phone: "3204567890",
-            totalDebt: 95000,
-            daysPending: 45,
-            isOverdue: true
-        }
-    ]; */
-
-    // modificar por datos reales
-    /* const mockPaymentStats: PaymentStat[] = [
-        { method: 'transfer', amount: 3250000, percentage: 65 },
-        { method: 'cash', amount: 1250000, percentage: 25 },
-        { method: 'debt', amount: 500000, percentage: 10 },
-    ];
- */
     return (
         <section className="space-y-6">
             <header>
@@ -82,39 +44,42 @@ export default function Finances({ activeTab }: { activeTab: string; }) {
                             }
                         />
 
-                        {/* <KPIs
+                        <KPIs
+                            title="Utilidad del Mes"
+                            value={formatCurrency(data.profitMonth.totalProfit)}
+                            icon={PiggyBank}
+                            iconClassName="bg-emerald-50 text-emerald-600"
+                            badge={{
+                                text: `${formatPercentage(data.profitMonth.margin)} margen`,
+                                className: "bg-emerald-50 text-emerald-700 border-emerald-100"
+                            }}
+                            footer={
+                                <p className="text-xs text-primary/50">
+                                    Ganancia obtenida después del costo de los productos
+                                </p>
+                            }
+                        />
+
+                        <KPIs
                             title="Dinero en la Calle"
-                            value={formatCurrency(1820000)}
+                            value={formatCurrency(data.debtCustomers.totalDebt)}
                             icon={Wallet}
                             iconClassName="bg-amber-50 text-amber-600"
                             badge={{
-                                text: `${stats?.debtCustomers?.totalCustomersWithDebt ?? 0} deudores`,
+                                text: `${data.debtCustomers.totalCustomersWithDebt} deudores`,
                                 className: "bg-gray-100 text-gray-600 border-gray-200"
                             }}
                             footer={
                                 <p className="text-xs text-primary/50">
-                                    Pagos realizados por clientes con deuda
+                                    Dinero que no se ha cobrado
                                 </p>
                             }
-                        /> */}
-
-
-                        {/* revisar traer los datos de la api para la utilidad y el margen de utilidad  */}
-                        {/* <KPIs
-                    title="Utilidad Estimada"
-                    value={formatCurrency(totalRevenue * 0.42)}
-                    icon={Percent}
-                    iconClassName="bg-emerald-50 text-emerald-600"
-                    badge={{
-                        text: "Margen est. 42%",
-                        className: "bg-emerald-50 text-emerald-700 border-emerald-100"
-                    }}
-                /> */}
+                        />
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* <PendingCollectionsCard debtors={mockDebtors} />
-                <PaymentMethodsCard stats={mockPaymentStats} /> */}
+                        <PendingCollectionsCard debtors={data.topDebtors} />
+                        <ProfitMarginCard profitData={data.profitMonth} />
                     </div>
                 </>
             )

@@ -57,6 +57,15 @@ const salesService = {
     }
   },
 
+  async getProfitMonth(tenantId?: string) {
+    try {
+      if (!tenantId) return { totalRevenue: 0, totalCost: 0, totalProfit: 0, margin: 0 };
+      return await salesRepository.getProfitMonth(tenantId);
+    } catch (error: any) {
+      throw new Error(`Error al obtener métricas del dashboard: ${error.message}`);
+    }
+  },
+
   async getSalesTrend(tenantId?: string) {
     try {
       if (!tenantId) return [];

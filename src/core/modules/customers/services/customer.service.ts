@@ -22,6 +22,11 @@ const customerService = {
     if (!data.amount || data.amount <= 0) throw new Error('El monto del abono debe ser mayor a 0');
     return customerRepository.registerPayment(tenantId, customerId, data);
   },
-};
+
+  async getTopDebtors(tenantId: string) {
+    if (!tenantId) throw new Error('Tenant ID requerido');
+    return customerRepository.getTopDebtors(tenantId);
+  },
+}; 
 
 export default customerService;

@@ -37,11 +37,19 @@ const dashboardController = {
   async getFinanceStats(tenantId?: string) {
     if (!tenantId) return apiResponse.error('Tenant requerido', 400);
     try {
-      const [salesMonth, debtCustomers] = await Promise.all([
+      const [salesMonth, profitMonth, debtCustomers, topDebtors] = await Promise.all([
         salesService.getSalesMonth(tenantId),
+        salesService.getProfitMonth(tenantId),
         customerService.getCustomersWithDebt(tenantId),
+        customerService.getTopDebtors(tenantId),
       ]);
-      return apiResponse.success({ salesMonth, debtCustomers });
+
+      return apiResponse.success({
+        salesMonth,
+        profitMonth,
+        debtCustomers,
+        topDebtors,
+      });
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al obtener finanzas', 500);
     }

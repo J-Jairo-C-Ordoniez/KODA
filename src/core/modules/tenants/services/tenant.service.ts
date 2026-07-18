@@ -1,10 +1,10 @@
 import tenantRepository from "../repositories/tenant.repository";
 import { slugify } from "@/core/utils/slugify";
 import bcrypt from "bcryptjs";
-import { RegisterTenantData, RegisterAdminData } from "../repositories/tenant.repository";
+import { RegisterTenantData, RegisterAdminData, UpdateStoreProfileData } from "../repositories/tenant.repository";
 
 
-interface RegisterFormData extends RegisterTenantData, RegisterAdminData {}
+interface RegisterFormData extends RegisterTenantData, RegisterAdminData { }
 
 
 const tenantService = {
@@ -12,7 +12,7 @@ const tenantService = {
     try {
       let slug = slugify(data.businessName);
       const existingTenant = await tenantRepository.findBySlug(slug);
-      
+
       if (existingTenant) {
         slug = `${slug}-${Math.floor(Math.random() * 1000)}`;
       }
@@ -36,11 +36,11 @@ const tenantService = {
     } catch (error: any) {
       if (error.code === 'P2002') {
         const field = error.meta?.target?.[0];
-        if (field === 'email') return {error: 'El correo electrónico ya está registrado. Intenta con otro.'};
-        if (field === 'slug') return {error: 'El nombre del negocio ya está en uso o es muy similar a uno existente.'};
+        if (field === 'email') return { error: 'El correo electrónico ya está registrado. Intenta con otro.' };
+        if (field === 'slug') return { error: 'El nombre del negocio ya está en uso o es muy similar a uno existente.' };
       }
-      
-      return {error: error.message || 'Error inesperado al registrar el negocio. Por favor intenta de nuevo.'};
+
+      return { error: error.message || 'Error inesperado al registrar el negocio. Por favor intenta de nuevo.' };
     }
   },
 
@@ -144,7 +144,7 @@ const tenantService = {
   async getStoreProfile(tenantId: string) {
     try {
       const tenant = await tenantRepository.getStoreProfile(tenantId);
-      
+
       if (!tenant) {
         throw new Error("Información de la tienda no encontrada.");
       }
@@ -157,6 +157,36 @@ const tenantService = {
         slug: tenant.slug,
         logo: tenant.aboutUs.length > 0 ? tenant.aboutUs[0].logo : null
       };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async updateStoreProfile(tenantId: string, data: UpdateStoreProfileData) {
+    try {
+
+      const currentTenant = await tenantRepository.getStoreProfile(tenantId);
+
+      if (!currentTenant) {
+        throw new Error("La tienda no existe.");
+      }
+
+      if (data.slug !== currentTenant.slug) {
+
+        const slugExists = await tenantRepository.findBySlug(data.slug);
+
+        if (slugExists) {
+          throw new Error(
+            "El enlace del catálogo ya está siendo utilizado."
+          );
+        }
+      }
+
+      return await tenantRepository.updateStoreProfile(
+        tenantId,
+        data
+      );
+
     } catch (error) {
       throw error;
     }

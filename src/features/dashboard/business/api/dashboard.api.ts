@@ -68,65 +68,72 @@ export interface FinanceStats {
 }
 
 export interface InventoryMetrics {
-    totalPhysicalItems: number;
-    totalInvestedCapital: number;
-    criticalStockItems: number;
+  totalPhysicalItems: number;
+  totalInvestedCapital: number;
+  criticalStockItems: number;
 }
 
 export interface TopVariant {
-    variantId: string;
-    productName: string;
-    size: string;
-    stock: number;
-    totalSold: number;
+  variantId: string;
+  productName: string;
+  size: string;
+  stock: number;
+  totalSold: number;
 }
 
 export interface StagnantVariant {
-    variantId: string;
-    productName: string;
-    size: string;
-    stock: number;
-    daysWithoutSale: number;
+  variantId: string;
+  productName: string;
+  size: string;
+  stock: number;
+  daysWithoutSale: number;
 }
 
 export interface OutOfStockVariant {
-    variantId: string;
-    productName: string;
-    size: string;
-    sku: string;
+  variantId: string;
+  productName: string;
+  size: string;
+  sku: string;
 }
 
 export interface InventoryStats {
-    metrics: InventoryMetrics;
-    topSales: TopVariant[];
-    stagnantItems: StagnantVariant[];
-    outOfStockItems: OutOfStockVariant[];
+  metrics: InventoryMetrics;
+  topSales: TopVariant[];
+  stagnantItems: StagnantVariant[];
+  outOfStockItems: OutOfStockVariant[];
 }
 
 export interface StoreProfile {
-    tenantId: string;
-    businessName: string;
-    description: string | null;
-    whatsApp: string;
-    slug: string;
-    logo: string | null;
+  tenantId: string;
+  businessName: string;
+  description: string | null;
+  whatsApp: string;
+  slug: string;
+  logo: string | null;
 }
 
 export interface StoreSubscription {
-    status: 'active' | 'pastDue' | 'canceled' | 'noVerify' | 'mora' | 'suspended';
-    startDate: Date | string;
-    endDate: Date | string;
-    plan: {
-        name: string;
-        price: number;
-        interval: string;
-        features: string[];
-    };
+  status: 'active' | 'pastDue' | 'canceled' | 'noVerify' | 'mora' | 'suspended';
+  startDate: Date | string;
+  endDate: Date | string;
+  plan: {
+    name: string;
+    price: number;
+    interval: string;
+    features: string[];
+  };
 }
 
 export interface StoreDataStats {
-    profile: StoreProfile;
-    subscription: StoreSubscription | null;
+  profile: StoreProfile;
+  subscription: StoreSubscription | null;
+}
+
+export interface UpdateStoreProfileDto {
+  businessName: string;
+  description: string;
+  whatsApp: string;
+  slug: string;
 }
 
 export async function fetchSidebarStatsApi(tenantId?: string): Promise<SidebarStats> {
@@ -187,4 +194,24 @@ export async function fetchStoreDataStatsApi(tenantId?: string): Promise<StoreDa
   }
 
   return data.data;
+}
+
+export async function updateStoreProfileApi(payload: UpdateStoreProfileDto): Promise<void> {
+  const response = await fetch("/api/dashboard/config", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    throw new Error(
+      data.error ||
+      data.message ||
+      "Error al actualizar la información de la tienda"
+    );
+  }
 }

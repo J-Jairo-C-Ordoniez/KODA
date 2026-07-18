@@ -14,6 +14,13 @@ export interface RegisterAdminData {
   password: string;
 }
 
+export interface UpdateStoreProfileData {
+  businessName: string;
+  description: string;
+  whatsApp: string;
+  slug: string;
+}
+
 const tenantRepository = {
   async createTenantWithAdmin(tenantData: RegisterTenantData, adminData: RegisterAdminData) {
     return await prisma.$transaction(async (tx) => {
@@ -246,9 +253,30 @@ const tenantRepository = {
         slug: true,
         aboutUs: {
           select: { logo: true },
-          take: 1 
+          take: 1
         }
       }
+    });
+  },
+
+  async updateStoreProfile(tenantId: string, data: UpdateStoreProfileData) {
+    return await prisma.tenant.update({
+      where: {
+        tenantId,
+      },
+      data: {
+        businessName: data.businessName,
+        description: data.description,
+        whatsApp: data.whatsApp,
+        slug: data.slug,
+      },
+      select: {
+        tenantId: true,
+        businessName: true,
+        description: true,
+        whatsApp: true,
+        slug: true,
+      },
     });
   },
 }

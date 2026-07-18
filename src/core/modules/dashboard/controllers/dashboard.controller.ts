@@ -95,7 +95,43 @@ const dashboardController = {
       console.error("[STORE_STATS_ERROR]", error);
       return apiResponse.error(error.message || 'Error al obtener la información de la tienda', 500);
     }
-  }
+  },
+
+  async updateStoreProfile(
+    tenantId?: string,
+    body?: {
+      businessName: string;
+      description: string;
+      whatsApp: string;
+      slug: string;
+    }
+  ) {
+
+    if (!tenantId)
+      return apiResponse.error("Tenant requerido", 400);
+
+    if (!body)
+      return apiResponse.error("Datos requeridos", 400);
+
+    try {
+
+      const profile = await tenantService.updateStoreProfile(
+        tenantId,
+        body
+      );
+
+      return apiResponse.success(profile);
+
+    } catch (error: any) {
+
+      return apiResponse.error(
+        error.message ||
+        "No fue posible actualizar la información.",
+        500
+      );
+    }
+
+  },
 };
 
 export default dashboardController;

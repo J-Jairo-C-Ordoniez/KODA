@@ -1,5 +1,11 @@
-import { useReducer, useEffect } from "react";
-import { fetchGeneralStatsApi, fetchFinanceStatsApi, fetchInventoryStatsApi, fetchStoreDataStatsApi } from "@/features/dashboard/business/api/dashboard.api";
+import { useReducer, useEffect, useCallback, useState } from "react";
+import {
+  fetchGeneralStatsApi,
+  fetchFinanceStatsApi,
+  fetchInventoryStatsApi,
+  fetchStoreDataStatsApi,
+  updateStoreProfileApi,
+} from "@/features/dashboard/business/api/dashboard.api";
 
 type State<T> = {
   data: T | null;
@@ -12,10 +18,7 @@ type Action<T> =
   | { type: "FETCH_SUCCESS"; payload: T | null }
   | { type: "FETCH_ERROR"; payload: string };
 
-function reducer<T>(
-  state: State<T>,
-  action: Action<T>
-): State<T> {
+function reducer<T>(state: State<T>, action: Action<T>): State<T> {
   switch (action.type) {
     case "FETCH_START":
       return {
@@ -49,54 +52,70 @@ export default function useTabStats<T>(activeTab: string) {
     data: null,
     isLoading: true,
     error: null,
-  } as State<T>);
+  });
 
-  useEffect(() => {
-    const loadTabData = async () => {
-      if (!activeTab) return;
+  const [isSaving, setIsSaving] = useState(false);
 
-      dispatch({ type: "FETCH_START" });
+  const loadTabData = useCallback(async () => {
+    if (!activeTab) return;
 
-      try {
-        let data: T | null = null;
+    dispatch({ type: "FETCH_START" });
 
-        switch (activeTab) {
-          case "view-general":
-            data = (await fetchGeneralStatsApi()) as T;
-            break;
+    try {
+      let data: T | null = null;
 
-          case "finances":
-            data = (await fetchFinanceStatsApi()) as T;
-            break;
+      switch (activeTab) {
+        case "view-general":
+          data = (await fetchGeneralStatsApi()) as T;
+          break;
 
-          case "inventory":
-            data = (await fetchInventoryStatsApi()) as T;
-            break;
+        case "finances":
+          data = (await fetchFinanceStatsApi()) as T;
+          break;
 
-          case "my-store":
-            data = (await fetchStoreDataStatsApi()) as T;
-            break;
+        case "inventory":
+          data = (await fetchInventoryStatsApi()) as T;
+          break;
 
-          default:
-            data = null;
-        }
-
-        dispatch({
-          type: "FETCH_SUCCESS",
-          payload: data,
-        });
-      } catch (err: any) {
-        dispatch({
-          type: "FETCH_ERROR",
-          payload:
-            err.message ??
-            `Error al cargar la sección ${activeTab}`,
-        });
+        case "my-store":
+          data = (await fetchStoreDataStatsApi()) as T;
+          break;
       }
-    };
 
-    loadTabData();
+      dispatch({
+        type: "FETCH_SUCCESS",
+        payload: data,
+      });
+    } catch (err: any) {
+      dispatch({
+        type: "FETCH_ERROR",
+        payload: err.message ?? "Error al cargar la información",
+      });
+    }
   }, [activeTab]);
 
-  return state;
+  useEffect(() => {
+    loadTabData();
+  }, [loadTabData]);
+
+  const updateStoreProfile = useCallback(async (payload: any) => {
+    try {
+      setIsSaving(true);
+
+      await updateStoreProfileApi(payload);
+
+      await loadTabData();
+
+      return true;
+    } finally {
+      setIsSaving(false);
+    }
+  }, [loadTabData]);
+
+  return {
+    ...state,
+    refresh: loadTabData,
+    updateStoreProfile,
+    isSaving,
+  };
 }

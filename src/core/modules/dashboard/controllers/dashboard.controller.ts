@@ -3,6 +3,7 @@ import salesService from '@/core/modules/sales/services/sales.service';
 import customerService from '@/core/modules/customers/services/customer.service';
 import inventoryService from '@/core/modules/inventory/services/inventory.service';
 import subscriptionService from '@/core/modules/subscriptions/services/subscription.service';
+import tenantService from '@/core/modules/tenants/services/tenant.service';
 
 const dashboardController = {
   async getSidebarStats(tenantId?: string) {
@@ -58,33 +59,41 @@ const dashboardController = {
   async getInventoryStats(tenantId?: string) {
     if (!tenantId) return apiResponse.error('Tenant requerido', 400);
     try {
-      const [totalProducts, lowStockItems, outOfStockItems] = await Promise.all([
-        inventoryService.getLowStockItems(tenantId),
-        inventoryService.getLowStockItems(tenantId),
-        inventoryService.getLowStockItems(tenantId),
-      ]);
-      return apiResponse.success({ totalProducts, lowStockItems, outOfStockItems });
+      const dashboardData = await inventoryService.getInventoryDashboardStats(tenantId);
+      return apiResponse.success(dashboardData);
+
     } catch (error: any) {
-      return apiResponse.error(error.message || 'Error al obtener inventario', 500);
+      return apiResponse.error(error.message || 'Error al procesar las estadísticas de inventario', 500);
     }
   },
 
   async getConfigStats(tenantId?: string) {
     if (!tenantId) return apiResponse.error('Tenant requerido', 400);
+
     try {
-      const subscription = await subscriptionService.getSubscription(tenantId);
+      const [profile, subscription] = await Promise.all([
+        tenantService.getStoreProfile(tenantId),
+        subscriptionService.getSubscription(tenantId)
+      ]);
 
       return apiResponse.success({
+        profile: profile,
         subscription: subscription ? {
-          planName: subscription.plan.name,
-          planPrice: Number(subscription.plan.price),
-          interval: subscription.plan.interval,
           status: subscription.status,
+          startDate: subscription.startDate,
           endDate: subscription.endDate,
+          plan: {
+            name: subscription.plan.name,
+            price: Number(subscription.plan.price),
+            interval: subscription.plan.interval,
+            features: subscription.plan.feature
+          }
         } : null,
       });
+
     } catch (error: any) {
-      return apiResponse.error(error.message || 'Error al obtener configuración', 500);
+      console.error("[STORE_STATS_ERROR]", error);
+      return apiResponse.error(error.message || 'Error al obtener la información de la tienda', 500);
     }
   }
 };

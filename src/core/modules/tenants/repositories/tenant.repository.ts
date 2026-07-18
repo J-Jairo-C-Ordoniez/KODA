@@ -234,6 +234,23 @@ const tenantRepository = {
       data: { status: status as SubscriptionStatus }
     });
   },
+
+  async getStoreProfile(tenantId: string) {
+    return await prisma.tenant.findUnique({
+      where: { tenantId },
+      select: {
+        tenantId: true,
+        businessName: true,
+        description: true,
+        whatsApp: true,
+        slug: true,
+        aboutUs: {
+          select: { logo: true },
+          take: 1 
+        }
+      }
+    });
+  },
 }
 
 export default tenantRepository;

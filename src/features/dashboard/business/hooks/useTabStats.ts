@@ -1,9 +1,5 @@
 import { useReducer, useEffect } from "react";
-import {
-  fetchGeneralStatsApi,
-  fetchFinanceStatsApi,
-  fetchConfigStatsApi,
-} from "@/features/dashboard/business/api/dashboard.api";
+import { fetchGeneralStatsApi, fetchFinanceStatsApi, fetchInventoryStatsApi, fetchStoreDataStatsApi } from "@/features/dashboard/business/api/dashboard.api";
 
 type State<T> = {
   data: T | null;
@@ -74,11 +70,11 @@ export default function useTabStats<T>(activeTab: string) {
             break;
 
           case "inventory":
-            data = {} as T;
+            data = (await fetchInventoryStatsApi()) as T;
             break;
 
           case "my-store":
-            data = (await fetchConfigStatsApi()) as T;
+            data = (await fetchStoreDataStatsApi()) as T;
             break;
 
           default:

@@ -1,12 +1,12 @@
 import { BarChart3 } from 'lucide-react';
-import { SalesChart } from './SalesChart';
-import { TrendPoint } from '@/features/dashboard/business/hooks/useTabStats';
+import SalesChart from '@/features/dashboard/business/components/main/sections/summary/Main/ui/SalesChart';
+import { TrendPoint } from '@/features/dashboard/business/api/dashboard.api';
 
 interface SalesTrendCardProps {
   salesTrend?: TrendPoint[];
 }
 
-export function SalesTrendCard({ salesTrend }: SalesTrendCardProps) {
+export default function SalesTrendCard({ salesTrend }: SalesTrendCardProps) {
   return (
     <article className="ov-chart lg:col-span-2 bg-background-card border border-primary/8 p-5 rounded-2xl">
       <header className="flex items-center gap-4 mb-4">

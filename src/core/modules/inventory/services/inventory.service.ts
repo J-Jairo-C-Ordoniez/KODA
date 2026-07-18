@@ -38,12 +38,37 @@ const inventoryService = {
     }
   },
 
-  async getDashboardData(tenantId: string) {
-    const [totalStock, lowStockItems] = await Promise.all([
-      inventoryRepository.getTotalStock(tenantId),
-      inventoryRepository.getLowStockItems(tenantId)
-    ]);
-    return { totalStock, lowStockItems };
+  async getInventoryDashboardStats(tenantId: string) {
+    try {
+      const [
+        totalPhysicalItems,
+        totalInvestedCapital,
+        criticalStockItems,
+        topSales,
+        stagnantItems,
+        outOfStockItems
+      ] = await Promise.all([
+        inventoryRepository.getTotalStock(tenantId),
+        inventoryRepository.getInvestedCapital(tenantId),
+        inventoryRepository.getCriticalStockCount(tenantId),
+        inventoryRepository.getTopSales(tenantId),
+        inventoryRepository.getStagnantItems(tenantId),
+        inventoryRepository.getOutOfStockItems(tenantId)
+      ]);
+
+      return {
+        metrics: {
+          totalPhysicalItems,
+          totalInvestedCapital,
+          criticalStockItems
+        },
+        topSales,
+        stagnantItems,
+        outOfStockItems
+      };
+    } catch (error: any) {
+      throw new Error(`Error al compilar las estadísticas del dashboard: ${error.message}`);
+    }
   },
 
   async getLowStockItems(tenantId: string) {

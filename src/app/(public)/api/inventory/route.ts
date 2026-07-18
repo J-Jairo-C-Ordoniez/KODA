@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
     return apiResponse.error('No autorizado', 401);
   }
 
-  // Only owners and admins can update stock
   const denied = requireRole(session.user.role, ['owner', 'admin', 'superAdmin']);
   if (denied) return denied;
 

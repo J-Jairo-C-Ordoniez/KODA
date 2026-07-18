@@ -8,19 +8,19 @@ import { formatCurrency } from "@/lib/formatters";
 import Loader from "@/shared/components/Loader";
 import Error from "@/shared/components/Error";
 import KPIs from "@/features/dashboard/business/components/main/sections/summary/Main/ui/KPIs";
-import { SalesTrendCard } from "@/features/dashboard/business/components/main/sections/summary/Main/ui/SalesTrendCard";
+import SalesTrendCard from "@/features/dashboard/business/components/main/sections/summary/Main/ui/SalesTrendCard";
 
 export default function ViewGeneral({ activeTab }: { activeTab: string; }) {
     const { data, isLoading, error } = useTabStats<GeneralStats>(activeTab);
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-6 animate-in fade-in duration-500">
             <header>
                 <h2 className="text-2xl font-bold text-primary tracking-tight">
                     Resumen del día
                 </h2>
 
-                <p className="text-primary/50 text-lg font-medium mt-1">
+                <p className="text-gray-500 text-base mt-1 max-w-2xl">
                     Métricas de ingresos, abonos y alertas operativas en tiempo real.
                 </p>
             </header>

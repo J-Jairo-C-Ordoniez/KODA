@@ -17,32 +17,37 @@ interface InventoryListCardProps {
 
 export function InventoryListCard({ title, icon, items, emptyMessage = "No hay datos disponibles." }: InventoryListCardProps) {
     return (
-        <article className="bg-white border border-gray-200 shadow-sm hover:shadow-md p-5 rounded-2xl transition-all duration-300 flex flex-col h-full">
-            <header className="mb-4 flex items-center gap-2">
-                <div aria-hidden="true">{icon}</div>
-                <h3 className="text-lg font-bold text-gray-900 tracking-tight">
+        <article className="bg-white border border-gray-100 shadow-sm hover:shadow-md rounded-2xl flex flex-col h-full overflow-hidden transition-shadow duration-300">
+            <header className="p-5 pb-4 flex items-center gap-2 border-b border-gray-50/50">
+                <div aria-hidden="true" className="p-1.5 bg-gray-50 rounded-lg">
+                    {icon}
+                </div>
+                <h3 className="text-base font-bold text-gray-800 tracking-tight">
                     {title}
                 </h3>
             </header>
 
-            <div className="flex-1">
+            <div className="flex-1 p-2">
                 {items.length === 0 ? (
-                    <p className="text-sm text-gray-500 text-center py-6">{emptyMessage}</p>
+                    <div className="flex flex-col items-center justify-center h-full min-h-[120px] text-center px-4">
+                        <p className="text-sm font-medium text-gray-400">{emptyMessage}</p>
+                    </div>
                 ) : (
-                    <ul className="divide-y divide-gray-100">
+                    <ul className="flex flex-col gap-1">
                         {items.map((item) => (
-                            <li key={item.id} className="flex justify-between items-center py-3 first:pt-0 last:pb-0 group">
+                            <li
+                                key={item.id}
+                                className="flex justify-between items-center p-3 rounded-xl hover:bg-gray-50 transition-colors group"
+                            >
                                 <div className="flex flex-col gap-0.5">
-                                    <p className="text-sm font-semibold text-gray-900 line-clamp-1">
+                                    <p className="text-sm font-medium text-gray-700 line-clamp-1 group-hover:text-gray-900 transition-colors">
                                         {item.title}
                                     </p>
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-gray-400">
                                         {item.subtitle}
                                     </p>
                                 </div>
-                                <span
-                                    className={`text-xs font-bold px-2 py-1 rounded-md border whitespace-nowrap ml-3 ${item.badgeStyles}`}
-                                >
+                                <span className={`shrink-0 ml-3 ${item.badgeStyles}`}>
                                     {item.badgeText}
                                 </span>
                             </li>

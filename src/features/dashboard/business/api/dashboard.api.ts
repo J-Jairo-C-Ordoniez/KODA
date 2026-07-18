@@ -67,8 +67,66 @@ export interface FinanceStats {
   topDebtors: Debtor[];
 }
 
-export interface ConfigStats {
-  subscription: SubscriptionInfo | null;
+export interface InventoryMetrics {
+    totalPhysicalItems: number;
+    totalInvestedCapital: number;
+    criticalStockItems: number;
+}
+
+export interface TopVariant {
+    variantId: string;
+    productName: string;
+    size: string;
+    stock: number;
+    totalSold: number;
+}
+
+export interface StagnantVariant {
+    variantId: string;
+    productName: string;
+    size: string;
+    stock: number;
+    daysWithoutSale: number;
+}
+
+export interface OutOfStockVariant {
+    variantId: string;
+    productName: string;
+    size: string;
+    sku: string;
+}
+
+export interface InventoryStats {
+    metrics: InventoryMetrics;
+    topSales: TopVariant[];
+    stagnantItems: StagnantVariant[];
+    outOfStockItems: OutOfStockVariant[];
+}
+
+export interface StoreProfile {
+    tenantId: string;
+    businessName: string;
+    description: string | null;
+    whatsApp: string;
+    slug: string;
+    logo: string | null;
+}
+
+export interface StoreSubscription {
+    status: 'active' | 'pastDue' | 'canceled' | 'noVerify' | 'mora' | 'suspended';
+    startDate: Date | string;
+    endDate: Date | string;
+    plan: {
+        name: string;
+        price: number;
+        interval: string;
+        features: string[];
+    };
+}
+
+export interface StoreDataStats {
+    profile: StoreProfile;
+    subscription: StoreSubscription | null;
 }
 
 export async function fetchSidebarStatsApi(tenantId?: string): Promise<SidebarStats> {
@@ -107,7 +165,19 @@ export async function fetchFinanceStatsApi(tenantId?: string): Promise<FinanceSt
   return data.data;
 }
 
-export async function fetchConfigStatsApi(tenantId?: string): Promise<ConfigStats> {
+export async function fetchInventoryStatsApi(tenantId?: string): Promise<InventoryStats> {
+  const url = tenantId ? `/api/dashboard/inventory?tenantId=${tenantId}` : '/api/dashboard/inventory';
+  const response = await fetch(url, { cache: 'no-store' });
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.error || data.message || "Error al cargar las métricas de inventario");
+  }
+
+  return data.data;
+}
+
+export async function fetchStoreDataStatsApi(tenantId?: string): Promise<StoreDataStats> {
   const url = tenantId ? `/api/dashboard/config?tenantId=${tenantId}` : '/api/dashboard/config';
   const response = await fetch(url, { cache: 'no-store' });
   const data = await response.json();

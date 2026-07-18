@@ -139,6 +139,27 @@ const tenantService = {
     } catch (error) {
       return error;
     }
+  },
+
+  async getStoreProfile(tenantId: string) {
+    try {
+      const tenant = await tenantRepository.getStoreProfile(tenantId);
+      
+      if (!tenant) {
+        throw new Error("Información de la tienda no encontrada.");
+      }
+
+      return {
+        tenantId: tenant.tenantId,
+        businessName: tenant.businessName,
+        description: tenant.description,
+        whatsApp: tenant.whatsApp,
+        slug: tenant.slug,
+        logo: tenant.aboutUs.length > 0 ? tenant.aboutUs[0].logo : null
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

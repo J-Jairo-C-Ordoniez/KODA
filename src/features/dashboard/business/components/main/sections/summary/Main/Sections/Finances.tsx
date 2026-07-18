@@ -7,18 +7,18 @@ import Loader from "@/shared/components/Loader";
 import Error from "@/shared/components/Error";
 import KPIs from "@/features/dashboard/business/components/main/sections/summary/Main/ui/KPIs";
 import PendingCollectionsCard from '@/features/dashboard/business/components/main/sections/summary/Main/ui/PendingCollectionsCard';
-import ProfitMarginCard from '@/features/dashboard/business/components/main/sections/summary/Main/ui/PaymentMethodsCard';
+import ProfitMarginCard from '@/features/dashboard/business/components/main/sections/summary/Main/ui/ProfitMarginCard';
 
 
 export default function Finances({ activeTab }: { activeTab: string; }) {
     const { data, isLoading, error } = useTabStats<FinanceStats>(activeTab);
     return (
-        <section className="space-y-6">
+        <section className="space-y-6 animate-in fade-in duration-500">
             <header>
                 <h2 className="text-2xl font-bold text-primary tracking-tight">
                     Finanzas y Cuentas por Cobrar
                 </h2>
-                <p className="text-primary/50 text-lg font-medium mt-1">
+                <p className="text-gray-500 text-base mt-1 max-w-2xl">
                     Control de liquidez, dinero en la calle y utilidades estimadas.
                 </p>
             </header>

@@ -24,7 +24,7 @@ export default function BusinessBottomNav() {
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-50 lg:hidden">
-      <nav className="flex items-center justify-around bg-bckground backdrop-blur-2xl border border-primary/10 p-2 rounded-4xl shadow-2xl shadow-background/20">
+      <nav className="flex items-center justify-around bg-background backdrop-blur-2xl border border-primary/10 p-2 rounded-4xl shadow-2xl shadow-background/20">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (

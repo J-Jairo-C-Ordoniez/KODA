@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Tag, Plus } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { useAdminCatalog } from '@/features/business/catalog/hooks/useAdminCatalog';
+import { useAdminCatalog } from '@/features/dashboard/business/hooks/useProducts';
 import { SectionHeader } from '@/features/business/dashboard/components/Summary/Main/ui/SectionHeader';
 import { EmptyState } from '@/features/business/dashboard/components/business-ui/EmptyState';
 import Loader from '@/shared/components/ui/Loader';

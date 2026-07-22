@@ -7,7 +7,7 @@ import MainCategory from './ui/MainCategory';
 import Modal from './ui/Modal';
 import CategoryForm from './ui/CategoryForm';
 import ActionDialog from './ui/ActionDialog';
-import { useAdminCatalog } from '@/features/business/catalog/hooks/useAdminCatalog';
+import { useAdminCatalog } from '@/features/dashboard/business/hooks/useProducts';
 import { useSession } from 'next-auth/react';
 
 export default function CategoryClient() {

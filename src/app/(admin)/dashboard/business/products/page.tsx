@@ -1,9 +1,9 @@
-import Summary from '@/features/dashboard/business/components/main/sections/summary/Summary';
+import Products from '@/features/dashboard/business/components/main/sections/products/Products';
 
-export const metadata = { title: 'Resumen' };
+export const metadata = { title: 'Productos' };
 
-export default function SummaryPage() {
+export default function ProductsPage() {
   return (
-    <Summary />
-  )
+    <Products />
+  );
 }

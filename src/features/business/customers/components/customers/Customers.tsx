@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Users, Search, X } from 'lucide-react';
 import { useCustomers } from '@/features/business/customers/hooks/useCustomers';
-import { SectionHeader } from '@/features/business/dashboard/components/Summary/Main/ui/SectionHeader';
+import { SectionHeader } from '@/shared/components/SectionHeader';
 import { EmptyState } from '@/features/business/dashboard/components/business-ui/EmptyState';
-import Loader from '@/shared/components/ui/Loader';
+import Loader from '@/shared/components/Loader';
 import { useSession } from 'next-auth/react';
-import { Toaster, useToast } from '@/shared/components/ui/Toast';
+import { Toaster, useToast } from '@/shared/components/Toast';
 import { CustomerCard } from './ui/CustomerCard';
 import { CustomerPaymentModal, CustomerHistoryModal } from './ui/CustomerModals';
 

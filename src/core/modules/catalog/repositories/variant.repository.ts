@@ -57,17 +57,18 @@ const variantRepository = {
 
   async update(variantId: string, data: any) {
     return await prisma.$transaction(async (tx) => {
+      const updateData: any = {};
+      if (data.name !== undefined) updateData.name = data.name;
+      if (data.sku !== undefined) updateData.sku = data.sku;
+      if (data.color !== undefined) updateData.color = data.color;
+      if (data.size !== undefined) updateData.size = data.size;
+      if (data.price !== undefined) updateData.price = parseFloat(data.price);
+      if (data.cost !== undefined) updateData.cost = parseFloat(data.cost || 0);
+      if (data.isActive !== undefined) updateData.isActive = data.isActive === true || data.isActive === 'true';
+
       const variant = await tx.variant.update({
         where: { variantId },
-        data: {
-          name: data.name,
-          sku: data.sku,
-          color: data.color,
-          size: data.size,
-          price: parseFloat(data.price),
-          cost: parseFloat(data.cost || 0),
-          isActive: data.isActive === true || data.isActive === 'true'
-        }
+        data: updateData
       });
 
       if (data.image) {
@@ -87,6 +88,27 @@ const variantRepository = {
               variantId,
               content: data.image,
               isPrimary: true
+            }
+          });
+        }
+      }
+
+      if (data.stock !== undefined) {
+        const stockVal = parseInt(data.stock);
+        const existingStock = await tx.inventory.findFirst({
+          where: { variantId }
+        });
+
+        if (existingStock) {
+          await tx.inventory.update({
+            where: { inventoryId: existingStock.inventoryId },
+            data: { stock: stockVal }
+          });
+        } else {
+          await tx.inventory.create({
+            data: {
+              variantId,
+              stock: stockVal
             }
           });
         }

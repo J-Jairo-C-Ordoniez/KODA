@@ -45,8 +45,10 @@ const variantService = {
 
   async updateVariant(tenantId: string, id: string, data: any) {
     try {
-      if (!data.name || !data.sku || !data.price) {
-        throw new Error('Nombre, SKU y precio son requeridos');
+      if (data.stock === undefined && data.isActive === undefined) {
+        if (!data.name || !data.sku || !data.price) {
+          throw new Error('Nombre, SKU y precio son requeridos');
+        }
       }
 
       const variant = await this.getVariantById(tenantId, id);

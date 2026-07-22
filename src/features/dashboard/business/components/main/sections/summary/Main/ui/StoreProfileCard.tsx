@@ -101,12 +101,12 @@ export default function StoreProfileCard({ formData, setFormData, isEditing }: {
                         </div>
                     ) : (
                         <Link
-                            href={`https://koda.app/${formData.slug}`}
+                            href={`/${formData.slug}`}
                             target="_blank"
                             rel="noreferrer"
                             className="font-semibold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors break-all"
                         >
-                            koda.app/{formData.slug} <ArrowUpRight size={14} />
+                            https://kodaebon.vercel.app/{formData.slug} <ArrowUpRight size={14} />
                         </Link>
                     )}
                 </div>

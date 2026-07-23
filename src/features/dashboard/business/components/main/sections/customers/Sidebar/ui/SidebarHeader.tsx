@@ -1,29 +1,23 @@
 'use client';
 
-import { Users, Plus } from 'lucide-react';
-
 interface SidebarHeaderProps {
-  onNewCustomer: () => void;
+  filterType: string;
+  onSelectAll: () => void;
 }
 
-export default function SidebarHeader({ onNewCustomer }: SidebarHeaderProps) {
+export default function SidebarHeader({ filterType, onSelectAll }: SidebarHeaderProps) {
   return (
-    <div className="space-y-3 border-b border-primary/5 pb-4">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-primary text-background flex items-center justify-center shadow-md">
-          <Users size={20} />
-        </div>
-        <div>
-          <h2 className="text-base font-bold text-primary tracking-tight">Clientes</h2>
-          <p className="text-xs font-medium text-primary/50">Cuaderno y deudas</p>
-        </div>
-      </div>
-
+    <div className="flex items-center justify-between px-2 mt-2">
+      <h2 className="text-lg font-medium text-primary tracking-tight">Clientes</h2>
       <button
-        onClick={onNewCustomer}
-        className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-xs active:scale-95 cursor-pointer"
+        onClick={onSelectAll}
+        className={`rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+          filterType === 'all'
+            ? 'bg-foreground-muted/40 text-primary'
+            : 'text-primary/45 hover:bg-foreground-muted/40 hover:text-primary'
+        }`}
       >
-        <Plus size={15} /> Nuevo cliente
+        Ver todos
       </button>
     </div>
   );

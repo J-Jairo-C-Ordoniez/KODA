@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Sidebar as SidebarIcon } from 'lucide-react';
 import Sidebar from '@/features/dashboard/business/components/main/sections/customers/Sidebar/Sidebar';
 import CustomersMain from '@/features/dashboard/business/components/main/sections/customers/Main/Main';
@@ -10,16 +10,37 @@ import useCustomers from '@/features/dashboard/business/hooks/useCustomers';
 export default function Customers() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { toasts, showToast, removeToast } = useToast();
+
+  // Single source of truth — one hook instance for the entire page
   const {
+    customers,
+    filteredCustomers,
+    isLoading,
+    isSaving,
+    searchQuery,
+    setSearchQuery,
     filterType,
     setFilterType,
     totalWithDebt,
     totalPaid,
-    customers,
     totalDebtSum,
+    saveCustomer,
+    registerPayment,
+    deleteCustomer,
+    getCustomerHistory,
   } = useCustomers();
 
-  const [isNewCustomerModalOpen, setIsNewCustomerModalOpen] = useState(false);
+  // Ref to trigger "new customer" view from sidebar
+  const newCustomerRef = useRef<(() => void) | null>(null);
+
+  const handleNewCustomer = () => {
+    if (newCustomerRef.current) {
+      newCustomerRef.current();
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      }
+    }
+  };
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden relative">
@@ -52,7 +73,7 @@ export default function Customers() {
           onCloseMobile={() => setIsSidebarOpen(false)}
           filterType={filterType}
           onFilterChange={setFilterType}
-          onNewCustomer={() => setIsNewCustomerModalOpen(true)}
+          onNewCustomer={handleNewCustomer}
           totalWithDebt={totalWithDebt}
           totalPaid={totalPaid}
           totalCustomers={customers.length}
@@ -61,7 +82,25 @@ export default function Customers() {
       </div>
 
       <div className="flex-1 min-w-0 h-full overflow-y-auto px-4 sm:px-6 lg:px-8 py-8 pt-20 md:pt-8 custom-scrollbar bg-background relative">
-        <CustomersMain showToast={showToast} />
+        <CustomersMain
+          showToast={showToast}
+          onNewCustomerRef={newCustomerRef}
+          // Pass all shared state down
+          customers={customers}
+          filteredCustomers={filteredCustomers}
+          isLoading={isLoading}
+          isSaving={isSaving}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          filterType={filterType}
+          setFilterType={setFilterType}
+          totalWithDebt={totalWithDebt}
+          totalPaid={totalPaid}
+          saveCustomer={saveCustomer}
+          registerPayment={registerPayment}
+          deleteCustomer={deleteCustomer}
+          getCustomerHistory={getCustomerHistory}
+        />
       </div>
     </div>
   );

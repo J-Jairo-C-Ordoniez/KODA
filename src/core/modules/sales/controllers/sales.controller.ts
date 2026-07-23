@@ -9,8 +9,8 @@ const saleSchema = z.object({
     variantId: z.string(),
     quantity: z.number().int().positive(),
   })),
-  customerId: z.string().optional(),
-  total: z.number().positive(),
+  customerId: z.string().optional().nullable(),
+  total: z.number().optional(),
   paymentMethod: z.nativeEnum(PaymentMethod),
 });
 
@@ -24,12 +24,31 @@ const salesController = {
       }
 
       const saleData = parseResult.data;
+      const customerId = saleData.customerId || undefined;
 
-      if (saleData.paymentMethod === PaymentMethod.debt && !saleData.customerId) {
+      if (saleData.paymentMethod === PaymentMethod.debt && !customerId) {
         return apiResponse.error('Un fiado requiere seleccionar un cliente', 400);
       }
 
-      const sale = await salesService.registerSale(tenantId, userId, saleData);
+      // Ensure total is computed if not provided
+      let total = saleData.total ?? 0;
+      if (!total || total <= 0) {
+        // Compute total from variant prices in DB if total wasn't supplied
+        const variantIds = saleData.items.map(i => i.variantId);
+        const variants = await salesRepository.getSalesByTenant ? (await import('@/infrastructure/db/client')).default.variant.findMany({
+          where: { variantId: { in: variantIds } },
+          select: { variantId: true, price: true }
+        }) : [];
+        const map = new Map(variants.map(v => [v.variantId, Number(v.price)]));
+        total = saleData.items.reduce((acc, item) => acc + (map.get(item.variantId) ?? 0) * item.quantity, 0);
+      }
+
+      const sale = await salesService.registerSale(tenantId, userId, {
+        items: saleData.items,
+        customerId,
+        total,
+        paymentMethod: saleData.paymentMethod,
+      });
       return apiResponse.success(sale, 201);
     } catch (error: any) {
       return apiResponse.error(error.message || 'Error al procesar la venta', 500);

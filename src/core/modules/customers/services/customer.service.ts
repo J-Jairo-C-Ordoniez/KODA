@@ -23,6 +23,21 @@ const customerService = {
     return customerRepository.registerPayment(tenantId, customerId, data);
   },
 
+  async updateCustomer(tenantId: string, customerId: string, data: { name?: string; phone?: string }) {
+    if (!tenantId || !customerId) throw new Error('IDs requeridos');
+    return customerRepository.updateCustomer(tenantId, customerId, data);
+  },
+
+  async deleteCustomer(tenantId: string, customerId: string) {
+    if (!tenantId || !customerId) throw new Error('IDs requeridos');
+    return customerRepository.deleteCustomer(tenantId, customerId);
+  },
+
+  async getCustomerHistory(tenantId: string, customerId: string) {
+    if (!tenantId || !customerId) throw new Error('IDs requeridos');
+    return customerRepository.getCustomerHistory(tenantId, customerId);
+  },
+
   async getTopDebtors(tenantId: string) {
     if (!tenantId) throw new Error('Tenant ID requerido');
     return customerRepository.getTopDebtors(tenantId);

@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2, Eye, EyeOff } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, Save, Trash2, Eye, EyeOff, UploadCloud, Image as ImageIcon, RefreshCw } from 'lucide-react';
+import { CldUploadWidget } from 'next-cloudinary';
+import Image from 'next/image';
 
 interface VariantDrawerProps {
   isOpen: boolean;
@@ -22,6 +25,7 @@ export default function VariantDrawer({
   onDelete,
   isSaving,
 }: VariantDrawerProps) {
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     sku: '',
@@ -34,6 +38,10 @@ export default function VariantDrawer({
     isActive: true,
   });
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (variant) {
@@ -64,14 +72,27 @@ export default function VariantDrawer({
     setError(null);
   }, [variant, isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
+  };
+
+  const handleLocalFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setFormData(prev => ({ ...prev, image: reader.result as string }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,16 +123,16 @@ export default function VariantDrawer({
     }
   };
 
-  return (
+  const drawerContent = (
     <>
-      {/* Blurred Backdrop */}
+      {/* Blurred Backdrop - Covers 100% viewport via Portal */}
       <div
         onClick={onClose}
-        className="fixed inset-0 z-[140] bg-black/10 backdrop-blur-md transition-opacity animate-fade-in"
+        className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-md transition-opacity animate-fade-in"
       />
 
-      {/* Drawer */}
-      <aside className="fixed inset-y-0 right-0 z-[150] w-full max-w-md bg-background border-l border-primary/5 shadow-2xl flex flex-col animate-slide-in-right h-full">
+      {/* Drawer Panel */}
+      <aside className="fixed inset-y-0 right-0 z-[10000] w-full max-w-md bg-background border-l border-primary/5 shadow-2xl flex flex-col animate-slide-in-right h-full">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-primary/5 bg-background-card">
           <div>
@@ -139,7 +160,7 @@ export default function VariantDrawer({
             </div>
           )}
 
-          {/* Nombre / Nombre Variante */}
+          {/* Nombre Variante */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block mb-1">
               Nombre de Variante *
@@ -278,30 +299,87 @@ export default function VariantDrawer({
             </div>
           </div>
 
-          {/* Imagen (URL) */}
-          <div className="space-y-1">
+          {/* Imagen — Subir desde equipo con Cloudinary */}
+          <div className="space-y-2">
             <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block mb-1">
-              URL de Imagen
+              Imagen de la Variante
             </label>
-            <input
-              type="text"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              placeholder="https://ejemplo.com/imagen.jpg"
-              className="w-full bg-foreground-muted/40 hover:bg-foreground-muted/60 focus:bg-background border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-xs text-primary font-medium outline-none transition-all"
-            />
-            {formData.image && (
-              <div className="mt-3 relative w-24 h-24 rounded-xl overflow-hidden border border-primary/8 bg-background-card p-1">
+
+            {formData.image ? (
+              <div className="relative group w-full aspect-video rounded-2xl overflow-hidden border border-primary/10 bg-foreground-muted/20 p-2 flex items-center justify-center">
                 <img
                   src={formData.image}
                   alt="Vista previa de variante"
-                  className="w-full h-full object-cover rounded-lg"
+                  className="max-h-full max-w-full object-contain rounded-xl"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
                 />
+
+                {/* Overlay con acciones */}
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                  <CldUploadWidget
+                    uploadPreset="clothing_upload"
+                    onSuccess={(result: any) => {
+                      if (result.info && typeof result.info === 'object' && 'secure_url' in result.info) {
+                        setFormData(prev => ({ ...prev, image: result.info.secure_url as string }));
+                      }
+                    }}
+                  >
+                    {({ open }) => (
+                      <button
+                        type="button"
+                        onClick={() => open()}
+                        className="px-3 py-2 bg-white/90 hover:bg-white text-primary text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                      >
+                        <RefreshCw size={13} /> Cambiar
+                      </button>
+                    )}
+                  </CldUploadWidget>
+
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                    className="px-3 py-2 bg-red-500/90 hover:bg-red-500 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                  >
+                    <Trash2 size={13} /> Quitar
+                  </button>
+                </div>
               </div>
+            ) : (
+              <CldUploadWidget
+                uploadPreset="clothing_upload"
+                onSuccess={(result: any) => {
+                  if (result.info && typeof result.info === 'object' && 'secure_url' in result.info) {
+                    setFormData(prev => ({ ...prev, image: result.info.secure_url as string }));
+                  }
+                }}
+              >
+                {({ open }) => (
+                  <div
+                    onClick={() => open()}
+                    className="w-full border-2 border-dashed border-primary/15 hover:border-primary/30 bg-foreground-muted/20 hover:bg-foreground-muted/40 rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-primary/5 group-hover:bg-primary/10 text-primary flex items-center justify-center transition-colors">
+                      <UploadCloud size={20} />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs font-bold text-primary">Subir imagen del equipo</p>
+                      <p className="text-[10px] font-medium text-primary/50 mt-0.5">
+                        Selecciona un archivo JPG, PNG o WEBP
+                      </p>
+                    </div>
+                    {/* Fallback local file input hidden */}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLocalFileChange}
+                      className="hidden"
+                      id="variant-file-input"
+                    />
+                  </div>
+                )}
+              </CldUploadWidget>
             )}
           </div>
         </form>
@@ -331,4 +409,6 @@ export default function VariantDrawer({
       </aside>
     </>
   );
+
+  return createPortal(drawerContent, document.body);
 }

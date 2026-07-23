@@ -215,3 +215,26 @@ export async function updateStoreProfileApi(payload: UpdateStoreProfileDto): Pro
     );
   }
 }
+
+export interface CustomerOption {
+  customerId: string;
+  name: string;
+  phone?: string;
+  totalDebt: number;
+}
+
+export async function fetchCustomersApi(tenantId: string): Promise<CustomerOption[]> {
+  const response = await fetch(`/api/${tenantId}/customers`, { cache: 'no-store' });
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    return [];
+  }
+
+  return (data.data || []).map((c: any) => ({
+    customerId: c.customerId,
+    name: c.name,
+    phone: c.phone,
+    totalDebt: Number(c.totalDebt ?? 0),
+  }));
+}

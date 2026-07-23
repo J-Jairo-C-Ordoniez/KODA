@@ -125,12 +125,8 @@ export default function ActiveCartTicket({
       <div className="border-t border-primary/8 pt-4 mt-4 space-y-4">
         <div className="space-y-1.5 text-xs font-semibold">
           <div className="flex justify-between text-primary/60">
-            <span>Subtotal</span>
+            <span>Subtotal ({totalItems} item{totalItems !== 1 ? 's' : ''})</span>
             <span>{formatCurrency(subtotal)}</span>
-          </div>
-          <div className="flex justify-between text-primary/60">
-            <span>Impuestos (Incluidos)</span>
-            <span>$ 0</span>
           </div>
           <div className="flex justify-between text-base font-bold text-primary pt-2 border-t border-primary/5">
             <span>Total a cobrar</span>

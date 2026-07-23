@@ -29,6 +29,32 @@ const customerController = {
       return apiResponse.error(error.message, 400);
     }
   },
+  async updateCustomer(tenantId: string, customerId: string, data: any) {
+    try {
+      const customer = await customerService.updateCustomer(tenantId, customerId, data);
+      return apiResponse.success(customer);
+    } catch (error: any) {
+      return apiResponse.error(error.message, 400);
+    }
+  },
+
+  async deleteCustomer(tenantId: string, customerId: string) {
+    try {
+      await customerService.deleteCustomer(tenantId, customerId);
+      return apiResponse.success({ message: 'Cliente eliminado correctamente' });
+    } catch (error: any) {
+      return apiResponse.error(error.message, 400);
+    }
+  },
+
+  async getCustomerHistory(tenantId: string, customerId: string) {
+    try {
+      const history = await customerService.getCustomerHistory(tenantId, customerId);
+      return apiResponse.success(history);
+    } catch (error: any) {
+      return apiResponse.error(error.message, 400);
+    }
+  },
 };
 
 export default customerController;

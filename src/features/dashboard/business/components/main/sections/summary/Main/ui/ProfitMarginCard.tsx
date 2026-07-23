@@ -13,8 +13,11 @@ interface ProfitMarginCardProps {
 
 export default function ProfitMarginCard({ profitData }: ProfitMarginCardProps) {
     const { totalRevenue, totalCost, totalProfit, margin } = profitData;
-    const costPercentage = totalRevenue > 0 ? (totalCost / totalRevenue) * 100 : 0;
-    const profitPercentage = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0;
+    const isLoss = totalProfit < 0;
+
+    // Normalize progress bar width safely (avoiding negative width values)
+    const costPercentage = totalRevenue > 0 ? Math.min(100, (totalCost / totalRevenue) * 100) : 0;
+    const profitPercentage = totalRevenue > 0 ? Math.max(0, (totalProfit / totalRevenue) * 100) : 0;
 
     return (
         <section
@@ -35,21 +38,21 @@ export default function ProfitMarginCard({ profitData }: ProfitMarginCardProps) 
 
             <div className="relative h-2.5 w-full bg-primary/5 rounded-full overflow-hidden flex">
                 <div
-                    className="bg-primary/20 h-full transition-all duration-700 ease-out"
+                    className={`${isLoss ? 'bg-red-300' : 'bg-primary/20'} h-full transition-all duration-700 ease-out`}
                     style={{ width: `${costPercentage}%` }}
                     title={`Costos: ${formatPercentage(costPercentage)}`}
                 />
                 <div
                     className="bg-emerald-400 h-full transition-all duration-700 ease-out"
                     style={{ width: `${profitPercentage}%` }}
-                    title={`Utilidad: ${formatPercentage(profitPercentage)}`}
+                    title={`Utilidad: ${formatPercentage(margin)}`}
                 />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-primary/20" aria-hidden="true" />
+                        <span className={`w-2 h-2 rounded-full ${isLoss ? 'bg-red-400' : 'bg-primary/20'}`} aria-hidden="true" />
                         <span className="text-xs font-medium text-primary/60 uppercase tracking-wider">
                             Costos
                         </span>
@@ -61,12 +64,12 @@ export default function ProfitMarginCard({ profitData }: ProfitMarginCardProps) 
 
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
+                        <span className={`w-2 h-2 rounded-full ${isLoss ? 'bg-red-500' : 'bg-emerald-400'}`} aria-hidden="true" />
                         <span className="text-xs font-medium text-primary/60 uppercase tracking-wider">
-                            Utilidad
+                            {isLoss ? 'Pérdida Neto' : 'Utilidad'}
                         </span>
                     </div>
-                    <span className="text-sm font-bold text-emerald-600 tabular-nums">
+                    <span className={`text-sm font-bold tabular-nums ${isLoss ? 'text-red-600' : 'text-emerald-600'}`}>
                         {formatCurrency(totalProfit)}
                     </span>
                 </div>

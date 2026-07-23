@@ -1,15 +1,9 @@
-import { useMemo, useState, useCallback, useEffect } from 'react';
-import { useCatalogStore } from '@/store/useProductsStore';
+import { useReducer, useEffect, useCallback, useState, useMemo } from 'react';
+import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/store/useCartStore';
-import { fetchProductsDataApi } from '@/features/dashboard/business/api/products.api';
-import {
-  fetchSalesMetricsApi,
-  fetchCustomersApi,
-  createSaleApi,
-  type SalesPOSMetrics,
-  type CustomerSummary,
-  type CreateSaleDto,
-} from '@/features/dashboard/business/api/sales.api';
+import { fetchGeneralStatsApi, fetchCustomersApi, type GeneralStats } from '@/features/dashboard/business/api/dashboard.api';
+import { fetchProductsDataApi, type Category, type Variant, type Product } from '@/features/dashboard/business/api/products.api';
+import { createSaleApi, type CreateSaleDto } from '@/features/dashboard/business/api/sales.api';
 
 export interface HydratedCartItem {
   variantId: string;
@@ -25,177 +19,286 @@ export interface HydratedCartItem {
   quantity: number;
 }
 
-export default function useSalesPOS(tenantId: string = 'default-tenant') {
-  const { products, categories, isLoading: catalogLoading, setCatalogData, setLoading } = useCatalogStore();
-  const { items: cartReferences, addItem, removeItem, updateQuantity, clearCart } = useCartStore();
+export interface POSVariant extends Variant {
+  productId: string;
+  productName: string;
+  categoryId: string;
+  primaryImage: string;
+  stock: number;
+}
 
+export interface CustomerOption {
+  customerId: string;
+  name: string;
+  phone?: string;
+  totalDebt: number;
+}
+
+type State = {
+  categories: Category[];
+  topVariants: POSVariant[];
+  searchResults: POSVariant[];
+  isLoadingCatalog: boolean;
+  isSearching: boolean;
+  generalStats: GeneralStats | null;
+  customers: CustomerOption[];
+  isLoadingCustomers: boolean;
+};
+
+type Action =
+  | { type: 'SET_CATALOG'; categories: Category[]; topVariants: POSVariant[] }
+  | { type: 'SET_SEARCH_RESULTS'; results: POSVariant[] }
+  | { type: 'SET_LOADING_CATALOG'; value: boolean }
+  | { type: 'SET_SEARCHING'; value: boolean }
+  | { type: 'SET_STATS'; data: GeneralStats }
+  | { type: 'SET_CUSTOMERS'; customers: CustomerOption[] }
+  | { type: 'SET_LOADING_CUSTOMERS'; value: boolean };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'SET_CATALOG':
+      return { ...state, categories: action.categories, topVariants: action.topVariants, isLoadingCatalog: false };
+    case 'SET_SEARCH_RESULTS':
+      return { ...state, searchResults: action.results, isSearching: false };
+    case 'SET_LOADING_CATALOG':
+      return { ...state, isLoadingCatalog: action.value };
+    case 'SET_SEARCHING':
+      return { ...state, isSearching: action.value };
+    case 'SET_STATS':
+      return { ...state, generalStats: action.data };
+    case 'SET_CUSTOMERS':
+      return { ...state, customers: action.customers, isLoadingCustomers: false };
+    case 'SET_LOADING_CUSTOMERS':
+      return { ...state, isLoadingCustomers: action.value };
+    default:
+      return state;
+  }
+}
+
+const initialState: State = {
+  categories: [],
+  topVariants: [],
+  searchResults: [],
+  isLoadingCatalog: true,
+  isSearching: false,
+  generalStats: null,
+  customers: [],
+  isLoadingCustomers: false,
+};
+
+export default function useSalesPOS() {
+  const { data: session } = useSession();
+  const tenantId = session?.user?.tenantId;
+
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | null>(null);
-
-  const [metrics, setMetrics] = useState<SalesPOSMetrics>({
-    revenueToday: 0,
-    salesCountToday: 0,
-    paymentMethodBreakdown: { cash: 0, transfer: 0, card: 0, debt: 0 },
-    totalAccountsReceivable: 0,
-  });
-  const [customers, setCustomers] = useState<CustomerSummary[]>([]);
   const [isProcessingSale, setIsProcessingSale] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // Function to load/refresh catalog data from API into store
-  const loadCatalogData = useCallback(async () => {
+  const { items: cartReferences, addItem, removeItem, updateQuantity, clearCart } = useCartStore();
+
+  // ----- Load top 5 + categories -----
+  const loadInitialCatalog = useCallback(async () => {
+    if (!tenantId) return;
+    dispatch({ type: 'SET_LOADING_CATALOG', value: true });
     try {
-      setLoading(true);
       const data = await fetchProductsDataApi(tenantId);
-      setCatalogData(data.categories, data.products);
+
+      const categories = data.categories;
+
+      // Flatten all variants and sort by popularity descending, take top 5
+      const allVariants: POSVariant[] = data.products.flatMap((product: Product) =>
+        (product.variants ?? []).map((variant: Variant) => ({
+          ...variant,
+          productId: product.productId,
+          productName: product.name,
+          categoryId: product.categoryId,
+          primaryImage:
+            variant.images?.find(i => i.isPrimary)?.content ||
+            variant.images?.[0]?.content ||
+            '/placeholder-product.png',
+          stock: variant.inventories?.[0]?.stock ?? variant.stock ?? 0,
+        })),
+      );
+
+      const topVariants = [...allVariants]
+        .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0))
+        .slice(0, 5);
+
+      dispatch({ type: 'SET_CATALOG', categories, topVariants });
     } catch (err) {
-      console.error('Error al obtener el catálogo en POS:', err);
+      console.error('Error cargando catálogo POS:', err);
+      dispatch({ type: 'SET_LOADING_CATALOG', value: false });
     }
-  }, [tenantId, setCatalogData, setLoading]);
+  }, [tenantId]);
 
-  // Load catalog data if empty on mount
-  useEffect(() => {
-    if (products.length === 0) {
-      loadCatalogData();
-    }
-  }, [products.length, loadCatalogData]);
-
-  // Load POS metrics & customers
-  const loadPOSData = useCallback(async () => {
+  // ----- Load general stats (sales today/month) -----
+  const loadStats = useCallback(async () => {
+    if (!tenantId) return;
     try {
-      const [metricsData, customersData] = await Promise.all([
-        fetchSalesMetricsApi(tenantId),
-        fetchCustomersApi(tenantId),
-      ]);
-      setMetrics(metricsData);
-      setCustomers(customersData);
-    } catch (err: any) {
-      console.error('Error loading POS metrics:', err);
+      const data = await fetchGeneralStatsApi();
+      dispatch({ type: 'SET_STATS', data });
+    } catch (err) {
+      console.error('Error cargando métricas POS:', err);
     }
   }, [tenantId]);
 
   useEffect(() => {
-    loadPOSData();
-  }, [loadPOSData]);
+    loadInitialCatalog();
+    loadStats();
+  }, [loadInitialCatalog, loadStats]);
 
-  // Flatten all variants from catalog
-  const allVariants = useMemo(() => {
-    return products.flatMap(product =>
-      (product.variants ?? []).map(variant => ({
-        ...variant,
-        productId: product.productId,
-        productName: product.name,
-        categoryId: product.categoryId,
-        primaryImage:
-          variant.images?.find(i => i.isPrimary)?.content ||
-          variant.images?.[0]?.content ||
-          '/placeholder-product.png',
-        stock: variant.inventories?.[0]?.stock ?? variant.stock ?? 0,
-      })),
-    );
-  }, [products]);
+  // ----- Search: debounced fetch by name/SKU -----
+  useEffect(() => {
+    if (!tenantId) return;
+    const query = searchQuery.trim();
+    if (!query) {
+      dispatch({ type: 'SET_SEARCH_RESULTS', results: [] });
+      return;
+    }
 
-  // Filtered variants for POS Grid
-  const filteredVariants = useMemo(() => {
-    return allVariants.filter(variant => {
-      // Category filter
-      if (selectedCategoryFilter && variant.categoryId !== selectedCategoryFilter) {
-        return false;
+    const timer = setTimeout(async () => {
+      dispatch({ type: 'SET_SEARCHING', value: true });
+      try {
+        const data = await fetchProductsDataApi(tenantId);
+        const lower = query.toLowerCase();
+        const results: POSVariant[] = data.products.flatMap((product: Product) =>
+          (product.variants ?? [])
+            .map((variant: Variant) => ({
+              ...variant,
+              productId: product.productId,
+              productName: product.name,
+              categoryId: product.categoryId,
+              primaryImage:
+                variant.images?.find(i => i.isPrimary)?.content ||
+                variant.images?.[0]?.content ||
+                '/placeholder-product.png',
+              stock: variant.inventories?.[0]?.stock ?? variant.stock ?? 0,
+            }))
+            .filter(
+              v =>
+                v.productName.toLowerCase().includes(lower) ||
+                v.name.toLowerCase().includes(lower) ||
+                v.sku.toLowerCase().includes(lower),
+            ),
+        );
+
+        // Apply category filter if active
+        const filtered = selectedCategoryFilter
+          ? results.filter(v => v.categoryId === selectedCategoryFilter)
+          : results;
+
+        dispatch({ type: 'SET_SEARCH_RESULTS', results: filtered });
+      } catch {
+        dispatch({ type: 'SET_SEARCHING', value: false });
       }
-      // Search query filter (matches product name, variant name, or SKU)
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase().trim();
-        const matchName = variant.productName.toLowerCase().includes(query);
-        const matchVariant = variant.name.toLowerCase().includes(query);
-        const matchSku = variant.sku.toLowerCase().includes(query);
-        return matchName || matchVariant || matchSku;
-      }
-      return true;
-    });
-  }, [allVariants, selectedCategoryFilter, searchQuery]);
+    }, 350);
 
-  // Hydrate cart references with full variant info from catalog
+    return () => clearTimeout(timer);
+  }, [searchQuery, selectedCategoryFilter, tenantId]);
+
+  // ----- Load customers on demand (for fiado) -----
+  const loadCustomers = useCallback(async () => {
+    if (!tenantId) return;
+    dispatch({ type: 'SET_LOADING_CUSTOMERS', value: true });
+    try {
+      const res = await fetchCustomersApi(tenantId);
+      dispatch({ type: 'SET_CUSTOMERS', customers: res });
+    } catch {
+      dispatch({ type: 'SET_LOADING_CUSTOMERS', value: false });
+    }
+  }, [tenantId]);
+
+  // Displayed variants: search results if query, otherwise top 5 (filtered by category)
+  const displayedVariants = useMemo<POSVariant[]>(() => {
+    if (searchQuery.trim()) return state.searchResults;
+    if (selectedCategoryFilter) {
+      return state.topVariants.filter(v => v.categoryId === selectedCategoryFilter);
+    }
+    return state.topVariants;
+  }, [searchQuery, state.searchResults, state.topVariants, selectedCategoryFilter]);
+
+  // ----- Cart hydration: cross references with topVariants + searchResults -----
+  const allKnownVariants = useMemo(() => {
+    const map = new Map<string, POSVariant>();
+    [...state.topVariants, ...state.searchResults].forEach(v => map.set(v.variantId, v));
+    return map;
+  }, [state.topVariants, state.searchResults]);
+
   const hydratedCartItems = useMemo<HydratedCartItem[]>(() => {
     return cartReferences
       .map(ref => {
-        const variant = allVariants.find(v => v.variantId === ref.variantId);
-        if (!variant) return null;
+        const v = allKnownVariants.get(ref.variantId);
+        if (!v) return null;
         return {
-          variantId: variant.variantId,
-          productId: variant.productId,
-          productName: variant.productName,
-          variantName: variant.name,
-          sku: variant.sku,
-          color: variant.color,
-          size: variant.size,
-          price: Number(variant.price),
-          stock: variant.stock,
-          image: variant.primaryImage,
+          variantId: v.variantId,
+          productId: v.productId,
+          productName: v.productName,
+          variantName: v.name,
+          sku: v.sku,
+          color: v.color,
+          size: v.size,
+          price: Number(v.price),
+          stock: v.stock,
+          image: v.primaryImage,
           quantity: ref.quantity,
         };
       })
       .filter((item): item is HydratedCartItem => item !== null);
-  }, [cartReferences, allVariants]);
+  }, [cartReferences, allKnownVariants]);
 
-  // Total Item Count & Subtotal
-  const cartTotalItems = useMemo(() => {
-    return hydratedCartItems.reduce((acc, item) => acc + item.quantity, 0);
-  }, [hydratedCartItems]);
+  const cartTotalItems = useMemo(() => hydratedCartItems.reduce((acc, i) => acc + i.quantity, 0), [hydratedCartItems]);
+  const cartSubtotal = useMemo(() => hydratedCartItems.reduce((acc, i) => acc + i.price * i.quantity, 0), [hydratedCartItems]);
 
-  const cartSubtotal = useMemo(() => {
-    return hydratedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  }, [hydratedCartItems]);
-
-  // Process checkout transaction
+  // ----- Checkout -----
   const processCheckout = async (data: {
-    paymentMethod: 'cash' | 'transfer' | 'card' | 'debt';
+    paymentMethod: 'cash' | 'transfer' | 'debt';
     customerId?: string | null;
-    discount?: number;
     notes?: string;
   }) => {
-    if (hydratedCartItems.length === 0) {
-      return { success: false, error: 'El carrito está vacío' };
-    }
+    if (hydratedCartItems.length === 0) return { success: false, error: 'El carrito está vacío' };
+    if (!tenantId) return { success: false, error: 'Sesión no disponible' };
 
     setIsProcessingSale(true);
-    setError(null);
-
     const payload: CreateSaleDto = {
       items: hydratedCartItems.map(item => ({
         variantId: item.variantId,
         quantity: item.quantity,
         unitPrice: item.price,
       })),
+      total: cartSubtotal,
       paymentMethod: data.paymentMethod,
-      customerId: data.customerId || null,
-      discount: data.discount || 0,
+      customerId: data.customerId || undefined,
       notes: data.notes,
     };
 
     try {
       const res = await createSaleApi(tenantId, payload);
       clearCart();
-      await loadPOSData();
-      await loadCatalogData(); // Refresh stock in catalog
-      setIsProcessingSale(false);
+      await Promise.all([loadInitialCatalog(), loadStats()]);
       return { success: true, data: res };
     } catch (err: any) {
-      setIsProcessingSale(false);
-      setError(err.message || 'Error al procesar la venta');
       return { success: false, error: err.message || 'Error al procesar la venta' };
+    } finally {
+      setIsProcessingSale(false);
     }
   };
 
   return {
-    catalogLoading,
-    categories,
-    filteredVariants,
+    // Catalog
+    isLoadingCatalog: state.isLoadingCatalog,
+    isSearching: state.isSearching,
+    categories: state.categories,
+    displayedVariants,
     searchQuery,
     setSearchQuery,
     selectedCategoryFilter,
     setSelectedCategoryFilter,
 
-    // Cart State & Actions
+    // Stats
+    generalStats: state.generalStats,
+
+    // Cart
     cartItems: hydratedCartItems,
     cartTotalItems,
     cartSubtotal,
@@ -204,12 +307,13 @@ export default function useSalesPOS(tenantId: string = 'default-tenant') {
     updateCartQuantity: updateQuantity,
     clearCart,
 
-    // POS Data & Checkout
-    metrics,
-    customers,
+    // Customers
+    customers: state.customers,
+    isLoadingCustomers: state.isLoadingCustomers,
+    loadCustomers,
+
+    // Checkout
     isProcessingSale,
-    error,
     processCheckout,
-    refreshPOS: loadPOSData,
   };
 }

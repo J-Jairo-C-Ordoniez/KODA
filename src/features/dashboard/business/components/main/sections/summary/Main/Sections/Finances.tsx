@@ -48,14 +48,19 @@ export default function Finances({ activeTab }: { activeTab: string; }) {
                             title="Utilidad del Mes"
                             value={formatCurrency(data.profitMonth.totalProfit)}
                             icon={PiggyBank}
-                            iconClassName="bg-emerald-50 text-emerald-600"
+                            iconClassName={data.profitMonth.totalProfit >= 0 ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"}
+                            valueClassName={data.profitMonth.totalProfit >= 0 ? "text-primary" : "text-red-600"}
                             badge={{
-                                text: `${formatPercentage(data.profitMonth.margin)} margen`,
-                                className: "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                text: `${formatPercentage(data.profitMonth.margin)} ${data.profitMonth.totalProfit >= 0 ? 'margen' : 'pérdida'}`,
+                                className: data.profitMonth.totalProfit >= 0
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                    : "bg-red-50 text-red-700 border-red-100 font-bold"
                             }}
                             footer={
                                 <p className="text-xs text-primary/50">
-                                    Ganancia obtenida después del costo de los productos
+                                    {data.profitMonth.totalProfit >= 0
+                                        ? "Ganancia obtenida después del costo de los productos"
+                                        : "Los costos declarados superaron los ingresos del mes"}
                                 </p>
                             }
                         />

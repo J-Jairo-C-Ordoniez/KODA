@@ -172,35 +172,39 @@ const salesRepository = {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     thirtyDaysAgo.setHours(0, 0, 0, 0);
 
-    const items = await prisma.saleItem.findMany({
-      where: {
-        sale: {
+    const [salesAggregate, items] = await Promise.all([
+      prisma.sale.aggregate({
+        where: {
           tenantId,
-          createdAt: {
-            gte: thirtyDaysAgo,
+          createdAt: { gte: thirtyDaysAgo },
+        },
+        _sum: { total: true },
+      }),
+      prisma.saleItem.findMany({
+        where: {
+          sale: {
+            tenantId,
+            createdAt: { gte: thirtyDaysAgo },
           },
         },
-      },
-      select: {
-        quantity: true,
-        priceAtSale: true,
-        variant: {
-          select: {
-            cost: true,
+        select: {
+          quantity: true,
+          priceAtSale: true,
+          variant: {
+            select: {
+              cost: true,
+            },
           },
         },
-      },
-    });
+      }),
+    ]);
 
-    let totalRevenue = 0;
+    const totalRevenue = Number(salesAggregate._sum.total || 0);
+
     let totalCost = 0;
-
     for (const item of items) {
-      const quantity = item.quantity;
-      const price = Number(item.priceAtSale);
-      const cost = Number(item.variant.cost);
-
-      totalRevenue += price * quantity;
+      const quantity = item.quantity || 0;
+      const cost = Number(item.variant?.cost ?? 0);
       totalCost += cost * quantity;
     }
 

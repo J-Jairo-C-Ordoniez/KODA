@@ -13,7 +13,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import ProductModal from './ProductModal';
 import ProductDetail from './ProductDetail';
 import VariantModal from './VariantModal';
-import { Toaster, useToast } from '@/shared/components/Toast';
+import { Toaster, useToast } from '@/shared/components/Toaster';
 import ProductCard from './components/ProductCard';
 import { DeleteConfirmModal } from './ui/DeleteConfirmModal';
 

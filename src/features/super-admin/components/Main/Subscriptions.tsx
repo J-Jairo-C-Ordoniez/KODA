@@ -7,7 +7,7 @@ import Loader from '@/shared/components/Loader';
 import Metric from '@/features/super-admin/components/Main/ui/Metric';
 import Table from '@/features/super-admin/components/Main/ui/Table';
 import { useSubscriptions } from '@/features/super-admin/hooks/useSubscriptions';
-import { useToast, Toaster } from '@/shared/components/Toast';
+import { useToast, Toaster } from '@/shared/components/Toaster';
 
 export default function Subscriptions() {
   const { subscriptions, stats, plans, isLoading, error, fetchSubscriptions, registerPayment, assignPlan } = useSubscriptions();

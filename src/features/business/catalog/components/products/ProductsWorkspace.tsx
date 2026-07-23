@@ -9,7 +9,7 @@ import VariantCard from './VariantCard';
 import VariantDrawer from './VariantDrawer';
 import ProductForm from './ProductForm';
 import CategoryForm from './CategoryForm';
-import { Toaster, useToast } from '@/shared/components/Toast';
+import { Toaster, useToast } from '@/shared/components/Toaster';
 import Loader from '@/shared/components/Loader';
 
 export default function ProductsWorkspace() {

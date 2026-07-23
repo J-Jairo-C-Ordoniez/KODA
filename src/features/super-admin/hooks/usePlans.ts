@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useToast } from '@/shared/components/Toast';
+import { useToast } from '@/shared/components/Toaster';
 import { fetchPlansApi, createPlanApi, updatePlanApi, deletePlanApi } from '@/features/super-admin/api/super-admin.api';
 
 export function usePlans() {

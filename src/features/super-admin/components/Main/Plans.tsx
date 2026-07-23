@@ -6,7 +6,7 @@ import { SectionHeader } from '@/components/Dashboard/business/Main/Summary/Main
 import Loader from '@/shared/components/Loader';
 import Metric from '@/features/super-admin/components/Main/ui/Metric';
 import { usePlans } from '@/features/super-admin/hooks/usePlans';
-import { useToast, Toaster } from '@/shared/components/Toast';
+import { useToast, Toaster } from '@/shared/components/Toaster';
 
 export default function Plans() {
   const { plans, isLoading, error, createPlan, updatePlan, deletePlan } = usePlans();

@@ -7,7 +7,7 @@ import { SectionHeader } from '@/shared/components/SectionHeader';
 import { EmptyState } from '@/features/business/dashboard/components/business-ui/EmptyState';
 import Loader from '@/shared/components/Loader';
 import { useSession } from 'next-auth/react';
-import { Toaster, useToast } from '@/shared/components/Toast';
+import { Toaster, useToast } from '@/shared/components/Toaster';
 import { CustomerCard } from './ui/CustomerCard';
 import { CustomerPaymentModal, CustomerHistoryModal } from './ui/CustomerModals';
 

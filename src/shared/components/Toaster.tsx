@@ -1,33 +1,14 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { ToastType } from '@/shared/hooks/useToast';
 import { CheckCircle2, AlertCircle, X, Info, AlertTriangle } from 'lucide-react';
-
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 interface Toast {
   id: string;
   type: ToastType;
   message: string;
   description?: string;
-}
-
-export function useToast() {
-  const [toasts, setToasts] = useState<Toast[]>([]);
-
-  const showToast = useCallback((type: ToastType, message: string, description?: string) => {
-    const id = Math.random().toString(36).substring(2, 9);
-    setToasts((prev) => [...prev, { id, type, message, description }]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4500);
-  }, []);
-
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  }, []);
-
-  return { toasts, showToast, removeToast };
 }
 
 const config = {
@@ -53,7 +34,6 @@ const config = {
   },
 };
 
-// Individual toast item with animated enter/exit
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
@@ -61,7 +41,6 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
 
   const { icon: Icon, iconClass, bar } = config[toast.type] || config.info;
 
-  // Trigger enter animation on mount
   useEffect(() => {
     const frame = requestAnimationFrame(() => setIsVisible(true));
     return () => cancelAnimationFrame(frame);
@@ -73,7 +52,6 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
     timerRef.current = setTimeout(() => onRemove(toast.id), 350);
   }, [isLeaving, onRemove, toast.id]);
 
-  // Clean up timeout on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -99,7 +77,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       <div className="flex-1 min-w-0 pr-2">
         <h4 className="text-sm font-bold text-primary leading-snug">{toast.message}</h4>
         {toast.description && (
-          <p className="text-xs font-semibold text-primary/75 leading-relaxed mt-1 break-words">
+          <p className="text-xs font-semibold text-primary/75 leading-relaxed mt-1 wrap-break-words">
             {toast.description}
           </p>
         )}
@@ -113,19 +91,22 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
         <X size={16} />
       </button>
 
-      {/* Bottom accent bar */}
       <div className={`absolute bottom-0 left-0 right-0 h-1 ${bar} opacity-80 rounded-b-2xl`} />
     </div>
   );
 }
 
-export function Toaster({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: string) => void }) {
+export default function Toaster({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: string) => void }) {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[99999] flex flex-col gap-2.5 pointer-events-none w-full max-w-md px-4">
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-9999 flex flex-col gap-2.5 pointer-events-none w-full max-w-md px-4">
       {toasts.map((toast) => (
-        <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
+        <ToastItem
+          key={toast.id}
+          toast={toast}
+          onRemove={removeToast}
+        />
       ))}
     </div>
   );

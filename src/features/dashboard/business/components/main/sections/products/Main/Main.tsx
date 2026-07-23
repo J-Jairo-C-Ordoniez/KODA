@@ -6,7 +6,7 @@ import { ChevronRight, LayoutGrid, PackageOpen, Plus } from 'lucide-react';
 import { useCatalogStore } from '@/store/useProductsStore';
 import useProducts from '@/features/dashboard/business/hooks/useProducts';
 import type { Product, Variant } from '@/features/dashboard/business/api/products.api';
-import type { ToastType } from '@/shared/components/Toast';
+import type { ToastType } from '@/shared/components/Toaster';
 
 import VariantCard from '@/features/business/catalog/components/products/VariantCard';
 import VariantDrawer from '@/features/business/catalog/components/products/VariantDrawer';

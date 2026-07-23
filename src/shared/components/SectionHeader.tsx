@@ -2,7 +2,7 @@ import React from 'react';
 
 interface SectionHeaderProps {
   title: string;
-  subtitle?: string; // Some pages use description, we can support both subtitle or description
+  subtitle?: string;
   description?: string;
   action?: React.ReactNode;
   children?: React.ReactNode;

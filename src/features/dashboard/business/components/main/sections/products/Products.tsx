@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Sidebar as SidebarIcon } from 'lucide-react';
 import Sidebar from '@/features/dashboard/business/components/main/sections/products/Sidebar/Sidebar';
 import ProductsMain from '@/features/dashboard/business/components/main/sections/products/Main/Main';
-import { Toaster, useToast } from '@/shared/components/Toast';
+import { Toaster, useToast } from '@/shared/components/Toaster';
 
 export default function Products() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);

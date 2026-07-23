@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Search, X, UserPlus, Users } from 'lucide-react';
 import { Customer, CustomerHistoryData } from '@/features/dashboard/business/api/customers.api';
-import type { ToastType } from '@/shared/components/Toast';
+import type { ToastType } from '@/shared/components/Toaster';
 import { CustomerFilterType } from '@/features/dashboard/business/hooks/useCustomers';
 
 import CustomerCard from './ui/CustomerCard';
@@ -165,15 +165,15 @@ export default function CustomersMain({
                 {searchQuery
                   ? 'No se encontraron clientes'
                   : filterType === 'with-debt'
-                  ? 'No hay clientes con deuda pendiente'
-                  : 'Lista de clientes vacía'}
+                    ? 'No hay clientes con deuda pendiente'
+                    : 'Lista de clientes vacía'}
               </h3>
               <p className="text-sm text-primary/55 leading-relaxed max-w-md mt-2">
                 {searchQuery
                   ? `Ningún cliente coincide con "${searchQuery}".`
                   : filterType === 'with-debt'
-                  ? '¡Excelente! Todos tus clientes están al día.'
-                  : 'Registra clientes frecuentes para controlar deudas y fidelización.'}
+                    ? '¡Excelente! Todos tus clientes están al día.'
+                    : 'Registra clientes frecuentes para controlar deudas y fidelización.'}
               </p>
               {!searchQuery && (
                 <button

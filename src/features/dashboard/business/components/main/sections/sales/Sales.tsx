@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ShoppingBag } from 'lucide-react';
-import { Toaster, useToast } from '@/shared/components/Toast';
+import { Toaster, useToast } from '@/shared/components/Toaster';
 import Loader from '@/shared/components/Loader';
 import useSalesPOS from '@/features/dashboard/business/hooks/useSalesPOS';
 

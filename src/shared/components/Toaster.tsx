@@ -37,39 +37,60 @@ const config = {
 
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
   const toastRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const { icon: Icon, iconClass, bar } = config[toast.type] || config.info;
+
+  const TOAST_DURATION = 4.5;
 
   useEffect(() => {
     const el = toastRef.current;
-    if (!el) return;
+    const barEl = barRef.current;
+    if (!el || !barEl) return;
 
-    gsap.fromTo(
-      el,
-      {
-        opacity: 0,
-        y: -15,
-        scale: 0.95,
-        height: 0,
-        marginBottom: 0,
-        paddingTop: 0,
-        paddingBottom: 0,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        height: 'auto',
-        marginBottom: 10,
-        paddingTop: 16,
-        paddingBottom: 16,
-        duration: 0.45,
-        ease: 'back.out(1.2)',
-        clearProps: 'paddingTop,paddingBottom',
-      }
-    );
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+
+      tl.fromTo(
+        el,
+        {
+          opacity: 0,
+          y: -15,
+          scale: 0.95,
+          height: 0,
+          marginBottom: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          height: 'auto',
+          marginBottom: 10,
+          paddingTop: 16,
+          paddingBottom: 16,
+          duration: 0.45,
+          ease: 'back.out(1.2)',
+          clearProps: 'paddingTop,paddingBottom',
+        }
+      );
+
+      tl.fromTo(
+        barEl,
+        { scaleX: 1 },
+        {
+          scaleX: 0,
+          duration: TOAST_DURATION,
+          ease: 'none',
+          transformOrigin: 'left',
+          onComplete: dismiss,
+        },
+        '-=0.1'
+      );
+    }, el);
 
     return () => {
-      gsap.killTweensOf(el);
+      ctx.revert();
     };
   }, []);
 
@@ -95,7 +116,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
   return (
     <div
       ref={toastRef}
-      className="pointer-events-auto flex items-start gap-3.5 px-4 rounded-2xl bg-background-card border border-primary/10 shadow-xl backdrop-blur-md relative overflow-hidden"
+      className="pointer-events-auto flex items-start gap-3.5 p-4 rounded-2xl bg-background-card border border-primary/10 shadow-xl backdrop-blur-md relative overflow-hidden"
     >
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${iconClass}`}>
         <Icon size={18} />
@@ -112,13 +133,16 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
 
       <button
         onClick={dismiss}
-        className="p-1 text-primary/40 hover:text-primary hover:bg-foreground-muted/50 rounded-lg transition-colors shrink-0 cursor-pointer mt-0.5"
+        className="p-1 text-primary/40 hover:text-primary hover:bg-foreground-muted/50 rounded-lg transition-colors shrink-0 cursor-pointer mt-0.5 relative z-10"
         aria-label="Cerrar notificación"
       >
         <X size={16} />
       </button>
 
-      <div className={`absolute bottom-0 left-0 right-0 h-1 ${bar} opacity-80 rounded-b-2xl`} />
+      <div
+        ref={barRef}
+        className={`absolute bottom-0 left-0 w-full h-1 origin-left ${bar} opacity-80 rounded-b-2xl`}
+      />
     </div>
   );
 }
@@ -127,7 +151,7 @@ export default function Toaster({ toasts, removeToast }: { toasts: Toast[]; remo
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-9999 flex flex-col pointer-events-none w-full max-w-md px-4">
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col pointer-events-none w-full max-w-md px-4">
       {toasts.map((toast) => (
         <ToastItem
           key={toast.id}

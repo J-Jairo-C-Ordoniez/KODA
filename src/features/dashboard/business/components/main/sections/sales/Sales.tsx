@@ -2,16 +2,20 @@
 
 import { useState } from 'react';
 import { ShoppingBag } from 'lucide-react';
-import { Toaster, useToast } from '@/shared/components/Toaster';
+import Toaster from '@/shared/components/Toaster';
+import useToast from '@/shared/hooks/useToast';
 import Loader from '@/shared/components/Loader';
 import useSalesPOS from '@/features/dashboard/business/hooks/useSalesPOS';
 
-import POSCatalog from './ui/POSCatalog';
-import ActiveCartTicket from './ui/ActiveCartTicket';
-import CheckoutModal from './ui/CheckoutModal';
+import POS from '@/features/dashboard/business/components/main/sections/sales/POS/POS';
+import Ticket from '@/features/dashboard/business/components/main/sections/sales/ticket/Ticket';
+import CheckoutModal from '@/features/dashboard/business/components/main/sections/sales/ticket/ui/CheckoutModal';
+import Button from '@/shared/components/Button';
 
 export default function Sales() {
   const { toasts, showToast, removeToast } = useToast();
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isMobileTicketOpen, setIsMobileTicketOpen] = useState(false);
   const {
     isLoadingCatalog,
     isSearching,
@@ -30,16 +34,12 @@ export default function Sales() {
     updateCartQuantity,
     clearCart,
 
-    generalStats,
     customers,
     isLoadingCustomers,
     loadCustomers,
     isProcessingSale,
     processCheckout,
   } = useSalesPOS();
-
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [isMobileTicketOpen, setIsMobileTicketOpen] = useState(false);
 
   const handleAddToCart = (variantId: string) => {
     addToCart(variantId);
@@ -68,12 +68,9 @@ export default function Sales() {
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6 sm:p-8 pt-6 sm:pt-8">
       <Toaster toasts={toasts} removeToast={removeToast} />
-
-      {/* Split View: 70% Catalog / 30% Cart */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Catalog (Left) */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <div className="lg:col-span-8">
-          <POSCatalog
+          <POS
             categories={categories}
             variants={displayedVariants}
             searchQuery={searchQuery}
@@ -85,9 +82,8 @@ export default function Sales() {
           />
         </div>
 
-        {/* Active Cart Ticket (Right — Desktop only) */}
         <div className="hidden lg:block lg:col-span-4 sticky top-6">
-          <ActiveCartTicket
+          <Ticket
             items={cartItems}
             totalItems={cartTotalItems}
             subtotal={cartSubtotal}
@@ -97,37 +93,35 @@ export default function Sales() {
             onOpenCheckout={() => setIsCheckoutOpen(true)}
           />
         </div>
-      </div>
+      </section>
 
-      {/* Mobile Floating Cart Button */}
       {cartTotalItems > 0 && (
-        <div className="lg:hidden fixed bottom-[96px] right-5 z-[120]">
-          <button
+        <div className="lg:hidden fixed bottom-24 right-5 z-120">
+          <Button
+            variant="primary"
             onClick={() => setIsMobileTicketOpen(true)}
-            className="flex items-center gap-3 px-5 py-3.5 bg-primary hover:bg-secondary text-white rounded-2xl shadow-xl active:scale-95 transition-all cursor-pointer"
           >
             <div className="relative">
-              <ShoppingBag size={20} />
-              <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-primary">
+              <ShoppingBag size={22} />
+              <span className="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center border-2 border-primary">
                 {cartTotalItems}
               </span>
             </div>
             <span className="text-xs font-bold uppercase tracking-wider">
-              Ver Ticket ({cartTotalItems})
+              Ver Ticket
             </span>
-          </button>
+          </Button>
         </div>
       )}
 
-      {/* Mobile Cart Drawer */}
       {isMobileTicketOpen && (
         <>
           <div
             onClick={() => setIsMobileTicketOpen(false)}
-            className="lg:hidden fixed inset-0 z-[130] bg-black/20 backdrop-blur-xs"
+            className="md:hidden fixed inset-0 z-30 bg-black/10 backdrop-blur-[1px] transition-opacity"
           />
-          <div className="lg:hidden fixed inset-x-0 bottom-0 z-[135] max-h-[85vh] overflow-y-auto rounded-t-3xl bg-background p-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
-            <ActiveCartTicket
+          <div className="md:hidden fixed inset-x-0 bottom-0 z-120 max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
+            <Ticket
               items={cartItems}
               totalItems={cartTotalItems}
               subtotal={cartSubtotal}
@@ -140,7 +134,6 @@ export default function Sales() {
         </>
       )}
 
-      {/* Checkout Modal */}
       <CheckoutModal
         isOpen={isCheckoutOpen}
         total={cartSubtotal}

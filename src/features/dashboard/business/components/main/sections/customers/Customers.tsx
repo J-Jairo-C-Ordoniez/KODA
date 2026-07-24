@@ -4,7 +4,8 @@ import { useRef, useState } from 'react';
 import { Sidebar as SidebarIcon } from 'lucide-react';
 import Sidebar from '@/features/dashboard/business/components/main/sections/customers/Sidebar/Sidebar';
 import CustomersMain from '@/features/dashboard/business/components/main/sections/customers/Main/Main';
-import { Toaster, useToast } from '@/shared/components/Toaster';
+import Toaster from '@/shared/components/Toaster';
+import useToast from '@/shared/hooks/useToast';
 import useCustomers from '@/features/dashboard/business/hooks/useCustomers';
 
 export default function Customers() {

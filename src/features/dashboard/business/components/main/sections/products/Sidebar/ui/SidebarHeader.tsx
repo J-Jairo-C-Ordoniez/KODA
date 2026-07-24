@@ -9,7 +9,7 @@ interface SidebarHeaderProps {
 
 export default function SidebarHeader({ selectedProductId, onSelectAll }: SidebarHeaderProps) {
   return (
-    <div className="flex items-center justify-between px-2 mt-2">
+    <header className="flex items-center justify-between px-2 mt-2">
       <h2 className="text-lg font-medium text-primary tracking-tight">
         Productos
       </h2>
@@ -22,6 +22,6 @@ export default function SidebarHeader({ selectedProductId, onSelectAll }: Sideba
       >
         Ver Todo
       </Button>
-    </div>
+    </header>
   );
 }

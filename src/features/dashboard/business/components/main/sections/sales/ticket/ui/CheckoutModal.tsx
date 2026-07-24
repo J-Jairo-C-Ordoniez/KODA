@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Check, Banknote, Smartphone, User, Loader2 } from 'lucide-react';
+import { X, Banknote, Smartphone, User, Loader2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatters';
 import type { CustomerOption } from '@/features/dashboard/business/api/dashboard.api';
 import Button from '@/shared/components/Button';

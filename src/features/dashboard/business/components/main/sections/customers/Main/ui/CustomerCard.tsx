@@ -1,8 +1,10 @@
 'use client';
 
-import { Phone, MessageCircle, Wallet, History, Edit3, Trash2 } from 'lucide-react';
+import { Phone, MessageCircle, Edit2, Trash2 } from 'lucide-react';
 import { Customer } from '@/features/dashboard/business/api/customers.api';
 import { formatCurrency } from '@/lib/formatters';
+import Link from 'next/link';
+import Button from '@/shared/components/Button';
 
 interface CustomerCardProps {
   customer: Customer;
@@ -12,50 +14,38 @@ interface CustomerCardProps {
   onDelete: (customerId: string) => void;
 }
 
-export default function CustomerCard({
-  customer,
-  onOpenPayment,
-  onOpenHistory,
-  onEdit,
-  onDelete,
-}: CustomerCardProps) {
+export default function CustomerCard({ customer, onOpenPayment, onOpenHistory, onEdit, onDelete }: CustomerCardProps) {
   const hasDebt = customer.totalDebt > 0;
-
-  const handleWhatsAppReminder = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const cleanPhone = customer.phone.replace(/\D/g, '');
-    const phoneWithCountry = cleanPhone.startsWith('57') ? cleanPhone : `57${cleanPhone}`;
-    const message = encodeURIComponent(
-      `Hola ${customer.name}, te escribimos de KODA. Te recordamos amablemente tu saldo pendiente de ${formatCurrency(customer.totalDebt)}. ¡Muchas gracias!`
-    );
-    window.open(`https://wa.me/${phoneWithCountry}?text=${message}`, '_blank');
-  };
+  const message = encodeURIComponent(
+    `Hola ${customer.name}, te escribimos de KODA. Te recordamos amablemente tu saldo pendiente de ${formatCurrency(customer.totalDebt)}. ¡Muchas gracias!`
+  );
 
   return (
     <article
       className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300 group flex flex-col justify-between cursor-default"
     >
-      {/* Header: nombre + teléfono */}
-      <header className="mb-4">
-        <p className="text-xs font-bold tracking-widest uppercase text-primary/50 mb-1">
+      <header className="mb-4 relative">
+        <span className={`absolute right-2 top-2 text-xs font-bold px-2.5 py-1 rounded-lg border backdrop-blur-xs ${hasDebt
+          ? 'text-red-700 bg-red-50 border-red-100'
+          : 'text-emerald-700 bg-emerald-50 border-emerald-100'
+          }`}>
           {hasDebt ? 'Con deuda' : 'Al día'}
-        </p>
+        </span>
         <h3 className="text-base font-bold text-primary leading-snug group-hover:text-secondary transition-colors">
           {customer.name}
         </h3>
-        <a
+        <Link
           href={`tel:${customer.phone}`}
           onClick={(e) => e.stopPropagation()}
-          className="text-xs font-medium text-primary/60 mt-1 flex items-center gap-1.5 hover:text-primary transition-colors w-fit"
+          className="text-sm text-primary/60 mt-1 flex items-center gap-2 hover:text-primary transition-colors w-fit"
         >
-          <Phone size={12} /> {customer.phone}
-        </a>
+          <Phone size={18} /> {customer.phone}
+        </Link>
       </header>
 
-      {/* Saldo pendiente */}
       <div className="pt-4 border-t border-primary/8 flex items-end justify-between gap-3">
         <div>
-          <h4 className="text-xs font-bold tracking-widest uppercase text-primary/50 mb-1">
+          <h4 className="text-xs font-semibold uppercase text-primary/60 mt-1">
             Saldo pendiente
           </h4>
           <p className="text-2xl font-bold tracking-tight text-primary">
@@ -63,60 +53,55 @@ export default function CustomerCard({
           </p>
         </div>
 
-        {/* WhatsApp si tiene deuda */}
         {hasDebt && (
-          <button
-            onClick={handleWhatsAppReminder}
+          <Link
+            href={`https://wa.me/57${customer.phone}?text=${message}`}
+            target="_blank"
+            rel="noopener noreferrer"
             title="Enviar recordatorio de cobro por WhatsApp"
-            className="h-10 w-10 flex items-center justify-center rounded-xl border border-primary/8 bg-foreground-muted/40 text-primary/60 hover:bg-foreground-muted/60 hover:text-primary transition-all cursor-pointer"
+            className="p-2 -mr-2 rounded-xl text-primary/50 hover:text-emerald-500 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all duration-200"
           >
-            <MessageCircle size={16} />
-          </button>
+            <MessageCircle size={18} strokeWidth={2.5} />
+          </Link>
         )}
       </div>
 
-      {/* Acciones */}
       <div className="pt-3 mt-3 border-t border-primary/8 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 flex-1">
-          <button
+          <Button
+            variant='primary'
             onClick={() => onOpenPayment(customer)}
             disabled={!hasDebt}
-            className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
-              hasDebt
-                ? 'border border-primary/8 bg-foreground-muted/40 hover:bg-foreground-muted/60 text-primary cursor-pointer'
-                : 'bg-foreground-muted/20 text-primary/25 cursor-not-allowed border border-primary/5'
-            }`}
           >
-            <Wallet size={14} /> Abonar
-          </button>
+            Abonar
+          </Button>
 
-          <button
+          <Button
+            variant='secondary'
             onClick={() => onOpenHistory(customer)}
-            className="flex items-center justify-center gap-1.5 py-2 px-3 border border-primary/8 bg-foreground-muted/40 hover:bg-foreground-muted/60 text-primary rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
           >
-            <History size={14} /> Cuaderno
-          </button>
+            Cuaderno
+          </Button>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => onEdit(customer)}
-            className="p-2 text-primary/40 hover:text-primary hover:bg-foreground-muted/40 rounded-lg transition-colors cursor-pointer"
+            className="text-primary/40 hover:text-primary transition-colors cursor-pointer"
             title="Editar cliente"
           >
-            <Edit3 size={15} />
+            <Edit2 size={18} />
           </button>
           <button
             onClick={() => onDelete(customer.customerId)}
             disabled={hasDebt}
-            className={`p-2 rounded-lg transition-colors ${
-              hasDebt
-                ? 'text-primary/20 cursor-not-allowed'
-                : 'text-primary/40 hover:text-red-500 hover:bg-foreground-muted/40 cursor-pointer'
-            }`}
+            className={`text-primary/40 transition-colors cursor-pointer ${hasDebt
+              ? 'text-primary/20 cursor-not-allowed'
+              : 'text-primary/40 hover:text-red-500 hover:bg-foreground-muted/40 cursor-pointer'
+              }`}
             title={hasDebt ? 'No puedes eliminar un cliente con deuda' : 'Eliminar cliente'}
           >
-            <Trash2 size={15} />
+            <Trash2 size={18} />
           </button>
         </div>
       </div>

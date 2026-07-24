@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Save } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import { Customer, SaveCustomerDto } from '@/features/dashboard/business/api/customers.api';
+import Button from '@/shared/components/Button';
 
 interface CustomerFormProps {
   editingCustomer: Customer | null;
@@ -11,12 +12,7 @@ interface CustomerFormProps {
   isSaving: boolean;
 }
 
-export default function CustomerForm({
-  editingCustomer,
-  onCancel,
-  onSave,
-  isSaving,
-}: CustomerFormProps) {
+export default function CustomerForm({ editingCustomer, onCancel, onSave, isSaving }: CustomerFormProps) {
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const [error, setError] = useState<string | null>(null);
 
@@ -70,7 +66,7 @@ export default function CustomerForm({
 
       <form onSubmit={handleSubmit} className="space-y-8 border-t border-primary/10 pt-8">
         {error && (
-          <div className="rounded-lg border border-accent-red/20 bg-accent-red/5 p-3.5 text-sm font-medium text-accent-red">
+          <div className="rounded-lg border border-red-500 bg-red-500/10 p-4 text-sm font-medium text-red-500">
             {error}
           </div>
         )}
@@ -114,20 +110,28 @@ export default function CustomerForm({
         </div>
 
         <div className="flex flex-col-reverse gap-3 border-t border-primary/10 pt-6 sm:flex-row sm:justify-end">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
             onClick={onCancel}
-            className="rounded-lg border border-primary/10 px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-primary transition-all hover:bg-foreground-muted/40 cursor-pointer"
           >
             Cancelar
-          </button>
-          <button
-            type="submit"
+          </Button>
+          <Button
+            variant="primary"
             disabled={isSaving}
-            className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-white shadow-sm transition-all hover:bg-secondary disabled:opacity-50 cursor-pointer"
+            type='submit'
           >
-            <Save size={14} /> {isSaving ? 'Guardando...' : editingCustomer ? 'Guardar cambios' : 'Registrar cliente'}
-          </button>
+            {isSaving ? (
+              <>
+                <LoaderCircle size={16} className="animate-spin" />
+                Guardando...
+              </>
+            ) : (
+              <>
+                Guardar Categoría
+              </>
+            )}
+          </Button>
         </div>
       </form>
     </section>

@@ -33,28 +33,34 @@ const customerRepository = {
     customerId: string,
     data: { amount: number; paymentMethod: string; note?: string }
   ) {
-    return prisma.$transaction(async (tx) => {
-      const customer = await tx.customer.findFirst({ where: { customerId, tenantId } });
-      if (!customer) throw new Error('Cliente no encontrado');
+    return prisma.$transaction(
+      async (tx) => {
+        const customer = await tx.customer.findFirst({ where: { customerId, tenantId } });
+        if (!customer) throw new Error('Cliente no encontrado');
 
-      const amount = Number(data.amount);
-      if (amount > Number(customer.totalDebt)) throw new Error('El abono supera la deuda actual');
+        const amount = Number(data.amount);
+        if (amount > Number(customer.totalDebt)) throw new Error('El abono supera la deuda actual');
 
-      await tx.customer.update({
-        where: { customerId },
-        data: { totalDebt: { decrement: amount } },
-      });
+        await tx.customer.update({
+          where: { customerId },
+          data: { totalDebt: { decrement: amount } },
+        });
 
-      return tx.payment.create({
-        data: {
-          tenantId,
-          customerId,
-          amount,
-          paymentMethod: data.paymentMethod as any,
-          note: data.note,
-        },
-      });
-    });
+        return tx.payment.create({
+          data: {
+            tenantId,
+            customerId,
+            amount,
+            paymentMethod: data.paymentMethod as any,
+            note: data.note,
+          },
+        });
+      },
+      {
+        maxWait: 10000,
+        timeout: 20000,
+      }
+    );
   },
 
   async getCustomersWithDebt(tenantId: string) {

@@ -1,9 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import Button from '@/shared/components/Button';
 import TicketCard from '@/features/dashboard/business/components/main/sections/sales/ticket/ui/TicketCard';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatters';
 import type { HydratedCartItem } from '@/features/dashboard/business/hooks/useSalesPOS';
 

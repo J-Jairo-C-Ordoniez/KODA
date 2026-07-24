@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Wallet, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { X, MessageCircle, CheckCircle2, Banknote, Smartphone, Loader2 } from 'lucide-react';
 import { Customer } from '@/features/dashboard/business/api/customers.api';
 import { formatCurrency } from '@/lib/formatters';
+import Button from '@/shared/components/Button';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -14,13 +15,7 @@ interface PaymentModalProps {
   isSaving: boolean;
 }
 
-export default function PaymentModal({
-  isOpen,
-  customer,
-  onClose,
-  onConfirmPayment,
-  isSaving,
-}: PaymentModalProps) {
+export default function PaymentModal({ isOpen, customer, onClose, onConfirmPayment, isSaving }: PaymentModalProps) {
   const [mounted, setMounted] = useState(false);
   const [amount, setAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'transfer'>('cash');
@@ -99,37 +94,31 @@ export default function PaymentModal({
 
   return createPortal(
     <>
-      {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm animate-fade-in"
+        className="fixed inset-0 z-999 bg-black/10 backdrop-blur-[1px] transition-opacity w-full h-full"
       />
 
-      {/* Modal Card */}
-      <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-        <div className="bg-background border border-primary/10 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-scale-up">
-          {/* Header */}
-          <div className="flex items-center justify-between p-5 border-b border-primary/5 bg-background-card">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold">
-                <Wallet size={20} />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-primary tracking-tight">Registrar Abono</h3>
-                <p className="text-xs font-medium text-primary/55">{customer.name}</p>
-              </div>
+      <div className="fixed inset-0 z-99999 flex items-center justify-center p-4">
+        <div className="w-full max-w-sm bg-background border border-primary/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+          <header className="flex items-center justify-between px-5 py-4 border-b border-primary/10">
+            <div>
+              <h3 className="text-lg font-medium text-primary tracking-tight">
+                Registrar Abono
+              </h3>
+              <p className="text-sm text-primary/40">
+                {customer.name}
+              </p>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-primary/40 hover:text-primary hover:bg-foreground-muted/40 rounded-xl transition-colors cursor-pointer"
+              className="p-2 text-primary hover:bg-primary/4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
             >
-              <X size={18} />
+              <X size={20} />
             </button>
-          </div>
+          </header>
 
-          {/* Body */}
           {lastReceipt ? (
-            /* Success State with WhatsApp Receipt Option */
             <div className="p-6 text-center space-y-5">
               <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto">
                 <CheckCircle2 size={32} />
@@ -162,110 +151,110 @@ export default function PaymentModal({
               </div>
             </div>
           ) : (
-            /* Form State */
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {error && (
-                <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-medium">
-                  {error}
-                </div>
-              )}
-
-              {/* Debt Summary Banner */}
-              <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-800">
+            <>
+              <div className="px-5 py-4 text-center border-b border-primary/10 bg-amber-500/5">
+                <span className="text-xs font-bold uppercase tracking-widest text-amber-600 block mb-0.5">
                   Deuda Pendiente
                 </span>
-                <span className="text-base font-bold text-amber-900">
+                <span className="text-3xl font-bold text-amber-700 tracking-tight">
                   {formatCurrency(customer.totalDebt)}
                 </span>
               </div>
 
-              {/* Monto Input */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-widest text-primary/65 block mb-1">
-                  Monto a Abonar ($) *
-                </label>
-                <input
-                  type="number"
-                  step="100"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0"
-                  className="w-full bg-foreground-muted/40 hover:bg-foreground-muted/60 focus:bg-background border border-primary/8 focus:border-primary/20 rounded-xl px-4 py-3 text-base text-primary font-mono font-bold outline-none transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setAmount(String(customer.totalDebt))}
-                  className="text-[11px] font-bold text-primary/55 hover:text-primary underline mt-1"
-                >
-                  Pagar totalidad ({formatCurrency(customer.totalDebt)})
-                </button>
-              </div>
+              <form onSubmit={handleSubmit} className="p-5 space-y-5">
+                {error && (
+                  <div className="rounded-lg border border-red-500 bg-red-500/10 p-4 text-sm font-medium text-red-500">
+                    {error}
+                  </div>
+                )}
 
-              {/* Método de Pago */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-widest text-primary/65 block mb-1">
-                  Método de Ingreso
-                </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
+                    Monto a Abonar ($) *
+                  </label>
+                  <input
+                    type="number"
+                    step="100"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0"
+                    className="w-full bg-foreground-muted/40 border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-sm text-primary font-bold outline-none transition-all"
+                  />
                   <button
                     type="button"
-                    onClick={() => setPaymentMethod('cash')}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all cursor-pointer ${
-                      paymentMethod === 'cash'
-                        ? 'bg-primary text-background border-primary shadow-xs'
-                        : 'bg-foreground-muted/40 border-primary/8 text-primary/70'
-                    }`}
+                    onClick={() => setAmount(String(customer.totalDebt))}
+                    className="text-xs text-primary/60 hover:text-primary underline mt-1 block cursor-pointer"
                   >
-                    Efectivo
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('transfer')}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all cursor-pointer ${
-                      paymentMethod === 'transfer'
-                        ? 'bg-primary text-background border-primary shadow-xs'
-                        : 'bg-foreground-muted/40 border-primary/8 text-primary/70'
-                    }`}
-                  >
-                    Transferencia
+                    Pagar totalidad ({formatCurrency(customer.totalDebt)})
                   </button>
                 </div>
-              </div>
 
-              {/* Nota opcional */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-widest text-primary/65 block mb-1">
-                  Nota / Observación (Opcional)
-                </label>
-                <input
-                  type="text"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  placeholder="Ej: Dejó el pago con el hermano"
-                  className="w-full bg-foreground-muted/40 hover:bg-foreground-muted/60 focus:bg-background border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-xs text-primary outline-none transition-all"
-                />
-              </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
+                    Método de Ingreso *
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('cash')}
+                      className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${paymentMethod === 'cash'
+                        ? 'bg-primary text-background border-primary shadow-xs'
+                        : 'bg-foreground-muted/30 border-primary/8 text-primary/70 hover:bg-foreground-muted/60'
+                        }`}
+                    >
+                      <Banknote size={20} />
+                      Efectivo
+                    </button>
 
-              {/* Submit Actions */}
-              <div className="pt-4 border-t border-primary/5 flex items-center justify-end gap-2">
-                <button
-                  type="button"
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('transfer')}
+                      className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${paymentMethod === 'transfer'
+                        ? 'bg-primary text-background border-primary shadow-xs'
+                        : 'bg-foreground-muted/30 border-primary/8 text-primary/70 hover:bg-foreground-muted/60'
+                        }`}
+                    >
+                      <Smartphone size={20} />
+                      Transferencia
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
+                    Nota / Observación (Opcional)
+                  </label>
+                  <input
+                    type="text"
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Ej: Dejó el pago con el hermano..."
+                    className="w-full bg-foreground-muted/40 border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-xs text-primary font-medium outline-none transition-all"
+                  />
+                </div>
+              </form>
+
+              <div className="px-5 pb-5 flex items-center justify-between gap-3 border-t border-primary/5 pt-4">
+                <Button
+                  variant="secondary"
                   onClick={onClose}
                   disabled={isSaving}
-                  className="py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-primary/60 hover:text-primary cursor-pointer"
                 >
                   Cancelar
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="py-2.5 px-5 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={handleSubmit}
+                  disabled={isSaving || !amount || parseFloat(amount) <= 0}
                 >
-                  {isSaving ? 'Guardando...' : 'Confirmar Abono'}
-                </button>
+                  {isSaving ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    `Confirmar · ${formatCurrency(parseFloat(amount) || 0)}`
+                  )}
+                </Button>
               </div>
-            </form>
+            </>
           )}
         </div>
       </div>

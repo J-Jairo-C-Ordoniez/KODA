@@ -11,8 +11,8 @@ import useCustomers from '@/features/dashboard/business/hooks/useCustomers';
 export default function Customers() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { toasts, showToast, removeToast } = useToast();
+  const newCustomerRef = useRef<(() => void) | null>(null);
 
-  // Single source of truth — one hook instance for the entire page
   const {
     customers,
     filteredCustomers,
@@ -31,8 +31,6 @@ export default function Customers() {
     getCustomerHistory,
   } = useCustomers();
 
-  // Ref to trigger "new customer" view from sidebar
-  const newCustomerRef = useRef<(() => void) | null>(null);
 
   const handleNewCustomer = () => {
     if (newCustomerRef.current) {
@@ -49,9 +47,9 @@ export default function Customers() {
 
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="absolute top-6 left-2 z-110 p-2 text-primary hover:bg-foreground-muted/40 rounded-lg border border-transparent hover:border-primary/10 hover:shadow-xs transition-all duration-200 active:scale-95 cursor-pointer"
-        title={isSidebarOpen ? 'Ocultar menú' : 'Mostrar menú'}
-        aria-label="Alternar menú de clientes"
+        className="absolute top-6 left-2 z-110 p-2 text-primary hover:bg-primary/4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
+        title={isSidebarOpen ? "Ocultar menú lateral" : "Mostrar menú lateral"}
+        aria-label="Alternar menú lateral"
       >
         <SidebarIcon size={20} />
       </button>
@@ -64,7 +62,7 @@ export default function Customers() {
       )}
 
       <div
-        className={`shrink-0 transition-all duration-300 border-r border-primary/5 bg-background fixed inset-y-0 left-0 z-100 w-[260px]
+        className={`shrink-0 transition-all duration-300 border-r border-primary/5 bg-background fixed inset-y-0 left-0 z-100 w-65
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           md:relative md:translate-x-0
           ${isSidebarOpen ? 'md:w-[18%] md:opacity-100' : 'md:w-0 md:opacity-0 md:overflow-hidden'}
@@ -86,7 +84,6 @@ export default function Customers() {
         <CustomersMain
           showToast={showToast}
           onNewCustomerRef={newCustomerRef}
-          // Pass all shared state down
           customers={customers}
           filteredCustomers={filteredCustomers}
           isLoading={isLoading}

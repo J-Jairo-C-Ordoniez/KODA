@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Plus, Wallet, CheckCircle2, Users } from 'lucide-react';
-import SidebarHeader from './ui/SidebarHeader';
 import { CustomerFilterType } from '@/features/dashboard/business/hooks/useCustomers';
 import { formatCurrency } from '@/lib/formatters';
 
@@ -18,16 +17,7 @@ interface SidebarProps {
   totalDebtSum: number;
 }
 
-export default function Sidebar({
-  onCloseMobile,
-  filterType,
-  onFilterChange,
-  onNewCustomer,
-  totalWithDebt,
-  totalPaid,
-  totalCustomers,
-  totalDebtSum,
-}: SidebarProps) {
+export default function Sidebar({ onCloseMobile, filterType, onFilterChange, onNewCustomer, totalWithDebt, totalPaid, totalCustomers, totalDebtSum }: SidebarProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,15 +47,13 @@ export default function Sidebar({
   return (
     <aside
       ref={containerRef}
-      className="w-full h-full bg-background p-4 pt-20 flex flex-col gap-8 overflow-y-auto"
+      className="w-full h-full bg-background p-4 pt-20 flex flex-col gap-6 overflow-y-auto"
     >
-      <SidebarHeader
-        filterType={filterType}
-        onSelectAll={() => handleSelectFilter('all')}
-      />
+      <h2 className="text-lg font-medium text-primary px-2 mt-2 tracking-tight">
+        Clientes
+      </h2>
 
       <nav className="flex flex-col gap-8">
-        {/* ACCIONES */}
         <section className="flex flex-col gap-1">
           <h3 className="px-2 mb-2 text-xs font-semibold uppercase tracking-wider text-primary/40">
             Acciones
@@ -82,7 +70,6 @@ export default function Sidebar({
           </button>
         </section>
 
-        {/* FILTROS */}
         <section className="flex flex-col gap-1">
           <h3 className="px-2 mb-2 text-xs font-semibold uppercase tracking-wider text-primary/40">
             Filtros
@@ -90,11 +77,10 @@ export default function Sidebar({
 
           <button
             onClick={() => handleSelectFilter('with-debt')}
-            className={`gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors duration-200 cursor-pointer ${
-              filterType === 'with-debt'
-                ? 'bg-foreground-muted/40 text-primary font-medium'
-                : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
-            }`}
+            className={`gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors duration-200 cursor-pointer ${filterType === 'with-debt'
+              ? 'bg-foreground-muted/40 text-primary font-medium'
+              : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
+              }`}
           >
             <div className="flex items-center gap-3">
               <Wallet size={18} />
@@ -105,26 +91,26 @@ export default function Sidebar({
 
           <button
             onClick={() => handleSelectFilter('paid')}
-            className={`gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors duration-200 cursor-pointer ${
-              filterType === 'paid'
-                ? 'bg-foreground-muted/40 text-primary font-medium'
-                : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
-            }`}
+            className={`gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors duration-200 cursor-pointer ${filterType === 'paid'
+              ? 'bg-foreground-muted/40 text-primary font-medium'
+              : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
+              }`}
           >
             <div className="flex items-center gap-3">
               <CheckCircle2 size={18} />
               <span>Al Día</span>
             </div>
-            <span className="text-sm font-medium text-primary/40">{totalPaid}</span>
+            <span className="text-sm font-medium text-primary/40">
+              {totalPaid}
+            </span>
           </button>
 
           <button
             onClick={() => handleSelectFilter('all')}
-            className={`gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors duration-200 cursor-pointer ${
-              filterType === 'all'
-                ? 'bg-foreground-muted/40 text-primary font-medium'
-                : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
-            }`}
+            className={`gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors duration-200 cursor-pointer ${filterType === 'all'
+              ? 'bg-foreground-muted/40 text-primary font-medium'
+              : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
+              }`}
           >
             <div className="flex items-center gap-3">
               <Users size={18} />
@@ -135,16 +121,12 @@ export default function Sidebar({
         </section>
       </nav>
 
-      {/* Deuda Total */}
       <div className="mt-auto px-2 pb-2 space-y-1">
         <p className="text-xs font-semibold uppercase tracking-wider text-primary/40">
           Deuda total por cobrar
         </p>
         <p className="text-xl font-bold tracking-tight text-primary">
           {formatCurrency(totalDebtSum)}
-        </p>
-        <p className="text-xs text-primary/45 leading-snug">
-          Pendiente en la calle ({totalWithDebt} cliente{totalWithDebt !== 1 ? 's' : ''})
         </p>
       </div>
     </aside>

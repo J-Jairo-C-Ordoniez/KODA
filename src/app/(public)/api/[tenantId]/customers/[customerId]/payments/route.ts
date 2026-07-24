@@ -5,12 +5,15 @@ import customerController from '@/core/modules/customers/controllers/customer.co
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ customerId: string }> }
+  { params }: { params: Promise<{ tenantId: string; customerId: string }> }
 ) {
-  const { tenantId } = getTenantContext(req);
+  const resolvedParams = await params;
+  const { tenantId: headerTenantId } = getTenantContext(req);
+  const tenantId = headerTenantId || resolvedParams.tenantId;
+
   if (!tenantId) return apiResponse.error('No autorizado', 401);
 
-  const { customerId } = await params;
+  const customerId = resolvedParams.customerId;
   const data = await req.json();
   return customerController.registerPayment(tenantId, customerId, data);
 }

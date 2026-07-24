@@ -1,17 +1,13 @@
 import { useCallback, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useCatalogStore } from '@/store/useProductsStore';
-import {
-  Variant, Product, Category,
-  saveVariantApi, deleteVariantApi, updateVariantStockApi,
-  saveProductApi, saveCategoryApi, fetchProductsDataApi
-} from '@/features/dashboard/business/api/products.api';
+import { useProductsStore } from '@/store/useProductsStore';
+import { Variant, Product, Category, saveVariantApi, deleteVariantApi, updateVariantStockApi, saveProductApi, saveCategoryApi, fetchProductsDataApi } from '@/features/dashboard/business/api/products.api';
 
 export default function useProducts() {
   const { data: session } = useSession();
   const tenantId = session?.user?.tenantId;
 
-  const { setCatalogData } = useCatalogStore();
+  const { setCatalogData } = useProductsStore();
   const [isSaving, setIsSaving] = useState(false);
 
   const refreshGlobalState = useCallback(async () => {

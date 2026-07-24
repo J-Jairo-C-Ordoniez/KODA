@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ToastType } from '@/shared/hooks/useToast';
 import { CheckCircle2, AlertCircle, X, Info, AlertTriangle } from 'lucide-react';
+import gsap from 'gsap';
 
 interface Toast {
   id: string;
@@ -35,40 +36,66 @@ const config = {
 };
 
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+  const toastRef = useRef<HTMLDivElement>(null);
   const { icon: Icon, iconClass, bar } = config[toast.type] || config.info;
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setIsVisible(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
+    const el = toastRef.current;
+    if (!el) return;
 
-  const dismiss = useCallback(() => {
-    if (isLeaving) return;
-    setIsLeaving(true);
-    timerRef.current = setTimeout(() => onRemove(toast.id), 350);
-  }, [isLeaving, onRemove, toast.id]);
+    gsap.fromTo(
+      el,
+      {
+        opacity: 0,
+        y: -15,
+        scale: 0.95,
+        height: 0,
+        marginBottom: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        height: 'auto',
+        marginBottom: 10,
+        paddingTop: 16,
+        paddingBottom: 16,
+        duration: 0.45,
+        ease: 'back.out(1.2)',
+        clearProps: 'paddingTop,paddingBottom',
+      }
+    );
 
-  useEffect(() => {
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      gsap.killTweensOf(el);
     };
   }, []);
 
+  const dismiss = () => {
+    const el = toastRef.current;
+    if (!el) return;
+
+    gsap.to(el, {
+      opacity: 0,
+      y: -15,
+      scale: 0.95,
+      height: 0,
+      marginBottom: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+      borderWidth: 0,
+      duration: 0.3,
+      ease: 'power2.in',
+      onComplete: () => onRemove(toast.id),
+    });
+  };
+
   return (
     <div
-      style={{
-        transition: 'opacity 350ms ease, transform 350ms cubic-bezier(0.4, 0, 0.2, 1), max-height 350ms ease',
-        opacity: isVisible && !isLeaving ? 1 : 0,
-        transform: isVisible && !isLeaving ? 'translateY(0) scale(1)' : 'translateY(-12px) scale(0.96)',
-        maxHeight: isLeaving ? '0px' : '200px',
-        overflow: 'hidden',
-        marginBottom: isLeaving ? '0px' : undefined,
-      }}
-      className="pointer-events-auto flex items-start gap-3.5 p-4 rounded-2xl bg-background-card border border-primary/10 shadow-xl backdrop-blur-md relative"
+      ref={toastRef}
+      className="pointer-events-auto flex items-start gap-3.5 px-4 rounded-2xl bg-background-card border border-primary/10 shadow-xl backdrop-blur-md relative overflow-hidden"
     >
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${iconClass}`}>
         <Icon size={18} />
@@ -100,7 +127,7 @@ export default function Toaster({ toasts, removeToast }: { toasts: Toast[]; remo
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-9999 flex flex-col gap-2.5 pointer-events-none w-full max-w-md px-4">
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-9999 flex flex-col pointer-events-none w-full max-w-md px-4">
       {toasts.map((toast) => (
         <ToastItem
           key={toast.id}

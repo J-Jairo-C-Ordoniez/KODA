@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { Sidebar as SidebarIcon } from 'lucide-react';
+import useToast from '@/shared/hooks/useToast';
+import Toaster from '@/shared/components/Toaster';
+
 import Sidebar from '@/features/dashboard/business/components/main/sections/products/Sidebar/Sidebar';
 import ProductsMain from '@/features/dashboard/business/components/main/sections/products/Main/Main';
-import { Toaster, useToast } from '@/shared/components/Toaster';
 
 export default function Products() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -12,13 +14,16 @@ export default function Products() {
 
     return (
         <div className="flex h-screen w-full bg-background overflow-hidden relative">
-            <Toaster toasts={toasts} removeToast={removeToast} />
+            <Toaster
+                toasts={toasts}
+                removeToast={removeToast}
+            />
 
             <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="absolute top-6 left-2 z-110 p-2 text-primary hover:bg-foreground-muted/40 rounded-lg border border-transparent hover:border-primary/10 hover:shadow-xs transition-all duration-200 active:scale-95 cursor-pointer"
-                title={isSidebarOpen ? 'Ocultar menú' : 'Mostrar menú'}
-                aria-label="Alternar menú de catálogo"
+                className="absolute top-6 left-2 z-110 p-2 text-primary hover:bg-primary/4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
+                title={isSidebarOpen ? "Ocultar menú lateral" : "Mostrar menú lateral"}
+                aria-label="Alternar menú lateral"
             >
                 <SidebarIcon size={20} />
             </button>
@@ -31,7 +36,7 @@ export default function Products() {
             )}
 
             <div
-                className={`shrink-0 transition-all duration-300 border-r border-primary/5 bg-background fixed inset-y-0 left-0 z-100 w-[260px]
+                className={`shrink-0 transition-all duration-300 border-r border-primary/5 bg-background fixed inset-y-0 left-0 z-100 w-65
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
                     md:relative md:translate-x-0
                     ${isSidebarOpen ? 'md:w-[18%] md:opacity-100' : 'md:w-0 md:opacity-0 md:overflow-hidden'}

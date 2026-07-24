@@ -17,17 +17,7 @@ interface CategoryTreeProps {
   onSetView: (view: ActiveView, editingItem?: any) => void;
 }
 
-export default function CategoryTree({
-  categories,
-  products,
-  selectedProductId,
-  onSelectProduct,
-  onUpdateCategory,
-  onDeleteCategory,
-  onUpdateProduct,
-  onDeleteProduct,
-  onSetView,
-}: CategoryTreeProps) {
+export default function CategoryTree({ categories, products, selectedProductId, onSelectProduct, onUpdateCategory, onDeleteCategory, onUpdateProduct, onDeleteProduct, onSetView }: CategoryTreeProps) {
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingType, setEditingType] = useState<'category' | 'product' | null>(null);
@@ -91,21 +81,39 @@ export default function CategoryTree({
         type="text"
         value={editValue}
         onChange={event => setEditValue(event.target.value)}
-        className="min-w-0 flex-1 border-b border-primary/30 bg-transparent px-1 py-0.5 text-sm text-primary outline-none focus:border-accent"
+        className="min-w-0 flex-1 border-b border-primary/30 bg-transparent p-1 text-sm text-primary outline-none focus:border-primary"
       />
-      <button type="submit" className="text-primary/45 transition-colors hover:text-success" aria-label="Guardar">
-        <Check size={14} />
+      <button
+        type="submit"
+        className="text-primary/80 transition-colors hover:text-success cursor-pointer"
+        aria-label="Guardar"
+      >
+        <Check size={18} />
       </button>
-      <button type="button" onClick={cancelEdit} className="text-primary/45 transition-colors hover:text-accent-red" aria-label="Cancelar">
-        <X size={14} />
+      <button
+        type="button"
+        onClick={cancelEdit}
+        className="text-primary/80 transition-colors hover:text-accent-red cursor-pointer"
+        aria-label="Cancelar"
+      >
+        <X size={18} />
       </button>
     </form>
   );
 
+  const handleDelete = async (e: React.MouseEvent, id: string, type: 'category' | 'product') => {
+    e.stopPropagation();
+    if (type === 'category') {
+      await onDeleteCategory(id);
+    } else {
+      await onDeleteProduct(id);
+    }
+  };
+
   return (
     <nav className="flex flex-col gap-8">
       <section className="flex flex-col gap-1">
-        <h3 className="px-2 mb-2 text-xs font-semibold uppercase tracking-wider text-primary/40">
+        <h3 className="text-xs font-semibold text-primary/40 uppercase tracking-wider px-2 mb-2">
           Acciones
         </h3>
         <button
@@ -125,16 +133,15 @@ export default function CategoryTree({
       </section>
 
       <section className="flex flex-col gap-1">
-        <h3 className="px-2 mb-2 text-xs font-semibold uppercase tracking-wider text-primary/40">
+        <h3 className="text-xs font-semibold text-primary/40 uppercase tracking-wider px-2 mb-2">
           Estructura
         </h3>
 
-        {categories.length === 0 ? (
-          <p className="px-2 py-6 text-sm font-medium leading-relaxed text-primary/40">
+        {categories.length === 0
+          ? (<p className="px-2 py-6 text-sm font-medium leading-relaxed text-primary/60">
             No hay categorías registradas.
-          </p>
-        ) : (
-          <ul className="flex flex-col gap-1">
+          </p>)
+          : (<ul className="flex flex-col gap-1">
             {categories.map(category => {
               const isExpanded = !!expandedCategories[category.categoryId];
               const categoryProducts = products.filter(product => product.categoryId === category.categoryId);
@@ -142,16 +149,19 @@ export default function CategoryTree({
               const FolderIcon = isExpanded ? FolderOpen : Folder;
 
               return (
-                <li key={category.categoryId} className="group/category flex flex-col gap-1">
+                <li
+                  key={category.categoryId}
+                  className="group/category flex flex-col gap-1"
+                >
                   <div
                     onClick={() => setExpandedCategories(prev => ({ ...prev, [category.categoryId]: !prev[category.categoryId] }))}
                     className="gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-primary/60 transition-colors duration-200 hover:bg-foreground-muted/40 hover:text-primary cursor-pointer"
                   >
                     <div className="flex min-w-0 flex-1 items-center gap-3">
                       <FolderIcon size={18} />
-                      {isEditingCategory ? renderInlineEdit(category.categoryId) : (
-                        <span className="truncate text-sm">{category.name}</span>
-                      )}
+                      {isEditingCategory
+                        ? renderInlineEdit(category.categoryId)
+                        : <span className="truncate text-sm">{category.name}</span>}
                     </div>
 
                     {!isEditingCategory && (
@@ -162,85 +172,84 @@ export default function CategoryTree({
                         <div className="hidden items-center gap-2 text-primary/40 group-hover/category:flex">
                           <button
                             onClick={event => startEdit(event, category.categoryId, 'category', category.name)}
-                            className="transition-colors hover:text-primary"
+                            className="transition-colors hover:text-primary cursor-pointer"
                             aria-label={`Editar ${category.name}`}
                           >
-                            <Edit2 size={14} />
+                            <Edit2 size={18} />
                           </button>
+
                           <button
-                            onClick={event => {
-                              event.stopPropagation();
-                              if (confirm(`¿Eliminar la categoría "${category.name}"?`)) onDeleteCategory(category.categoryId);
-                            }}
-                            className="transition-colors hover:text-accent-red"
+                            onClick={e => handleDelete(e, category.categoryId, 'category')}
+                            className="transition-colors hover:text-accent-red cursor-pointer"
                             aria-label={`Eliminar ${category.name}`}
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={18} />
                           </button>
                         </div>
-                        {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                        {isExpanded
+                          ? <ChevronDown size={18} />
+                          : <ChevronRight size={18}
+                          />
+                        }
                       </div>
                     )}
                   </div>
 
                   {isExpanded && (
                     <ul className="ml-3 flex flex-col gap-1 border-l border-primary/10 pl-4 py-1">
-                      {categoryProducts.length === 0 ? (
-                        <li className="px-3 py-1 text-xs text-primary/35">Sin productos</li>
-                      ) : (
-                        categoryProducts.map(product => {
-                          const isSelected = selectedProductId === product.productId;
-                          const isEditingProduct = editingId === product.productId && editingType === 'product';
+                      {categoryProducts.length === 0
+                        ? <li className="px-3 py-1 text-sm font-medium leading-relaxed text-primary/60">Sin productos</li>
+                        : (
+                          categoryProducts.map(product => {
+                            const isSelected = selectedProductId === product.productId;
+                            const isEditingProduct = editingId === product.productId && editingType === 'product';
 
-                          return (
-                            <li
-                              key={product.productId}
-                              onClick={() => onSelectProduct(product.productId)}
-                              className={`group/product flex items-center justify-between rounded-lg px-3 py-2 transition-colors duration-200 cursor-pointer ${
-                                isSelected
+                            return (
+                              <li
+                                key={product.productId}
+                                onClick={() => onSelectProduct(product.productId)}
+                                className={`group/product flex items-center justify-between rounded-lg px-3 py-2 transition-colors duration-200 cursor-pointer ${isSelected
                                   ? 'bg-foreground-muted/40 text-primary'
                                   : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
-                              }`}
-                            >
-                              <div className="flex min-w-0 flex-1 items-center gap-3">
-                                <Package size={16} />
-                                {isEditingProduct ? renderInlineEdit(product.productId) : (
-                                  <span className="truncate text-sm">{product.name}</span>
-                                )}
-                              </div>
-
-                              {!isEditingProduct && (
-                                <div className="hidden items-center gap-2 text-primary/40 group-hover/product:flex">
-                                  <button
-                                    onClick={event => startEdit(event, product.productId, 'product', product.name)}
-                                    className="transition-colors hover:text-primary"
-                                    aria-label={`Editar ${product.name}`}
-                                  >
-                                    <Edit2 size={14} />
-                                  </button>
-                                  <button
-                                    onClick={event => {
-                                      event.stopPropagation();
-                                      if (confirm(`¿Eliminar el producto "${product.name}"?`)) onDeleteProduct(product.productId);
-                                    }}
-                                    className="transition-colors hover:text-accent-red"
-                                    aria-label={`Eliminar ${product.name}`}
-                                  >
-                                    <Trash2 size={14} />
-                                  </button>
+                                  }`}
+                              >
+                                <div className="flex min-w-0 flex-1 items-center gap-3">
+                                  <Package size={18} />
+                                  {isEditingProduct
+                                    ? renderInlineEdit(product.productId)
+                                    : <span className="truncate text-sm">{product.name}</span>
+                                  }
                                 </div>
-                              )}
-                            </li>
-                          );
-                        })
-                      )}
+
+                                {!isEditingProduct && (
+                                  <div className="hidden items-center gap-2 text-primary/40 group-hover/product:flex">
+                                    <button
+                                      onClick={event => startEdit(event, product.productId, 'product', product.name)}
+                                      className="transition-colors hover:text-primary cursor-pointer"
+                                      aria-label={`Editar ${product.name}`}
+                                    >
+                                      <Edit2 size={18} />
+                                    </button>
+                                    <button
+                                      onClick={e => handleDelete(e, product.productId, 'product')}
+                                      className="transition-colors hover:text-accent-red cursor-pointer"
+                                      aria-label={`Eliminar ${product.name}`}
+                                    >
+                                      <Trash2 size={18} />
+                                    </button>
+                                  </div>
+                                )}
+                              </li>
+                            );
+                          })
+                        )}
                     </ul>
                   )}
                 </li>
               );
             })}
           </ul>
-        )}
+          )}
       </section>
     </nav>
   );

@@ -14,7 +14,7 @@ interface CatalogState {
   products: Product[];
   isLoading: boolean;
   error: string | null;
-  
+
   selectedProductId: string | null;
   editingItem: any | null;
   activeView: ActiveView;
@@ -26,26 +26,26 @@ interface CatalogState {
   setActiveView: (view: ActiveView, editingItem?: any) => void;
 }
 
-export const useCatalogStore = create<CatalogState>((set) => ({
+export const useProductsStore = create<CatalogState>((set) => ({
   categories: [],
   products: [],
   isLoading: true,
   error: null,
-  
+
   selectedProductId: null,
   editingItem: null,
   activeView: 'grid',
 
   setLoading: (isLoading) => set({ isLoading }),
-  
+
   setError: (error) => set({ error, isLoading: false }),
-  
-  setCatalogData: (categories, products) => 
+
+  setCatalogData: (categories, products) =>
     set({ categories, products, isLoading: false, error: null }),
-    
-  setSelectedProduct: (productId) => 
+
+  setSelectedProduct: (productId) =>
     set({ selectedProductId: productId, activeView: 'grid', editingItem: null }),
-    
-  setActiveView: (view, editingItem = null) => 
+
+  setActiveView: (view, editingItem = null) =>
     set({ activeView: view, editingItem }),
 }));

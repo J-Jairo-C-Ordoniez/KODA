@@ -1,18 +1,18 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ChevronRight, LayoutGrid, PackageOpen, Plus } from 'lucide-react';
-
-import { useCatalogStore } from '@/store/useProductsStore';
+import { ChevronRight } from 'lucide-react';
+import { useProductsStore } from '@/store/useProductsStore';
 import useProducts from '@/features/dashboard/business/hooks/useProducts';
 import type { Product, Variant } from '@/features/dashboard/business/api/products.api';
-import type { ToastType } from '@/shared/components/Toaster';
+import type { ToastType } from '@/shared/hooks/useToast';
 
-import VariantCard from '@/features/business/catalog/components/products/VariantCard';
-import VariantDrawer from '@/features/business/catalog/components/products/VariantDrawer';
-import ProductForm from '@/features/business/catalog/components/products/ProductForm';
-import CategoryForm from '@/features/business/catalog/components/products/CategoryForm';
+import VariantCard from '@/features/dashboard/business/components/main/sections/products/Main/ui/VariantCard';
+import VariantDrawer from '@/features/dashboard/business/components/main/sections/products/Main/ui/VariantDrawer';
+import ProductForm from '@/features/dashboard/business/components/main/sections/products/Main/ui/ProductForm';
+import CategoryForm from '@/features/dashboard/business/components/main/sections/products/Main/ui/CategoryForm';
 import Loader from '@/shared/components/Loader';
+import Button from '@/shared/components/Button';
 
 type ToastHandler = (type: ToastType, message: string, description?: string) => void;
 type VariantWithProductName = Variant & { productName?: string };
@@ -22,15 +22,7 @@ interface ProductsMainProps {
 }
 
 export default function ProductsMain({ showToast }: ProductsMainProps) {
-    const {
-        activeView,
-        selectedProductId,
-        editingItem,
-        products,
-        categories,
-        setActiveView,
-        isLoading,
-    } = useCatalogStore();
+    const { activeView, selectedProductId, editingItem, products, categories, setActiveView, isLoading } = useProductsStore();
     const { isSaving, saveVariant, updateVariantStock, deleteVariant, saveCategory, saveProduct } = useProducts();
 
     const [selectedVariant, setSelectedVariant] = useState<VariantWithProductName | null>(null);
@@ -120,11 +112,6 @@ export default function ProductsMain({ showToast }: ProductsMainProps) {
         setIsVariantDrawerOpen(true);
     };
 
-    const pageTitle = selectedProduct?.name ?? 'Productos';
-    const pageDescription = selectedProduct
-        ? 'Gestiona sus variantes, precios e inventario desde una vista concentrada.'
-        : 'Revisa todo el catálogo, ajusta stock directo en cada card y entra al detalle cuando necesites editar una variante.';
-
     if (isLoading && products.length === 0) {
         return (
             <div className="flex h-full w-full items-center justify-center bg-background">
@@ -157,58 +144,68 @@ export default function ProductsMain({ showToast }: ProductsMainProps) {
             {activeView === 'grid' && (
                 <section className="space-y-6 animate-in fade-in duration-500">
                     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-primary/5 pb-4">
-                        <nav className="flex flex-wrap items-center gap-2 text-xs font-medium text-primary/60" aria-label="Ubicación del catálogo">
-                            <span className="rounded-md bg-foreground-muted/40 px-2.5 py-1 text-primary/70 font-semibold">Catálogo</span>
-                            <ChevronRight size={13} className="text-primary/25" />
+                        <nav
+                            className="flex flex-wrap items-center gap-2 text-xs font-medium text-primary/60"
+                            aria-label="Ubicación del Productos"
+                        >
+                            <span className="rounded-md bg-foreground-muted/40 px-3 py-1 text-sm text-primary/80">
+                                Productos
+                            </span>
+                            <ChevronRight
+                                size={18}
+                                className="text-primary/25"
+                            />
                             {selectedCategory && (
                                 <>
-                                    <span className="px-1 py-0.5 text-primary/60">{selectedCategory.name}</span>
-                                    <ChevronRight size={13} className="text-primary/25" />
+                                    <span className="text-sm text-primary/80">
+                                        {selectedCategory.name}
+                                    </span>
+                                    <ChevronRight
+                                        size={18}
+                                        className="text-primary/25"
+                                    />
                                 </>
                             )}
-                            <span className="px-1 py-0.5 font-bold text-primary">
+                            <span className="p-1 text-sm text-primary/80">
                                 {selectedProduct ? selectedProduct.name : 'Todos los productos'}
                             </span>
                         </nav>
 
                         {selectedProductId && (
                             <div className="flex flex-wrap items-center gap-2">
-                                <button
+                                <Button
+                                    variant='secondary'
                                     onClick={() => setActiveView('create-product', selectedProduct)}
-                                    className="py-2 px-3.5 border border-primary/10 hover:bg-foreground-muted/40 text-primary rounded-xl text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer"
                                 >
                                     Editar producto
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                    variant='primary'
                                     onClick={() => openVariantDrawer()}
-                                    className="flex items-center gap-1.5 py-2 px-3.5 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-all shadow-xs cursor-pointer"
                                 >
-                                    <Plus size={14} /> Nueva variante
-                                </button>
+                                    Nueva variante
+                                </Button>
                             </div>
                         )}
                     </header>
 
                     {displayedVariants.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center text-center py-20 bg-white border border-primary/10 rounded-2xl p-8 max-w-2xl mx-auto shadow-xs">
-                            <div className="w-16 h-16 rounded-xl bg-primary text-background flex items-center justify-center mb-5">
-                                {selectedProduct ? <LayoutGrid size={28} /> : <PackageOpen size={28} />}
-                            </div>
-                            <h3 className="text-lg font-bold text-primary">
+                        <div className="flex flex-col items-center justify-center text-center py-20 w-full h-full mx-auto">
+                            <h3 className="text-lg font-medium text-primary tracking-tight">
                                 {selectedProduct ? 'Sin variantes registradas' : 'Tu catálogo está listo para organizarse'}
                             </h3>
-                            <p className="text-sm text-primary/55 leading-relaxed max-w-md mt-2">
+                            <p className="text-sm text-primary/60 leading-relaxed max-w-md my-2">
                                 {selectedProduct
                                     ? 'Crea una variante con precio, color, talla y stock inicial para empezar a vender este producto.'
                                     : 'Selecciona un producto del menú lateral para ver sus variantes, o crea un producto nuevo para empezar a cargar inventario.'}
                             </p>
                             {selectedProduct && (
-                                <button
+                                <Button
+                                    variant='primary'
                                     onClick={() => openVariantDrawer()}
-                                    className="mt-6 flex items-center gap-2 py-2.5 px-4 bg-primary hover:bg-secondary text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors shadow-xs cursor-pointer"
                                 >
-                                    <Plus size={14} /> Crear primera variante
-                                </button>
+                                    Crear primera variante
+                                </Button>
                             )}
                         </div>
                     ) : (

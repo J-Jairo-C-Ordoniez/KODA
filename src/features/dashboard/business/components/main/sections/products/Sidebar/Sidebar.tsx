@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-
-import { useCatalogStore } from '@/store/useProductsStore';
+import { useProductsStore } from '@/store/useProductsStore';
 import useProductSidebarCatalog from '@/features/dashboard/business/hooks/useProductSidebarCatalog';
 
 import SidebarHeader from '@/features/dashboard/business/components/main/sections/products/Sidebar/ui/SidebarHeader';
@@ -15,8 +14,7 @@ interface SidebarProps {
 
 export default function Sidebar({ onCloseMobile }: SidebarProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { categories, products, selectedProductId } = useCatalogStore();
-
+    const { categories, products, selectedProductId } = useProductsStore();
     const {
         setSelectedProduct,
         setActiveView,

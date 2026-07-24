@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useCatalogStore } from '@/store/useProductsStore';
-import { Category, Product, Variant, fetchProductsDataApi, saveCategoryApi, deleteCategoryApi, saveProductApi, deleteProductApi, saveVariantApi, deleteVariantApi, updateVariantStockApi, } from '@/features/dashboard/business/api/products.api';
+import { useProductsStore } from '@/store/useProductsStore';
+import { Category, Product, fetchProductsDataApi, saveCategoryApi, deleteCategoryApi, saveProductApi, deleteProductApi } from '@/features/dashboard/business/api/products.api';
 
 export default function useProductSidebarCatalog() {
   const { data: session } = useSession();
   const tenantId = session?.user?.tenantId;
 
-  const { setLoading, setError, setCatalogData, setActiveView, setSelectedProduct } = useCatalogStore();
+  const { setLoading, setError, setCatalogData, setActiveView, setSelectedProduct } = useProductsStore();
 
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const refresh = useCallback(async () => {
     if (!tenantId) return;
-    
+
     setLoading(true);
     try {
       const data = await fetchProductsDataApi(tenantId);
@@ -35,11 +35,11 @@ export default function useProductSidebarCatalog() {
       errorMessage: string,
     ) => {
       if (!tenantId) return { success: false, error: 'Tenant ID requerido' };
-      
+
       loadingSetter(true);
       try {
         const data = await mutationFn();
-        await refresh(); 
+        await refresh();
         return { success: true, data };
       } catch (err: any) {
         return { success: false, error: err.message || errorMessage };

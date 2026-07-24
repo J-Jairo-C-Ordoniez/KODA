@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LoaderCircle, Save, X } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { StoreDataStats } from '@/features/dashboard/business/api/dashboard.api';
 import useTabStats from "@/features/dashboard/business/hooks/useTabStats";
 import Loader from "@/shared/components/Loader";
@@ -62,7 +62,6 @@ export default function MyStore({ activeTab }: { activeTab: string }) {
                                     variant="secondary"
                                     disabled={isSaving}
                                 >
-                                    <X size={16} />
                                     Cancelar
                                 </Button>
                                 <Button
@@ -77,7 +76,6 @@ export default function MyStore({ activeTab }: { activeTab: string }) {
                                         </>
                                     ) : (
                                         <>
-                                            <Save size={16} />
                                             Guardar cambios
                                         </>
                                     )}

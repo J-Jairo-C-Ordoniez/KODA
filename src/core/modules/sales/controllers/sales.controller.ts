@@ -3,6 +3,7 @@ import salesService from '../services/sales.service';
 import { PaginationOptions } from '../repositories/sales.repository';
 import { z } from 'zod';
 import { PaymentMethod } from '@prisma/client';
+import prisma from '@/infrastructure/db/client';
 
 const saleSchema = z.object({
   items: z.array(z.object({
@@ -35,10 +36,13 @@ const salesController = {
       if (!total || total <= 0) {
         // Compute total from variant prices in DB if total wasn't supplied
         const variantIds = saleData.items.map(i => i.variantId);
-        const variants = await salesRepository.getSalesByTenant ? (await import('@/infrastructure/db/client')).default.variant.findMany({
-          where: { variantId: { in: variantIds } },
+        const variants = await prisma.variant.findMany({
+          where: {
+            variantId: { in: variantIds },
+            product: { tenantId },
+          },
           select: { variantId: true, price: true }
-        }) : [];
+        });
         const map = new Map(variants.map(v => [v.variantId, Number(v.price)]));
         total = saleData.items.reduce((acc, item) => acc + (map.get(item.variantId) ?? 0) * item.quantity, 0);
       }

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
+import useBreadcrumbsStore from "@/store/breadcrumbs.store";
 import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import PolicyContent from "./ui/PolicyContent";
-import { usePolicies } from "@/hooks/store/usePolicies";
+import { usePolicies } from "@/features/storefront/hooks/usePolicies";
 
 export default function PoliciesMain() {
   const { setBreadcrumbsRoute } = useBreadcrumbsStore();

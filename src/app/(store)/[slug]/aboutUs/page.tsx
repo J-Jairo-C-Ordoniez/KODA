@@ -1,6 +1,6 @@
-import Header from '../../../../components/Store/Header/Header';
-import Footer from '../../../../components/Store/Footer/Footer';
-import AboutMain from '../../../../components/Store/others/about/AboutMain';
+import Header from '@/features/storefront/components/Header/Header';
+import Footer from '@/features/storefront/components/Footer/Footer';
+import AboutMain from '@/features/storefront/components/others/about/AboutMain';
 
 export default function AboutPage() {
   return (

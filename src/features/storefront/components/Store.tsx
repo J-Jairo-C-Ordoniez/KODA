@@ -1,21 +1,21 @@
 'use client';
 
 import { Suspense } from 'react';
-import Header from "@/components/Store/Header/Header"
-import StoreLanding from "@/components/Store/Main/StoreLanding"
-import Footer from "@/components/Store/Footer/Footer"
+import Header from "@/features/storefront/components/Header/Header"
+import StoreLanding from "@/features/storefront/components/Main/StoreLanding"
+import Footer from "@/features/storefront/components/Footer/Footer"
 import Loader from "@/shared/components/Loader"
 import { redirect } from "next/navigation";
-import { useTenantBySlug } from "@/hooks/publicCatalog/useTenantBySlug";
+import { useTenantBySlug } from "@/features/storefront/hooks/useTenantBySlug";
 
 interface Props {
     slug?: string;
 }
 
 export function LandingStore({ slug }: Props) {
-    if (!slug) return null;
+    const { tenant, isLoading } = useTenantBySlug(slug || "");
 
-    const { tenant, isLoading } = useTenantBySlug(slug);
+    if (!slug) return null;
 
     if (isLoading) {
         return (

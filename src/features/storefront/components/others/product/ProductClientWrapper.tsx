@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import Header from '@/components/Store/Header/Header';
-import Footer from '@/components/Store/Footer/Footer';
-import ProductDetail from '@/components/Store/others/product/ProductDetail';
+import Header from '@/features/storefront/components/Header/Header';
+import Footer from '@/features/storefront/components/Footer/Footer';
+import ProductDetail from '@/features/storefront/components/others/product/ProductDetail';
 import { redirect } from 'next/navigation';
-import { useTenantBySlug } from '@/hooks/publicCatalog/useTenantBySlug';
-import Loader from '@/components/ui/Loader';
+import { useTenantBySlug } from '@/features/storefront/hooks/useTenantBySlug';
+import Loader from '@/shared/components/Loader';
 
 interface Props {
   slug: string;

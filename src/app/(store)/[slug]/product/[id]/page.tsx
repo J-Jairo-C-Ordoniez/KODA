@@ -1,4 +1,4 @@
-import ProductClientWrapper from '@/components/Store/others/product/ProductClientWrapper';
+import ProductClientWrapper from '@/features/storefront/components/others/product/ProductClientWrapper';
 import catalogController from '@/core/modules/catalog/controllers/catalog.controller';
 import { Metadata } from 'next';
 
@@ -24,5 +24,4 @@ export default async function ProductDetailPage({ params }: Props) {
   const { slug, id } = await params;
   return <ProductClientWrapper slug={slug} variantId={id} />;
 }
-
 

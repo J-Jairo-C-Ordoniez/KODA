@@ -2,7 +2,7 @@
 
 import { FilterDropdown } from './FilterDropdown';
 import { SlidersHorizontal, X } from 'lucide-react';
-import { useCatalogFilters } from '@/hooks/publicCatalog/useCatalogFilters';
+import { useCatalogFilters } from '@/features/storefront/hooks/useCatalogFilters';
 
 export default function FilterBar({ tenantId }: { tenantId?: string }) {
   const { 

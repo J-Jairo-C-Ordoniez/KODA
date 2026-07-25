@@ -1,10 +1,10 @@
 'use client';
 
-import Breadcrumbs from "@/components/Store/Main/ui/Breadcrumbs";
-import FilterBar from "@/components/Store/Main/ui/FilterBar";
-import ProductGrid from "@/components/Store/Main/ui/ProductGrid";
+import Breadcrumbs from "@/features/storefront/components/Main/ui/Breadcrumbs";
+import FilterBar from "@/features/storefront/components/Main/ui/FilterBar";
+import ProductGrid from "@/features/storefront/components/Main/ui/ProductGrid";
 import Loader from "@/shared/components/Loader";
-import { useCatalog } from "@/hooks/publicCatalog/useCatalog";
+import { useCatalog } from "@/features/storefront/hooks/useCatalog";
 
 
 export default function Main({ tenantId }: { tenantId?: string }) {

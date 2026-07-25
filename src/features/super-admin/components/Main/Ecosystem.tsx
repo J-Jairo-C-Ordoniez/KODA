@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Store, Search, ArrowRight, CheckCircle, XCircle, Plus } from 'lucide-react';
-import { SectionHeader } from '@/components/Dashboard/business/Main/Summary/Main/ui/SectionHeader';
+import { SectionHeader } from '@/shared/components/SectionHeader';
 import Loader from '@/shared/components/Loader';
 import Metric from '@/features/super-admin/components/Main/ui/Metric';
 import Table from '@/features/super-admin/components/Main/ui/Table';

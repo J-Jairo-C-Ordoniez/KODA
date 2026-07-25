@@ -1,7 +1,7 @@
-import { EmployeeCustomersP } from '@/components/Dashboard/employee/Employee';
+import { redirect } from 'next/navigation';
 
 export const metadata = { title: 'Clientes y Fiados | KODA' };
 
 export default function EmployeeCustomersPage() {
-  return <EmployeeCustomersP />;
+  redirect('/dashboard/business/customers');
 }

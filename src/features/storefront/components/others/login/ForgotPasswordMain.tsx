@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
+import useBreadcrumbsStore from "@/store/breadcrumbs.store";
 import Breadcrumbs from '../../Main/ui/Breadcrumbs';
-import { useForgotPassword } from '@/hooks/auth/useForgotPassword';
+import { useForgotPassword } from '@/features/auth/hooks/useForgotPassword';
 
 export default function ForgotPasswordMain() {
     const { setBreadcrumbsRoute } = useBreadcrumbsStore();

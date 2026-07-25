@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
+import useBreadcrumbsStore from "@/store/breadcrumbs.store";
 import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import Content from "./ui/Content";
-import { useAbout } from "@/hooks/store/useAbout";
+import { useAbout } from "@/features/storefront/hooks/useAbout";
 
 export default function AboutMain() {
   const { setBreadcrumbsRoute } = useBreadcrumbsStore();

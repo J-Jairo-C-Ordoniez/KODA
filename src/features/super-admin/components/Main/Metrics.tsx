@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { SectionHeader } from '@/components/Dashboard/business/Main/Summary/Main/ui/SectionHeader';
+import { SectionHeader } from '@/shared/components/SectionHeader';
 import { Plus } from 'lucide-react';
 import Loader from '@/shared/components/Loader';
 import Metric from '@/features/super-admin/components/Main/ui/Metric';

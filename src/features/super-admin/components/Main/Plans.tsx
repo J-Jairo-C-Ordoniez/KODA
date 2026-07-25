@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Package, Plus, Search, X, Edit3, Trash2, Check, Info, DollarSign } from 'lucide-react';
-import { SectionHeader } from '@/components/Dashboard/business/Main/Summary/Main/ui/SectionHeader';
+import { SectionHeader } from '@/shared/components/SectionHeader';
 import Loader from '@/shared/components/Loader';
 import Metric from '@/features/super-admin/components/Main/ui/Metric';
 import { usePlans } from '@/features/super-admin/hooks/usePlans';

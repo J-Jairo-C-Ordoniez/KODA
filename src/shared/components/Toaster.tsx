@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { ToastType } from '@/shared/hooks/useToast';
+export { default as useToast } from '@/shared/hooks/useToast';
 import { CheckCircle2, AlertCircle, X, Info, AlertTriangle } from 'lucide-react';
 import gsap from 'gsap';
 
@@ -41,6 +42,25 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
   const { icon: Icon, iconClass, bar } = config[toast.type] || config.info;
 
   const TOAST_DURATION = 4.5;
+
+  const dismiss = useCallback(() => {
+    const el = toastRef.current;
+    if (!el) return;
+
+    gsap.to(el, {
+      opacity: 0,
+      y: -15,
+      scale: 0.95,
+      height: 0,
+      marginBottom: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+      borderWidth: 0,
+      duration: 0.3,
+      ease: 'power2.in',
+      onComplete: () => onRemove(toast.id),
+    });
+  }, [onRemove, toast.id]);
 
   useEffect(() => {
     const el = toastRef.current;
@@ -92,26 +112,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
     return () => {
       ctx.revert();
     };
-  }, []);
-
-  const dismiss = () => {
-    const el = toastRef.current;
-    if (!el) return;
-
-    gsap.to(el, {
-      opacity: 0,
-      y: -15,
-      scale: 0.95,
-      height: 0,
-      marginBottom: 0,
-      paddingTop: 0,
-      paddingBottom: 0,
-      borderWidth: 0,
-      duration: 0.3,
-      ease: 'power2.in',
-      onComplete: () => onRemove(toast.id),
-    });
-  };
+  }, [dismiss]);
 
   return (
     <div
@@ -162,3 +163,5 @@ export default function Toaster({ toasts, removeToast }: { toasts: Toast[]; remo
     </div>
   );
 }
+
+export { Toaster };

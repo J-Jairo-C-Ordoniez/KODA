@@ -1,20 +1,7 @@
-import { DM_Sans, Playfair_Display } from "next/font/google";
 import Providers from "@/shared/components/Providers";
 import { Metadata } from "next";
 
 import "../styles/globals.css";
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://koda.app'),
@@ -62,7 +49,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="es"
-      className={`${playfair.variable} ${dmSans.variable}`}
+      className="font-vars"
     >
       <body>
         <Providers>

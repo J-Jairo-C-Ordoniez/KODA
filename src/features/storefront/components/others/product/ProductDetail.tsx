@@ -2,11 +2,11 @@
 
 import { useEffect } from "react";
 import useBreadcrumbsStore from "@/store/breadcrumbs.store";
-import Breadcrumbs from "@/components/Store/Main/ui/Breadcrumbs";
+import Breadcrumbs from "@/features/storefront/components/Main/ui/Breadcrumbs";
 import ProductInfo from "./ui/ProductInfo";
 import ProductImg from "./ui/ProductImg";
-import { useProductDetail } from "@/hooks/publicCatalog/useProductDetail";
-import Loader from "@/components/ui/Loader";
+import { useProductDetail } from "@/features/storefront/hooks/useProductDetail";
+import Loader from "@/shared/components/Loader";
 import { ChevronLeft, ShoppingBag } from "lucide-react";
 
 export default function ProductDetail({ variantId, contact }: { variantId: string, contact?: string }) {

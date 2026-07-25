@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearch } from "@/hooks/publicCatalog/useSearch";
-import useBreadcrumbsStore from "../../../../store/breadcrumbs.store";
+import { useSearch } from "@/features/storefront/hooks/useSearch";
+import useBreadcrumbsStore from "@/store/breadcrumbs.store";
 import Breadcrumbs from "../../Main/ui/Breadcrumbs";
 import SearchInitial from "./ui/SearchInitial";
 import SearchResults from "./ui/SearchResults";

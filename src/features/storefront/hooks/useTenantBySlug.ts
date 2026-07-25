@@ -9,7 +9,11 @@ export function useTenantBySlug(slug: string) {
 
     useEffect(() => {
         const fetchTenant = async () => {
-            if (!slug) return;
+            if (!slug) {
+                setTenant(null);
+                setIsLoading(false);
+                return;
+            }
             
             setIsLoading(true);
             setError(null);

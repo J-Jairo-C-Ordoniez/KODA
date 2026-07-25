@@ -1,7 +1,7 @@
-import Employees from '@/components/Dashboard/business/Main/employees/Employees';
+import Team from '@/features/dashboard/business/components/main/sections/team/Team';
 
-export const metadata = { title: 'Empleados | KODA' };
+export const metadata = { title: 'Equipo' };
 
-export default function EmployeesPage() {
-  return <Employees />;
+export default function TeamPage() {
+  return <Team />;
 }

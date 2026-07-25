@@ -1,7 +1,7 @@
-import { EmployeeSalesP } from '@/components/Dashboard/employee/Employee';
+import { redirect } from 'next/navigation';
 
 export const metadata = { title: 'Ventas (POS) | KODA' };
 
 export default function EmployeeSalesPage() {
-  return <EmployeeSalesP />;
+  redirect('/dashboard/business/sales');
 }

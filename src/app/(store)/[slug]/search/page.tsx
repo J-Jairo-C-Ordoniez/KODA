@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import Header from '@/components/Store/Header/Header';
-import SearchMain from '@/components/Store/others/search/SearchMain';
-import Footer from '@/components/Store/Footer/Footer';
-import Loader from '@/components/ui/Loader';
-import { useTenantBySlug } from '@/hooks/publicCatalog/useTenantBySlug';
+import Header from '@/features/storefront/components/Header/Header';
+import SearchMain from '@/features/storefront/components/others/search/SearchMain';
+import Footer from '@/features/storefront/components/Footer/Footer';
+import Loader from '@/shared/components/Loader';
+import { useTenantBySlug } from '@/features/storefront/hooks/useTenantBySlug';
 import { redirect } from 'next/navigation';
 
 interface Props {

@@ -35,37 +35,31 @@ export default function EmployeeCard({ employee, onClick }: EmployeeCardProps) {
       onClick={onClick}
       className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300 group cursor-pointer flex flex-col justify-between"
     >
-      {/* Avatar area */}
-      <div className="relative mb-4">
-        <div className="w-full aspect-square rounded-xl bg-primary/5 flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]">
+      {/* Header compacto */}
+      <header className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 shrink-0 rounded-xl bg-primary/8 flex items-center justify-center text-sm font-bold text-primary overflow-hidden">
           {employee.avatar ? (
             <img src={employee.avatar} alt={employee.name} className="w-full h-full object-cover" />
           ) : (
-            <span className="text-4xl font-bold text-primary/30 select-none">
-              {getInitials(employee.name)}
-            </span>
+            getInitials(employee.name)
           )}
         </div>
-
-        {/* Status badge */}
-        <span className="absolute right-3 top-3 text-xs font-bold px-2.5 py-1 rounded-lg border backdrop-blur-xs text-emerald-700 bg-emerald-50 border-emerald-100">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base font-bold text-primary leading-snug group-hover:text-secondary transition-colors truncate">
+            {employee.name}
+          </h3>
+          <p className="text-xs text-primary/45 truncate">{employee.email}</p>
+        </div>
+        <span className="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-lg border text-emerald-700 bg-emerald-50 border-emerald-100">
           Activo
         </span>
-      </div>
+      </header>
 
       {/* Info */}
       <div className="flex flex-1 flex-col justify-between border-t border-primary/10 pt-4">
-        <header className="mb-4 space-y-1.5">
-          <p className="text-sm font-semibold uppercase text-primary/60">
-            {employee.email}
-          </p>
-          <h3 className="text-base font-bold text-primary leading-snug group-hover:text-secondary transition-colors">
-            {employee.name}
-          </h3>
-          <p className="text-sm text-primary/60">
-            {employee._count.sales} {employee._count.sales === 1 ? 'venta' : 'ventas'} registradas
-          </p>
-        </header>
+        <p className="text-sm text-primary/60 mb-4">
+          {employee._count.sales} {employee._count.sales === 1 ? 'venta' : 'ventas'} registradas
+        </p>
 
         {/* Stats footer */}
         <div className="pt-4 border-t border-primary/10 flex items-end justify-between gap-3">

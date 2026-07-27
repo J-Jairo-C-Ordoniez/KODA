@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { Plus } from 'lucide-react';
+import { Plus, UserRound } from 'lucide-react';
 import type { Employee } from '@/features/dashboard/business/api/team.api';
 import SidebarHeader from '@/features/dashboard/business/components/main/sections/team/Sidebar/ui/SidebarHeader';
 
@@ -14,14 +14,6 @@ interface SidebarProps {
   onCloseMobile?: () => void;
 }
 
-function getInitials(name: string) {
-  return name
-    .split(' ')
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase();
-}
 
 export default function Sidebar({
   employees,
@@ -107,17 +99,7 @@ export default function Sidebar({
                       }`}
                     >
                       <div className="flex min-w-0 flex-1 items-center gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-foreground-muted/60 text-xs font-bold text-primary">
-                          {employee.avatar ? (
-                            <img
-                              src={employee.avatar}
-                              alt={employee.name}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            getInitials(employee.name)
-                          )}
-                        </div>
+                        <UserRound size={16} className="shrink-0 text-primary/40" />
                         <span className="truncate text-sm">{employee.name}</span>
                       </div>
 

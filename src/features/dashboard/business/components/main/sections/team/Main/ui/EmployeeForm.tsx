@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import Button from '@/shared/components/Button';
 
 interface EmployeeFormProps {
@@ -46,76 +46,111 @@ export default function EmployeeForm({ editingEmployee, onCancel, onSave, isSavi
   };
 
   return (
-    <section className="space-y-6 animate-in fade-in duration-500">
-      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-primary/5 pb-4">
-        <div>
-          <h2 className="text-lg font-medium text-primary tracking-tight">
-            {isEditing ? 'Editar empleado' : 'Nuevo empleado'}
-          </h2>
-          <p className="text-sm text-primary/45 mt-0.5">
-            {isEditing ? 'Actualiza la información del miembro del equipo.' : 'Agrega un nuevo miembro al equipo.'}
-          </p>
-        </div>
-        <button
-          onClick={onCancel}
-          className="p-2 text-primary hover:bg-primary/4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer self-start"
-        >
-          <X size={18} />
-        </button>
+    <section className="mx-auto max-w-4xl space-y-8 animate-in fade-in duration-500">
+      <header>
+        <h2 className="text-2xl font-bold text-primary tracking-tight">
+          {isEditing ? 'Editar empleado' : 'Nuevo empleado'}
+        </h2>
+        <p className="text-gray-500 text-base mt-1 max-w-2xl">
+          {isEditing
+            ? 'Actualiza la información del miembro del equipo.'
+            : 'Agrega un nuevo miembro al equipo para que pueda registrar ventas con acceso individual.'}
+        </p>
       </header>
 
-      <form onSubmit={handleSubmit} className="max-w-md space-y-5">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-8 border-t border-primary/10 pt-8"
+        aria-label="Formulario de empleado"
+      >
         {error && (
           <div className="rounded-lg border border-red-500 bg-red-500/10 p-4 text-sm font-medium text-red-500">
             {error}
           </div>
         )}
 
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
-            Nombre completo *
-          </label>
+        {/* Nombre */}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+              Nombre completo *
+            </label>
+            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+              Nombre real del empleado tal como aparecerá en reportes y registros de ventas.
+            </p>
+          </div>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej: María González"
-            className="w-full bg-foreground-muted/40 border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-sm text-primary font-medium outline-none transition-all"
+            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
-            Correo electrónico *
-          </label>
+        {/* Email */}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+              Correo electrónico *
+            </label>
+            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+              Esta dirección se usará como credencial de inicio de sesión para el empleado.
+            </p>
+          </div>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="empleado@correo.com"
-            className="w-full bg-foreground-muted/40 border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-sm text-primary font-medium outline-none transition-all"
+            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
-            Contraseña {isEditing ? '(dejar vacío para no cambiar)' : '*'}
-          </label>
+        {/* Contraseña */}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+              Contraseña {isEditing ? '(opcional)' : '*'}
+            </label>
+            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+              {isEditing
+                ? 'Déjala vacía si no deseas cambiar la contraseña actual.'
+                : 'Mínimo 8 caracteres. El empleado podrá cambiarla después.'}
+            </p>
+          </div>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder={isEditing ? 'Nueva contraseña (opcional)' : 'Mínimo 8 caracteres'}
-            className="w-full bg-foreground-muted/40 border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-sm text-primary font-medium outline-none transition-all"
+            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
           />
         </div>
 
-        <div className="flex items-center gap-3 pt-2">
-          <Button variant="secondary" onClick={onCancel} disabled={isSaving}>
+        {/* Actions */}
+        <div className="flex flex-col-reverse gap-3 border-t border-primary/10 pt-6 sm:flex-row sm:justify-end">
+          <Button
+            variant="secondary"
+            onClick={onCancel}
+            disabled={isSaving}
+          >
             Cancelar
           </Button>
-          <Button variant="primary" onClick={handleSubmit} disabled={isSaving}>
-            {isSaving ? <Loader2 size={14} className="animate-spin" /> : isEditing ? 'Guardar cambios' : 'Crear empleado'}
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={handleSubmit}
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              <>
+                <LoaderCircle size={16} className="animate-spin" />
+                Guardando...
+              </>
+            ) : (
+              <>{isEditing ? 'Guardar cambios' : 'Crear empleado'}</>
+            )}
           </Button>
         </div>
       </form>

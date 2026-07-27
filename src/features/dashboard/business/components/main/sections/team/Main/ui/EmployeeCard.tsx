@@ -18,23 +18,9 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-const METHOD_LABEL: Record<string, string> = {
-  cash: 'Efectivo',
-  transfer: 'Transferencia',
-  online: 'Online',
-  debt: 'Fiado',
-};
-
 export default function EmployeeCard({ employee, onClick }: EmployeeCardProps) {
   const totalAmount = employee.sales.reduce((sum, s) => sum + s.total, 0);
   const avgSale = employee._count.sales > 0 ? totalAmount / employee._count.sales : 0;
-
-  // Most used payment method
-  const methodCount: Record<string, number> = {};
-  employee.sales.forEach((s) => {
-    methodCount[s.paymentMethod] = (methodCount[s.paymentMethod] || 0) + 1;
-  });
-  const topMethod = Object.entries(methodCount).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 
   const lastSale = employee.sales[0];
   const lastSaleDate = lastSale
@@ -47,75 +33,61 @@ export default function EmployeeCard({ employee, onClick }: EmployeeCardProps) {
   return (
     <article
       onClick={onClick}
-      className="group relative bg-background border border-primary/8 rounded-2xl p-5 flex flex-col gap-5 hover:border-primary/20 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
+      className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300 group cursor-pointer flex flex-col justify-between"
     >
-      {/* Subtle top gradient accent */}
-      <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-primary/30 via-primary/60 to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-      {/* Header */}
-      <div className="flex items-center gap-3.5">
-        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-base font-bold text-primary shrink-0 overflow-hidden">
+      {/* Avatar area */}
+      <div className="relative mb-4">
+        <div className="w-full aspect-square rounded-xl bg-primary/5 flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]">
           {employee.avatar ? (
             <img src={employee.avatar} alt={employee.name} className="w-full h-full object-cover" />
           ) : (
-            getInitials(employee.name)
+            <span className="text-4xl font-bold text-primary/30 select-none">
+              {getInitials(employee.name)}
+            </span>
           )}
         </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-primary truncate">{employee.name}</h3>
-          <p className="text-xs text-primary/45 truncate">{employee.email}</p>
-        </div>
-        <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+
+        {/* Status badge */}
+        <span className="absolute right-3 top-3 text-xs font-bold px-2.5 py-1 rounded-lg border backdrop-blur-xs text-emerald-700 bg-emerald-50 border-emerald-100">
           Activo
         </span>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-foreground-muted/30">
-          <ShoppingBag size={14} className="text-primary/50 mt-0.5 shrink-0" />
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary/45">Ventas</p>
-            <p className="text-sm font-bold text-primary">{employee._count.sales}</p>
-          </div>
-        </div>
+      {/* Info */}
+      <div className="flex flex-1 flex-col justify-between border-t border-primary/10 pt-4">
+        <header className="mb-4 space-y-1.5">
+          <p className="text-sm font-semibold uppercase text-primary/60">
+            {employee.email}
+          </p>
+          <h3 className="text-base font-bold text-primary leading-snug group-hover:text-secondary transition-colors">
+            {employee.name}
+          </h3>
+          <p className="text-sm text-primary/60">
+            {employee._count.sales} {employee._count.sales === 1 ? 'venta' : 'ventas'} registradas
+          </p>
+        </header>
 
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-foreground-muted/30">
-          <TrendingUp size={14} className="text-primary/50 mt-0.5 shrink-0" />
+        {/* Stats footer */}
+        <div className="pt-4 border-t border-primary/10 flex items-end justify-between gap-3">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary/45">Total</p>
-            <p className="text-sm font-bold text-primary">{formatCurrency(totalAmount)}</p>
+            <h4 className="text-sm font-semibold uppercase text-primary/60">
+              Total ventas
+            </h4>
+            <p className="text-2xl font-bold tracking-tight text-primary">
+              {formatCurrency(totalAmount)}
+            </p>
           </div>
-        </div>
 
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-foreground-muted/30">
-          <CreditCard size={14} className="text-primary/50 mt-0.5 shrink-0" />
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary/45">Promedio</p>
-            <p className="text-sm font-bold text-primary">{formatCurrency(avgSale)}</p>
-          </div>
-        </div>
-
-        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-foreground-muted/30">
-          <Clock size={14} className="text-primary/50 mt-0.5 shrink-0" />
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary/45">Última</p>
-            <p className="text-sm font-bold text-primary">{lastSaleDate ?? '—'}</p>
+          <div className="text-right">
+            <h4 className="text-sm font-semibold uppercase text-primary/60">
+              Promedio
+            </h4>
+            <p className="text-lg font-bold tracking-tight text-primary">
+              {formatCurrency(avgSale)}
+            </p>
           </div>
         </div>
       </div>
-
-      {/* Top method badge */}
-      {topMethod && (
-        <div className="flex items-center justify-between border-t border-primary/5 pt-3">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40">
-            Método principal
-          </span>
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-foreground-muted/50 text-primary/70">
-            {METHOD_LABEL[topMethod] ?? topMethod}
-          </span>
-        </div>
-      )}
     </article>
   );
 }

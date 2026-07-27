@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { X, ShoppingBag, TrendingUp, CreditCard, Banknote, Smartphone, Loader2, Trash2, Pencil } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { SidebarIcon, LoaderCircle, Loader2 } from 'lucide-react';
 import type { Employee } from '@/features/dashboard/business/api/team.api';
-import { formatCurrency } from '@/lib/formatters';
 import Button from '@/shared/components/Button';
 
 interface EmployeeDrawerProps {
@@ -19,20 +19,6 @@ function getInitials(name: string) {
   return name.split(' ').slice(0, 2).map((n) => n[0]).join('').toUpperCase();
 }
 
-const METHOD_LABEL: Record<string, string> = {
-  cash: 'Efectivo',
-  transfer: 'Transferencia',
-  online: 'Online',
-  debt: 'Fiado',
-};
-
-const METHOD_ICON: Record<string, React.ReactNode> = {
-  cash: <Banknote size={12} />,
-  transfer: <Smartphone size={12} />,
-  online: <CreditCard size={12} />,
-  debt: <CreditCard size={12} />,
-};
-
 export default function EmployeeDrawer({
   isOpen,
   employee,
@@ -42,20 +28,9 @@ export default function EmployeeDrawer({
   isSaving,
 }: EmployeeDrawerProps) {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [mounted] = useState(true);
 
-  if (!isOpen || !employee) return null;
-
-  const totalAmount = employee.sales.reduce((sum, s) => sum + s.total, 0);
-  const avgSale = employee._count.sales > 0 ? totalAmount / employee._count.sales : 0;
-
-  const methodBreakdown: Record<string, { count: number; amount: number }> = {};
-  employee.sales.forEach((s) => {
-    if (!methodBreakdown[s.paymentMethod]) {
-      methodBreakdown[s.paymentMethod] = { count: 0, amount: 0 };
-    }
-    methodBreakdown[s.paymentMethod].count++;
-    methodBreakdown[s.paymentMethod].amount += s.total;
-  });
+  if (!isOpen || !employee || typeof document === 'undefined') return null;
 
   const handleDelete = async () => {
     if (!confirmDelete) {
@@ -69,18 +44,18 @@ export default function EmployeeDrawer({
     }
   };
 
-  return (
+  const drawerContent = (
     <>
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] transition-opacity"
+        className="fixed inset-0 z-9999 bg-black/10 backdrop-blur-[1px] transition-opacity"
       />
 
       {/* Drawer */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-background border-l border-primary/10 shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-300">
+      <aside className="fixed inset-y-0 right-0 z-10000 w-full max-w-md bg-background border-l border-primary/5 shadow-2xl flex flex-col animate-slide-in-right h-full">
         {/* Header */}
-        <header className="flex items-center justify-between px-5 py-4 border-b border-primary/10 shrink-0">
+        <header className="flex items-center justify-between px-5 py-3 border-b border-primary/5">
           <div className="flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-sm font-bold text-primary shrink-0 overflow-hidden">
               {employee.avatar ? (
@@ -90,67 +65,51 @@ export default function EmployeeDrawer({
               )}
             </div>
             <div>
-              <h3 className="text-base font-medium text-primary tracking-tight">{employee.name}</h3>
-              <p className="text-xs text-primary/40">{employee.email}</p>
+              <h3 className="text-lg font-medium text-primary tracking-tight">{employee.name}</h3>
+              <p className="text-sm text-primary/60 mt-0.5">{employee.email}</p>
             </div>
           </div>
+
           <button
             onClick={onClose}
             className="p-2 text-primary hover:bg-primary/4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
+            aria-label="Cerrar panel"
           >
-            <X size={18} />
+            <SidebarIcon size={20} />
           </button>
         </header>
 
         {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+          {/* Role badge */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-lg border bg-emerald-50 border-emerald-100 text-emerald-700">
+              Activo
+            </span>
+            <span className="text-xs font-medium text-primary/45">Empleado</span>
+          </div>
 
           {/* KPI strip */}
           <div className="grid grid-cols-3 gap-3">
             <div className="flex flex-col gap-1 p-3.5 rounded-xl bg-foreground-muted/30 border border-primary/5">
-              <ShoppingBag size={14} className="text-primary/50" />
               <p className="text-[10px] font-bold uppercase tracking-widest text-primary/45">Ventas</p>
               <p className="text-lg font-bold text-primary">{employee._count.sales}</p>
             </div>
             <div className="flex flex-col gap-1 p-3.5 rounded-xl bg-foreground-muted/30 border border-primary/5">
-              <TrendingUp size={14} className="text-primary/50" />
               <p className="text-[10px] font-bold uppercase tracking-widest text-primary/45">Total</p>
-              <p className="text-lg font-bold text-primary">{formatCurrency(totalAmount)}</p>
+              <p className="text-lg font-bold text-primary">
+                {employee.sales.reduce((sum, s) => sum + s.total, 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 })}
+              </p>
             </div>
             <div className="flex flex-col gap-1 p-3.5 rounded-xl bg-foreground-muted/30 border border-primary/5">
-              <CreditCard size={14} className="text-primary/50" />
               <p className="text-[10px] font-bold uppercase tracking-widest text-primary/45">Promedio</p>
-              <p className="text-lg font-bold text-primary">{formatCurrency(avgSale)}</p>
+              <p className="text-lg font-bold text-primary">
+                {employee._count.sales > 0
+                  ? (employee.sales.reduce((sum, s) => sum + s.total, 0) / employee._count.sales).toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 })
+                  : '$0'}
+              </p>
             </div>
           </div>
-
-          {/* Payment method breakdown */}
-          {Object.keys(methodBreakdown).length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-primary/50">
-                Métodos de pago
-              </h4>
-              <div className="space-y-2">
-                {Object.entries(methodBreakdown)
-                  .sort((a, b) => b[1].count - a[1].count)
-                  .map(([method, stats]) => (
-                    <div
-                      key={method}
-                      className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-foreground-muted/30 border border-primary/5"
-                    >
-                      <div className="flex items-center gap-2 text-primary/70">
-                        {METHOD_ICON[method]}
-                        <span className="text-xs font-semibold">{METHOD_LABEL[method] ?? method}</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-right">
-                        <span className="text-[10px] text-primary/45 font-medium">{stats.count} ventas</span>
-                        <span className="text-xs font-bold text-primary">{formatCurrency(stats.amount)}</span>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          )}
 
           {/* Sales history */}
           <div className="space-y-2">
@@ -171,7 +130,11 @@ export default function EmployeeDrawer({
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-foreground-muted/60 text-primary/60">
-                        {METHOD_LABEL[sale.paymentMethod] ?? sale.paymentMethod}
+                        {sale.paymentMethod === 'cash' ? 'Efectivo'
+                          : sale.paymentMethod === 'transfer' ? 'Transferencia'
+                          : sale.paymentMethod === 'online' ? 'Online'
+                          : sale.paymentMethod === 'debt' ? 'Fiado'
+                          : sale.paymentMethod}
                       </span>
                       <span className="text-xs text-primary/45">
                         {new Date(sale.createdAt).toLocaleDateString('es-CO', {
@@ -181,7 +144,9 @@ export default function EmployeeDrawer({
                         })}
                       </span>
                     </div>
-                    <span className="text-sm font-bold text-primary">{formatCurrency(sale.total)}</span>
+                    <span className="text-sm font-bold text-primary">
+                      {sale.total.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 })}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -190,7 +155,7 @@ export default function EmployeeDrawer({
         </div>
 
         {/* Footer actions */}
-        <footer className="px-5 py-4 border-t border-primary/5 flex items-center justify-between gap-3 shrink-0">
+        <div className="p-4 sm:p-5 border-t border-primary/5 bg-background-card flex items-center justify-end gap-3">
           {confirmDelete ? (
             <div className="flex items-center gap-2 w-full">
               <p className="text-xs text-red-500 font-medium flex-1">¿Confirmar eliminación?</p>
@@ -207,25 +172,27 @@ export default function EmployeeDrawer({
             </div>
           ) : (
             <>
-              <button
+              <Button
+                type="button"
                 onClick={handleDelete}
                 disabled={isSaving}
-                className="flex items-center gap-1.5 py-2 px-3 text-red-500 hover:bg-red-50 border border-red-200 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                variant="secondary"
               >
-                <Trash2 size={13} />
                 Eliminar
-              </button>
+              </Button>
+
               <Button
-                variant="primary"
+                type="button"
                 onClick={() => onEdit(employee)}
               >
-                <Pencil size={13} />
                 Editar empleado
               </Button>
             </>
           )}
-        </footer>
-      </div>
+        </div>
+      </aside>
     </>
   );
+
+  return createPortal(drawerContent, document.body);
 }

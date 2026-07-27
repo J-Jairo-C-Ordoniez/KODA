@@ -12,6 +12,7 @@ import TeamMain from '@/features/dashboard/business/components/main/sections/tea
 export default function Team() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
+  const [pendingNewEmployee, setPendingNewEmployee] = useState(false);
   const { toasts, showToast, removeToast } = useToast();
 
   const {
@@ -22,6 +23,10 @@ export default function Team() {
     updateEmployee,
     deleteEmployee,
   } = useTeam();
+
+  const handleNewEmployeeFromSidebar = () => {
+    setPendingNewEmployee(true);
+  };
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden relative">
@@ -57,6 +62,7 @@ export default function Team() {
           employees={employees}
           selectedEmployeeId={selectedEmployeeId}
           onSelectEmployee={setSelectedEmployeeId}
+          onNewEmployee={handleNewEmployeeFromSidebar}
           onCloseMobile={() => setIsSidebarOpen(false)}
         />
       </div>
@@ -72,6 +78,8 @@ export default function Team() {
           createEmployee={createEmployee}
           updateEmployee={updateEmployee}
           deleteEmployee={deleteEmployee}
+          pendingNewEmployee={pendingNewEmployee}
+          onNewEmployeeHandled={() => setPendingNewEmployee(false)}
         />
       </div>
     </div>

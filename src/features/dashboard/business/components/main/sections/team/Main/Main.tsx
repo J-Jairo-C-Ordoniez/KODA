@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ChevronRight, UserPlus } from 'lucide-react';
 import type { Employee } from '@/features/dashboard/business/api/team.api';
 import type { ToastType } from '@/shared/hooks/useToast';
-import useTeam from '@/features/dashboard/business/hooks/useTeam';
 
 import EmployeeCard from '@/features/dashboard/business/components/main/sections/team/Main/ui/EmployeeCard';
 import EmployeeDrawer from '@/features/dashboard/business/components/main/sections/team/Main/ui/EmployeeDrawer';
@@ -24,6 +23,10 @@ interface TeamMainProps {
   createEmployee: (data: any) => Promise<{ success: boolean; error?: string }>;
   updateEmployee: (id: string, data: any) => Promise<{ success: boolean; error?: string }>;
   deleteEmployee: (id: string) => Promise<{ success: boolean; error?: string }>;
+  /** Se activa cuando el usuario presiona "Nuevo empleado" en la sidebar */
+  pendingNewEmployee?: boolean;
+  /** Callback para notificar que se procesó el pending */
+  onNewEmployeeHandled?: () => void;
 }
 
 export default function TeamMain({
@@ -35,11 +38,22 @@ export default function TeamMain({
   createEmployee,
   updateEmployee,
   deleteEmployee,
+  pendingNewEmployee,
+  onNewEmployeeHandled,
 }: TeamMainProps) {
   const [activeView, setActiveView] = useState<ActiveView>('grid');
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [drawerEmployee, setDrawerEmployee] = useState<Employee | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Reaccionar al trigger desde la sidebar
+  useEffect(() => {
+    if (pendingNewEmployee) {
+      setEditingEmployee(null);
+      setActiveView('create-employee');
+      onNewEmployeeHandled?.();
+    }
+  }, [pendingNewEmployee, onNewEmployeeHandled]);
 
   const selectedEmployee = useMemo<Employee | null>(() => {
     if (!selectedEmployeeId) return null;
@@ -133,14 +147,6 @@ export default function TeamMain({
                 {selectedEmployee ? selectedEmployee.name : 'Todos los empleados'}
               </span>
             </nav>
-
-            <Button
-              variant="primary"
-              onClick={() => { setEditingEmployee(null); setActiveView('create-employee'); }}
-            >
-              <UserPlus size={15} />
-              Nuevo empleado
-            </Button>
           </header>
 
           {/* Grid */}

@@ -5,7 +5,6 @@ import { Menu, X } from 'lucide-react';
 
 import Logo from '@/shared/components/Logo';
 import Button from '@/shared/components/Button';
-import Container from '@/shared/components/Container';
 import Nav from '@/features/landing/components/Header/ui/Menu';
 
 export default function Header() {
@@ -22,7 +21,7 @@ export default function Header() {
 
   return (
     <header className="h-16 flex justify-center items-center w-full transition-all duration-500">
-      <Container className="flex items-center justify-between">
+      <div className="flex items-center justify-between w-full h-full">
         <div className="w-[70%] h-16 bg-transparent flex items-center px-40 py-4">
           <Logo />
         </div>
@@ -41,7 +40,7 @@ export default function Header() {
             }
           </Button>
         </div>
-      </Container>
+      </div>
 
       {isMenuOpen && (
         <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú móvil">

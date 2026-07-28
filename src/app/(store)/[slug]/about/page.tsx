@@ -1,5 +1,5 @@
 import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
-import Catalog from '@/features/store/components/main/sections/catalog/Catalog';
+import AboutView from '@/features/store/components/main/sections/About/AboutView';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -14,16 +14,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tenant = (json as any).success ? (json as any).data : null;
 
   if (!tenant || tenant.status === 'suspended') {
-    return { title: 'Tienda no disponible' };
+    return { title: 'Información no disponible' };
   }
 
   return {
-    title: `${tenant.businessName}`,
-    description: tenant.description || `Explora las prendas de ${tenant.businessName}.`,
+    title: `Sobre Nosotros y Contacto | ${tenant.businessName}`,
+    description: tenant.description || `Información institucional y canales de atención de ${tenant.businessName}.`,
   };
 }
 
-export default async function StorePage({ params }: Props) {
+export default async function AboutPage({ params }: Props) {
   const { slug } = await params;
   const response = await tenantController.getTenantBySlug(slug);
   const json = (response as any).json ? await (response as any).json() : response;
@@ -33,10 +33,5 @@ export default async function StorePage({ params }: Props) {
     redirect('/');
   }
 
-  return (
-    <Catalog
-      tenant={tenant}
-      slug={slug}
-    />
-  )
+  return <AboutView tenant={tenant} slug={slug} />;
 }

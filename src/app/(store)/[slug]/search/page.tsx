@@ -1,36 +1,37 @@
-'use client';
-
-import React from 'react';
-import Header from '@/features/storefront/components/Header/Header';
-import SearchMain from '@/features/storefront/components/others/search/SearchMain';
-import Footer from '@/features/storefront/components/Footer/Footer';
-import Loader from '@/shared/components/Loader';
-import { useTenantBySlug } from '@/features/storefront/hooks/useTenantBySlug';
+import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
+import SearchView from '@/features/store/components/main/sections/Search/SearchView';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export default function SearchPage({ params }: Props) {
-  const { slug } = React.use(params);
-  const { tenant, isLoading } = useTenantBySlug(slug);
-
-  if (isLoading) return <div className="h-screen w-full flex items-center justify-center bg-background"><Loader size="lg" /></div>;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const response = await tenantController.getTenantBySlug(slug);
+  const json = (response as any).json ? await (response as any).json() : response;
+  const tenant = (json as any).success ? (json as any).data : null;
 
   if (!tenant || tenant.status === 'suspended') {
-      return redirect("/");
+    return { title: 'Búsqueda no disponible' };
   }
 
-  return (
-    <>
-      <Header 
-        businessName={tenant.businessName}
-        slug={tenant.slug}
-        tenantId={tenant.tenantId}
-      />
-      <SearchMain tenantId={tenant.tenantId} />
-      <Footer />
-    </>
-  );
+  return {
+    title: `Buscar en ${tenant.businessName} | Catálogo`,
+    description: `Busca productos y prendas en la tienda oficial de ${tenant.businessName}.`,
+  };
+}
+
+export default async function SearchPage({ params }: Props) {
+  const { slug } = await params;
+  const response = await tenantController.getTenantBySlug(slug);
+  const json = (response as any).json ? await (response as any).json() : response;
+  const tenant = (json as any).success ? (json as any).data : null;
+
+  if (!tenant || tenant.status === 'suspended') {
+    redirect('/');
+  }
+
+  return <SearchView tenant={tenant} slug={slug} />;
 }

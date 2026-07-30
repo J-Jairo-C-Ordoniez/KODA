@@ -92,8 +92,10 @@ const catalogRepository = {
         select: {
           variantId: true,
           name: true,
+          sku: true,
           price: true,
           color: true,
+          size: true,
           inventories: {
             select: { stock: true }
           },

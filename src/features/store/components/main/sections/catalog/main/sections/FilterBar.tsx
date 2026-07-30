@@ -16,7 +16,7 @@ export default function FilterBar({ categories, currentCategory, onFilterChange 
   }));
 
   return (
-    <section className="w-full border-b border-primary/5 py-2">
+    <section className="w-full py-2">
       <div className="px-10 md:px-40 h-12 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-primary/40">

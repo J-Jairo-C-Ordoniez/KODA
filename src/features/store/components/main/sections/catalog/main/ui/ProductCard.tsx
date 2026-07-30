@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Package, MessageCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatters';
+import Button from '@/shared/components/Button';
 
 interface Props {
   product: any;
@@ -12,7 +13,7 @@ interface Props {
   itemIndex?: number;
 }
 
-export default function ProductCard({ product, slug, whatsApp, itemIndex = 1 }: Props) {
+export default function ProductCard({ product, slug, whatsApp }: Props) {
   if (!product) return null;
 
   const variant = product;
@@ -20,90 +21,88 @@ export default function ProductCard({ product, slug, whatsApp, itemIndex = 1 }: 
   const mainImage = variant.images?.[0]?.content || null;
   const productUrl = `/${slug}/product/${variant.variantId}`;
 
-  // Format SKU / item number like reference (e.g., 40041, 40042...)
-  const displaySku = variant.sku ? variant.sku : String(40040 + itemIndex);
-
-  // Clean title in uppercase with trailing period if not already present
-  const titleText = (parentProduct.name || variant.name || '').toUpperCase().trim();
-  const formattedTitle = titleText.endsWith('.') ? titleText : `${titleText}.`;
+  const productName = parentProduct.name || variant.name || 'Producto';
+  const colorLabel = variant.color
+    ? variant.color.charAt(0).toUpperCase() + variant.color.slice(1).toLowerCase()
+    : null;
+  const sizeLabel = variant.size || null;
+  const isLowStock =
+    variant.inventories?.[0]?.stock <= 5 && variant.inventories?.[0]?.stock > 0;
 
   const handleWhatsAppBuy = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     if (!whatsApp) return;
-
     const message = encodeURIComponent(
-      `Hola! Me interesa comprar el producto:\n*${parentProduct.name || variant.name}*\nVariante: ${variant.color} (${variant.size || 'Única'})\nPrecio: ${formatCurrency(variant.price)}\nSKU: ${displaySku}`
+      `Hola! Me interesa:\n*${productName}*\n${colorLabel ? `Color: ${colorLabel}` : ''}${sizeLabel ? ` · Talla ${sizeLabel}` : ''}\nPrecio: ${formatCurrency(variant.price)}`
     );
     window.open(`https://wa.me/57${whatsApp}?text=${message}`, '_blank');
   };
 
   return (
-    <article className="group relative flex flex-col justify-between border-r border-b border-foreground/10 bg-background/50 hover:bg-foreground/[0.02] transition-colors min-h-[380px] p-6 sm:p-8">
-      {/* Top row: SKU identifier */}
-      <div className="flex items-center justify-between mb-4 z-10">
-        <span className="text-xs font-mono font-bold tracking-widest text-primary/80">
-          {displaySku}
-        </span>
-        {variant.inventories?.[0]?.stock <= 5 && variant.inventories?.[0]?.stock > 0 && (
-          <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-contrast text-white px-2 py-0.5 rounded">
-            Pocas uni.
+    <article className="group flex flex-col">
+
+      {/* Image — fixed height, generous padding so product breathes */}
+      <Link
+        href={productUrl}
+        className="relative block w-full h-[420px] overflow-hidden"
+      >
+        {mainImage ? (
+          <Image
+            src={mainImage}
+            alt={productName}
+            fill
+            className="object-contain p-8 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-primary/15">
+            <Package size={40} strokeWidth={0.75} />
+            <span className="text-xs font-medium text-primary/30">Sin imagen</span>
+          </div>
+        )}
+
+        {/* Low stock badge */}
+        {isLowStock && (
+          <span className="absolute top-3 left-3 text-[11px] font-bold uppercase tracking-wider text-foreground border border-secondary px-3.5 py-2 rounded-xs bg-background/80 backdrop-blur-sm">
+            Últimas unidades
           </span>
         )}
-      </div>
+      </Link>
 
-      {/* Main Card Content: Split between Left Text & Right Portrait Image */}
-      <div className="grid grid-cols-12 gap-4 flex-1 items-center">
-        {/* Left Column: Product Info (Title & Price) */}
-        <div className="col-span-6 flex flex-col justify-between h-full py-2 z-10">
-          <div className="space-y-3">
-            <Link href={productUrl} className="block group-hover:text-contrast transition-colors">
-              <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider leading-snug text-primary text-balance">
-                {formattedTitle}
-              </h3>
-            </Link>
+      {/* Info block */}
+      <div className="flex flex-col gap-1 pt-4 pb-8">
+        <p className="text-xl font-bold tracking-tight text-primary">
+          {formatCurrency(variant.price)}
+        </p>
 
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground-muted/60">
-              {variant.color} {variant.size ? `• Talla ${variant.size}` : ''}
-            </div>
+        <Link href={productUrl} className="block">
+          <h3 className="text-sm font-medium text-primary leading-snug tracking-tight hover:text-secondary transition-colors">
+            {productName}
+          </h3>
+        </Link>
+
+        {(colorLabel || sizeLabel) && (
+          <p className="text-sm text-primary/50">
+            {colorLabel}
+            {colorLabel && sizeLabel && <span className="mx-1.5 text-primary/20">·</span>}
+            {sizeLabel && <span>Talla {sizeLabel}</span>}
+          </p>
+        )}
+
+        {whatsApp && (
+          <div className="mt-4 overflow-hidden">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleWhatsAppBuy}
+              className="w-full gap-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300"
+            >
+              <MessageCircle size={14} strokeWidth={1.5} />
+              <span>Pedir por WhatsApp</span>
+            </Button>
           </div>
-
-          <div className="space-y-3 pt-4">
-            <div className="text-xs sm:text-sm font-bold font-mono tracking-tight text-primary/90">
-              {formatCurrency(variant.price)}
-            </div>
-
-            {/* Quick Action Button on Hover */}
-            {whatsApp && (
-              <button
-                onClick={handleWhatsAppBuy}
-                className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] bg-emerald-500 text-white px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-emerald-600 shadow-md"
-              >
-                <MessageCircle size={12} />
-                <span>Pedir</span>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Right Column: Full-Height Portrait Product Image */}
-        <div className="col-span-6 h-full relative min-h-[240px] flex items-center justify-center">
-          <Link href={productUrl} className="relative w-full h-full block">
-            {mainImage ? (
-              <Image
-                src={mainImage}
-                alt={parentProduct.name || variant.name}
-                fill
-                className="object-contain object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes="(max-width: 768px) 50vw, 33vw"
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-foreground-muted/20">
-                <Package size={36} strokeWidth={1} />
-              </div>
-            )}
-          </Link>
-        </div>
+        )}
       </div>
     </article>
   );

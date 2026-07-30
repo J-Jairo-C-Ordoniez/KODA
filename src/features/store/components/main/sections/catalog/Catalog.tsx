@@ -3,12 +3,9 @@
 import Header from '@/features/store/components/header/Header';
 import FilterBar from '@/features/store/components/main/sections/catalog/main/sections/FilterBar';
 import ProductGrid from '@/features/store/components/main/sections/catalog/main/sections/ProductGrid';
-
-
-import Footer from '../../../footer/Footer';
-import SidebarLeft from '../../../header/ui/SidebarLeft';
+import Footer from '@/features/store/components/footer/Footer';
 import Loader from '@/shared/components/Loader';
-import { useStoreCatalog } from '../../../../hooks/useStoreCatalog';
+import { useStoreCatalog } from '@/features/store/hooks/useStoreCatalog';
 
 interface Props {
   tenant: any;
@@ -49,11 +46,12 @@ export default function Catalog({ tenant, slug }: Props) {
             slug={slug}
             whatsApp={tenant.whatsApp}
             error={error}
+            currentCategory={currentCategory}
           />
         )}
       </main>
 
-      {/* <Footer businessName={tenant.businessName} slug={slug} whatsApp={tenant.whatsApp} /> */}
+      <Footer businessName={tenant.businessName} slug={slug} whatsApp={tenant.whatsApp} />
     </div>
   );
 }

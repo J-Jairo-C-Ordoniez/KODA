@@ -1,6 +1,6 @@
 'use client';
 
-import { SlidersHorizontal, X } from 'lucide-react';
+import { X, SlidersHorizontal } from 'lucide-react';
 import FilterDropdown from '@/features/store/components/main/sections/catalog/main/ui/FilterDropdown';
 
 interface Props {
@@ -16,21 +16,31 @@ export default function FilterBar({ categories, currentCategory, onFilterChange 
   }));
 
   return (
-    <section className="px-10 md:px-40 w-full border-b border-foreground/10 py-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="w-full flex justify-between items-center">
-          <div className="text-gray-500 text-sm max-w-2xl flex gap-2">
-            <SlidersHorizontal size={24} />
-            <span>Filtros</span>
+    <section className="w-full border-b border-primary/5 py-2">
+      <div className="px-10 md:px-40 h-12 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-primary/40">
+            <SlidersHorizontal size={14} strokeWidth={1.5} />
+            <span className="text-xs font-medium text-primary/60">Filtros</span>
           </div>
 
-          <FilterDropdown
-            title="Categorías"
-            options={categoryOptions}
-            selectedValue={currentCategory}
-            onSelect={(val) => onFilterChange('category', val)}
-          />
+          {currentCategory && (
+            <button
+              onClick={() => onFilterChange('category', '')}
+              className="flex items-center gap-1.5 text-xs font-medium text-primary/70 bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/8 transition-all cursor-pointer"
+            >
+              <span>{currentCategory}</span>
+              <X size={12} strokeWidth={2} />
+            </button>
+          )}
         </div>
+
+        <FilterDropdown
+          title="Categorías"
+          options={categoryOptions}
+          selectedValue={currentCategory}
+          onSelect={(val) => onFilterChange('category', val)}
+        />
       </div>
     </section>
   );

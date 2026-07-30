@@ -37,30 +37,48 @@ const catalogRepository = {
     // Build the product-level filter
     const productFilter: any = {};
     if (tenantId) productFilter.tenantId = tenantId;
-    if (category && category.length > 0) productFilter.categoryId = category;
-    if (gender) productFilter.gender = { in: [gender, 'mixto'] as any };
 
-    if (search && search.trim().length > 0) {
-      // When searching, use a broad OR across variant + product fields
-      whereClause.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { color: { contains: search, mode: 'insensitive' } },
-        { product: { name: { contains: search, mode: 'insensitive' } } },
-        { product: { description: { contains: search, mode: 'insensitive' } } },
-        { product: { category: { name: { contains: search, mode: 'insensitive' } } } },
-      ];
-      // Still scope to this tenant if provided
-      if (Object.keys(productFilter).length > 0) {
-        whereClause.product = { is: productFilter };
-      }
-    } else {
-      if (Object.keys(productFilter).length > 0) {
-        whereClause.product = { is: productFilter };
-      }
+    if (category && category.trim().length > 0) {
+      productFilter.category = {
+        is: {
+          OR: [
+            { categoryId: category },
+            { name: { equals: category.trim(), mode: 'insensitive' } }
+          ]
+        }
+      };
     }
 
-    if (color && color.length > 0) {
-      whereClause.color = { in: color };
+    if (gender) {
+      productFilter.gender = { in: [gender, 'mixto'] as any };
+    }
+
+    if (Object.keys(productFilter).length > 0) {
+      whereClause.product = { is: productFilter };
+    }
+
+    if (color && color.length > 0 && color[0].trim().length > 0) {
+      whereClause.OR = color.map((c) => ({
+        color: { equals: c.trim(), mode: 'insensitive' }
+      }));
+    }
+
+    if (search && search.trim().length > 0) {
+      const s = search.trim();
+      const searchConditions = [
+        { name: { contains: s, mode: 'insensitive' as const } },
+        { color: { contains: s, mode: 'insensitive' as const } },
+        { product: { is: { name: { contains: s, mode: 'insensitive' as const } } } },
+        { product: { is: { description: { contains: s, mode: 'insensitive' as const } } } },
+        { product: { is: { category: { is: { name: { contains: s, mode: 'insensitive' as const } } } } } },
+      ];
+
+      if (whereClause.OR) {
+        whereClause.AND = [{ OR: whereClause.OR }, { OR: searchConditions }];
+        delete whereClause.OR;
+      } else {
+        whereClause.OR = searchConditions;
+      }
     }
 
     const skip = (page - 1) * limit;

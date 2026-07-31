@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
+'use client';
 
-export const metadata = { title: 'Clientes y Fiados | KODA' };
+import EmployeeCustomersView from '@/features/dashboard/employee/components/main/customers/CustomersView';
 
 export default function EmployeeCustomersPage() {
-  redirect('/dashboard/business/customers');
+  return <EmployeeCustomersView />;
 }

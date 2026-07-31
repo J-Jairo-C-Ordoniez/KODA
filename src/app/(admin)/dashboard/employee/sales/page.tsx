@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
+'use client';
 
-export const metadata = { title: 'Ventas (POS) | KODA' };
+import EmployeeSalesView from '@/features/dashboard/employee/components/main/sales/SalesView';
 
 export default function EmployeeSalesPage() {
-  redirect('/dashboard/business/sales');
+  return <EmployeeSalesView />;
 }

@@ -1,6 +1,6 @@
 import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
 import catalogController from '@/core/modules/catalog/controllers/catalog.controller';
-import ProductDetailView from '@/features/store/components/main/sections/Product/ProductDetailView';
+import Product from '@/features/store/components/main/sections/product/Product';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!variant) return { title: 'Producto no encontrado' };
 
   return {
-    title: `${variant.product?.name || variant.name} | Detalle de Prenda`,
+    title: variant.name,
     description: variant.product?.description || `Ver detalles de ${variant.name} en el catálogo.`,
   };
 }
@@ -32,5 +32,5 @@ export default async function ProductPage({ params }: Props) {
     redirect('/');
   }
 
-  return <ProductDetailView tenant={tenant} slug={slug} variantId={id} />;
+  return <Product tenant={tenant} slug={slug} variantId={id} />;
 }

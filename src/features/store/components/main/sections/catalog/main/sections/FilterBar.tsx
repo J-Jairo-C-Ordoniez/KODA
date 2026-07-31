@@ -7,9 +7,10 @@ interface Props {
   categories: any[];
   currentCategory: string;
   onFilterChange: (key: string, val: string) => void;
+  totalCount?: number;
 }
 
-export default function FilterBar({ categories, currentCategory, onFilterChange }: Props) {
+export default function FilterBar({ categories, currentCategory, onFilterChange, totalCount }: Props) {
   const categoryOptions = categories.map((cat) => ({
     label: cat.name,
     value: cat.name.toLowerCase(),
@@ -35,12 +36,20 @@ export default function FilterBar({ categories, currentCategory, onFilterChange 
           )}
         </div>
 
-        <FilterDropdown
-          title="Categorías"
-          options={categoryOptions}
-          selectedValue={currentCategory}
-          onSelect={(val) => onFilterChange('category', val)}
-        />
+        <div className="flex items-center gap-4">
+          {typeof totalCount === 'number' && (
+            <span className="hidden sm:block text-xs font-medium text-primary/40">
+              {totalCount} {totalCount === 1 ? 'prenda' : 'prendas'}
+            </span>
+          )}
+
+          <FilterDropdown
+            title="Categorías"
+            options={categoryOptions}
+            selectedValue={currentCategory}
+            onSelect={(val) => onFilterChange('category', val)}
+          />
+        </div>
       </div>
     </section>
   );

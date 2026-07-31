@@ -1,5 +1,5 @@
 import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
-import SearchView from '@/features/store/components/main/sections/Search/SearchView';
+import Search from '@/features/store/components/main/sections/search/Search';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `Buscar en ${tenant.businessName} | Catálogo`,
+    title: `Buscar en ${tenant.businessName}`,
     description: `Busca productos y prendas en la tienda oficial de ${tenant.businessName}.`,
   };
 }
@@ -33,5 +33,5 @@ export default async function SearchPage({ params }: Props) {
     redirect('/');
   }
 
-  return <SearchView tenant={tenant} slug={slug} />;
+  return <Search tenant={tenant} slug={slug} />;
 }

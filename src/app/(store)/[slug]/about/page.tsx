@@ -1,5 +1,5 @@
 import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
-import AboutView from '@/features/store/components/main/sections/About/AboutView';
+import About from '@/features/store/components/main/sections/about/About';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `Sobre Nosotros y Contacto | ${tenant.businessName}`,
+    title: tenant.businessName,
     description: tenant.description || `Información institucional y canales de atención de ${tenant.businessName}.`,
   };
 }
@@ -33,5 +33,5 @@ export default async function AboutPage({ params }: Props) {
     redirect('/');
   }
 
-  return <AboutView tenant={tenant} slug={slug} />;
+  return <About tenant={tenant} slug={slug} />;
 }

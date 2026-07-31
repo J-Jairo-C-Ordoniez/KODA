@@ -7,16 +7,16 @@ import { formatCurrency } from '@/lib/formatters';
 import type { HydratedCartItem } from '@/features/dashboard/business/hooks/useSalesPOS';
 
 interface ActiveCartTicketProps {
-    items: HydratedCartItem[];
-    totalItems: number;
-    subtotal: number;
+    items?: HydratedCartItem[];
+    totalItems?: number;
+    subtotal?: number;
     onUpdateQuantity: (variantId: string, quantity: number) => void;
     onRemoveItem: (variantId: string) => void;
     onClearCart: () => void;
     onOpenCheckout: () => void;
 }
 
-export default function ActiveCartTicket({ items, totalItems, subtotal, onUpdateQuantity, onRemoveItem, onClearCart, onOpenCheckout, }: ActiveCartTicketProps) {
+export default function ActiveCartTicket({ items = [], totalItems = 0, subtotal = 0, onUpdateQuantity, onRemoveItem, onClearCart, onOpenCheckout, }: ActiveCartTicketProps) {
     return (
         <aside className="bg-background-card border border-primary/8 rounded-2xl p-5 flex flex-col h-full justify-between shadow-xs">
             <header>

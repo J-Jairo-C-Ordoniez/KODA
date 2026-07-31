@@ -1,6 +1,6 @@
-'use client';
+import EmployeeSalesView from '@/features/dashboard/employee/components/main/sections/sales/SalesView';
 
-import EmployeeSalesView from '@/features/dashboard/employee/components/main/sales/SalesView';
+export const metadata = { title: 'Ventas' };
 
 export default function EmployeeSalesPage() {
   return <EmployeeSalesView />;

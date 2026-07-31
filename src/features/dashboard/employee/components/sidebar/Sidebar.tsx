@@ -15,7 +15,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: "Ventas (POS)", href: "/dashboard/employee/sales", icon: ShoppingCart },
   { label: "Clientes y Fiados", href: "/dashboard/employee/customers", icon: Users },
-  { label: "Catálogo", href: "/dashboard/employee/catalog", icon: PackageSearch },
+  { label: "Productos", href: "/dashboard/employee/products", icon: PackageSearch },
   { label: "Mi Turno", href: "/dashboard/employee/profile", icon: UserCheck },
 ];
 

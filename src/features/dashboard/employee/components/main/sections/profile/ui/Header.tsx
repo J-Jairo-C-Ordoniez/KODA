@@ -1,14 +1,13 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { User, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 
 interface Props {
   title: string;
   subtitle?: string;
 }
 
-export default function EmployeeHeader({ title, subtitle }: Props) {
+export default function Header({ title, subtitle }: Props) {
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 mb-6 border-b border-primary/5">
       <div>

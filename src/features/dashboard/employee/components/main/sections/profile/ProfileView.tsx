@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession, signOut } from 'next-auth/react';
-import EmployeeHeader from '@/features/dashboard/employee/components/header/Header';
+import EmployeeHeader from '@/features/dashboard/employee/components/main/sections/profile/ui/Header';
 import { User, LogOut, CheckCircle2, ShieldCheck, Clock } from 'lucide-react';
 import Button from '@/shared/components/Button';
 

@@ -6,17 +6,26 @@ import type { Category } from '@/features/dashboard/business/api/products.api';
 import type { POSVariant } from '@/features/dashboard/business/hooks/useSalesPOS';
 
 interface POSCatalogProps {
-    categories: Category[];
-    variants: POSVariant[];
-    searchQuery: string;
+    categories?: Category[];
+    variants?: POSVariant[];
+    searchQuery?: string;
     onSearchChange: (query: string) => void;
-    selectedCategory: string | null;
-    onCategorySelect: (categoryId: string | null) => void;
+    selectedCategory?: string | null;
+    onCategorySelect?: (categoryId: string | null) => void;
     onAddToCart: (variantId: string) => void;
     isSearching?: boolean;
 }
 
-export default function POSCatalog({ categories, variants, searchQuery, onSearchChange, selectedCategory, onCategorySelect, onAddToCart, isSearching }: POSCatalogProps) {
+export default function POSCatalog({
+    categories = [],
+    variants = [],
+    searchQuery = '',
+    onSearchChange,
+    selectedCategory = null,
+    onCategorySelect,
+    onAddToCart,
+    isSearching = false
+}: POSCatalogProps) {
     return (
         <article className="space-y-5">
             <div className="relative w-full">
@@ -46,7 +55,7 @@ export default function POSCatalog({ categories, variants, searchQuery, onSearch
 
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
                 <button
-                    onClick={() => onCategorySelect(null)}
+                    onClick={() => onCategorySelect?.(null)}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${selectedCategory === null
                         ? 'bg-primary text-background shadow-xs'
                         : 'bg-foreground-muted/40 hover:bg-foreground-muted/60 text-primary/70'
@@ -57,7 +66,7 @@ export default function POSCatalog({ categories, variants, searchQuery, onSearch
                 {categories.map(cat => (
                     <button
                         key={cat.categoryId}
-                        onClick={() => onCategorySelect(cat.categoryId)}
+                        onClick={() => onCategorySelect?.(cat.categoryId)}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${selectedCategory === cat.categoryId
                             ? 'bg-primary text-background shadow-xs'
                             : 'bg-foreground-muted/40 hover:bg-foreground-muted/60 text-primary/70'

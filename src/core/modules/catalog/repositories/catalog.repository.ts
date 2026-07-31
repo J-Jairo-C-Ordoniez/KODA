@@ -147,20 +147,37 @@ const catalogRepository = {
 
   async getPopularVariants(tenantId: string, limit = 10) {
     return await prisma.variant.findMany({
-      where: { isActive: true },
-      include: {
+      where: {
+        isActive: true,
+        product: { tenantId },
+      },
+      orderBy: { popularity: 'desc' },
+      take: limit,
+      select: {
+        variantId: true,
+        name: true,
+        sku: true,
+        price: true,
+        color: true,
+        size: true,
+        inventories: {
+          select: { stock: true }
+        },
         product: {
-          include: {
-            category: true
+          select: {
+            productId: true,
+            name: true,
+            gender: true,
+            category: {
+              select: { name: true }
+            }
           }
         },
-        images: true,
-        inventories: true
-      },
-      orderBy: {
-        popularity: 'desc'
-      },
-      take: limit
+        images: {
+          select: { imageId: true, content: true },
+          take: 2
+        }
+      }
     });
   },
 

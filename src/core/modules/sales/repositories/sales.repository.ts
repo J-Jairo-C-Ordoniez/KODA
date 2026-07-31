@@ -37,9 +37,16 @@ const salesRepository = {
           throw new Error(`Stock insuficiente para la variante: ${variant.name}`);
         }
 
+        // Decrement stock
         await tx.inventory.update({
           where: { inventoryId: inventory.inventoryId },
           data: { stock: { decrement: item.quantity } }
+        });
+
+        // Increment popularity by units sold — powers storefront recommendations
+        await tx.variant.update({
+          where: { variantId: item.variantId },
+          data: { popularity: { increment: item.quantity } }
         });
 
         itemsToCreate.push({

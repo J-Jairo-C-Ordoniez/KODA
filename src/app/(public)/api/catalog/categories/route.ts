@@ -1,17 +1,10 @@
-import categoryController from '@/core/modules/catalog/controllers/category.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import categoryController from '@/backend/core/catalog/controllers/category.controller';
+import { secureHeaders } from '@/backend/core/utils/routeGuard';
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const tenantId = searchParams.get('tenantId') || '';
-  return await categoryController.getAllCategories(tenantId);
-}
-
-export async function POST(req: Request) {
-  try {
-    const data = await req.json();
-    const tenantId = data.tenantId || '';
-    return await categoryController.createCategory(tenantId, data);
-  } catch (error) {
-    return await categoryController.createCategory('', {});
-  }
+// ─── GET /api/catalog/categories — Public: list categories for a tenant ────────
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const tenantId = req.nextUrl.searchParams.get('tenantId') ?? '';
+  const result = await categoryController.getAllCategories(tenantId);
+  return secureHeaders(result as NextResponse);
 }

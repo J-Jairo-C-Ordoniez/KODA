@@ -1,26 +1,27 @@
-import { NextRequest } from 'next/server';
-import { apiResponse } from '@/core/utils/apiResponse';
-import { getTenantContext, requireRole } from '@/core/utils/tenantContext';
-import customerController from '@/core/modules/customers/controllers/customer.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import { getTenantContext, requireRoles, secureHeaders } from '@/backend/core/utils/routeGuard';
+import customerController from '@/backend/core/customers/controllers/customer.controller';
 
 export async function GET(req: NextRequest) {
-  const { tenantId } = getTenantContext(req);
-  if (!tenantId) return apiResponse.error('No autorizado', 401);
+  const ctx = getTenantContext(req);
 
   const url = new URL(req.url);
   const page = Number(url.searchParams.get('page') || '1');
   const limit = Number(url.searchParams.get('limit') || '50');
 
-  return customerController.getCustomers(tenantId, { page, limit });
+  const result = await customerController.getCustomers(ctx.tenantId, { page, limit }) as NextResponse;
+  secureHeaders(result);
+  return result;
 }
 
 export async function POST(req: NextRequest) {
-  const { tenantId, role } = getTenantContext(req);
-  if (!tenantId) return apiResponse.error('No autorizado', 401);
+  const ctx = getTenantContext(req);
 
-  const denied = requireRole(role, ['owner', 'admin', 'superAdmin']);
+  const denied = requireRoles(ctx, ['admin', 'superAdmin']);
   if (denied) return denied;
 
-  const data = await req.json();
-  return customerController.createCustomer(tenantId, data);
+  const body = await req.json();
+  const result = await customerController.createCustomer(ctx.tenantId, body) as NextResponse;
+  secureHeaders(result);
+  return result;
 }

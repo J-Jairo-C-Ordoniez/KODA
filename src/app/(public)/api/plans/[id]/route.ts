@@ -1,48 +1,40 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from 'next/server';
-import planController from '@/core/modules/plans/controllers/plan.controller';
-import planService from "@/core/modules/plans/services/plan.service";
-import { apiResponse } from "@/core/utils/apiResponse";
+import { type NextRequest, NextResponse } from 'next/server';
+import { getSessionContext, requireSuperAdmin, secureHeaders } from '@/backend/core/utils/routeGuard';
+import planController from '@/backend/crossCutting/plans/controllers/plan.controller';
 
+// GET is public — no auth guard required
 export async function GET(
-  req: Request,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+): Promise<NextResponse> {
   const { id } = await params;
-  try {
-    const plan = await planService.getPlan(id);
-    return apiResponse.success(plan);
-  } catch (error: any) {
-    return apiResponse.error(error.message, 404);
-  }
+  const result = await planController.getPlan(id);
+  return secureHeaders(result as NextResponse);
 }
 
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getServerSession(authOptions);
-
-  if (!session || session.user.role !== "superAdmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+): Promise<NextResponse> {
+  const ctx = await getSessionContext();
+  const guard = requireSuperAdmin(ctx);
+  if (guard) return guard;
 
   const { id } = await params;
   const data = await req.json();
-  return await planController.updatePlan(id, data);
+  const result = await planController.updatePlan(id, data);
+  return secureHeaders(result as NextResponse);
 }
 
 export async function DELETE(
-  req: Request,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getServerSession(authOptions);
-
-  if (!session || session.user.role !== "superAdmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+): Promise<NextResponse> {
+  const ctx = await getSessionContext();
+  const guard = requireSuperAdmin(ctx);
+  if (guard) return guard;
 
   const { id } = await params;
-  return await planController.deletePlan(id);
+  const result = await planController.deletePlan(id);
+  return secureHeaders(result as NextResponse);
 }

@@ -1,8 +1,10 @@
-import { NextResponse } from 'next/server';
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
+import { secureHeaders } from '@/backend/core/utils/routeGuard';
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const slug = searchParams.get("slug");
-  return tenantController.getTenantBySlug(slug as string);
+// ─── GET /api/tenants/slug — Public: resolve tenant by slug ───────────────────
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const slug = req.nextUrl.searchParams.get('slug') ?? '';
+  const result = await tenantController.getTenantBySlug(slug);
+  return secureHeaders(result as NextResponse);
 }

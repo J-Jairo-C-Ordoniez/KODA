@@ -1,24 +1,14 @@
-import categoryController from '@/core/modules/catalog/controllers/category.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import categoryController from '@/backend/core/catalog/controllers/category.controller';
+import { secureHeaders } from '@/backend/core/utils/routeGuard';
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+// ─── GET /api/catalog/categories/[id] — Public: get category detail ───────────
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const { id } = await params;
-  const tenantId = new URL(req.url).searchParams.get('tenantId') || '';
-  return await categoryController.getCategoryById(tenantId, id);
-}
-
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const tenantId = new URL(req.url).searchParams.get('tenantId') || '';
-  try {
-    const data = await req.json();
-    return await categoryController.updateCategory(tenantId, id, data);
-  } catch (error) {
-    return await categoryController.updateCategory(tenantId, id, {});
-  }
-}
-
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const tenantId = new URL(req.url).searchParams.get('tenantId') || '';
-  return await categoryController.deleteCategory(tenantId, id);
+  const tenantId = req.nextUrl.searchParams.get('tenantId') ?? '';
+  const result = await categoryController.getCategoryById(tenantId, id);
+  return secureHeaders(result as NextResponse);
 }

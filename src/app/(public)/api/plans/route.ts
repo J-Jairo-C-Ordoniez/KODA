@@ -1,19 +1,19 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from 'next/server';
-import planController from '@/core/modules/plans/controllers/plan.controller';
+import { type NextRequest, NextResponse } from 'next/server';
+import { getSessionContext, requireSuperAdmin, secureHeaders } from '@/backend/core/utils/routeGuard';
+import planController from '@/backend/crossCutting/plans/controllers/plan.controller';
 
-export async function GET() {
-  return await planController.getPlans();
+// GET is public — no auth guard required
+export async function GET(): Promise<NextResponse> {
+  const result = await planController.getPlans();
+  return secureHeaders(result as NextResponse);
 }
 
-export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session || session.user.role !== "superAdmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  const ctx = await getSessionContext();
+  const guard = requireSuperAdmin(ctx);
+  if (guard) return guard;
 
   const data = await req.json();
-  return await planController.createPlan(data);
+  const result = await planController.createPlan(data);
+  return secureHeaders(result as NextResponse);
 }

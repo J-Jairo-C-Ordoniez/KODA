@@ -1,24 +1,14 @@
-import productController from '@/core/modules/catalog/controllers/product.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import productController from '@/backend/core/catalog/controllers/product.controller';
+import { secureHeaders } from '@/backend/core/utils/routeGuard';
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+// ─── GET /api/catalog/products/[id] — Public: get product detail ──────────────
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const { id } = await params;
-  const tenantId = new URL(req.url).searchParams.get('tenantId') || '';
-  return await productController.getProductById(tenantId, id);
-}
-
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const tenantId = new URL(req.url).searchParams.get('tenantId') || '';
-  try {
-    const data = await req.json();
-    return await productController.updateProduct(tenantId, id, data);
-  } catch (error) {
-    return await productController.updateProduct(tenantId, id, {});
-  }
-}
-
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const tenantId = new URL(req.url).searchParams.get('tenantId') || '';
-  return await productController.deleteProduct(tenantId, id);
+  const tenantId = req.nextUrl.searchParams.get('tenantId') ?? '';
+  const result = await productController.getProductById(tenantId, id);
+  return secureHeaders(result as NextResponse);
 }

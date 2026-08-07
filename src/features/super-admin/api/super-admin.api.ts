@@ -140,7 +140,7 @@ export async function updateTenantStatusApi(tenantId: string, status: string): P
 export async function fetchTenantMetricsApi(): Promise<any> {
   const [activeTenantRes, mrrRes, onboardingRes, churnCountRes, churnRateRes] = await Promise.all([
     fetch('/api/tenants/counts?type=active', { cache: 'no-store' }),
-    fetch('/api/tenants/MRR', { cache: 'no-store' }),
+    fetch('/api/tenants/mrr', { cache: 'no-store' }),
     fetch('/api/tenants/onboarding', { cache: 'no-store' }),
     fetch('/api/tenants/churn?type=MonthlyChurnCount', { cache: 'no-store' }),
     fetch('/api/tenants/churn?type=ChurnRate', { cache: 'no-store' }),

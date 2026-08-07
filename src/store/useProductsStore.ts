@@ -1,4 +1,3 @@
-// store/useCatalogStore.ts (o la ruta donde manejes tus stores)
 import { create } from 'zustand';
 import { Category, Product } from '@/features/dashboard/business/api/products.api';
 

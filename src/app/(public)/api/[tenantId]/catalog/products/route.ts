@@ -1,25 +1,19 @@
-import { NextRequest } from 'next/server';
-import { apiResponse } from '@/core/utils/apiResponse';
-import { getTenantContext, requireRole } from '@/core/utils/tenantContext';
-import productController from '@/core/modules/catalog/controllers/product.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import { getTenantContext, requireRoles, secureHeaders } from '@/backend/core/utils/routeGuard';
+import productController from '@/backend/core/catalog/controllers/product.controller';
 
 export async function GET(req: NextRequest) {
-  const { tenantId } = getTenantContext(req);
-  if (!tenantId) return apiResponse.error('No autorizado', 401);
-  return await productController.getAllProducts(tenantId);
+  const ctx = getTenantContext(req);
+  const res = await productController.getAllProducts(ctx.tenantId);
+  return secureHeaders(res);
 }
 
 export async function POST(req: NextRequest) {
-  const { tenantId, role } = getTenantContext(req);
-  if (!tenantId) return apiResponse.error('No autorizado', 401);
+  const ctx = getTenantContext(req);
+  const guard = requireRoles(ctx, ['admin', 'superAdmin']);
+  if (guard) return guard;
 
-  const denied = requireRole(role, ['owner', 'admin', 'superAdmin']);
-  if (denied) return denied;
-
-  try {
-    const data = await req.json();
-    return await productController.createProduct(tenantId, data);
-  } catch (error: any) {
-    return apiResponse.error(error.message || 'Error al crear producto', 400);
-  }
+  const data = await req.json();
+  const res = await productController.createProduct(ctx.tenantId, data);
+  return secureHeaders(res);
 }

@@ -1,17 +1,10 @@
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
-import { apiResponse } from '@/core/utils/apiResponse';
+import { NextRequest, NextResponse } from 'next/server';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
+import { secureHeaders } from '@/backend/core/utils/routeGuard';
 
-export async function POST(request: Request) {
-  try {
-    const data = await request.json();
-    const { businessName, name, email, password, whatsapp, type } = data;
-
-    if (!businessName || !name || !email || !password || !whatsapp || !type) {
-      return apiResponse.error('Todos los campos son obligatorios', 400);
-    }
-
-    return await tenantController.registerBusiness(data);
-  } catch (error: any) {
-    return apiResponse.error(error.message || 'Error interno del servidor', 500);
-  }
+// ─── POST /api/auth/register — Public: register a new business tenant ─────────
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  const data = await req.json();
+  const result = await tenantController.registerBusiness(data);
+  return secureHeaders(result as NextResponse);
 }

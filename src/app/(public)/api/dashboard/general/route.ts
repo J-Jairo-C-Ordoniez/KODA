@@ -1,11 +1,9 @@
-import dashboardController from '@/core/modules/dashboard/controllers/dashboard.controller';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { apiResponse } from '@/core/utils/apiResponse';
+import { type NextRequest, NextResponse } from 'next/server';
+import { getTenantContext, secureHeaders } from '@/backend/core/utils/routeGuard';
+import dashboardController from '@/backend/aggregation/dashboard/controllers/dashboard.controller';
 
-export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) return apiResponse.error('No autorizado', 401);
-  
-  return await dashboardController.getGeneralStats(session.user.tenantId);
+export async function GET(req: NextRequest) {
+  const ctx = getTenantContext(req);
+  const result = await dashboardController.getGeneralStats(ctx.tenantId);
+  return secureHeaders(result as NextResponse);
 }

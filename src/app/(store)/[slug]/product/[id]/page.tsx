@@ -1,5 +1,5 @@
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
-import catalogController from '@/core/modules/catalog/controllers/catalog.controller';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
+import catalogController from '@/backend/core/catalog/controllers/catalog.controller';
 import Product from '@/features/store/components/main/sections/product/Product';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';

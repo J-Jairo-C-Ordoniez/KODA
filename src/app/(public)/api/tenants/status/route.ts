@@ -1,21 +1,18 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from 'next/server';
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
+import {
+  getSessionContext,
+  requireSuperAdmin,
+  secureHeaders,
+} from '@/backend/core/utils/routeGuard';
 
-export async function PATCH(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session || session.user.role !== "superAdmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+// ─── PATCH /api/tenants/status — SuperAdmin only: update tenant status ─────────
+export async function PATCH(req: NextRequest): Promise<NextResponse> {
+  const ctx = await getSessionContext();
+  const guard = requireSuperAdmin(ctx);
+  if (guard) return guard;
 
   const { tenantId, status } = await req.json();
-
-  if (!tenantId || !status) {
-    return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
-  }
-
-  const tenant = await tenantController.updateTenantStatus(tenantId, status);
-  return tenant;
+  const result = await tenantController.updateTenantStatus(tenantId, status);
+  return secureHeaders(result as NextResponse);
 }

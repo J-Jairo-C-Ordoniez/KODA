@@ -1,28 +1,19 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from 'next/server';
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
+import { secureHeaders } from '@/backend/core/utils/routeGuard';
 
-export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+// ─── GET /api/tenants/counts — Public: tenant count metrics ───────────────────
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const type = req.nextUrl.searchParams.get('type') ?? 'all';
 
-  if (!session || session.user.role !== "superAdmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  let result: NextResponse;
+  if (type === 'active') {
+    result = await tenantController.countActiveTenants() as NextResponse;
+  } else if (type === 'suspended') {
+    result = await tenantController.countSuspendedTenants() as NextResponse;
+  } else {
+    result = await tenantController.countAllTenants() as NextResponse;
   }
 
-  const { searchParams } = new URL(req.url);
-  const type = searchParams.get("type") || "all";
-
-  if (type === "all") {
-    const count = await tenantController.countAllTenants();
-    return count;
-  } else if (type === "active") {
-    const count = await tenantController.countActiveTenants();
-    return count;
-  } else if (type === "suspended") {
-    const count = await tenantController.countSuspendedTenants();
-    return count;
-  }
-
-  return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+  return secureHeaders(result);
 }

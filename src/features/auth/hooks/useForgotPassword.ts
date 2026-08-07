@@ -43,7 +43,7 @@ export function useForgotPassword() {
   const handleRequestCode = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     return runRequest(async () => {
-      await postResetStep("/api/auth/forgot-password/request", { email });
+      await postResetStep("/api/auth/forgotPassword/request", { email });
       setStep("CODE");
     });
   }, [email, runRequest]);
@@ -51,7 +51,7 @@ export function useForgotPassword() {
   const handleVerifyCode = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     return runRequest(async () => {
-      await postResetStep("/api/auth/forgot-password/verify", { email, code });
+      await postResetStep("/api/auth/forgotPassword/verify", { email, code });
       setStep("NEW_PASSWORD");
     });
   }, [code, email, runRequest]);
@@ -63,7 +63,7 @@ export function useForgotPassword() {
         throw new Error("Las contrasenas no coinciden.");
       }
 
-      await postResetStep("/api/auth/forgot-password/reset", { email, password });
+      await postResetStep("/api/auth/forgotPassword/reset", { email, password });
       setStep("SUCCESS");
     });
   }, [confirmPassword, email, password, runRequest]);

@@ -1,42 +1,40 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { apiResponse } from "@/core/utils/apiResponse";
-import categoryController from '@/core/modules/catalog/controllers/category.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import { getTenantContext, requireRoles, secureHeaders } from '@/backend/core/utils/routeGuard';
+import categoryController from '@/backend/core/catalog/controllers/category.controller';
 
-export async function GET(req: Request, { params }: { params: Promise<{ tenantId: string, categoryId: string }> }) {
-  const { tenantId, categoryId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    return apiResponse.error('No autorizado', 401);
-  }
-
-  return await categoryController.getCategoryById(tenantId, categoryId);
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ tenantId: string; categoryId: string }> }
+) {
+  const ctx = getTenantContext(req);
+  const { categoryId } = await params;
+  const res = await categoryController.getCategoryById(ctx.tenantId, categoryId);
+  return secureHeaders(res);
 }
 
-export async function PATCH(req: Request, { params }: { params: Promise<{ tenantId: string, categoryId: string }> }) {
-  const { tenantId, categoryId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    return apiResponse.error('No autorizado', 401);
-  }
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ tenantId: string; categoryId: string }> }
+) {
+  const ctx = getTenantContext(req);
+  const guard = requireRoles(ctx, ['admin', 'superAdmin']);
+  if (guard) return guard;
 
-  try {
-    const data = await req.json();
-    return await categoryController.updateCategory(tenantId, categoryId, data);
-  } catch (error: any) {
-    return apiResponse.error(error.message || 'Error al actualizar categoría', 400);
-  }
+  const { categoryId } = await params;
+  const data = await req.json();
+  const res = await categoryController.updateCategory(ctx.tenantId, categoryId, data);
+  return secureHeaders(res);
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ tenantId: string, categoryId: string }> }) {
-  const { tenantId, categoryId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    return apiResponse.error('No autorizado', 401);
-  }
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ tenantId: string; categoryId: string }> }
+) {
+  const ctx = getTenantContext(req);
+  const guard = requireRoles(ctx, ['admin', 'superAdmin']);
+  if (guard) return guard;
 
-  return await categoryController.deleteCategory(tenantId, categoryId);
+  const { categoryId } = await params;
+  const res = await categoryController.deleteCategory(ctx.tenantId, categoryId);
+  return secureHeaders(res);
 }

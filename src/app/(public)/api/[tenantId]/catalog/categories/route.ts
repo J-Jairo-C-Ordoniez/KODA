@@ -1,25 +1,19 @@
-import { NextRequest } from 'next/server';
-import { apiResponse } from '@/core/utils/apiResponse';
-import { getTenantContext, requireRole } from '@/core/utils/tenantContext';
-import categoryController from '@/core/modules/catalog/controllers/category.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import { getTenantContext, requireRoles, secureHeaders } from '@/backend/core/utils/routeGuard';
+import categoryController from '@/backend/core/catalog/controllers/category.controller';
 
 export async function GET(req: NextRequest) {
-  const { tenantId } = getTenantContext(req);
-  if (!tenantId) return apiResponse.error('No autorizado', 401);
-  return await categoryController.getAllCategories(tenantId);
+  const ctx = getTenantContext(req);
+  const res = await categoryController.getAllCategories(ctx.tenantId);
+  return secureHeaders(res);
 }
 
 export async function POST(req: NextRequest) {
-  const { tenantId, role } = getTenantContext(req);
-  if (!tenantId) return apiResponse.error('No autorizado', 401);
+  const ctx = getTenantContext(req);
+  const guard = requireRoles(ctx, ['admin', 'superAdmin']);
+  if (guard) return guard;
 
-  const denied = requireRole(role, ['owner', 'admin', 'superAdmin']);
-  if (denied) return denied;
-
-  try {
-    const data = await req.json();
-    return await categoryController.createCategory(tenantId, data);
-  } catch (error: any) {
-    return apiResponse.error(error.message || 'Error al crear categoría', 400);
-  }
+  const data = await req.json();
+  const res = await categoryController.createCategory(ctx.tenantId, data);
+  return secureHeaders(res);
 }

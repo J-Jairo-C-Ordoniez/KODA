@@ -1,19 +1,20 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from 'next/server';
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
+import {
+  getSessionContext,
+  requireSuperAdmin,
+  secureHeaders,
+} from '@/backend/core/utils/routeGuard';
 
-export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+// ─── GET /api/tenants/search — SuperAdmin only: filtered tenant list ───────────
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const ctx = await getSessionContext();
+  const guard = requireSuperAdmin(ctx);
+  if (guard) return guard;
 
-  if (!session || session.user.role !== "superAdmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const search = req.nextUrl.searchParams.get('search');
+  const status = req.nextUrl.searchParams.get('status');
 
-  const { searchParams } = new URL(req.url);
-  const search = searchParams.get("search");
-  const status = searchParams.get("status");
-
-  const tenants = await tenantController.getTenantsFiltered(search, status);
-  return tenants;
+  const result = await tenantController.getTenantsFiltered(search, status);
+  return secureHeaders(result as NextResponse);
 }

@@ -1,4 +1,4 @@
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
 import Header from '@/features/store/components/header/Header';
 import Footer from '@/features/store/components/footer/Footer';
 import { redirect } from 'next/navigation';

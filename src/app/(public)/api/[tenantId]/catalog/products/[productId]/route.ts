@@ -1,42 +1,40 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { apiResponse } from "@/core/utils/apiResponse";
-import productController from '@/core/modules/catalog/controllers/product.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import { getTenantContext, requireRoles, secureHeaders } from '@/backend/core/utils/routeGuard';
+import productController from '@/backend/core/catalog/controllers/product.controller';
 
-export async function GET(req: Request, { params }: { params: Promise<{ tenantId: string, productId: string }> }) {
-  const { tenantId, productId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    return apiResponse.error('No autorizado', 401);
-  }
-
-  return await productController.getProductById(tenantId, productId);
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ tenantId: string; productId: string }> }
+) {
+  const ctx = getTenantContext(req);
+  const { productId } = await params;
+  const res = await productController.getProductById(ctx.tenantId, productId);
+  return secureHeaders(res);
 }
 
-export async function PATCH(req: Request, { params }: { params: Promise<{ tenantId: string, productId: string }> }) {
-  const { tenantId, productId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    return apiResponse.error('No autorizado', 401);
-  }
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ tenantId: string; productId: string }> }
+) {
+  const ctx = getTenantContext(req);
+  const guard = requireRoles(ctx, ['admin', 'superAdmin']);
+  if (guard) return guard;
 
-  try {
-    const data = await req.json();
-    return await productController.updateProduct(tenantId, productId, data);
-  } catch (error: any) {
-    return apiResponse.error(error.message || 'Error al actualizar producto', 400);
-  }
+  const { productId } = await params;
+  const data = await req.json();
+  const res = await productController.updateProduct(ctx.tenantId, productId, data);
+  return secureHeaders(res);
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ tenantId: string, productId: string }> }) {
-  const { tenantId, productId } = await params;
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.tenantId !== tenantId && session.user.role !== 'superAdmin')) {
-    return apiResponse.error('No autorizado', 401);
-  }
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ tenantId: string; productId: string }> }
+) {
+  const ctx = getTenantContext(req);
+  const guard = requireRoles(ctx, ['admin', 'superAdmin']);
+  if (guard) return guard;
 
-  return await productController.deleteProduct(tenantId, productId);
+  const { productId } = await params;
+  const res = await productController.deleteProduct(ctx.tenantId, productId);
+  return secureHeaders(res);
 }

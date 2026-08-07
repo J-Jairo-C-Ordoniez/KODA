@@ -1,23 +1,24 @@
-import policyController from '@/core/modules/policies/controllers/policy.controller';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { apiResponse } from '@/core/utils/apiResponse';
+import { NextRequest, NextResponse } from 'next/server';
+import policyController from '@/backend/crossCutting/policies/controllers/policy.controller';
+import {
+  getSessionContext,
+  requireSuperAdmin,
+  secureHeaders,
+} from '@/backend/core/utils/routeGuard';
 
-export async function GET() {
-  return await policyController.getLatestPolicy();
+// ─── GET /api/legal — Public: retrieve latest policy ──────────────────────────
+export async function GET(): Promise<NextResponse> {
+  const result = await policyController.getLatestPolicy();
+  return secureHeaders(result as NextResponse);
 }
 
-export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+// ─── POST /api/legal — SuperAdmin only: create / update policy ─────────────────
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  const ctx = await getSessionContext();
+  const guard = requireSuperAdmin(ctx);
+  if (guard) return guard;
 
-  if (!session || session.user.role !== 'superAdmin') {
-    return apiResponse.error('No autorizado. Solo superAdmin puede actualizar políticas', 401);
-  }
-
-  try {
-    const data = await req.json();
-    return await policyController.updatePolicy(data);
-  } catch (error) {
-    return apiResponse.error('Error en la solicitud JSON', 400);
-  }
+  const data = await req.json();
+  const result = await policyController.updatePolicy(data);
+  return secureHeaders(result as NextResponse);
 }

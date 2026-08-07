@@ -1,17 +1,10 @@
-import variantController from '@/core/modules/catalog/controllers/variant.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import variantController from '@/backend/core/catalog/controllers/variant.controller';
+import { secureHeaders } from '@/backend/core/utils/routeGuard';
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const tenantId = searchParams.get('tenantId') || '';
-  return await variantController.getAllVariants(tenantId);
-}
-
-export async function POST(req: Request) {
-  try {
-    const data = await req.json();
-    const tenantId = data.tenantId || '';
-    return await variantController.createVariant(tenantId, data);
-  } catch (error) {
-    return await variantController.createVariant('', {});
-  }
+// ─── GET /api/catalog/variants — Public: list variants for a tenant ────────────
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const tenantId = req.nextUrl.searchParams.get('tenantId') ?? '';
+  const result = await variantController.getAllVariants(tenantId);
+  return secureHeaders(result as NextResponse);
 }

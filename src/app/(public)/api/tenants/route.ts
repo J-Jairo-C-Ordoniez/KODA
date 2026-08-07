@@ -1,21 +1,24 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from 'next/server';
-import tenantController from '@/core/modules/tenants/controllers/tenant.controller';
+import { NextRequest, NextResponse } from 'next/server';
+import tenantController from '@/backend/crossCutting/tenants/controllers/tenant.controller';
+import {
+  getSessionContext,
+  requireSuperAdmin,
+  secureHeaders,
+} from '@/backend/core/utils/routeGuard';
 
-export async function POST(req: Request) {
+// ─── POST /api/tenants — Public: register a new tenant ────────────────────────
+export async function POST(req: NextRequest): Promise<NextResponse> {
   const data = await req.json();
-  const tenant = await tenantController.registerBusiness(data);
-  return NextResponse.json(tenant);
+  const result = await tenantController.registerBusiness(data);
+  return secureHeaders(result as NextResponse);
 }
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
+// ─── GET /api/tenants — SuperAdmin only: list all tenants ─────────────────────
+export async function GET(): Promise<NextResponse> {
+  const ctx = await getSessionContext();
+  const guard = requireSuperAdmin(ctx);
+  if (guard) return guard;
 
-  if (!session || session.user.role !== "superAdmin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const tenants = await tenantController.getAllTenants();
-  return tenants;
+  const result = await tenantController.getAllTenants();
+  return secureHeaders(result as NextResponse);
 }

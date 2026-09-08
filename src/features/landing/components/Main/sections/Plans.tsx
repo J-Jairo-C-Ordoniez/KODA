@@ -3,18 +3,26 @@
 import { useRef } from "react";
 import useLandingPlans from "@/features/landing/hooks/useLandingPlans";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
 
 import Loader from "@/shared/components/Loader";
 import Error from "@/shared/components/Error";
 import PlanCard from "@/features/landing/components/Main/ui/PlanCard";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Plans() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const { plans, isLoading, error } = useLandingPlans();
 
   useGSAP(() => {
-    gsap.fromTo(".pricing-header", { opacity: 0, y: 20 }, {
+    if (!headerRef.current) {
+      return;
+    }
+
+    gsap.fromTo(headerRef.current, { opacity: 0, y: 20 }, {
       opacity: 1, y: 0, duration: 0.8, ease: "power2.out",
       scrollTrigger: { trigger: containerRef.current, start: "top 80%" },
     });
@@ -27,7 +35,7 @@ export default function Plans() {
       className="relative bg-background py-10 md:py-20"
     >
       <div className="mx-auto max-w-4xl px-6">
-        <header className="chaos-header mx-auto mb-20 max-w-3xl text-center">
+        <header ref={headerRef} className="chaos-header mx-auto mb-20 max-w-3xl text-center">
           <h2 className="font-heading text-4xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
             Paga por ordenar tu negocio.
           </h2>

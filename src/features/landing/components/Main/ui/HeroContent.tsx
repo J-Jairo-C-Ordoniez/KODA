@@ -3,14 +3,9 @@
 import { MapPin } from "lucide-react";
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
 
 import Button from "@/shared/components/Button";
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function HeroContent() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,18 +36,13 @@ export default function HeroContent() {
         { opacity: 0, y: 14 },
         { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' },
         '-=0.4'
-      )
-      .fromTo('.hero-trust',
-        { opacity: 0 },
-        { opacity: 1, duration: 0.5 },
-        '-=0.2'
       );
   }, { scope: containerRef });
 
   return (
     <article
       ref={containerRef}
-      className="flex h-full w-full flex-col justify-center gap-6 px-6 py-16 sm:px-12 lg:px-40 lg:py-4">
+      className="flex w-full flex-col justify-center gap-6 px-6 py-12 sm:px-12 sm:py-16 lg:px-40 lg:py-20">
       <address
         className="hero-badge flex w-fit items-center gap-2 px-2 py-1 text-foreground"
         aria-label="Desarrollado para negocios de La Unión, Nariño"

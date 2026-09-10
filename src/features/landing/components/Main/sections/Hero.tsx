@@ -65,11 +65,11 @@ export default function Hero() {
         </address>
 
         <hgroup className="space-y-1 mb-2">
-          <h1 className="hero-fade-up font-heading text-4xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="hero-fade-up font-heading text-4xl font-black leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
             Tu negocio crece.
           </h1>
           <p
-            className="block hero-fade-up font-heading text-4xl font-bold leading-[1.05] tracking-tight text-foreground/50 sm:text-5xl md:text-6xl lg:text-7xl"
+            className="block hero-fade-up font-heading text-4xl font-black leading-[1.05] tracking-tight text-foreground/50 sm:text-5xl md:text-6xl lg:text-7xl"
             aria-label="El desorden no."
           >
             El desorden, no.

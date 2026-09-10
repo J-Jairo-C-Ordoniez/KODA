@@ -54,12 +54,12 @@ export default function RenderVisual({ id }: { id: string }) {
         case "metrics":
             return (
                 <div
-                    className="relative flex items-end justify-center gap-4 h-full w-full pb-12"
+                    className="relative flex items-end justify-center gap-4 h-full w-full pb-0 md:pb-12"
                     aria-hidden="true"
                 >
-                    <div className="anim-element chart-bar w-10 h-16 bg-background/30 rounded-t-lg" />
-                    <div className="anim-element chart-bar w-10 h-28 bg-background/60 rounded-t-lg" />
-                    <div className="anim-element chart-bar w-10 h-40 bg-background rounded-t-lg shadow-xl" />
+                    <div className="anim-element chart-bar w-8 md:w-10 h-16 bg-background/30 rounded-t-lg" />
+                    <div className="anim-element chart-bar w-8 md:w-10 h-28 bg-background/60 rounded-t-lg" />
+                    <div className="anim-element chart-bar w-8 md:w-10 h-36 md:h-40 bg-background rounded-t-lg shadow-xl" />
                 </div>
             );
         default: return null;

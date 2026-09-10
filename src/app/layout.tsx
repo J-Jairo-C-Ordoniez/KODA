@@ -49,7 +49,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="es"
-      className="font-vars"
+      className="font-vars selection:bg-accent/25 selection:text-foreground"
     >
       <body>
         <Providers>

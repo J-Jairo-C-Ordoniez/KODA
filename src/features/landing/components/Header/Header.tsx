@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { List, X } from '@phosphor-icons/react';
+import { ListIcon, XIcon } from '@phosphor-icons/react';
 
 import Logo from '@/shared/components/Logo';
 import Button from '@/shared/components/Button';
@@ -78,8 +78,18 @@ export default function Header() {
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
           >
             {isMenuOpen
-              ? <X size={20} weight="bold" className="text-background md:w-6 md:h-6" aria-label="Cerrar menú" />
-              : <List size={20} weight="bold" className="text-background md:w-6 md:h-6" aria-label="Abrir menú" />
+              ? <XIcon
+                size={20}
+                weight="bold"
+                className="text-background md:w-6 md:h-6"
+                aria-label="Cerrar menú"
+              />
+              : <ListIcon
+                size={20}
+                weight="bold"
+                className="text-background md:w-6 md:h-6"
+                aria-label="Abrir menú"
+              />
             }
             <span className="text-background md:text-sm font-semibold tracking-wide">Menú</span>
           </Button>

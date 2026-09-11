@@ -15,16 +15,16 @@ const PROBLEMS = [
     title: "Vendiste todo el día. ¿Pero cuánto te quedó?",
     desc: "Al final sacás la plata, contás, restás... y el número nunca cuadra. Ventas sin registrar, fiados que se pierden, gastos que se olvidan. Siempre falta algo.",
     visual: (
-      <div className="w-full h-full flex flex-col justify-center gap-3 px-8 md:px-10" aria-hidden="true">
-        <div className="flex justify-between text-sm border-b border-background/10 pb-3">
+      <div className="w-full h-full flex flex-col justify-center gap-2.5 sm:gap-3 px-6 sm:px-8 md:px-10" aria-hidden="true">
+        <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2.5 sm:pb-3">
           <span className="text-background/60">Ventas del día</span>
           <span className="font-black text-background">$1.250.000</span>
         </div>
-        <div className="flex justify-between text-sm border-b border-background/10 pb-3">
+        <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2.5 sm:pb-3">
           <span className="text-background/60">Gastos varios</span>
           <span className="text-background/30 italic">sin registro</span>
         </div>
-        <div className="flex justify-between text-sm font-bold">
+        <div className="flex justify-between text-xs sm:text-sm font-bold">
           <span className="text-background/80">Ganancia real</span>
           <span className="text-background/25 italic font-normal">sin calcular</span>
         </div>
@@ -36,9 +36,9 @@ const PROBLEMS = [
     title: "Todo vive en tu cabeza. Y eso cansa.",
     desc: "¿Quién te debe? ¿Cuánto abonó? La memoria no es un sistema. Cuando fallás siempre perdés: plata, tiempo o la confianza del cliente.",
     visual: (
-      <div className="w-full h-full flex flex-col justify-center gap-3 px-6 md:px-8" aria-hidden="true">
+      <div className="w-full h-full flex flex-col justify-center gap-2.5 sm:gap-3 px-5 sm:px-6 md:px-8" aria-hidden="true">
         {["¿Ya me abonaron el fiado?", "¿Cuánto stock me queda?", "¿Quién hizo esa venta?"].map((q, i) => (
-          <div key={i} className="bg-background/8 border border-background/12 text-background/75 rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-3">
+          <div key={i} className="bg-background/8 border border-background/12 text-background/75 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 md:py-3 text-xs sm:text-sm font-medium flex items-center gap-2.5 sm:gap-3">
             <span className="w-1.5 h-1.5 rounded-full bg-background/35 shrink-0" />
             {q}
           </div>
@@ -51,18 +51,18 @@ const PROBLEMS = [
     title: "Comprás sin saber. Vendés sin datos.",
     desc: "Pedís más stock porque 'se veía que faltaba'. Luego sobra talla L, falta talla M y el dinero queda parado en el estante.",
     visual: (
-      <div className="w-full h-full flex flex-col justify-center px-8 md:px-10" aria-hidden="true">
-        <p className="text-[10px] uppercase tracking-widest text-background/40 mb-4 font-bold">Inventario</p>
-        <div className="space-y-3">
-          <div className="flex justify-between text-sm border-b border-background/10 pb-2.5">
+      <div className="w-full h-full flex flex-col justify-center px-6 sm:px-8 md:px-10" aria-hidden="true">
+        <p className="text-[10px] uppercase tracking-widest text-background/40 mb-2 sm:mb-3 md:mb-4 font-bold">Inventario</p>
+        <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
+          <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2 sm:pb-2.5">
             <span className="text-background/60">Jeans Slim 32</span>
             <span className="font-black text-red-400">0 uds.</span>
           </div>
-          <div className="flex justify-between text-sm border-b border-background/10 pb-2.5">
+          <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2 sm:pb-2.5">
             <span className="text-background/60">Camiseta M</span>
             <span className="font-black text-yellow-400">1 ud.</span>
           </div>
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-xs sm:text-sm">
             <span className="text-background/60">Camisas L</span>
             <span className="font-black text-background/30">12 uds.</span>
           </div>
@@ -162,20 +162,20 @@ export default function Problem() {
       aria-labelledby="problem-heading"
     >
       <div className="relative h-screen flex flex-col overflow-hidden">
-        <header className="problem-header relative z-20 text-center pt-16 pb-10 px-6 shrink-0">
-          <hgroup className="space-y-1 mb-5">
+        <header className="problem-header relative z-20 text-center pt-8 sm:pt-12 md:pt-14 lg:pt-16 pb-3 sm:pb-4 md:pb-6 px-4 sm:px-6 shrink-0">
+          <hgroup className="space-y-1 mb-2.5 sm:mb-3 md:mb-5">
             <h2
               id="problem-heading"
-              className="problem-fade-up font-heading text-4xl font-black leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl"
+              className="problem-fade-up font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight text-foreground"
             >
               El cuaderno ya no alcanza.
             </h2>
-            <p className="problem-fade-up font-heading text-4xl font-black leading-[1.05] tracking-tight text-foreground/50 sm:text-5xl md:text-6xl">
+            <p className="problem-fade-up font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight text-foreground/50">
               Y tu lo sabés.
             </p>
           </hgroup>
 
-          <p className="problem-fade-up text-base lg:text-lg text-foreground/70 max-w-2xl md:text-lg leading-relaxed mx-auto">
+          <p className="problem-fade-up text-base lg:text-lg text-foreground/70 max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl leading-relaxed mx-auto">
             Hay un punto donde tu negocio crece pero el control no. <strong>Cada día a ciegas</strong>.
           </p>
         </header>
@@ -188,26 +188,25 @@ export default function Problem() {
           {PROBLEMS.map((item, i) => (
             <article
               key={item.id}
-              className="p-card absolute top-1/4 left-1/2 w-full max-w-2xl"
+              className="p-card absolute top-1/2 left-1/2 w-[90%] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl"
               role="group"
               aria-roledescription="diapositiva"
               aria-label={`Problema ${i + 1} de ${PROBLEMS.length}: ${item.title}`}
               aria-hidden={i > 0}
             >
-              <div className="flex flex-col min-h-70 md:h-80">
+              <div className="flex flex-col">
                 <div
-                  className="w-full h-52 md:h-full bg-primary rounded-4xl overflow-hidden relative shrink-0"
+                  className="w-full h-40 sm:h-44 md:h-48 lg:h-52 bg-primary rounded-3xl md:rounded-4xl overflow-hidden relative shrink-0"
                   aria-hidden="true"
                 >
                   {item.visual}
                 </div>
 
-
-                <div className="w-full flex flex-col justify-center items-center px-6 pt-8 pb-4 bg-transparent text-center">
-                  <h3 className="text-3xl lg:text-4xl font-heading font-black leading-[1.05] tracking-tight text-foreground mb-4">
+                <div className="w-full flex flex-col justify-center items-center px-3 sm:px-6 pt-4 sm:pt-5 md:pt-7 pb-2 bg-transparent text-center">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-black leading-[1.1] tracking-tight text-foreground mb-2 sm:mb-3 md:mb-4">
                     {item.title}
                   </h3>
-                  <p className="text-base lg:text-lg text-foreground/70 max-w-2xl md:text-lg leading-relaxed">
+                  <p className="text-base lg:text-lg text-foreground/70 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg leading-relaxed">
                     {item.desc}
                   </p>
                 </div>

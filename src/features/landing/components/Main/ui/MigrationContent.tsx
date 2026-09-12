@@ -36,16 +36,36 @@ const steps: MigrationStep[] = [
 
 export default function MigrationContent() {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
     const frames = gsap.utils.toArray<HTMLElement>(".migration-step-frame");
     if (frames.length < 3) return;
 
+    // Ocultar el indicador inicialmente
+    gsap.set(navRef.current, { opacity: 0, x: 20 });
+
+    // Mostrar el indicador al entrar al primer frame
+    ScrollTrigger.create({
+      trigger: frames[0],
+      start: "top 60%",
+      onEnter: () => gsap.to(navRef.current, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }),
+      onLeaveBack: () => gsap.to(navRef.current, { opacity: 0, x: 20, duration: 0.3, ease: "power2.in" }),
+    });
+
+    // Ocultar el indicador al salir del último frame
+    ScrollTrigger.create({
+      trigger: frames[frames.length - 1],
+      start: "bottom 60%",
+      onEnter: () => gsap.to(navRef.current, { opacity: 0, x: 20, duration: 0.3, ease: "power2.in" }),
+      onLeaveBack: () => gsap.to(navRef.current, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }),
+    });
+
     frames.forEach((frame, idx) => {
       const title = frame.querySelector(".card-step-title");
       const desc = frame.querySelector(".card-step-desc");
 
-      // Estado inicial: ocultos abajo
+      // Estado inicial: ocultos abajo con desplazamiento independiente
       gsap.set(title, { yPercent: 55, opacity: 0 });
       gsap.set(desc, { yPercent: 40, opacity: 0 });
 
@@ -53,36 +73,36 @@ export default function MigrationContent() {
         scrollTrigger: {
           trigger: frame,
           start: "top top",
-          end: "+=110%",
+          end: "+=70%",   // Menor distancia → menos scroll entre cards
           pin: true,
           scrub: 1.1,
           anticipatePin: 1,
         },
       });
 
-      // Entrada tipográfica independiente (título primero, luego desc con desfase)
+      // Entrada: título y desc con desfase cinético
       tl.to(
         title,
-        { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.28 },
+        { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.3 },
         0.05
       )
         .to(
           desc,
-          { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.28 },
-          0.12
+          { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.3 },
+          0.13
         )
-        // Pausa de lectura
-        .to({}, { duration: 0.3 }, 0.4)
-        // Salida
+        // Pausa de lectura cómoda
+        .to({}, { duration: 0.35 }, 0.43)
+        // Salida: título y desc con desfase cinético
         .to(
           title,
           { yPercent: -50, opacity: 0, ease: "power1.in", duration: 0.22 },
-          0.7
+          0.78
         )
         .to(
           desc,
           { yPercent: -65, opacity: 0, ease: "power1.in", duration: 0.22 },
-          0.73
+          0.82
         );
 
       // Actualizar indicador lateral
@@ -91,24 +111,15 @@ export default function MigrationContent() {
 
       tl.to(
         dotActive,
-        { backgroundColor: "#09090B", borderColor: "#09090B", scale: 1.25, duration: 0.04 },
+        { backgroundColor: "#09090B", borderColor: "#09090B", scale: 1.3, duration: 0.05 },
         0.05
       );
 
       if (dotPrev) {
         tl.to(
           dotPrev,
-          { backgroundColor: "transparent", borderColor: "rgba(9, 9, 11, 0.35)", scale: 1, duration: 0.04 },
+          { backgroundColor: "transparent", borderColor: "rgba(9,9,11,0.3)", scale: 1, duration: 0.05 },
           0.05
-        );
-      }
-
-      // En la última card, al salir se apaga el indicador
-      if (idx === frames.length - 1) {
-        tl.to(
-          ".step-diamond-dot",
-          { opacity: 0, duration: 0.18, ease: "power1.in" },
-          0.7
         );
       }
     });
@@ -116,9 +127,10 @@ export default function MigrationContent() {
 
   return (
     <div ref={wrapperRef} className="relative w-full">
-      {/* Indicador vertical de pasos – posición fija relativa al flow */}
+      {/* Indicador lateral – visibilidad controlada por ScrollTrigger */}
       <nav
-        className="fixed right-4 sm:right-8 md:right-12 lg:right-16 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-4 sm:gap-5 pointer-events-none"
+        ref={navRef}
+        className="fixed right-4 sm:right-8 md:right-12 lg:right-16 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-4 sm:gap-5 pointer-events-none opacity-0"
         aria-label="Indicador de pasos de migración"
       >
         {steps.map((step, idx) => (
@@ -134,11 +146,11 @@ export default function MigrationContent() {
         ))}
       </nav>
 
-      {/* Un frame independiente por step – mismo patrón que Problem */}
+      {/* Un frame independiente por step — mismo patrón que Problem */}
       {steps.map((step, idx) => (
         <div
           key={step.id}
-          className="migration-step-frame relative h-screen w-full flex items-center justify-center overflow-hidden px-6 sm:px-12"
+          className="migration-step-frame relative h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6 md:px-10 lg:px-16"
         >
           <MigrationCard step={step} index={idx} />
         </div>

@@ -38,7 +38,7 @@ const PROBLEMS = [
     visual: (
       <div className="w-full mx-auto h-full flex flex-col justify-center gap-2.5 sm:gap-3 px-2 sm:px-4" aria-hidden="true">
         {["¿Ya me abonaron el fiado?", "¿Cuánto stock me queda?", "¿Quién hizo esa venta?"].map((q, i) => (
-          <p key={i} className="border border-primary/20 text-primary px-3.5 sm:px-4 py-2 sm:py-2.5 md:py-3 text-sm sm:text-base font-medium flex items-center gap-2.5 sm:gap-3 rounded-xl bg-background/50">
+          <p key={i} className="text-primary px-3.5 sm:px-4 py-2 sm:py-2.5 md:py-3 text-base font-medium flex items-center gap-2.5 sm:gap-3 rounded-xl bg-background/50">
             <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
             {q}
           </p>
@@ -233,10 +233,10 @@ export default function Problem() {
           >
             <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-16">
               <div className="w-full lg:w-7/12 flex flex-col text-left">
-                <h3 className="card-title font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.08] tracking-tight text-foreground mb-3 sm:mb-5">
+                <h3 className="card-title font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.08] tracking-tight text-foreground mb-3 sm:mb-5">
                   {item.title}
                 </h3>
-                <p className="card-desc text-sm sm:text-base md:text-lg lg:text-xl text-foreground/70 leading-relaxed max-w-xl">
+                <p className="card-desc text-base md:text-lg lg:text-xl text-foreground/70 leading-relaxed max-w-xl">
                   {item.desc}
                 </p>
               </div>

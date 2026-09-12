@@ -15,18 +15,18 @@ const PROBLEMS = [
     title: "Vendiste todo el día. ¿Pero cuánto te quedó?",
     desc: "Al final sacás la plata, contás, restás... y el número nunca cuadra. Ventas sin registrar, fiados que se pierden, gastos que se olvidan. Siempre falta algo.",
     visual: (
-      <div className="w-full h-full flex flex-col justify-center gap-2.5 sm:gap-3 px-6 sm:px-8 md:px-10" aria-hidden="true">
-        <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2.5 sm:pb-3">
-          <span className="text-background/60">Ventas del día</span>
-          <span className="font-black text-background">$1.250.000</span>
+      <div className="w-full h-full flex flex-col justify-center gap-2.5 sm:gap-3 px-2 sm:px-4" aria-hidden="true">
+        <div className="flex justify-between text-base lg:text-lg border-b border-primary/10 pb-2.5 sm:pb-3">
+          <span className="text-primary/60">Ventas del día</span>
+          <span className="font-bold text-primary">$1.250.000</span>
         </div>
-        <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2.5 sm:pb-3">
-          <span className="text-background/60">Gastos varios</span>
-          <span className="text-background/30 italic">sin registro</span>
+        <div className="flex justify-between text-base lg:text-lg border-b border-primary/10 pb-2.5 sm:pb-3">
+          <span className="text-primary/60">Gastos varios</span>
+          <span className="text-primary/30 italic">sin registro</span>
         </div>
-        <div className="flex justify-between text-xs sm:text-sm font-bold">
-          <span className="text-background/80">Ganancia real</span>
-          <span className="text-background/25 italic font-normal">sin calcular</span>
+        <div className="flex justify-between text-base lg:text-lg font-bold">
+          <span className="text-primary/80">Ganancia real</span>
+          <span className="text-primary/30 italic font-normal">sin calcular</span>
         </div>
       </div>
     ),
@@ -36,12 +36,12 @@ const PROBLEMS = [
     title: "Todo vive en tu cabeza. Y eso cansa.",
     desc: "¿Quién te debe? ¿Cuánto abonó? La memoria no es un sistema. Cuando fallás siempre perdés: plata, tiempo o la confianza del cliente.",
     visual: (
-      <div className="w-full h-full flex flex-col justify-center gap-2.5 sm:gap-3 px-5 sm:px-6 md:px-8" aria-hidden="true">
+      <div className="w-full mx-auto h-full flex flex-col justify-center gap-2.5 sm:gap-3 px-2 sm:px-4" aria-hidden="true">
         {["¿Ya me abonaron el fiado?", "¿Cuánto stock me queda?", "¿Quién hizo esa venta?"].map((q, i) => (
-          <div key={i} className="bg-background/8 border border-background/12 text-background/75 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 md:py-3 text-xs sm:text-sm font-medium flex items-center gap-2.5 sm:gap-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-background/35 shrink-0" />
+          <p key={i} className="border border-primary/20 text-primary px-3.5 sm:px-4 py-2 sm:py-2.5 md:py-3 text-sm sm:text-base font-medium flex items-center gap-2.5 sm:gap-3 rounded-xl bg-background/50">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
             {q}
-          </div>
+          </p>
         ))}
       </div>
     ),
@@ -51,20 +51,20 @@ const PROBLEMS = [
     title: "Comprás sin saber. Vendés sin datos.",
     desc: "Pedís más stock porque 'se veía que faltaba'. Luego sobra talla L, falta talla M y el dinero queda parado en el estante.",
     visual: (
-      <div className="w-full h-full flex flex-col justify-center px-6 sm:px-8 md:px-10" aria-hidden="true">
-        <p className="text-[10px] uppercase tracking-widest text-background/40 mb-2 sm:mb-3 md:mb-4 font-bold">Inventario</p>
+      <div className="w-full h-full flex flex-col justify-center px-2 sm:px-4" aria-hidden="true">
+        <p className="text-xs uppercase tracking-widest text-primary/70 mb-2 sm:mb-3 md:mb-4 font-bold">Inventario</p>
         <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
-          <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2 sm:pb-2.5">
-            <span className="text-background/60">Jeans Slim 32</span>
-            <span className="font-black text-red-400">0 uds.</span>
+          <div className="flex justify-between text-base lg:text-lg border-b border-primary/10 pb-2 sm:pb-2.5">
+            <span className="text-primary/60">Jeans Slim 32</span>
+            <span className="font-bold text-primary">0 uds.</span>
           </div>
-          <div className="flex justify-between text-xs sm:text-sm border-b border-background/10 pb-2 sm:pb-2.5">
-            <span className="text-background/60">Camiseta M</span>
-            <span className="font-black text-yellow-400">1 ud.</span>
+          <div className="flex justify-between text-base lg:text-lg border-b border-primary/10 pb-2 sm:pb-2.5">
+            <span className="text-primary/60">Camiseta M</span>
+            <span className="font-bold text-primary">1 ud.</span>
           </div>
-          <div className="flex justify-between text-xs sm:text-sm">
-            <span className="text-background/60">Camisas L</span>
-            <span className="font-black text-background/30">12 uds.</span>
+          <div className="flex justify-between text-base lg:text-lg">
+            <span className="text-primary/60">Camisas L</span>
+            <span className="font-bold text-primary">12 uds.</span>
           </div>
         </div>
       </div>
@@ -73,147 +73,181 @@ const PROBLEMS = [
 ] as const;
 
 export default function Problem() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const introStageRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    const cards = gsap.utils.toArray<HTMLElement>(".p-card");
-    const vw = window.innerWidth;
-
-    gsap.set(cards, {
-      x: -vw * 0.55,
-      opacity: 0,
-      scale: 0.88,
-      xPercent: -50,
-      yPercent: -50,
-      transformOrigin: "center center",
-    });
-
-    const tl = gsap.timeline({
+    const introTl = gsap.timeline({
       scrollTrigger: {
-        trigger: sectionRef.current,
+        trigger: introStageRef.current,
         start: "top top",
-        end: "+=" + (vw < 768 ? window.innerHeight * 3.8 : window.innerHeight * 3.2),
+        end: "+=160%",
         pin: true,
-        scrub: 1.8,
+        scrub: 1.2,
         anticipatePin: 1,
       },
     });
 
-    tl.
-      fromTo(".problem-fade-up",
-        { opacity: 0, y: 38 },
-        { opacity: 1, y: 0, stagger: 0.025, duration: 0.08, ease: "power3.out" }, 0.04
+    introTl.fromTo(
+      ".problem-title-phrase",
+      { opacity: 0, y: 35 },
+      {
+        opacity: 1,
+        y: 0,
+        stagger: 0.1,
+        duration: 0.22,
+        ease: "power2.out",
+      },
+      0
+    )
+      .to({}, { duration: 0.16 }, 0.22)
+      .to(
+        ".problem-title-stage",
+        {
+          opacity: 0,
+          y: -45,
+          scale: 0.97,
+          duration: 0.12,
+          ease: "power2.in",
+        },
+        0.38
+      )
+      .fromTo(
+        ".problem-desc-stage",
+        { opacity: 0, y: 50, scale: 0.96 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.2,
+          ease: "power2.out",
+        },
+        0.50
+      )
+      .to({}, { duration: 0.18 }, 0.70)
+      .to(
+        ".problem-desc-stage",
+        {
+          opacity: 0,
+          y: -35,
+          duration: 0.12,
+          ease: "power2.in",
+        },
+        0.88
       );
 
-    tl.to(cards[0], {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      duration: 0.2,
-      ease: "power3.out",
-    }, 0.14);
+    const cardFrames = gsap.utils.toArray<HTMLElement>(".problem-card-frame");
 
-    tl
-      .to(cards[0], {
-        x: vw * 0.40,
-        scale: 0.5,
-        opacity: 0.38,
-        duration: 0.22,
-        ease: "power2.inOut",
-      }, 0.38)
-      .to(cards[1], {
-        x: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.2,
-        ease: "power3.out",
-      }, 0.42);
+    cardFrames.forEach((frame) => {
+      const cardTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: frame,
+          start: "top top",
+          end: "+=120%",
+          pin: true,
+          scrub: 1.1,
+          anticipatePin: 1,
+        },
+      });
 
-    tl
-      .to(cards[0], {
-        x: vw * 0.60,
-        scale: 0.32,
-        opacity: 0.16,
-        duration: 0.22,
-      }, 0.62)
-      .to(cards[1], {
-        x: vw * 0.38,
-        scale: 0.52,
-        opacity: 0.40,
-        duration: 0.22,
-        ease: "power2.inOut",
-      }, 0.62)
-      .to(cards[2], {
-        x: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.2,
-        ease: "power3.out",
-      }, 0.67);
-
-    tl.to({}, { duration: 0.12 }, 0.88);
-  }, { scope: sectionRef });
+      cardTl.fromTo(
+        frame.querySelector(".card-title"),
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.25,
+          ease: "power2.out",
+        },
+        0
+      )
+        .fromTo(
+          frame.querySelector(".card-desc"),
+          { opacity: 0, y: 25 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.25,
+            ease: "power2.out",
+          },
+          0.2
+        )
+        .fromTo(
+          frame.querySelector(".card-visual"),
+          { opacity: 0, y: 35, scale: 0.95 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          },
+          0.4
+        )
+        .to({}, { duration: 0.35 }, 0.65);
+    });
+  }, { scope: containerRef });
 
   return (
     <section
-      ref={sectionRef}
+      ref={containerRef}
       id="problem"
       className="relative bg-background"
       aria-labelledby="problem-heading"
     >
-      <div className="relative h-screen flex flex-col overflow-hidden">
-        <header className="problem-header relative z-20 text-center pt-8 sm:pt-12 md:pt-14 lg:pt-16 pb-3 sm:pb-4 md:pb-6 px-4 sm:px-6 shrink-0">
-          <hgroup className="space-y-1 mb-2.5 sm:mb-3 md:mb-5">
+      <div
+        ref={introStageRef}
+        className="relative h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6"
+      >
+        <div className="problem-title-stage absolute inset-0 flex items-center justify-center px-4 sm:px-6 pointer-events-none">
+          <hgroup className="text-center space-y-2 sm:space-y-3 max-w-4xl">
             <h2
               id="problem-heading"
-              className="problem-fade-up font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight text-foreground"
+              className="problem-title-phrase font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight text-foreground"
             >
               El cuaderno ya no alcanza.
             </h2>
-            <p className="problem-fade-up font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight text-foreground/50">
+            <p className="problem-title-phrase block font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight text-foreground/50">
               Y tu lo sabés.
             </p>
           </hgroup>
+        </div>
+        <div className="problem-desc-stage absolute inset-0 flex items-center justify-center px-4 sm:px-6 pointer-events-none opacity-0">
+          <div className="max-w-3xl text-center space-y-4 sm:space-y-6">
+            <p className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] tracking-tight text-foreground">
+              Hay un punto donde tu negocio crece pero el control no.
+            </p>
+            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-black text-foreground/45 leading-[1.2] tracking-tight">
+              Cada día a ciegas.
+            </p>
+          </div>
+        </div>
+      </div>
 
-          <p className="problem-fade-up text-base lg:text-lg text-foreground/70 max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl leading-relaxed mx-auto">
-            Hay un punto donde tu negocio crece pero el control no. <strong>Cada día a ciegas</strong>.
-          </p>
-        </header>
-
-        <div
-          className="relative flex-1"
-          style={{ overflow: "visible" }}
-          aria-label="Fricciones del negocio"
-        >
-          {PROBLEMS.map((item, i) => (
-            <article
-              key={item.id}
-              className="p-card absolute top-1/2 left-1/2 w-[90%] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl"
-              role="group"
-              aria-roledescription="diapositiva"
-              aria-label={`Problema ${i + 1} de ${PROBLEMS.length}: ${item.title}`}
-              aria-hidden={i > 0}
-            >
-              <div className="flex flex-col">
-                <div
-                  className="w-full h-40 sm:h-44 md:h-48 lg:h-52 bg-primary rounded-3xl md:rounded-4xl overflow-hidden relative shrink-0"
-                  aria-hidden="true"
-                >
+      <div className="problem-cards-wrapper relative w-full">
+        {PROBLEMS.map((item, i) => (
+          <article
+            key={item.id}
+            className="problem-card-frame relative h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6 md:px-10 lg:px-16"
+            aria-label={`Problema ${i + 1} de ${PROBLEMS.length}: ${item.title}`}
+          >
+            <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-16">
+              <div className="w-full lg:w-7/12 flex flex-col text-left">
+                <h3 className="card-title font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.08] tracking-tight text-foreground mb-3 sm:mb-5">
+                  {item.title}
+                </h3>
+                <p className="card-desc text-sm sm:text-base md:text-lg lg:text-xl text-foreground/70 leading-relaxed max-w-xl">
+                  {item.desc}
+                </p>
+              </div>
+              <div className="card-visual w-full lg:w-5/12 flex items-center justify-center">
+                <div className="w-full max-w-md lg:max-w-none rounded-3xl md:rounded-4xl border border-primary/10 bg-background/80 shadow-sm p-6 sm:p-8 flex flex-col justify-center min-h-50 sm:min-h-60 lg:min-h-70">
                   {item.visual}
                 </div>
-
-                <div className="w-full flex flex-col justify-center items-center px-3 sm:px-6 pt-4 sm:pt-5 md:pt-7 pb-2 bg-transparent text-center">
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-black leading-[1.1] tracking-tight text-foreground mb-2 sm:mb-3 md:mb-4">
-                    {item.title}
-                  </h3>
-                  <p className="text-base lg:text-lg text-foreground/70 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
               </div>
-            </article>
-          ))}
-        </div>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );

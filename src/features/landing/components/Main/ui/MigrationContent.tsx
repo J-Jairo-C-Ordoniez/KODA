@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
@@ -35,126 +35,180 @@ const steps: MigrationStep[] = [
 ];
 
 export default function MigrationContent() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const activeStepRef = useRef(0);
 
-  useGSAP(() => {
-    const frames = gsap.utils.toArray<HTMLElement>(".migration-step-frame");
-    if (frames.length < 3) return;
+  useGSAP(
+    () => {
+      const isReduced =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Ocultar el indicador inicialmente
-    gsap.set(navRef.current, { opacity: 0, x: 20 });
+      if (isReduced) {
+        gsap.set(".migration-card-item", { opacity: 1, y: 0, position: "relative" });
+        if (navRef.current) gsap.set(navRef.current, { display: "none" });
+        return;
+      }
 
-    // Mostrar el indicador al entrar al primer frame
-    ScrollTrigger.create({
-      trigger: frames[0],
-      start: "top 60%",
-      onEnter: () => gsap.to(navRef.current, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }),
-      onLeaveBack: () => gsap.to(navRef.current, { opacity: 0, x: 20, duration: 0.3, ease: "power2.in" }),
-    });
+      gsap.set(".migration-card-item-0", { opacity: 1, y: 0 });
+      gsap.set([".migration-card-item-1", ".migration-card-item-2"], {
+        opacity: 0,
+        y: 35,
+      });
 
-    // Ocultar el indicador al salir del último frame
-    ScrollTrigger.create({
-      trigger: frames[frames.length - 1],
-      start: "bottom 60%",
-      onEnter: () => gsap.to(navRef.current, { opacity: 0, x: 20, duration: 0.3, ease: "power2.in" }),
-      onLeaveBack: () => gsap.to(navRef.current, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }),
-    });
-
-    frames.forEach((frame, idx) => {
-      const title = frame.querySelector(".card-step-title");
-      const desc = frame.querySelector(".card-step-desc");
-
-      // Estado inicial: ocultos abajo con desplazamiento independiente
-      gsap.set(title, { yPercent: 55, opacity: 0 });
-      gsap.set(desc, { yPercent: 40, opacity: 0 });
+      gsap.set(navRef.current, { opacity: 0, x: 20 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: frame,
+          trigger: stageRef.current,
           start: "top top",
-          end: "+=70%",   // Menor distancia → menos scroll entre cards
+          end: "+=180%",
           pin: true,
           scrub: 1.1,
           anticipatePin: 1,
+          onEnter: () =>
+            gsap.to(navRef.current, {
+              opacity: 1,
+              x: 0,
+              duration: 0.35,
+              ease: "power2.out",
+            }),
+          onLeaveBack: () =>
+            gsap.to(navRef.current, {
+              opacity: 0,
+              x: 20,
+              duration: 0.25,
+              ease: "power2.in",
+            }),
+          onLeave: () =>
+            gsap.to(navRef.current, {
+              opacity: 0,
+              x: 20,
+              duration: 0.3,
+              ease: "power2.in",
+            }),
+          onEnterBack: () =>
+            gsap.to(navRef.current, {
+              opacity: 1,
+              x: 0,
+              duration: 0.35,
+              ease: "power2.out",
+            }),
+          onUpdate: (self) => {
+            const p = self.progress;
+            let current = 0;
+            if (p >= 0.62) {
+              current = 2;
+            } else if (p >= 0.30) {
+              current = 1;
+            } else {
+              current = 0;
+            }
+
+            if (activeStepRef.current !== current) {
+              activeStepRef.current = current;
+              setActiveStep(current);
+            }
+          },
         },
       });
 
-      // Entrada: título y desc con desfase cinético
-      tl.to(
-        title,
-        { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.3 },
-        0.05
-      )
-        .to(
-          desc,
-          { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.3 },
-          0.13
-        )
-        // Pausa de lectura cómoda
-        .to({}, { duration: 0.35 }, 0.43)
-        // Salida: título y desc con desfase cinético
-        .to(
-          title,
-          { yPercent: -50, opacity: 0, ease: "power1.in", duration: 0.22 },
-          0.78
-        )
-        .to(
-          desc,
-          { yPercent: -65, opacity: 0, ease: "power1.in", duration: 0.22 },
-          0.82
-        );
-
-      // Actualizar indicador lateral
-      const dotActive = `.step-dot-${idx}`;
-      const dotPrev = idx > 0 ? `.step-dot-${idx - 1}` : null;
+      scrollTriggerRef.current = tl.scrollTrigger ?? null;
 
       tl.to(
-        dotActive,
-        { backgroundColor: "#09090B", borderColor: "#09090B", scale: 1.3, duration: 0.05 },
-        0.05
+        ".migration-card-item-0",
+        { opacity: 0, y: -30, duration: 0.35, ease: "power2.in" },
+        0.65
+      ).to(
+        ".migration-card-item-1",
+        { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+        0.70
       );
 
-      if (dotPrev) {
-        tl.to(
-          dotPrev,
-          { backgroundColor: "transparent", borderColor: "rgba(9,9,11,0.3)", scale: 1, duration: 0.05 },
-          0.05
-        );
-      }
+      tl.to(
+        ".migration-card-item-1",
+        { opacity: 0, y: -30, duration: 0.35, ease: "power2.in" },
+        1.70
+      ).to(
+        ".migration-card-item-2",
+        { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+        1.75
+      );
+
+      tl.to({}, { duration: 0.85 }, 2.10);
+    },
+    { scope: stageRef }
+  );
+
+  const handleStepClick = (idx: number) => {
+    const st = scrollTriggerRef.current;
+    if (!st) return;
+
+    const targetProgress = [0.15, 0.48, 0.85][idx] ?? 0;
+    const targetY = st.start + (st.end - st.start) * targetProgress;
+
+    window.scrollTo({
+      top: targetY,
+      behavior: "smooth",
     });
-  }, { scope: wrapperRef });
+  };
 
   return (
-    <div ref={wrapperRef} className="relative w-full">
-      {/* Indicador lateral – visibilidad controlada por ScrollTrigger */}
+    <div
+      ref={stageRef}
+      className="migration-cards-stage relative h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6 md:px-10 lg:px-16"
+    >
       <nav
         ref={navRef}
-        className="fixed right-4 sm:right-8 md:right-12 lg:right-16 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-4 sm:gap-5 pointer-events-none opacity-0"
-        aria-label="Indicador de pasos de migración"
+        className="fixed right-4 sm:right-8 md:right-12 lg:right-16 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-3 sm:gap-4 opacity-0 pointer-events-auto"
+        aria-label="Progreso de pasos de migración"
       >
-        {steps.map((step, idx) => (
-          <div key={step.id} className="flex items-center">
-            <span
-              className={`step-diamond-dot step-dot-${idx} block w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 ${
-                idx === 0
-                  ? "bg-primary border border-primary scale-125"
-                  : "bg-transparent border border-foreground/25"
-              }`}
-            />
-          </div>
-        ))}
+        <ol className="flex flex-col items-center gap-3 sm:gap-4" role="list">
+          {steps.map((step, idx) => {
+            const isActive = activeStep === idx;
+            return (
+              <li key={step.id}>
+                <button
+                  type="button"
+                  onClick={() => handleStepClick(idx)}
+                  className="group relative flex items-center justify-center p-2 rounded-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-transform active:scale-95"
+                  aria-label={`Paso ${step.number}: ${step.title}`}
+                  aria-current={isActive ? "step" : undefined}
+                >
+                  <span className="sr-only">
+                    {`Paso ${step.number}: ${step.title}${isActive ? " (Paso actual)" : ""}`}
+                  </span>
+                  <span
+                    className={`step-diamond-dot step-dot-${idx} block w-2.5 h-2.5 sm:w-3 sm:h-3 rotate-45 transition-all duration-300 ${
+                      isActive
+                        ? "bg-primary border border-primary scale-125 shadow-xs"
+                        : "bg-transparent border border-foreground/30 hover:border-foreground/60 hover:scale-110"
+                    }`}
+                  />
+                </button>
+              </li>
+            );
+          })}
+        </ol>
       </nav>
 
-      {/* Un frame independiente por step — mismo patrón que Problem */}
-      {steps.map((step, idx) => (
-        <div
-          key={step.id}
-          className="migration-step-frame relative h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6 md:px-10 lg:px-16"
-        >
-          <MigrationCard step={step} index={idx} />
-        </div>
-      ))}
+      <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center min-h-70 sm:min-h-80">
+        <ol className="relative w-full" role="list">
+          {steps.map((step, idx) => (
+            <li
+              key={step.id}
+              className={`migration-card-item migration-card-item-${idx} ${
+                idx === 0 ? "relative" : "absolute inset-0"
+              } flex items-center justify-center`}
+            >
+              <MigrationCard step={step} index={idx} />
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }

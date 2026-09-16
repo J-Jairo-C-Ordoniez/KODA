@@ -32,7 +32,7 @@ export default function Features() {
     <section
       ref={containerRef}
       id="features"
-      className="relative bg-background py-16 md:py-24"
+      className="relative bg-background pt-8 pb-16 md:pt-14 md:pb-24"
     >
       <div className="mx-auto max-w-6xl px-6">
         <header className="features-header mx-auto mb-16 max-w-4xl text-center md:mb-24 opacity-0">

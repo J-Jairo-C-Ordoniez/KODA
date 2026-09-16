@@ -61,17 +61,17 @@ export default function Header() {
   return (
     <header
       ref={containerRef}
-      className="relative z-1001 flex w-full items-center justify-center px-4 sm:px-8 pt-6 pb-4 md:pt-10 md:pb-6 bg-transparent"
+      className="relative z-1001 flex w-full items-center justify-center px-4 sm:px-6 md:px-8 pt-5 pb-4 md:pt-10 md:pb-6 bg-transparent"
     >
-      <div className="relative z-1002 flex w-full items-center justify-between gap-4 lg:w-auto lg:justify-center lg:gap-6">
+      <div className="relative z-1002 flex w-full items-center justify-between gap-3 sm:gap-4 lg:w-auto lg:justify-center lg:gap-6">
         <div className="logo flex shrink-0 items-center drop-shadow-md">
           <Logo />
         </div>
 
-        <div className="menu-content flex h-14 md:h-15 items-center rounded-full gap-1 md:gap-2 bg-primary p-1.5 shadow-lg">
+        <div className="menu-content flex h-12 sm:h-14 md:h-15 items-center rounded-full gap-1 md:gap-2 bg-primary p-1.5 shadow-lg shrink-0">
           <Button
             variant="primary"
-            className="menu-button h-full px-4 md:px-6 bg-transparent hover:bg-background/20 rounded-l-full"
+            className="menu-button h-full px-3 sm:px-4 md:px-6 bg-transparent hover:bg-background/20 rounded-l-full"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -79,25 +79,25 @@ export default function Header() {
           >
             {isMenuOpen
               ? <XIcon
-                size={20}
+                size={18}
                 weight="bold"
-                className="text-background md:w-6 md:h-6"
+                className="text-background sm:w-5 sm:h-5 md:w-6 md:h-6"
                 aria-label="Cerrar menú"
               />
               : <ListIcon
-                size={20}
+                size={18}
                 weight="bold"
-                className="text-background md:w-6 md:h-6"
+                className="text-background sm:w-5 sm:h-5 md:w-6 md:h-6"
                 aria-label="Abrir menú"
               />
             }
-            <span className="text-background md:text-sm font-semibold tracking-wide">Menú</span>
+            <span className="text-background text-xs sm:text-sm font-semibold tracking-wide">Menú</span>
           </Button>
 
           <Button
             href="/auth/register"
             variant="secondary"
-            className="menu-button h-full px-6 md:px-8 bg-background rounded-full"
+            className="menu-button h-full px-4 sm:px-6 md:px-8 bg-background rounded-full text-sm"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}

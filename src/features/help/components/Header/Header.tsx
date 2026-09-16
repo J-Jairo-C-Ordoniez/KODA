@@ -1,43 +1,112 @@
 "use client";
 
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ListIcon, XIcon } from '@phosphor-icons/react';
 
 import Logo from '@/shared/components/Logo';
 import Button from '@/shared/components/Button';
-import Nav from '@/features/legal/components/Header/ui/Menu';
+import Nav from '@/features/help/components/Header/ui/Menu';
+
+gsap.registerPlugin(useGSAP);
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const containerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, []);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      defaults: { ease: 'power3.out', duration: 1 },
+    });
+
+    tl
+      .from('.logo', { autoAlpha: 0, x: -60, scale: 0 })
+      .from('.menu-content', { autoAlpha: 0, x: 60, scale: 0 })
+      .from('.menu-button', { autoAlpha: 0, scale: 0 }, '-=0.5');
+  }, { scope: containerRef });
 
   return (
-    <header className="h-16 flex justify-center items-center w-full transition-all duration-500">
-      <div className="flex items-center justify-between w-full h-full">
-        <div className="w-[70%] h-16 bg-transparent flex items-center px-40 py-4">
+    <header
+      ref={containerRef}
+      className="relative z-1001 flex w-full items-center justify-center px-4 sm:px-6 md:px-8 pt-5 pb-4 md:pt-10 md:pb-6 bg-transparent"
+    >
+      <div className="relative z-1002 flex w-full items-center justify-between gap-3 sm:gap-4 lg:w-auto lg:justify-center lg:gap-6">
+        <div className="logo flex shrink-0 items-center drop-shadow-md">
           <Logo />
         </div>
 
-        <div className="w-[30%] h-16 bg-primary flex items-center justify-center">
+        <div className="menu-content flex h-12 sm:h-14 md:h-15 items-center rounded-full gap-1 md:gap-2 bg-primary p-1.5 shadow-lg shrink-0">
           <Button
-            variant="ghost"
+            variant="primary"
+            className="menu-button h-full px-3 sm:px-4 md:px-6 bg-transparent hover:bg-background/20 rounded-l-full"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-expanded={isMenuOpen}
-            aria-controls="menu"
+            aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
           >
             {isMenuOpen
-              ? <X size={24} className="text-foreground-muted" aria-label="Cerrar menú" />
-              : <Menu size={24} className="text-foreground-muted" aria-label="Abrir menú" />
+              ? <XIcon
+                size={18}
+                weight="bold"
+                className="text-background sm:w-5 sm:h-5 md:w-6 md:h-6"
+                aria-label="Cerrar menú"
+              />
+              : <ListIcon
+                size={18}
+                weight="bold"
+                className="text-background sm:w-5 sm:h-5 md:w-6 md:h-6"
+                aria-label="Abrir menú"
+              />
             }
+            <span className="text-background text-xs sm:text-sm font-semibold tracking-wide">Menú</span>
+          </Button>
+
+          <Button
+            href="/auth/register"
+            variant="secondary"
+            className="menu-button h-full px-4 sm:px-6 md:px-8 bg-background rounded-full text-sm"
+          >
+            Comenzar
           </Button>
         </div>
       </div>
 
-      {isMenuOpen && (
-        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú móvil">
-          <Nav setIsMenuOpen={setIsMenuOpen} />
-        </div>
-      )}
+      <div
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú móvil"
+        className={`fixed inset-0 z-900 ${isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      >
+        <Nav
+          setIsMenuOpen={setIsMenuOpen}
+          isOpen={isMenuOpen}
+        />
+      </div>
     </header>
   );
 }

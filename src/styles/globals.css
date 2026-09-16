@@ -132,9 +132,9 @@ body {
 }
 
 .migration-card-frame {
-  --migration-float-x: clamp(6.75rem, 27vw, 11.5rem);
-  --migration-float-y: clamp(10.25rem, 29vh, 12.75rem);
-  --migration-float-size: clamp(3.25rem, 15vw, 4.75rem);
+  --migration-float-x: clamp(7.5rem, 28vw, 12rem);
+  --migration-float-y: clamp(9.5rem, 27vh, 12rem);
+  --migration-float-size: clamp(4.5rem, 16vw, 6rem);
 }
 
 .migration-float-item {
@@ -142,7 +142,6 @@ body {
   z-index: 0;
   pointer-events: none;
   width: var(--migration-float-size);
-  aspect-ratio: 1;
   color: var(--color-foreground);
   opacity: 0;
   will-change: transform, opacity;
@@ -177,17 +176,17 @@ body {
 
 @media (min-width: 768px) {
   .migration-card-frame {
-    --migration-float-x: clamp(14.5rem, 31vw, 19rem);
-    --migration-float-y: clamp(11rem, 23vh, 14rem);
-    --migration-float-size: clamp(4.75rem, 8vw, 6rem);
+    --migration-float-x: clamp(15rem, 32vw, 20rem);
+    --migration-float-y: clamp(10.5rem, 22vh, 13.5rem);
+    --migration-float-size: clamp(5.5rem, 9vw, 7rem);
   }
 }
 
 @media (min-width: 1024px) {
   .migration-card-frame {
-    --migration-float-x: clamp(20rem, 29vw, 26rem);
-    --migration-float-y: clamp(11.5rem, 24vh, 15.5rem);
-    --migration-float-size: clamp(5.25rem, 6vw, 6.75rem);
+    --migration-float-x: clamp(21rem, 30vw, 27rem);
+    --migration-float-y: clamp(11rem, 23vh, 15rem);
+    --migration-float-size: clamp(6rem, 6.5vw, 7.5rem);
   }
 }
 

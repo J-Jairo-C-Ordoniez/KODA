@@ -7,20 +7,20 @@ import ModernAppMockup from "@/features/landing/components/Main/ui/ModernAppMock
 const featureSteps = [
     {
         id: "nav",
-        title: "Encuentra todo sin pensar",
-        description: "Un menú principal siempre visible y submódulos que aparecen solo cuando los necesitas. Navegar por tu negocio nunca fue tan intuitivo.",
+        title: "Encuentras todo al instante",
+        description: "Menús claros que no te marean. Usar tu sistema es tan fácil y rápido como revisar tu celular. Sin opciones extrañas estorbando.",
         icon: <FolderOpen size={20} />,
     },
     {
         id: "workspace",
-        title: "Espacio para lo que importa",
-        description: "Al vender o cobrar, el menú se aparta para darte una pantalla limpia. Cero distracciones para que tú y tus empleados operen con agilidad quirúrgica.",
+        title: "Pantalla libre para vender",
+        description: "Al cobrar, los menús se ocultan solos. Tú y tus vendedores se enfocan en despachar rápido al cliente que tienen enfrente, sin distracciones.",
         icon: <PanelLeftClose size={20} />,
     },
     {
         id: "metrics",
-        title: "El cerebro del negocio",
-        description: "Métricas claras, deudores y stock en un solo pantallazo. Obtienes visibilidad total de tu local para tomar decisiones con datos, no con corazonadas.",
+        title: "El pulso de tu local",
+        description: "¿Cuánto llevas vendido hoy? ¿Quién te debe? Lo ves todo de un vistazo. Se acabaron las horas sumando tickets al final del día.",
         icon: <LayoutDashboard size={20} />,
     },
 ] as const;
@@ -40,9 +40,9 @@ export default function FeatureContent() {
                         <button
                             key={feature.id}
                             onClick={() => setActiveStep(feature.id)}
-                            className={`group relative flex flex-col items-start rounded-2xl border px-5 py-3 text-left transition-all duration-300 cursor-pointer ${isActive
+                            className={`feature-card opacity-0 group relative flex flex-col items-start rounded-2xl border px-5 py-3 text-left transition-all duration-300 cursor-pointer ${isActive
                                 ? "border-primary/50 bg-primary text-foreground-muted shadow-2xl shadow-primary/5"
-                                : "border-primary/10 bg-background text-primary shadow-xl shadow-primary/2"
+                                : "border-primary/10 bg-background text-primary shadow-xl shadow-primary/2 hover:bg-background/80"
                                 }`}
                         >
                             <div className="flex w-full items-center gap-4">
@@ -66,7 +66,7 @@ export default function FeatureContent() {
                 })}
             </div>
 
-            <aside className="w-full md:col-span-7">
+            <aside className="feature-mockup opacity-0 w-full md:col-span-7">
                 <ModernAppMockup step={activeStep} />
             </aside>
         </div>

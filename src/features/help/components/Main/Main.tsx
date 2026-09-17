@@ -26,10 +26,10 @@ export default function Main() {
         <main className="min-h-screen animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
             <div className="mx-auto max-w-6xl min-h-screen px-20 py-16 md:py-24">
                 <header className="mb-14 border-b border-primary/10 pb-10 space-y-6 mx-auto">
-                    <h1 className="font-heading text-4xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+                    <h1 className="font-heading text-4xl font-black leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
                         ¿Cómo podemos ayudarte?
                     </h1>
-                    <p className="text-lg leading-relaxed text-foreground/80 whitespace-pre-wrap">
+                    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-foreground/75 whitespace-pre-wrap">
                         Resolvamos cualquier problema para que tu negocio no se detenga.
                     </p>
                 </header>

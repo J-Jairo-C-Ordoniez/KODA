@@ -21,11 +21,11 @@ export default function LegalContent({ title }: Props) {
                 {policy && (
                     <section className="mx-auto max-w-6xl px-6">
                         <header className="mb-14 border-b border-primary/10 pb-10 space-y-6">
-                            <h1 className="font-heading text-4xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+                            <h1 className="font-heading text-4xl font-black leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
                                 {policy.title}
                             </h1>
 
-                            <span className="mx-auto text-base font-normal leading-relaxed text-foreground/80 sm:text-lg">
+                            <span className="mx-auto text-base font-normal leading-relaxed text-foreground/75 sm:text-lg md:text-xl">
                                 <time dateTime={policy.content.lastUpdate}>
                                     Última actualización: {dateFormatter(new Date(policy.content.lastUpdate))}
                                 </time>

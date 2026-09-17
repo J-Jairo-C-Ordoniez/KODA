@@ -37,7 +37,7 @@ export default function Features() {
       scrollTrigger: {
         trigger: introStageRef.current,
         start: "top top",
-        end: "+=160%",
+        end: "+=80%",
         pin: true,
         scrub: 1.2,
         anticipatePin: 1,
@@ -68,29 +68,6 @@ export default function Features() {
           ease: "power2.in",
         },
         0.38
-      )
-      .fromTo(
-        ".features-desc-stage",
-        { opacity: 0, y: 50, scale: 0.96 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.2,
-          ease: "power2.out",
-        },
-        0.50
-      )
-      .to({}, { duration: 0.18 }, 0.70)
-      .to(
-        ".features-desc-stage",
-        {
-          opacity: 0,
-          y: -35,
-          duration: 0.12,
-          ease: "power2.in",
-        },
-        0.88
       );
 
     const cardFrames = gsap.utils.toArray<HTMLElement>(".feature-card-frame");
@@ -148,7 +125,7 @@ export default function Features() {
     >
       <header
         ref={introStageRef}
-        className="relative h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6"
+        className="relative h-[80vh] w-full flex items-center justify-center overflow-hidden px-4 sm:px-6"
       >
         <div className="features-title-stage absolute inset-0 flex items-center justify-center px-4 sm:px-6 pointer-events-none">
           <hgroup className="text-center space-y-2 sm:space-y-3 max-w-4xl">
@@ -162,16 +139,6 @@ export default function Features() {
               Cero enredos.
             </p>
           </hgroup>
-        </div>
-        <div className="features-desc-stage absolute inset-0 flex items-center justify-center px-4 sm:px-6 pointer-events-none opacity-0">
-          <div className="max-w-3xl text-center space-y-4 sm:space-y-6">
-            <p className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] tracking-tight text-foreground">
-              Diseñamos un sistema que se siente natural.
-            </p>
-            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-black text-foreground/45 leading-[1.2] tracking-tight">
-              Sin menús complicados ni manuales larguísimos. Abres tu caja y estás listo para vender.
-            </p>
-          </div>
         </div>
       </header>
 

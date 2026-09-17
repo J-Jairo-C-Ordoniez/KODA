@@ -54,7 +54,6 @@ export default function Header() {
     { name: 'Problema', href: '#problem' },
     { name: 'Migración', href: '#migration' },
     { name: 'Funcionalidades', href: '#features' },
-    { name: 'Ventas WhatsApp', href: '#whatsapp-sales' },
     { name: 'Planes', href: '#plans' }
   ];
 

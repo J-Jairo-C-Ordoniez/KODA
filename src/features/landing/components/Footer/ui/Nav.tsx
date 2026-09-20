@@ -8,7 +8,7 @@ export default function Nav() {
                 <li><Link href="#inicio" className="text-base font-normal leading-relaxed text-foreground/80 hover:text-foreground transition-colors duration-200">Inicio</Link></li>
                 <li><Link href="#features" className="text-base font-normal leading-relaxed text-foreground/80 hover:text-foreground transition-colors duration-200">Características</Link></li>
                 <li><Link href="#pricing" className="text-base font-normal leading-relaxed text-foreground/80 hover:text-foreground transition-colors duration-200">Planes</Link></li>
-                <li><Link href="/register" className="text-base font-normal leading-relaxed text-foreground/80 hover:text-foreground transition-colors duration-200">Registrar Negocio</Link></li>
+                <li><Link href="/auth/register" className="text-base font-normal leading-relaxed text-foreground/80 hover:text-foreground transition-colors duration-200">Registrar Negocio</Link></li>
             </ul>
         </nav>
     );

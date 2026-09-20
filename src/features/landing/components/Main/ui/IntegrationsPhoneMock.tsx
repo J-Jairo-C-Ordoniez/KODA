@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { WhatsappLogoIcon } from "@phosphor-icons/react";
 
 const products = [
   { name: "Chaqueta Denim Classic", price: "$ 95.000", sizes: ["S", "M", "L"] },
@@ -39,7 +39,7 @@ export default function IntegrationsPhoneMock() {
     <div className="relative w-full h-full flex justify-center pt-2 pb-6">
       <dialog className="floating-chat absolute top-4 sm:top-12 -left-2 sm:-left-8 z-30 flex items-start gap-3 rounded-2xl border border-primary/10 bg-background p-3 shadow-xl">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-300/50 text-green-600">
-          <MessageCircle size={16} fill="currentColor" />
+          <WhatsappLogoIcon size={16} weight="fill" />
         </span>
         <div>
           <p className="text-md font-bold text-foreground">Nuevo pedido</p>
@@ -50,10 +50,10 @@ export default function IntegrationsPhoneMock() {
       </dialog>
 
       <div
-        className="relative flex w-full max-w-[350px] h-full flex-col rounded-4xl border-6 border-primary bg-background shadow-2xl z-10"
+        className="relative flex w-full max-w-88 h-full flex-col rounded-4xl border-6 border-primary bg-background shadow-2xl z-10"
         aria-label="Simulador de catálogo móvil"
       >
-        <div className="absolute left-1/2 top-2.5 z-30 h-[18px] w-[75px] -translate-x-1/2 rounded-full bg-primary shadow-sm" />
+        <div className="absolute left-1/2 top-2.5 z-30 h-5 w-19 -translate-x-1/2 rounded-full bg-primary shadow-sm" />
 
         <div className="relative z-20 select-none rounded-t-4xl bg-background px-4 pb-3 pt-9">
           <span className="flex items-center gap-1.5 text-md font-black tracking-widest text-primary">

@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import ModernAppMockup from "@/features/landing/components/Main/ui/ModernAppMockup";
 
 export interface FeatureItem {

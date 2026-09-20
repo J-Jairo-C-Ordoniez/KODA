@@ -4,8 +4,8 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
-import ProblemIntro from "../ui/ProblemIntro";
-import ProblemCard, { PROBLEMS } from "../ui/ProblemCard";
+import ProblemIntro from "@/features/landing/components/Main/ui/ProblemIntro";
+import ProblemCard, { PROBLEMS } from "@/features/landing/components/Main/ui/ProblemCard";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

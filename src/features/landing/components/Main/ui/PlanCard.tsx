@@ -1,4 +1,4 @@
-import { Check, Star } from "lucide-react";
+import { CheckIcon, StarIcon } from "@phosphor-icons/react";
 import { formatCurrency } from "@/lib/formatters";
 
 import Button from "@/shared/components/Button";
@@ -27,9 +27,9 @@ export default function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: 
             </h3>
             {isPopular && (
               <span className="flex items-center gap-1.5 rounded-full bg-background/15 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-background">
-                <Star
+                <StarIcon
                   size={12}
-                  fill="currentColor"
+                  weight="fill"
                 />
                 Popular
               </span>
@@ -54,10 +54,10 @@ export default function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: 
               className={`flex items-start gap-3 text-sm font-medium ${isPopular ? "text-background/90" : "text-foreground/80"}`}
             >
               <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${isPopular ? "bg-background/15" : "bg-foreground/5"}`}>
-                <Check
+                <CheckIcon
                   size={12}
                   className={isPopular ? "text-background" : "text-foreground"}
-                  strokeWidth={3}
+                  weight="bold"
                 />
               </div>
               <span className="leading-tight">{f}</span>
@@ -67,7 +67,7 @@ export default function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: 
 
         <Button
           href="/auth/register"
-          variant={isPopular ? "secondary" : "primary"}
+          variant={isPopular ? "primary" : "secondary"}
         >
           Elegir {plan.name}
         </Button>

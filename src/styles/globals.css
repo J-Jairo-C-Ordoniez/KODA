@@ -33,6 +33,7 @@ html {
   font-size: 16px;
   padding: 0 !important;
   margin: 0 !important;
+  scroll-behavior: smooth;
 }
 
 body {

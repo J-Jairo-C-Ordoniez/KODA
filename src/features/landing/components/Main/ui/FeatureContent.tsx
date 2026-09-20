@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutDashboard, FolderOpen, PanelLeftClose } from "lucide-react";
+import { SquaresFourIcon, FolderOpenIcon, SidebarSimpleIcon } from "@phosphor-icons/react";
 import ModernAppMockup from "@/features/landing/components/Main/ui/ModernAppMockup";
 
 const featureSteps = [
@@ -9,19 +9,19 @@ const featureSteps = [
         id: "nav",
         title: "Encuentras todo al instante",
         description: "Menús claros que no te marean. Usar tu sistema es tan fácil y rápido como revisar tu celular. Sin opciones extrañas estorbando.",
-        icon: <FolderOpen size={20} />,
+        icon: <FolderOpenIcon size={20} />,
     },
     {
         id: "workspace",
         title: "Pantalla libre para vender",
         description: "Al cobrar, los menús se ocultan solos. Tú y tus vendedores se enfocan en despachar rápido al cliente que tienen enfrente, sin distracciones.",
-        icon: <PanelLeftClose size={20} />,
+        icon: <SidebarSimpleIcon size={20} />,
     },
     {
         id: "metrics",
         title: "El pulso de tu local",
         description: "¿Cuánto llevas vendido hoy? ¿Quién te debe? Lo ves todo de un vistazo. Se acabaron las horas sumando tickets al final del día.",
-        icon: <LayoutDashboard size={20} />,
+        icon: <SquaresFourIcon size={20} />,
     },
 ] as const;
 

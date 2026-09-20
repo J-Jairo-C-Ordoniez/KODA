@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
+import { UserIcon, EnvelopeIcon, LockKeyIcon, EyeIcon, EyeClosedIcon, ArrowLeftIcon, CircleNotchIcon } from "@phosphor-icons/react";
 
 import Button from "@/shared/components/Button";
 
@@ -23,7 +23,7 @@ export default function StepTwo({ formData, handleChange, prevStep, loading }: a
                 </label>
 
                 <div className="relative group">
-                    <User
+                    <UserIcon
                         className={iconClass}
                         size={20}
                     />
@@ -48,7 +48,7 @@ export default function StepTwo({ formData, handleChange, prevStep, loading }: a
                     Correo Electrónico
                 </label>
                 <div className="relative group">
-                    <Mail
+                    <EnvelopeIcon
                         className={iconClass}
                         size={20}
                     />
@@ -73,7 +73,7 @@ export default function StepTwo({ formData, handleChange, prevStep, loading }: a
                     Contraseña
                 </label>
                 <div className="relative group">
-                    <Lock
+                    <LockKeyIcon
                         className={iconClass}
                         size={20}
                     />
@@ -93,8 +93,8 @@ export default function StepTwo({ formData, handleChange, prevStep, loading }: a
                         className="absolute right-4 top-1/2 -translate-y-1/2 text-primary/40 hover:text-primary transition-colors"
                     >
                         {showPassword
-                            ? <EyeOff size={20} />
-                            : <Eye size={20} />
+                            ? <EyeClosedIcon size={20} />
+                            : <EyeIcon size={20} />
                         }
                     </button>
                 </div>
@@ -106,7 +106,7 @@ export default function StepTwo({ formData, handleChange, prevStep, loading }: a
                     onClick={prevStep}
                     variant="secondary"
                 >
-                    <ArrowLeft size={20} />
+                    <ArrowLeftIcon size={20} />
                 </Button>
                 <Button
                     type="submit"
@@ -116,7 +116,7 @@ export default function StepTwo({ formData, handleChange, prevStep, loading }: a
                 >
                     {loading ? (
                         <span className="flex items-center gap-2">
-                            <Loader2 className="h-4 w-4 animate-spin" /> Creando...
+                            <CircleNotchIcon className="h-4 w-4 animate-spin" /> Creando...
                         </span>
                     ) : (
                         "Completar Registro"

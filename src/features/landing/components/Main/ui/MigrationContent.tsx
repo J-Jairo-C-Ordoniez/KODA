@@ -1,4 +1,4 @@
-import MigrationCard, { MigrationStep } from "./MigrationCard";
+import MigrationCard, { MigrationStep } from "@/features/landing/components/Main/ui/MigrationCard";
 import {
   Step1Notebook,
   Step1Excel,

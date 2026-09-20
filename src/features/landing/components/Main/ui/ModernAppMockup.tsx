@@ -1,4 +1,4 @@
-import { LayoutDashboard, ShoppingBag, FolderOpen, PanelLeftClose, Search, Users, Activity } from "lucide-react";
+import { SquaresFourIcon, ShoppingBagIcon, FolderOpenIcon, SidebarSimpleIcon, UsersIcon, ActivityIcon } from "@phosphor-icons/react";
 
 export default function ModernAppMockup({ step }: { step: "nav" | "workspace" | "metrics" }) {
     const isMenuCollapsed = step === "workspace";
@@ -11,13 +11,13 @@ export default function ModernAppMockup({ step }: { step: "nav" | "workspace" | 
                 </div>
                 <ul className="flex flex-col gap-4">
                     <li className={`cursor-pointer rounded-lg p-1.5 transition-colors ${step === "metrics" ? "bg-background/12 text-background" : "hover:text-background"}`}>
-                        <LayoutDashboard size={16} />
+                        <SquaresFourIcon size={16} />
                     </li>
                     <li className={`cursor-pointer rounded-lg p-1.5 transition-colors ${step === "workspace" ? "bg-background/12 text-background" : "hover:text-background"}`}>
-                        <ShoppingBag size={16} />
+                        <ShoppingBagIcon size={16} />
                     </li>
                     <li className={`cursor-pointer rounded-lg p-1.5 transition-colors ${step === "nav" ? "bg-background/12 text-background" : "hover:text-background"}`}>
-                        <FolderOpen size={16} />
+                        <FolderOpenIcon size={16} />
                     </li>
                 </ul>
             </nav>
@@ -26,7 +26,7 @@ export default function ModernAppMockup({ step }: { step: "nav" | "workspace" | 
                 ${isMenuCollapsed ? "w-0 opacity-0 overflow-hidden" : "w-32 sm:w-40 px-3 py-4 opacity-100"}`}
             >
                 <div className="mb-4 flex items-center justify-between px-1 text-foreground/60">
-                    <PanelLeftClose size={16} />
+                    <SidebarSimpleIcon size={16} />
                 </div>
 
                 <ul className="space-y-1">
@@ -79,7 +79,7 @@ export default function ModernAppMockup({ step }: { step: "nav" | "workspace" | 
                     {step === "metrics" && (
                         <div className="grid h-full grid-cols-2 gap-3">
                             <div className="rounded-md bg-primary/5 p-4">
-                                <Activity
+                                <ActivityIcon
                                     size={20}
                                     className="text-primary mb-3"
                                 />
@@ -88,7 +88,7 @@ export default function ModernAppMockup({ step }: { step: "nav" | "workspace" | 
                             </div>
 
                             <div className="rounded-md bg-primary/5 p-4">
-                                <Users
+                                <UsersIcon
                                     size={20}
                                     className="text-primary mb-3"
                                 />

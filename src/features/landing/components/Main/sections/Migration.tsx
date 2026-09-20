@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
-import MigrationContent from "../ui/MigrationContent";
+import MigrationContent from "@/features/landing/components/Main/ui/MigrationContent";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -79,9 +79,7 @@ export default function Migration() {
           },
           0.18
         )
-        // Pausa de lectura cómoda
         .to({}, { duration: 0.25 }, 0.43)
-        // Salida limpia del intro para no solaparse jamás con las cards
         .to(
           ".migration-intro-content",
           {
@@ -246,7 +244,6 @@ export default function Migration() {
       className="relative bg-background"
       aria-labelledby="migration-heading"
     >
-      {/* ── Frame 1: Intro Encabezado ── */}
       <header
         ref={introStageRef}
         className="relative h-screen w-full flex items-center justify-center overflow-hidden px-4 sm:px-6 md:px-12"
@@ -270,7 +267,6 @@ export default function Migration() {
         </div>
       </header>
 
-      {/* ── Frames 2, 3 y 4: Las 3 Cards a Pantalla Completa con Elementos Flotantes ── */}
       <MigrationContent />
     </section>
   );

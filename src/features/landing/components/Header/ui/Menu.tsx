@@ -28,6 +28,23 @@ export default function Menu({ navLinks, setIsMenuOpen, isOpen }: { navLinks: { 
         }
     }, [isOpen]);
 
+    const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        if (href.startsWith('#')) {
+            e.preventDefault();
+            setIsMenuOpen(false);
+            
+            setTimeout(() => {
+                const element = document.querySelector(href);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                    window.history.pushState(null, '', href);
+                }
+            }, 400);
+        } else {
+            setIsMenuOpen(false);
+        }
+    };
+
     return (
         <div
             ref={menuRef}
@@ -41,7 +58,7 @@ export default function Menu({ navLinks, setIsMenuOpen, isOpen }: { navLinks: { 
                     <div key={link.name} className="menu-link invisible">
                         <Link
                             href={link.href}
-                            onClick={() => setIsMenuOpen(false)}
+                            onClick={(e) => handleLinkClick(e, link.href)}
                             className="relative text-xs md:text-sm font-medium tracking-widest uppercase text-secondary hover:text-primary transition-colors duration-200 group w-fit"
                         >
                             {link.name}

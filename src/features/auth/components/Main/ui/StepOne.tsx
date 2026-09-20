@@ -1,6 +1,6 @@
 "use client";
 
-import { Store, Phone, ChevronDown } from "lucide-react";
+import { StorefrontIcon, PhoneIcon, CaretDownIcon } from "@phosphor-icons/react";
 import Button from "@/shared/components/Button";
 
 const inputClass = "w-full pl-11 pr-4 py-3 bg-background border border-primary/10 rounded-xl focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all duration-300 text-md font-medium text-primary placeholder:text-primary/40";
@@ -19,7 +19,7 @@ export default function StepOne({ formData, handleChange, nextStep }: any) {
                 </label>
 
                 <div className="relative group">
-                    <Store
+                    <StorefrontIcon
                         className={iconClass}
                         size={20}
                     />
@@ -45,7 +45,7 @@ export default function StepOne({ formData, handleChange, nextStep }: any) {
                 </label>
 
                 <div className="relative group">
-                    <ChevronDown
+                    <CaretDownIcon
                         className={iconClass}
                         size={20}
                     />
@@ -72,7 +72,7 @@ export default function StepOne({ formData, handleChange, nextStep }: any) {
                 </label>
 
                 <div className="relative group">
-                    <Phone
+                    <PhoneIcon
                         className={iconClass}
                         size={20}
                     />

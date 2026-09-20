@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { CircleNotchIcon, EnvelopeIcon, LockKeyIcon, EyeIcon, EyeClosedIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 
 import useLogin from "@/features/auth/hooks/useLogin";
@@ -47,7 +47,7 @@ export default function LoginForm() {
           </label>
 
           <div className="relative group">
-            <Mail
+            <EnvelopeIcon
               className={iconClass}
               size={20}
             />
@@ -74,7 +74,7 @@ export default function LoginForm() {
             Contraseña
           </label>
           <div className="relative group">
-            <Lock
+            <LockKeyIcon
               className={iconClass}
               size={20}
             />
@@ -96,8 +96,8 @@ export default function LoginForm() {
               className="absolute right-4 top-1/2 -translate-y-1/2 text-primary/40 hover:text-primary transition-colors duration-300"
             >
               {showPassword
-                ? <EyeOff size={20} />
-                : <Eye size={20} />
+                ? <EyeClosedIcon size={20} />
+                : <EyeIcon size={20} />
               }
             </button>
           </div>
@@ -113,7 +113,7 @@ export default function LoginForm() {
         >
           {loading ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" /> Accediendo...
+              <CircleNotchIcon className="h-4 w-4 animate-spin" /> Accediendo...
             </span>
           ) : (
             "Iniciar Sesión"

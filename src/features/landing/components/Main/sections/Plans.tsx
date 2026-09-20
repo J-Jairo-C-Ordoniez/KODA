@@ -73,7 +73,7 @@ export default function Plans() {
         {!isLoading && !error && (
           <div className="flex flex-col md:flex-row gap-8 justify-center items-center md:items-stretch">
             {plans.map(plan => (
-              <div key={plan.planId} className="plan-card-anim opacity-0 w-full max-w-md md:max-w-none md:w-[380px]">
+              <div key={plan.planId} className="plan-card-anim opacity-0 w-full max-w-md md:max-w-none md:w-95">
                 <PlanCard
                   plan={plan}
                   isPopular={plan.name === "Empresarial"}

@@ -1,18 +1,18 @@
-import { Globe, RefreshCw, Zap } from "lucide-react";
+import { GlobeIcon, ArrowsClockwiseIcon, LightningIcon } from "@phosphor-icons/react";
 
 const benefits = [
   {
-    icon: <Globe size={24} className="text-foreground" />,
+    icon: <GlobeIcon size={24} className="text-foreground" />,
     title: "Catálogo Automático",
     desc: "Al crear un producto en tu inventario, ya está listo para venderse online. Sin doble trabajo, sin subir la misma foto dos veces.",
   },
   {
-    icon: <Zap size={24} className="text-accent" />,
+    icon: <LightningIcon size={24} className="text-accent" />,
     title: "Ventas sin enredos",
     desc: "El cliente te envía exactamente lo que quiere (talla, color y cantidad). Adiós a los audios descifrando qué modelo te piden.",
   },
   {
-    icon: <RefreshCw size={24} className="text-foreground" />,
+    icon: <ArrowsClockwiseIcon size={24} className="text-foreground" />,
     title: "Stock sincronizado",
     desc: "Si vendes una prenda en la tienda física, desaparece de tu vitrina digital en tiempo real. Nunca más vendas algo que ya no tienes.",
   },

@@ -73,7 +73,7 @@ export default function SummaryPage() {
         title={isSidebarOpen ? "Ocultar menú lateral" : "Mostrar menú lateral"}
         aria-label="Alternar menú lateral"
       >
-        <SidebarIcon size={20} className={isSidebarOpen ? "rotate-180" : ""} />
+        <SidebarIcon size={24} className={isSidebarOpen ? "rotate-180" : ""} />
       </button>
 
       {isSidebarOpen && (

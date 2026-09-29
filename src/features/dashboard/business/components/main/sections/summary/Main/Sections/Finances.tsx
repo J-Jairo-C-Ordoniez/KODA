@@ -13,7 +13,7 @@ import ProfitMarginCard from '@/features/dashboard/business/components/main/sect
 export default function Finances({ activeTab }: { activeTab: string; }) {
     const { data, isLoading, error } = useTabStats<FinanceStats>(activeTab);
     return (
-        <section className="space-y-5 animate-in fade-in duration-500 py-4 px-10">
+        <section className="space-y-5 animate-in fade-in duration-500 py-4 px-3 md:px-6 lg:px-10">
             <header>
                 <h2 className="text-2xl tracking-tight leading-tight font-bold">
                     Finanzas y Cuentas por Cobrar

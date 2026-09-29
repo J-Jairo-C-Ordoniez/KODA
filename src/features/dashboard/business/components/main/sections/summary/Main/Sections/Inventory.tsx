@@ -38,7 +38,7 @@ export default function Inventory({ activeTab }: { activeTab: string }) {
     })) : [];
 
     return (
-        <section className="space-y-5 animate-in fade-in duration-500 py-4 px-10">
+        <section className="space-y-5 animate-in fade-in duration-500 py-4 px-3 md:px-6 lg:px-10">
             <header>
                 <h2 className="text-2xl tracking-tight leading-tight font-bold">
                     Rendimiento de Inventario

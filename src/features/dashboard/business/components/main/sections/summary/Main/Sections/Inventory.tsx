@@ -53,7 +53,7 @@ export default function Inventory({ activeTab }: { activeTab: string }) {
 
             {data && (
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
                         <KPIs
                             title="Prendas en Stock"
                             value={data.metrics.totalPhysicalItems}
@@ -84,7 +84,7 @@ export default function Inventory({ activeTab }: { activeTab: string }) {
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                         <InventoryListCard
                             title="Top Ventas"
                             icon={<StarIcon size={24} weight="fill" className="text-green-600" />}

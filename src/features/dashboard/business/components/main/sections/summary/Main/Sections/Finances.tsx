@@ -28,7 +28,7 @@ export default function Finances({ activeTab }: { activeTab: string; }) {
 
             {data && (
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
                         <KPIs
                             title="Ventas Mes Actual"
                             value={formatCurrency(data.salesMonth.totalRevenue)}
@@ -82,7 +82,7 @@ export default function Finances({ activeTab }: { activeTab: string; }) {
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                         <PendingCollectionsCard debtors={data.topDebtors} />
                         <ProfitMarginCard profitData={data.profitMonth} />
                     </div>

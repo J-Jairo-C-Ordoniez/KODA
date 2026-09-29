@@ -85,7 +85,7 @@ export default function SummaryPage() {
 
       <div
         className={`shrink-0 transition-all duration-300 border-l border-primary/10 bg-background 
-          fixed inset-y-0 right-0 z-50 w-50
+          fixed inset-y-0 right-0 z-50 w-60
           ${isSidebarOpen ? "translate-x-0" : "translate-x-full"}
           md:sticky md:top-0 md:h-screen md:translate-x-0
           ${isSidebarOpen ? "md:w-80 md:opacity-100" : "md:w-0 md:opacity-0 md:overflow-hidden md:border-l-0"}

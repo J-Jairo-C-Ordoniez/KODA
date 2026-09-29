@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LoaderCircle } from "lucide-react";
+import { SpinnerGapIcon } from "@phosphor-icons/react";
 import { StoreDataStats } from '@/features/dashboard/business/api/dashboard.api';
 import useTabStats from "@/features/dashboard/business/hooks/useTabStats";
 import Loader from "@/shared/components/Loader";
@@ -23,7 +23,6 @@ export default function MyStore({ activeTab }: { activeTab: string }) {
 
     const handleSave = async () => {
         const ok = await updateStoreProfile(formData);
-
         if (ok) {
             setIsEditing(false);
         }
@@ -42,19 +41,19 @@ export default function MyStore({ activeTab }: { activeTab: string }) {
     }, [data]);
 
     return (
-        <section className="space-y-6 animate-in fade-in duration-500">
+        <section className="space-y-5 animate-in fade-in duration-500">
             <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+                    <h2 className="text-xl font-bold text-primary tracking-tight">
                         Mi Tienda
                     </h2>
-                    <p className="text-gray-500 text-base mt-1 max-w-2xl">
+                    <p className="text-sm text-primary/50 mt-1 font-medium tracking-tight">
                         Administra la identidad de tu marca, tu catálogo público y el estado de tu suscripción en la plataforma.
                     </p>
                 </div>
 
                 {data && (
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 shrink-0">
                         {isEditing ? (
                             <>
                                 <Button
@@ -71,7 +70,7 @@ export default function MyStore({ activeTab }: { activeTab: string }) {
                                 >
                                     {isSaving ? (
                                         <>
-                                            <LoaderCircle size={16} className="animate-spin" />
+                                            <SpinnerGapIcon size={16} className="animate-spin" />
                                             Guardando...
                                         </>
                                     ) : (
@@ -97,7 +96,7 @@ export default function MyStore({ activeTab }: { activeTab: string }) {
             {error && <Error message={error} />}
 
             {data && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
                     <StoreProfileCard
                         formData={formData}
                         setFormData={setFormData}

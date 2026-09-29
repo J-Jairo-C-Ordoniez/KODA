@@ -14,31 +14,29 @@ interface ProfitMarginCardProps {
 export default function ProfitMarginCard({ profitData }: ProfitMarginCardProps) {
     const { totalRevenue, totalCost, totalProfit, margin } = profitData;
     const isLoss = totalProfit < 0;
-
-    // Normalize progress bar width safely (avoiding negative width values)
     const costPercentage = totalRevenue > 0 ? Math.min(100, (totalCost / totalRevenue) * 100) : 0;
     const profitPercentage = totalRevenue > 0 ? Math.max(0, (totalProfit / totalRevenue) * 100) : 0;
 
     return (
         <section
-            className="bg-background-card border border-primary/5 hover:shadow-sm rounded-2xl p-5 md:p-6 transition-all duration-300 flex flex-col gap-5"
+            className="rounded-3xl md:rounded-4xl border border-primary/10 bg-background/80 shadow-sm p-4 sm:p-6 flex flex-col gap-4"
             aria-labelledby="margin-title"
         >
-            <header className="flex flex-col gap-3">
+            <header className="flex flex-col gap-1">
                     <h3
                         id="margin-title"
-                        className="text-base font-semibold text-primary tracking-tight"
+                        className="text-base sm:text-md font-bold leading-relaxed text-foreground/75"
                     >
                         Estructura de Márgenes (Mes)
                     </h3>
-                    <p className="text-xs text-primary/60">
+                    <p className="text-sm font-medium leading-relaxed text-foreground/50">
                         Relación entre costos e ingresos netos
                     </p>
             </header>
 
-            <div className="relative h-2.5 w-full bg-primary/5 rounded-full overflow-hidden flex">
+            <div className="relative h-2 w-full bg-primary/5 rounded-full overflow-hidden flex">
                 <div
-                    className={`${isLoss ? 'bg-red-300' : 'bg-primary/20'} h-full transition-all duration-700 ease-out`}
+                    className={`${isLoss ? 'bg-red-300' : 'bg-primary/15'} h-full transition-all duration-700 ease-out`}
                     style={{ width: `${costPercentage}%` }}
                     title={`Costos: ${formatPercentage(costPercentage)}`}
                 />
@@ -49,37 +47,37 @@ export default function ProfitMarginCard({ profitData }: ProfitMarginCardProps) 
                 />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
+            <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-0.5">
                     <div className="flex items-center gap-1.5">
                         <span className={`w-2 h-2 rounded-full ${isLoss ? 'bg-red-400' : 'bg-primary/20'}`} aria-hidden="true" />
-                        <span className="text-xs font-medium text-primary/60 uppercase tracking-wider">
+                        <span className="text-sm font-medium leading-relaxed text-foreground/60">
                             Costos
                         </span>
                     </div>
-                    <span className="text-sm font-bold text-primary tabular-nums">
+                    <span className="text-base font-bold leading-relaxed text-foreground/75 tabular-nums">
                         {formatCurrency(totalCost)}
                     </span>
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-0.5">
                     <div className="flex items-center gap-1.5">
                         <span className={`w-2 h-2 rounded-full ${isLoss ? 'bg-red-500' : 'bg-emerald-400'}`} aria-hidden="true" />
-                        <span className="text-xs font-medium text-primary/60 uppercase tracking-wider">
-                            {isLoss ? 'Pérdida Neto' : 'Utilidad'}
+                        <span className="text-sm font-medium leading-relaxed text-foreground/60">
+                            {isLoss ? 'Pérdida neta' : 'Utilidad'}
                         </span>
                     </div>
-                    <span className={`text-sm font-bold tabular-nums ${isLoss ? 'text-red-600' : 'text-emerald-600'}`}>
+                    <span className={`text-base font-bold leading-relaxed tabular-nums ${isLoss ? 'text-red-500' : 'text-emerald-500'}`}>
                         {formatCurrency(totalProfit)}
                     </span>
                 </div>
             </div>
 
-            <footer className="mt-1 pt-4 border-t border-primary/5 flex items-center justify-between">
-                <span className="text-xs font-medium text-primary/60">
+            <footer className="mt-2 pt-2 border-t border-primary/10 flex items-center justify-between">
+                <span className="text-sm font-medium leading-relaxed text-foreground/50">
                     Ingreso Total (Ventas)
                 </span>
-                <span className="text-sm font-bold text-primary tabular-nums">
+                <span className="text-base font-bold leading-relaxed text-foreground/75 tabular-nums">
                     {formatCurrency(totalRevenue)}
                 </span>
             </footer>

@@ -19,7 +19,7 @@ export default function SalesChart({ data }: SalesChartProps) {
   }));
 
   return (
-    <div className="w-full h-[300px]">
+    <div className="w-full h-75">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <defs>
@@ -54,7 +54,7 @@ export default function SalesChart({ data }: SalesChartProps) {
             }}
             formatter={(value: number) => [formatCurrency(value), 'Ventas']}
             labelStyle={{ color: '#737373', marginBottom: '4px' }}
-            itemStyle={{ color: '#09090B' }}
+            itemStyle={{ color: '#FFFFFF' }}
           />
           <Area
             type="monotone"

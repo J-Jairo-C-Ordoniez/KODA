@@ -8,7 +8,7 @@ const dashboardController = {
       const stats = await dashboardService.getSidebarStats(tenantId);
       return apiResponse.success(stats);
     } catch (error: any) {
-      return apiResponse.error(error.message || 'Error al obtener estadísticas de barra lateral', 500);
+      return apiResponse.error('Error al obtener estadísticas', 500);
     }
   },
 
@@ -17,7 +17,7 @@ const dashboardController = {
       const stats = await dashboardService.getGeneralStats(tenantId);
       return apiResponse.success(stats);
     } catch (error: any) {
-      return apiResponse.error(error.message || 'Error al obtener vista general', 500);
+      return apiResponse.error('Error al obtener vista general', 500);
     }
   },
 

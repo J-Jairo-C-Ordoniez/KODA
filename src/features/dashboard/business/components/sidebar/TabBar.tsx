@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Package, ShoppingCart, Users, UserCog } from "lucide-react";
+import { HouseIcon, ShoppingBagIcon, ReceiptIcon, UsersIcon, UsersThreeIcon } from "@phosphor-icons/react";
 import { cn } from "@/shared/utils/cn";
 
 interface NavItem {
@@ -12,19 +13,54 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Resumen", href: "/dashboard/business", icon: Home },
-  { label: "Productos", href: "/dashboard/business/products", icon: Package },
-  { label: "Ventas", href: "/dashboard/business/sales", icon: ShoppingCart },
-  { label: "Clientes", href: "/dashboard/business/customers", icon: Users },
-  { label: "Equipo", href: "/dashboard/business/team", icon: UserCog },
+  { label: "Resumen", href: "/dashboard/business", icon: HouseIcon },
+  { label: "Productos", href: "/dashboard/business/products", icon: ShoppingBagIcon },
+  { label: "Ventas", href: "/dashboard/business/sales", icon: ReceiptIcon },
+  { label: "Clientes", href: "/dashboard/business/customers", icon: UsersIcon },
+  { label: "Equipo", href: "/dashboard/business/team", icon: UsersThreeIcon },
 ];
 
 export default function BusinessBottomNav() {
   const pathname = usePathname();
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const scrollContainer = document.getElementById("dashboard-scroll-container");
+    if (!scrollContainer) return;
+
+    const handleScroll = () => {
+      const currentScrollY = scrollContainer.scrollTop;
+
+      if (currentScrollY < 50) {
+        setIsVisible(true);
+      } else {
+        if (Math.abs(currentScrollY - lastScrollY.current) > 5) {
+          if (currentScrollY > lastScrollY.current) {
+            setIsVisible(false);
+          } else {
+            setIsVisible(true);
+          }
+        }
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+    return () => scrollContainer.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-50 lg:hidden">
-      <nav className="flex items-center justify-around bg-background backdrop-blur-2xl border border-primary/10 p-2 rounded-4xl shadow-2xl shadow-background/20">
+    <div
+      className={cn(
+        "fixed left-0 w-full z-40 lg:hidden bg-background border-t border-primary/10 pb-2 transition-all duration-300 ease-in-out",
+        isVisible
+          ? "bottom-0 translate-y-0"
+          : "bottom-0 translate-y-full"
+      )}
+    >
+      <nav className="flex items-center justify-around h-14 px-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -33,17 +69,17 @@ export default function BusinessBottomNav() {
               href={item.href}
               aria-current={isActive ? "page" : undefined}
               title={item.label}
-              className="relative flex flex-col items-center justify-center p-3 rounded-2xl group outline-none"
+              className="relative flex items-center justify-center flex-1 h-full group outline-none"
             >
               <item.icon
-                size={24}
-                strokeWidth={isActive ? 2.5 : 2}
+                size={28}
+                weight={isActive ? "fill" : "regular"}
                 aria-hidden="true"
                 className={cn(
-                  "transition-all duration-500 ease-out",
+                  "transition-colors duration-200",
                   isActive
-                    ? "text-primary scale-110"
-                    : "text-primary/40 group-hover:text-primary group-hover:-translate-y-0.5"
+                    ? "text-primary"
+                    : "text-primary/60 group-hover:text-primary/80"
                 )}
               />
             </Link>

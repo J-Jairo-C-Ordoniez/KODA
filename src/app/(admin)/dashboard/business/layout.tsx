@@ -6,7 +6,10 @@ export default function BusinessDashboardLayout({ children }: { children: React.
     <div className="flex flex-col h-screen overflow-hidden bg-background">
       <div className="flex flex-1 overflow-hidden relative h-full">
         <Sidebar />
-        <div className="flex-1 overflow-y-auto custom-scrollbar bg-background pb-30 lg:pb-0">
+        <div 
+          id="dashboard-scroll-container"
+          className="flex-1 overflow-y-auto custom-scrollbar bg-background pb-30 lg:pb-0"
+        >
           {children}
         </div>
       </div>

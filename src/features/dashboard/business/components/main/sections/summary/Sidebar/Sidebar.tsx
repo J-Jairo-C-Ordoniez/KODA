@@ -47,7 +47,7 @@ export default function SecondaryMenu({ mainTitle, sections }: SecondaryMenuProp
     return (
         <aside
             ref={containerRef}
-            className="w-full h-full bg-background py-4 px-10 flex flex-col overflow-y-auto"
+            className="w-full h-full bg-background py-4 px-3 md:px-6 lg:px-10 flex flex-col overflow-y-auto"
         >
 
             <h2 className="min-h-16 flex items-center text-xl tracking-tight leading-tight font-bold px-5 mb-4">

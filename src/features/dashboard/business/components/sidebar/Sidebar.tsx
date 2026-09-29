@@ -26,7 +26,7 @@ export default function Sidebar() {
   return (
     <aside
       role="navigation"
-      className="hidden lg:flex flex-col w-80 h-screen py-4 px-10 shrink-0 bg-background border-r border-primary/10"
+      className="hidden lg:flex flex-col w-80 h-screen py-4 px-3 md:px-6 lg:px-10 shrink-0 bg-background border-r border-primary/10"
     >
       <nav
         className="w-full h-full flex flex-col pt-4 pb-2"

@@ -53,8 +53,9 @@ export default function PendingCollectionsCard({ debtors }: PendingCollectionsCa
 
                                     {debtor.isOverdue && (
                                         <>
-                                            <span className="w-1 h-1 rounded-full bg-red-400" aria-hidden="true"></span>
-                                            <span className="text-red-400 font-semibold">
+                                            
+                                            <span className="flex gap-2 items-center text-red-400 font-semibold">
+                                                <span className="w-1 h-1 rounded-full bg-red-400" aria-hidden="true"></span>
                                                 Vencida
                                             </span>
                                         </>

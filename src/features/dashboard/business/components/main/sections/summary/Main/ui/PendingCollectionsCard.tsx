@@ -46,7 +46,7 @@ export default function PendingCollectionsCard({ debtors }: PendingCollectionsCa
                                 <p className="text-base sm:text-md font-medium leading-relaxed text-foreground/75 line-clamp-1">
                                     {debtor.name}
                                 </p>
-                                <div className="flex items-center gap-2 text-sm">
+                                <div className="flex flex-col xl:flex-row items-center gap-2 text-sm">
                                     <span className="font-medium leading-relaxed text-foreground/50">
                                         Hace {debtor.daysPending} {debtor.daysPending === 1 ? 'día' : 'días'}
                                     </span>

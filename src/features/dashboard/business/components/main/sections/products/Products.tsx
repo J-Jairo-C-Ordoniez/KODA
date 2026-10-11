@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { SidebarSimpleIcon } from '@phosphor-icons/react';
 import useToast from '@/shared/hooks/useToast';
 import Toaster from '@/shared/components/Toaster';
@@ -12,15 +12,44 @@ export default function Products() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const { toasts, showToast, removeToast } = useToast();
 
+    // Soporte para gesto táctil (swipe desde la derecha para abrir/cerrar)
+    const touchStartX = useRef<number | null>(null);
+    const touchStartY = useRef<number | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX.current === null || touchStartY.current === null) return;
+        const diffX = touchStartX.current - e.changedTouches[0].clientX;
+        const diffY = Math.abs(touchStartY.current - e.changedTouches[0].clientY);
+
+        if (diffY < 60) {
+            if (diffX > 50 && !isSidebarOpen) {
+                setIsSidebarOpen(true);
+            } else if (diffX < -50 && isSidebarOpen) {
+                setIsSidebarOpen(false);
+            }
+        }
+        touchStartX.current = null;
+        touchStartY.current = null;
+    };
+
     return (
-        <div className="flex w-full bg-background relative min-h-screen">
+        <div
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="flex w-full bg-background relative min-h-screen"
+        >
             <Toaster
                 toasts={toasts}
                 removeToast={removeToast}
             />
 
             {/* Contenido Principal (Central) */}
-            <div className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-8 md:pt-8 custom-scrollbar relative">
+            <div className="flex-1 min-w-0 px-[8vw] py-8 pt-20 md:pt-8 custom-scrollbar relative">
                 <ProductsMain showToast={showToast} isSidebarOpen={isSidebarOpen} />
             </div>
 

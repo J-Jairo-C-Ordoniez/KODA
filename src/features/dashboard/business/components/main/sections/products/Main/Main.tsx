@@ -122,7 +122,7 @@ export default function ProductsMain({ showToast, isSidebarOpen }: ProductsMainP
     }
 
     return (
-        <main className="w-full space-y-8 px-2 py-4 md:px-4 xl:px-10">
+        <main className="w-full space-y-8">
             {activeView === 'create-category' && (
                 <CategoryForm
                     editingCategory={editingItem}

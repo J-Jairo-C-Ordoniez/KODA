@@ -134,7 +134,7 @@ export default function TeamMain({
   }
 
   return (
-    <main className="w-full space-y-8 px-2 py-8 md:px-4 md:py-10 xl:px-10">
+    <main className="w-full space-y-8">
       {/* ── Form view ── */}
       {activeView === 'create-employee' && (
         <EmployeeForm

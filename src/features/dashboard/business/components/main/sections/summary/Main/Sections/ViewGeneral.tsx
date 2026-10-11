@@ -14,7 +14,7 @@ export default function ViewGeneral({ activeTab }: { activeTab: string; }) {
     const { data, isLoading, error } = useTabStats<GeneralStats>(activeTab);
 
     return (
-        <section className="space-y-5 animate-in fade-in duration-500 py-4 px-2 md:px-4 xl:px-10">
+        <section className="space-y-5 animate-in fade-in duration-500">
             <header>
                 <h2 className="text-2xl tracking-tight leading-tight font-bold">
                     Resumen del día

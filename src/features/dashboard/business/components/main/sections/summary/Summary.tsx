@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { LayoutIcon, WalletIcon, PackageIcon, SidebarIcon } from "@phosphor-icons/react";
 
 import Sidebar from "@/features/dashboard/business/components/main/sections/summary/Sidebar/Sidebar";
@@ -11,6 +11,34 @@ export default function SummaryPage() {
   const [activeTab, setActiveTab] = useState("view-general");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { data } = useSidebarStats();
+
+  // Soporte para gesto táctil (swipe desde la derecha para abrir/cerrar)
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const diffX = touchStartX.current - e.changedTouches[0].clientX;
+    const diffY = Math.abs(touchStartY.current - e.changedTouches[0].clientY);
+
+    // Arrastre predominantemente horizontal de al menos 50px
+    if (diffY < 60) {
+      if (diffX > 50 && !isSidebarOpen) {
+        // Deslizar de derecha a izquierda -> abrir menú lateral
+        setIsSidebarOpen(true);
+      } else if (diffX < -50 && isSidebarOpen) {
+        // Deslizar de izquierda a derecha -> cerrar menú lateral
+        setIsSidebarOpen(false);
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   const sections = [
     {
@@ -60,8 +88,12 @@ export default function SummaryPage() {
   ];
 
   return (
-    <div className="flex w-full bg-background relative min-h-screen">
-      <div className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-8 md:pt-8 custom-scrollbar transition-all duration-300">
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="flex w-full bg-background relative min-h-screen"
+    >
+      <div className="flex-1 min-w-0 px-[8vw] py-8 pt-20 md:pt-8 custom-scrollbar transition-all duration-300">
         <div className="w-full space-y-6 overflow-hidden">
           <SummaryMain activeTab={activeTab} />
         </div>

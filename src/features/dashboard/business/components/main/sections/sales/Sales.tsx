@@ -66,7 +66,7 @@ export default function Sales() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 p-4 sm:p-8 pt-16 sm:pt-8">
+    <div className="w-full space-y-6 px-[8vw] py-8 pt-20 md:pt-8">
       <Toaster toasts={toasts} removeToast={removeToast} />
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <div className="lg:col-span-8">

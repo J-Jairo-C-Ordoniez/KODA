@@ -14,11 +14,12 @@ interface ActiveCartTicketProps {
     onRemoveItem: (variantId: string) => void;
     onClearCart: () => void;
     onOpenCheckout: () => void;
+    onClose?: () => void;
 }
 
-export default function ActiveCartTicket({ items = [], totalItems = 0, subtotal = 0, onUpdateQuantity, onRemoveItem, onClearCart, onOpenCheckout, }: ActiveCartTicketProps) {
+export default function ActiveCartTicket({ items = [], totalItems = 0, subtotal = 0, onUpdateQuantity, onRemoveItem, onClearCart, onOpenCheckout, onClose }: ActiveCartTicketProps) {
     return (
-        <aside className="flex h-full flex-col justify-between rounded-3xl border border-primary/10 bg-background/80 p-4 shadow-sm md:rounded-4xl sm:p-6">
+        <aside className="flex h-full flex-col justify-between rounded-3xl border border-primary/10 bg-background p-4 shadow-sm md:rounded-4xl sm:p-6">
             <header>
                 <article className="flex items-center justify-between border-b border-primary/10 pb-4 mb-4">
                     <div className="flex items-center gap-2.5">
@@ -35,17 +36,30 @@ export default function ActiveCartTicket({ items = [], totalItems = 0, subtotal 
                         </div>
                     </div>
 
-                    {items.length > 0 && (
-                        <Button
-                            variant='secondary'
-                            onClick={onClearCart}
-                            title="Vaciar carrito"
-                            className="px-2 py-1"
-                            size='sm'
-                        >
-                            Vaciar
-                        </Button>
-                    )}
+                    <div className="flex items-center gap-2">
+                        {items.length > 0 && (
+                            <Button
+                                variant='secondary'
+                                onClick={onClearCart}
+                                title="Vaciar carrito"
+                                className="px-2.5 py-1 text-xs"
+                                size='sm'
+                            >
+                                Vaciar
+                            </Button>
+                        )}
+                        {onClose && (
+                            <Button
+                                variant='ghost'
+                                size='sm'
+                                onClick={onClose}
+                                className="p-1.5 text-primary/60 hover:text-primary hover:bg-primary/5 rounded-xl cursor-pointer"
+                                aria-label="Cerrar ticket"
+                            >
+                                ✕
+                            </Button>
+                        )}
+                    </div>
                 </article>
 
                 {items.length === 0 ? (

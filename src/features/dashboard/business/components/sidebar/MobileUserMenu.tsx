@@ -7,7 +7,6 @@ import {
   SignOutIcon,
   StorefrontIcon,
   UserCircleIcon,
-  DotsThreeIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@/shared/utils/cn";
 
@@ -131,7 +130,7 @@ export default function MobileUserMenu() {
         </div>
       )}
 
-      {/* Avatar trigger button */}
+      {/* Avatar trigger button - Solo círculo del perfil */}
       <button
         ref={triggerRef}
         onClick={() => setIsOpen((v) => !v)}
@@ -139,18 +138,17 @@ export default function MobileUserMenu() {
         aria-haspopup="menu"
         aria-label="Menú de usuario"
         className={cn(
-          "flex items-center gap-1.5 rounded-full border border-primary/10 bg-background/90 backdrop-blur-sm px-2 py-1.5 shadow-sm transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-accent",
-          isOpen ? "bg-primary/5" : "hover:bg-primary/5 active:scale-95"
+          "flex items-center justify-center w-10 h-10 rounded-full border border-primary/10 bg-background/95 backdrop-blur-sm shadow-sm transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-accent",
+          isOpen ? "ring-2 ring-primary/20 scale-105" : "hover:scale-105 active:scale-95"
         )}
       >
-        <div className="w-7 h-7 rounded-full bg-primary/10 overflow-hidden shrink-0 flex items-center justify-center border border-primary/10">
+        <div className="w-8 h-8 rounded-full bg-primary/10 overflow-hidden shrink-0 flex items-center justify-center border border-primary/10">
           {userImage ? (
             <img src={userImage} alt={userName} className="w-full h-full object-cover" />
           ) : (
-            <UserCircleIcon size={22} weight="fill" className="text-primary/40" />
+            <span className="text-xs font-bold text-primary/70">{avatarInitials}</span>
           )}
         </div>
-        <DotsThreeIcon size={16} weight="bold" className="text-primary/60" />
       </button>
     </div>
   );

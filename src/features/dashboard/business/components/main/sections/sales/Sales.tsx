@@ -66,7 +66,7 @@ export default function Sales() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 p-6 sm:p-8 pt-6 sm:pt-8">
+    <div className="max-w-7xl mx-auto space-y-6 p-4 sm:p-8 pt-16 sm:pt-8">
       <Toaster toasts={toasts} removeToast={removeToast} />
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <div className="lg:col-span-8">
@@ -118,9 +118,9 @@ export default function Sales() {
         <>
           <div
             onClick={() => setIsMobileTicketOpen(false)}
-            className="md:hidden fixed inset-0 z-30 bg-black/10 backdrop-blur-[1px] transition-opacity"
+            className="lg:hidden fixed inset-0 z-9999 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300"
           />
-          <div className="md:hidden fixed inset-x-0 bottom-0 z-120 max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
+          <div className="lg:hidden fixed inset-x-0 bottom-0 z-10000 max-h-[85vh] overflow-y-auto rounded-t-3xl border-t border-primary/10 bg-background shadow-2xl p-4 sm:p-6 animate-in slide-in-from-bottom duration-300">
             <Ticket
               items={cartItems}
               totalItems={cartTotalItems}
@@ -129,6 +129,7 @@ export default function Sales() {
               onRemoveItem={removeFromCart}
               onClearCart={clearCart}
               onOpenCheckout={() => setIsCheckoutOpen(true)}
+              onClose={() => setIsMobileTicketOpen(false)}
             />
           </div>
         </>

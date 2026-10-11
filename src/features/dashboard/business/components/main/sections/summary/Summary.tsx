@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { LayoutIcon, WalletIcon, PackageIcon, StorefrontIcon, SidebarIcon } from "@phosphor-icons/react";
+import { LayoutIcon, WalletIcon, PackageIcon, SidebarIcon } from "@phosphor-icons/react";
 
 import Sidebar from "@/features/dashboard/business/components/main/sections/summary/Sidebar/Sidebar";
 import SummaryMain from "@/features/dashboard/business/components/main/sections/summary/Main/Main";

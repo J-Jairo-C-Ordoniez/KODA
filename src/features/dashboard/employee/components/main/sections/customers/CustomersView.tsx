@@ -96,6 +96,7 @@ export default function EmployeeCustomersView() {
           registerPayment={registerPayment}
           deleteCustomer={deleteCustomer}
           getCustomerHistory={getCustomerHistory}
+          isSidebarOpen={isSidebarOpen}
         />
       </div>
     </div>

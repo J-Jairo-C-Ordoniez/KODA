@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { LoaderCircle } from 'lucide-react';
+import { SpinnerGapIcon } from '@phosphor-icons/react';
 import Button from '@/shared/components/Button';
 
 interface EmployeeFormProps {
@@ -46,14 +46,14 @@ export default function EmployeeForm({ editingEmployee, onCancel, onSave, isSavi
   };
 
   return (
-    <section className="mx-auto max-w-4xl space-y-8 animate-in fade-in duration-500">
+    <section className="w-full space-y-5 animate-in fade-in duration-500">
       <header>
-        <h2 className="text-2xl font-bold text-primary tracking-tight">
-          {isEditing ? 'Editar empleado' : 'Nuevo empleado'}
+        <h2 className="text-2xl font-bold leading-tight tracking-tight text-primary">
+          {isEditing ? 'Editar empleado' : 'Registrar empleado'}
         </h2>
-        <p className="text-gray-500 text-base mt-1 max-w-2xl">
+        <p className="max-w-3xl text-base font-normal leading-relaxed text-foreground/75 sm:text-lg md:text-xl">
           {isEditing
-            ? 'Actualiza la información del miembro del equipo.'
+            ? 'Actualiza los datos y credenciales del miembro del equipo.'
             : 'Agrega un nuevo miembro al equipo para que pueda registrar ventas con acceso individual.'}
         </p>
       </header>
@@ -70,12 +70,12 @@ export default function EmployeeForm({ editingEmployee, onCancel, onSave, isSavi
         )}
 
         {/* Nombre */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+            <label className="block text-base font-medium leading-relaxed text-foreground/75 sm:text-lg">
               Nombre completo *
             </label>
-            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+            <p className="mt-1 text-sm font-normal leading-relaxed text-foreground/75 sm:text-base">
               Nombre real del empleado tal como aparecerá en reportes y registros de ventas.
             </p>
           </div>
@@ -84,17 +84,17 @@ export default function EmployeeForm({ editingEmployee, onCancel, onSave, isSavi
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej: María González"
-            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
+            className="w-full rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
           />
         </div>
 
         {/* Email */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+            <label className="block text-base font-medium leading-relaxed text-foreground/75 sm:text-lg">
               Correo electrónico *
             </label>
-            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+            <p className="mt-1 text-sm font-normal leading-relaxed text-foreground/75 sm:text-base">
               Esta dirección se usará como credencial de inicio de sesión para el empleado.
             </p>
           </div>
@@ -103,19 +103,19 @@ export default function EmployeeForm({ editingEmployee, onCancel, onSave, isSavi
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="empleado@correo.com"
-            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
+            className="w-full rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
           />
         </div>
 
         {/* Contraseña */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+            <label className="block text-base font-medium leading-relaxed text-foreground/75 sm:text-lg">
               Contraseña {isEditing ? '(opcional)' : '*'}
             </label>
-            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+            <p className="mt-1 text-sm font-normal leading-relaxed text-foreground/75 sm:text-base">
               {isEditing
-                ? 'Déjala vacía si no deseas cambiar la contraseña actual.'
+                ? 'Déjala vacía si no deseas cambiar la contraseña actual del empleado.'
                 : 'Mínimo 8 caracteres. El empleado podrá cambiarla después.'}
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function EmployeeForm({ editingEmployee, onCancel, onSave, isSavi
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder={isEditing ? 'Nueva contraseña (opcional)' : 'Mínimo 8 caracteres'}
-            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
+            className="w-full rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
           />
         </div>
 
@@ -140,12 +140,11 @@ export default function EmployeeForm({ editingEmployee, onCancel, onSave, isSavi
           <Button
             variant="primary"
             type="submit"
-            onClick={handleSubmit}
             disabled={isSaving}
           >
             {isSaving ? (
               <>
-                <LoaderCircle size={16} className="animate-spin" />
+                <SpinnerGapIcon size={16} className="animate-spin" />
                 Guardando...
               </>
             ) : (

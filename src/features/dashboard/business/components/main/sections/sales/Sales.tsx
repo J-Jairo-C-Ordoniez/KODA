@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBagIcon } from '@phosphor-icons/react';
 import Toaster from '@/shared/components/Toaster';
 import useToast from '@/shared/hooks/useToast';
 import Loader from '@/shared/components/Loader';
@@ -102,7 +102,7 @@ export default function Sales() {
             onClick={() => setIsMobileTicketOpen(true)}
           >
             <div className="relative">
-              <ShoppingBag size={22} />
+              <ShoppingBagIcon size={22} weight="fill" />
               <span className="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center border-2 border-primary">
                 {cartTotalItems}
               </span>

@@ -12,35 +12,114 @@ export interface CreateSaleItemRepoDTO {
   priceAtSale: number;
 }
 
-export interface CreateSaleRepoDTO {
+export interface RegisterSaleRepoDTO {
   tenantId: string;
   userId: string;
   customerId?: string;
-  total: number;
   paymentMethod: PaymentMethod;
-  items: CreateSaleItemRepoDTO[];
+  items: Array<{
+    variantId: string;
+    quantity: number;
+  }>;
 }
 
 const salesRepository = {
-  async createSale(data: CreateSaleRepoDTO) {
-    return prisma.sale.create({
-      data: {
-        tenantId: data.tenantId,
-        userId: data.userId,
-        customerId: data.customerId,
-        total: data.total,
-        paymentMethod: data.paymentMethod,
-        items: {
-          create: data.items.map(item => ({
-            variantId: item.variantId,
-            quantity: item.quantity,
-            priceAtSale: item.priceAtSale,
-          }))
-        }
-      },
-      include: {
-        items: true,
+  async registerSale(data: RegisterSaleRepoDTO) {
+    return prisma.$transaction(async (tx) => {
+      const quantitiesByVariant = new Map<string, number>();
+      for (const item of data.items) {
+        quantitiesByVariant.set(
+          item.variantId,
+          (quantitiesByVariant.get(item.variantId) ?? 0) + item.quantity,
+        );
       }
+
+      const variantIds = [...quantitiesByVariant.keys()];
+      const variants = await tx.variant.findMany({
+        where: {
+          variantId: { in: variantIds },
+          product: { tenantId: data.tenantId },
+        },
+        select: {
+          variantId: true,
+          price: true,
+          inventories: {
+            select: { inventoryId: true, stock: true },
+            orderBy: { createdAt: 'asc' },
+            take: 1,
+          },
+        },
+      });
+
+      if (variants.length !== variantIds.length) {
+        throw new Error('Una o más variantes no están disponibles para esta tienda');
+      }
+
+      const items = [] as CreateSaleItemRepoDTO[];
+
+      for (const variant of variants) {
+        const quantity = quantitiesByVariant.get(variant.variantId)!;
+        const inventory = variant.inventories[0];
+
+        if (!inventory) {
+          throw new Error('La variante no tiene inventario configurado');
+        }
+
+        const stockUpdate = await tx.inventory.updateMany({
+          where: {
+            inventoryId: inventory.inventoryId,
+            stock: { gte: quantity },
+          },
+          data: { stock: { decrement: quantity } },
+        });
+
+        if (stockUpdate.count !== 1) {
+          throw new Error(`Stock insuficiente para una de las variantes seleccionadas`);
+        }
+
+        await tx.variant.update({
+          where: { variantId: variant.variantId },
+          data: { popularity: { increment: quantity } },
+        });
+
+        items.push({
+          variantId: variant.variantId,
+          quantity,
+          priceAtSale: Number(variant.price),
+        });
+      }
+
+      const total = items.reduce((sum, item) => sum + item.priceAtSale * item.quantity, 0);
+
+      if (data.paymentMethod === PaymentMethod.debt) {
+        if (!data.customerId) {
+          throw new Error('Un fiado requiere seleccionar un cliente');
+        }
+
+        const debtUpdate = await tx.customer.updateMany({
+          where: { customerId: data.customerId, tenantId: data.tenantId },
+          data: { totalDebt: { increment: total } },
+        });
+
+        if (debtUpdate.count !== 1) {
+          throw new Error('Cliente no encontrado');
+        }
+      }
+
+      return tx.sale.create({
+        data: {
+          tenantId: data.tenantId,
+          userId: data.userId,
+          customerId: data.customerId,
+          total,
+          paymentMethod: data.paymentMethod,
+          items: { create: items },
+        },
+        include: { items: true },
+      });
+    }, {
+      maxWait: 5000,
+      timeout: 10000,
     });
   },
 

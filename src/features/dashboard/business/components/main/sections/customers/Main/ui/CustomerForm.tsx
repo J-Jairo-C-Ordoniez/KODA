@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { LoaderCircle } from 'lucide-react';
+import { SpinnerGapIcon } from '@phosphor-icons/react';
 import { Customer, SaveCustomerDto } from '@/features/dashboard/business/api/customers.api';
 import Button from '@/shared/components/Button';
 
@@ -52,12 +52,12 @@ export default function CustomerForm({ editingCustomer, onCancel, onSave, isSavi
   };
 
   return (
-    <section className="mx-auto max-w-4xl space-y-8 animate-in fade-in duration-500">
+    <section className="w-full space-y-5 animate-in fade-in duration-500">
       <header>
-        <h2 className="text-2xl font-bold text-primary tracking-tight">
+        <h2 className="text-2xl font-bold leading-tight tracking-tight text-primary">
           {editingCustomer ? 'Editar cliente' : 'Registrar cliente'}
         </h2>
-        <p className="text-gray-500 text-base mt-1 max-w-2xl">
+        <p className="max-w-3xl text-base font-normal leading-relaxed text-foreground/75 sm:text-lg md:text-xl">
           {editingCustomer
             ? 'Actualiza los datos de contacto del cliente.'
             : 'Registra a un cliente de confianza para llevar control de sus compras y deudas.'}
@@ -71,12 +71,12 @@ export default function CustomerForm({ editingCustomer, onCancel, onSave, isSavi
           </div>
         )}
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+            <label className="block text-base font-medium leading-relaxed text-foreground/75 sm:text-lg">
               Nombre completo *
             </label>
-            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+            <p className="mt-1 text-sm font-normal leading-relaxed text-foreground/75 sm:text-base">
               Usa el nombre con el que lo identifica habitualmente en el negocio.
             </p>
           </div>
@@ -86,16 +86,16 @@ export default function CustomerForm({ editingCustomer, onCancel, onSave, isSavi
             value={formData.name}
             onChange={handleChange}
             placeholder="Ej: Juan Pérez"
-            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
+            className="w-full rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+            <label className="block text-base font-medium leading-relaxed text-foreground/75 sm:text-lg">
               Teléfono / WhatsApp *
             </label>
-            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+            <p className="mt-1 text-sm font-normal leading-relaxed text-foreground/75 sm:text-base">
               Este número se usará para enviar recordatorios de cobro y recibos de abono directamente por WhatsApp.
             </p>
           </div>
@@ -105,7 +105,7 @@ export default function CustomerForm({ editingCustomer, onCancel, onSave, isSavi
             value={formData.phone}
             onChange={handleChange}
             placeholder="Ej: 3001234567"
-            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
+            className="w-full rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
           />
         </div>
 
@@ -123,12 +123,12 @@ export default function CustomerForm({ editingCustomer, onCancel, onSave, isSavi
           >
             {isSaving ? (
               <>
-                <LoaderCircle size={16} className="animate-spin" />
+                <SpinnerGapIcon size={16} className="animate-spin" />
                 Guardando...
               </>
             ) : (
               <>
-                Guardar Categoría
+                {editingCustomer ? 'Guardar cambios' : 'Guardar cliente'}
               </>
             )}
           </Button>

@@ -71,7 +71,7 @@ export default function Sidebar({ onCloseMobile }: SidebarProps) {
     return (
         <aside
             ref={containerRef}
-            className="w-full h-full bg-background p-4 pt-20 flex flex-col gap-6 overflow-y-auto"
+            className="w-full h-full bg-background py-4 px-2 md:px-4 xl:px-10 flex flex-col overflow-y-auto"
         >
             <SidebarHeader
                 selectedProductId={selectedProductId}

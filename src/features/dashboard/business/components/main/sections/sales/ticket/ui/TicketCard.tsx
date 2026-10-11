@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { MinusIcon, PlusIcon, TrashIcon } from '@phosphor-icons/react';
 import { formatCurrency } from '@/lib/formatters';
 import type { HydratedCartItem } from '@/features/dashboard/business/hooks/useSalesPOS';
 
@@ -13,9 +13,9 @@ interface TicketCardProps {
 
 export default function TicketCard({ item, onUpdateQuantity, onRemoveItem }: TicketCardProps) {
     return (
-        <article className="flex items-center justify-between gap-3 p-3 rounded-xl bg-primary/2 border border-primary/5 hover:border-primary/10 transition-all">
+        <article className="flex items-center justify-between gap-3 rounded-2xl border border-primary/10 bg-background p-3 transition-all hover:border-primary/20">
             <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="relative w-11 h-11 rounded-lg bg-background border border-primary/5 overflow-hidden shrink-0">
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-primary/10 bg-background">
                     <Image
                         src={item.image}
                         alt={item.variantName}
@@ -25,10 +25,10 @@ export default function TicketCard({ item, onUpdateQuantity, onRemoveItem }: Tic
                     />
                 </div>
                 <div className="min-w-0 flex-1">
-                    <h4 className="text-xs font-bold text-primary truncate leading-tight">
+                    <h4 className="truncate text-sm font-medium leading-relaxed text-foreground/75">
                         {item.productName} · {item.variantName}
                     </h4>
-                    <p className="text-xs font-medium text-primary/60 mt-1">
+                    <p className="mt-1 text-sm font-medium leading-relaxed text-foreground/50">
                         {formatCurrency(item.price)} c/u
                     </p>
                 </div>
@@ -40,7 +40,7 @@ export default function TicketCard({ item, onUpdateQuantity, onRemoveItem }: Tic
                     className="w-7 h-7 rounded-lg bg-background border border-primary/10 hover:bg-foreground-muted/60 text-primary flex items-center justify-center transition-colors cursor-pointer"
                     aria-label="Disminuir cantidad"
                 >
-                    <Minus size={12} />
+                    <MinusIcon size={12} weight="bold" />
                 </button>
                 <span className="w-6 text-center font-mono text-xs font-bold text-primary">
                     {item.quantity}
@@ -50,14 +50,14 @@ export default function TicketCard({ item, onUpdateQuantity, onRemoveItem }: Tic
                     className="w-7 h-7 rounded-lg bg-background border border-primary/10 hover:bg-foreground-muted/60 text-primary flex items-center justify-center transition-colors cursor-pointer"
                     aria-label="Aumentar cantidad"
                 >
-                    <Plus size={12} />
+                    <PlusIcon size={12} weight="bold" />
                 </button>
                 <button
                     onClick={() => onRemoveItem(item.variantId)}
                     className="w-7 h-7 rounded-lg text-primary/40 hover:text-accent-red hover:bg-accent-red/10 flex items-center justify-center transition-colors cursor-pointer ml-1"
                     title="Eliminar de ticket"
                 >
-                    <Trash2 size={18} />
+                    <TrashIcon size={18} />
                 </button>
             </div>
         </article>

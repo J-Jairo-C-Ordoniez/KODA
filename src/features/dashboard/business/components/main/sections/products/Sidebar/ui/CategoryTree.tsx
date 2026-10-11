@@ -1,7 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Check, ChevronDown, ChevronRight, Edit2, Folder, FolderOpen, Package, Plus, Trash2, X } from 'lucide-react';
+import {
+  CaretDownIcon,
+  CaretRightIcon,
+  CheckIcon,
+  FolderIcon,
+  FolderOpenIcon,
+  PackageIcon,
+  PencilSimpleIcon,
+  PlusIcon,
+  TrashIcon,
+  XIcon,
+} from '@phosphor-icons/react';
 import type { Category, Product } from '@/features/dashboard/business/api/products.api';
 import type { ActiveView } from '@/store/useProductsStore';
 
@@ -18,18 +29,21 @@ interface CategoryTreeProps {
 }
 
 export default function CategoryTree({ categories, products, selectedProductId, onSelectProduct, onUpdateCategory, onDeleteCategory, onUpdateProduct, onDeleteProduct, onSetView }: CategoryTreeProps) {
-  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+  const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingType, setEditingType] = useState<'category' | 'product' | null>(null);
   const [editValue, setEditValue] = useState('');
   const editInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!selectedProductId) return;
+    if (!selectedProductId) {
+      setExpandedCategoryId(null);
+      return;
+    }
 
     const product = products.find(item => item.productId === selectedProductId);
     if (product) {
-      setExpandedCategories(prev => ({ ...prev, [product.categoryId]: true }));
+      setExpandedCategoryId(product.categoryId);
     }
   }, [selectedProductId, products]);
 
@@ -88,7 +102,7 @@ export default function CategoryTree({ categories, products, selectedProductId, 
         className="text-primary/80 transition-colors hover:text-success cursor-pointer"
         aria-label="Guardar"
       >
-        <Check size={18} />
+        <CheckIcon size={18} weight="bold" />
       </button>
       <button
         type="button"
@@ -96,7 +110,7 @@ export default function CategoryTree({ categories, products, selectedProductId, 
         className="text-primary/80 transition-colors hover:text-accent-red cursor-pointer"
         aria-label="Cancelar"
       >
-        <X size={18} />
+        <XIcon size={18} weight="bold" />
       </button>
     </form>
   );
@@ -111,42 +125,42 @@ export default function CategoryTree({ categories, products, selectedProductId, 
   };
 
   return (
-    <nav className="flex flex-col gap-8">
+    <nav className="flex w-full flex-col gap-8 pt-4 pb-2">
       <section className="flex flex-col gap-1">
-        <h3 className="text-xs font-semibold text-primary/40 uppercase tracking-wider px-2 mb-2">
+        <h3 className="mb-2 px-5 text-sm font-medium uppercase tracking-tight leading-tight text-primary/40">
           Acciones
         </h3>
         <button
           onClick={() => onSetView('create-category')}
-          className="gsap-menu-item flex items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-primary/60 transition-colors duration-200 hover:bg-foreground-muted/40 hover:text-primary cursor-pointer"
+          className="gsap-menu-item flex items-center gap-5 rounded-full px-5 py-3.5 text-left text-xl font-medium tracking-tight leading-tight text-primary/80 transition-colors duration-200 hover:bg-primary/10 hover:text-primary cursor-pointer"
         >
-          <Plus size={18} />
+          <PlusIcon size={28} weight="regular" />
           Nueva categoría
         </button>
         <button
           onClick={() => onSetView('create-product')}
-          className="gsap-menu-item flex items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-primary/60 transition-colors duration-200 hover:bg-foreground-muted/40 hover:text-primary cursor-pointer"
+          className="gsap-menu-item flex items-center gap-5 rounded-full px-5 py-3.5 text-left text-xl font-medium tracking-tight leading-tight text-primary/80 transition-colors duration-200 hover:bg-primary/10 hover:text-primary cursor-pointer"
         >
-          <Plus size={18} />
+          <PlusIcon size={28} weight="regular" />
           Nuevo producto
         </button>
       </section>
 
       <section className="flex flex-col gap-1">
-        <h3 className="text-xs font-semibold text-primary/40 uppercase tracking-wider px-2 mb-2">
+        <h3 className="mb-2 px-5 text-sm font-medium uppercase tracking-tight leading-tight text-primary/40">
           Estructura
         </h3>
 
         {categories.length === 0
-          ? (<p className="px-2 py-6 text-sm font-medium leading-relaxed text-primary/60">
+          ? (<p className="px-5 py-6 text-sm font-medium leading-relaxed text-primary/60">
             No hay categorías registradas.
           </p>)
           : (<ul className="flex flex-col gap-1">
             {categories.map(category => {
-              const isExpanded = !!expandedCategories[category.categoryId];
+              const isExpanded = expandedCategoryId === category.categoryId;
               const categoryProducts = products.filter(product => product.categoryId === category.categoryId);
               const isEditingCategory = editingId === category.categoryId && editingType === 'category';
-              const FolderIcon = isExpanded ? FolderOpen : Folder;
+              const CategoryIcon = isExpanded ? FolderOpenIcon : FolderIcon;
 
               return (
                 <li
@@ -154,19 +168,22 @@ export default function CategoryTree({ categories, products, selectedProductId, 
                   className="group/category flex flex-col gap-1"
                 >
                   <div
-                    onClick={() => setExpandedCategories(prev => ({ ...prev, [category.categoryId]: !prev[category.categoryId] }))}
-                    className="gsap-menu-item flex items-center justify-between rounded-lg px-3 py-2 text-primary/60 transition-colors duration-200 hover:bg-foreground-muted/40 hover:text-primary cursor-pointer"
+                    onClick={() => setExpandedCategoryId(current => current === category.categoryId ? null : category.categoryId)}
+                    className={`gsap-menu-item flex items-center justify-between rounded-full px-5 py-3.5 transition-colors duration-200 cursor-pointer ${isExpanded
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-primary/80 hover:bg-primary/10 hover:text-primary'
+                      }`}
                   >
-                    <div className="flex min-w-0 flex-1 items-center gap-3">
-                      <FolderIcon size={18} />
+                    <div className="flex min-w-0 flex-1 items-center gap-5">
+                      <CategoryIcon size={28} weight={isExpanded ? 'fill' : 'regular'} />
                       {isEditingCategory
                         ? renderInlineEdit(category.categoryId)
-                        : <span className="truncate text-sm">{category.name}</span>}
+                        : <span className={`truncate text-xl tracking-tight leading-tight ${isExpanded ? 'font-bold' : 'font-medium'}`}>{category.name}</span>}
                     </div>
 
                     {!isEditingCategory && (
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-primary/40 group-hover/category:hidden">
+                        <span className="text-sm font-medium text-primary/60 group-hover/category:hidden">
                           {categoryProducts.length}
                         </span>
                         <div className="hidden items-center gap-2 text-primary/40 group-hover/category:flex">
@@ -175,7 +192,7 @@ export default function CategoryTree({ categories, products, selectedProductId, 
                             className="transition-colors hover:text-primary cursor-pointer"
                             aria-label={`Editar ${category.name}`}
                           >
-                            <Edit2 size={18} />
+                            <PencilSimpleIcon size={18} />
                           </button>
 
                           <button
@@ -183,12 +200,12 @@ export default function CategoryTree({ categories, products, selectedProductId, 
                             className="transition-colors hover:text-accent-red cursor-pointer"
                             aria-label={`Eliminar ${category.name}`}
                           >
-                            <Trash2 size={18} />
+                            <TrashIcon size={18} />
                           </button>
                         </div>
                         {isExpanded
-                          ? <ChevronDown size={18} />
-                          : <ChevronRight size={18}
+                          ? <CaretDownIcon size={18} weight="bold" />
+                          : <CaretRightIcon size={18} weight="bold"
                           />
                         }
                       </div>
@@ -196,9 +213,9 @@ export default function CategoryTree({ categories, products, selectedProductId, 
                   </div>
 
                   {isExpanded && (
-                    <ul className="ml-3 flex flex-col gap-1 border-l border-primary/10 pl-4 py-1">
+                    <ul className="ml-9 flex flex-col gap-1 border-l border-primary/10 py-1 pl-4">
                       {categoryProducts.length === 0
-                        ? <li className="px-3 py-1 text-sm font-medium leading-relaxed text-primary/60">Sin productos</li>
+                        ? <li className="px-5 py-2 text-sm font-medium leading-relaxed text-primary/60">Sin productos</li>
                         : (
                           categoryProducts.map(product => {
                             const isSelected = selectedProductId === product.productId;
@@ -208,16 +225,16 @@ export default function CategoryTree({ categories, products, selectedProductId, 
                               <li
                                 key={product.productId}
                                 onClick={() => onSelectProduct(product.productId)}
-                                className={`group/product flex items-center justify-between rounded-lg px-3 py-2 transition-colors duration-200 cursor-pointer ${isSelected
-                                  ? 'bg-foreground-muted/40 text-primary'
-                                  : 'text-primary/60 hover:bg-foreground-muted/40 hover:text-primary'
+                                className={`group/product flex items-center justify-between rounded-full px-5 py-3 transition-colors duration-200 cursor-pointer ${isSelected
+                                  ? 'bg-primary/10 text-primary'
+                                  : 'text-primary/80 hover:bg-primary/10 hover:text-primary'
                                   }`}
                               >
-                                <div className="flex min-w-0 flex-1 items-center gap-3">
-                                  <Package size={18} />
+                                <div className="flex min-w-0 flex-1 items-center gap-5">
+                                  <PackageIcon size={24} weight={isSelected ? 'fill' : 'regular'} />
                                   {isEditingProduct
                                     ? renderInlineEdit(product.productId)
-                                    : <span className="truncate text-sm">{product.name}</span>
+                                    : <span className={`truncate text-base tracking-tight ${isSelected ? 'font-bold' : 'font-medium'}`}>{product.name}</span>
                                   }
                                 </div>
 
@@ -228,14 +245,14 @@ export default function CategoryTree({ categories, products, selectedProductId, 
                                       className="transition-colors hover:text-primary cursor-pointer"
                                       aria-label={`Editar ${product.name}`}
                                     >
-                                      <Edit2 size={18} />
+                                      <PencilSimpleIcon size={18} />
                                     </button>
                                     <button
                                       onClick={e => handleDelete(e, product.productId, 'product')}
                                       className="transition-colors hover:text-accent-red cursor-pointer"
                                       aria-label={`Eliminar ${product.name}`}
                                     >
-                                      <Trash2 size={18} />
+                                      <TrashIcon size={18} />
                                     </button>
                                   </div>
                                 )}

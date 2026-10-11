@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sidebar as SidebarIcon } from 'lucide-react';
+import { SidebarSimpleIcon } from '@phosphor-icons/react';
 import useToast from '@/shared/hooks/useToast';
 import useTeam from '@/features/dashboard/business/hooks/useTeam';
 import Toaster from '@/shared/components/Toaster';
@@ -26,6 +26,9 @@ export default function Team() {
 
   const handleNewEmployeeFromSidebar = () => {
     setPendingNewEmployee(true);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
   };
 
   return (
@@ -33,7 +36,7 @@ export default function Team() {
       <Toaster toasts={toasts} removeToast={removeToast} />
 
       {/* Main content (Center) */}
-      <div className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-8 md:pt-8 custom-scrollbar relative">
+      <div className="flex-1 min-w-0 custom-scrollbar relative">
         <TeamMain
           showToast={showToast}
           selectedEmployeeId={selectedEmployeeId}
@@ -45,17 +48,18 @@ export default function Team() {
           deleteEmployee={deleteEmployee}
           pendingNewEmployee={pendingNewEmployee}
           onNewEmployeeHandled={() => setPendingNewEmployee(false)}
+          isSidebarOpen={isSidebarOpen}
         />
       </div>
 
       {/* Sidebar toggle button (Right) */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="fixed top-6 right-4 lg:right-6 z-[110] p-2 text-primary hover:bg-primary/5 rounded-xl border border-transparent hover:border-primary/10 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer bg-background md:bg-transparent shadow-sm md:shadow-none"
-        title={isSidebarOpen ? 'Ocultar menú lateral' : 'Mostrar menú lateral'}
+        className="fixed top-6 right-4 lg:right-6 z-[110] flex h-10 w-10 items-center justify-center rounded-xl border border-transparent bg-background text-primary shadow-sm transition-all duration-200 hover:border-primary/10 hover:bg-primary/5 hover:shadow-sm active:scale-95 cursor-pointer md:bg-transparent md:shadow-none"
+        title={isSidebarOpen ? "Ocultar menú lateral" : "Mostrar menú lateral"}
         aria-label="Alternar menú lateral"
       >
-        <SidebarIcon size={20} className={isSidebarOpen ? "rotate-180" : ""} />
+        <SidebarSimpleIcon size={24} weight="regular" className={isSidebarOpen ? "rotate-180" : ""} />
       </button>
 
       {/* Mobile overlay */}
@@ -69,10 +73,10 @@ export default function Team() {
       {/* Sidebar panel (Right) */}
       <div
         className={`shrink-0 transition-all duration-300 border-l border-primary/10 bg-background 
-          fixed inset-y-0 right-0 z-50 w-[280px]
+          fixed inset-y-0 right-0 z-50 w-65
           ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
           md:sticky md:top-0 md:h-screen md:translate-x-0
-          ${isSidebarOpen ? 'md:w-[280px] md:opacity-100' : 'md:w-0 md:opacity-0 md:overflow-hidden md:border-l-0'}
+          ${isSidebarOpen ? 'md:w-80 md:opacity-100' : 'md:w-0 md:opacity-0 md:overflow-hidden md:border-l-0'}
         `}
       >
         <Sidebar

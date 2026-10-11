@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronRight, UserPlus } from 'lucide-react';
+import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react';
 import type { Employee } from '@/features/dashboard/business/api/team.api';
 import type { ToastType } from '@/shared/hooks/useToast';
 
@@ -27,6 +27,7 @@ interface TeamMainProps {
   pendingNewEmployee?: boolean;
   /** Callback para notificar que se procesó el pending */
   onNewEmployeeHandled?: () => void;
+  isSidebarOpen: boolean;
 }
 
 export default function TeamMain({
@@ -40,11 +41,13 @@ export default function TeamMain({
   deleteEmployee,
   pendingNewEmployee,
   onNewEmployeeHandled,
+  isSidebarOpen,
 }: TeamMainProps) {
   const [activeView, setActiveView] = useState<ActiveView>('grid');
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [drawerEmployee, setDrawerEmployee] = useState<Employee | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Reaccionar al trigger desde la sidebar
   useEffect(() => {
@@ -61,16 +64,23 @@ export default function TeamMain({
   }, [employees, selectedEmployeeId]);
 
   const displayedEmployees = useMemo<Employee[]>(() => {
-    if (selectedEmployee) return [selectedEmployee];
-    return employees;
-  }, [employees, selectedEmployee]);
+    let list = selectedEmployee ? [selectedEmployee] : employees;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      list = list.filter(
+        (emp) =>
+          emp.name.toLowerCase().includes(q) || emp.email.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [employees, selectedEmployee, searchQuery]);
 
   const handleOpenDrawer = (employee: Employee) => {
     setDrawerEmployee(employee);
     setIsDrawerOpen(true);
   };
 
-  const handleEditFromDrawer = (employee: Employee) => {
+  const handleEdit = (employee: Employee) => {
     setEditingEmployee(employee);
     setIsDrawerOpen(false);
     setActiveView('create-employee');
@@ -100,31 +110,39 @@ export default function TeamMain({
   };
 
   const handleDelete = async (employeeId: string) => {
-    const res = await deleteEmployee(employeeId);
-    if (res.success) {
-      showToast('success', 'Empleado eliminado', 'El miembro fue removido del equipo.');
-    } else {
-      showToast('error', 'Error al eliminar', res.error);
+    const emp = employees.find((e) => e.userId === employeeId);
+    if (!emp) return { success: false, error: 'Empleado no encontrado' };
+    if (confirm(`¿Estás seguro de que deseas eliminar al empleado "${emp.name}"?`)) {
+      const res = await deleteEmployee(employeeId);
+      if (res.success) {
+        showToast('success', 'Empleado eliminado', 'El miembro fue removido del equipo.');
+        setIsDrawerOpen(false);
+      } else {
+        showToast('error', 'Error al eliminar', res.error);
+      }
+      return res;
     }
-    return res;
+    return { success: false };
   };
 
   if (isLoading && employees.length === 0) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-background">
+      <div className="flex h-full w-full items-center justify-center bg-background py-20">
         <Loader />
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-7">
-
+    <main className="w-full space-y-8 px-2 py-8 md:px-4 md:py-10 xl:px-10">
       {/* ── Form view ── */}
       {activeView === 'create-employee' && (
         <EmployeeForm
           editingEmployee={editingEmployee}
-          onCancel={() => { setActiveView('grid'); setEditingEmployee(null); }}
+          onCancel={() => {
+            setActiveView('grid');
+            setEditingEmployee(null);
+          }}
           onSave={handleSave}
           isSaving={isSaving}
         />
@@ -133,46 +151,62 @@ export default function TeamMain({
       {/* ── Grid view ── */}
       {activeView === 'grid' && (
         <section className="space-y-6 animate-in fade-in duration-500">
-          {/* Header + breadcrumb */}
-          <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-primary/5 pb-4">
-            <nav
-              className="flex flex-wrap items-center gap-2 text-xs font-medium text-primary/60"
-              aria-label="Ubicación del Equipo"
-            >
-              <span className="rounded-md bg-foreground-muted/40 px-3 py-1 text-sm text-primary/80">
-                Equipo
+          <header className="border-b border-primary/10 pb-6">
+            <div className="relative w-full max-w-xl">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-primary/40">
+                <MagnifyingGlassIcon size={18} />
               </span>
-              <ChevronRight size={18} className="text-primary/25" />
-              <span className="p-1 text-sm text-primary/80">
-                {selectedEmployee ? selectedEmployee.name : 'Todos los empleados'}
-              </span>
-            </nav>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar por nombre o correo..."
+                className="w-full rounded-2xl border border-primary/10 bg-background py-3.5 pl-10 pr-10 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 hover:border-primary/20 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-primary/40 transition-colors hover:text-primary cursor-pointer"
+                  title="Limpiar búsqueda"
+                >
+                  <XIcon size={18} />
+                </button>
+              )}
+            </div>
           </header>
 
           {/* Grid */}
           {displayedEmployees.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-20 w-full mx-auto">
-              <h3 className="text-lg font-medium text-primary tracking-tight">
-                Sin empleados registrados
+            <div className="flex min-h-75 w-full flex-col items-center justify-center rounded-3xl border border-primary/10 bg-background/80 px-6 py-20 text-center shadow-sm">
+              <h3 className="text-xl font-bold tracking-tight text-primary">
+                {searchQuery ? 'No se encontraron miembros' : 'Sin empleados registrados'}
               </h3>
-              <p className="text-sm text-primary/60 leading-relaxed max-w-md my-2">
-                Agrega el primer miembro de tu equipo para comenzar a registrar ventas con acceso individual.
+              <p className="my-2 max-w-md text-sm leading-relaxed text-foreground/65 sm:text-base">
+                {searchQuery
+                  ? `Ningún miembro coincide con "${searchQuery}".`
+                  : 'Agrega el primer miembro de tu equipo para comenzar a registrar ventas con acceso individual.'}
               </p>
-              <Button
-                variant="primary"
-                onClick={() => { setEditingEmployee(null); setActiveView('create-employee'); }}
-              >
-                <UserPlus size={15} />
-                Crear primer empleado
-              </Button>
+              {!searchQuery && (
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setEditingEmployee(null);
+                    setActiveView('create-employee');
+                  }}
+                >
+                  Crear primer empleado
+                </Button>
+              )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className={`grid grid-cols-1 gap-6 lg:grid-cols-2 ${isSidebarOpen ? 'xl:grid-cols-2' : 'xl:grid-cols-3'}`}>
               {displayedEmployees.map((emp) => (
                 <EmployeeCard
                   key={emp.userId}
                   employee={emp}
-                  onClick={() => handleOpenDrawer(emp)}
+                  onOpenDrawer={handleOpenDrawer}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
                 />
               ))}
             </div>
@@ -185,10 +219,10 @@ export default function TeamMain({
         isOpen={isDrawerOpen}
         employee={drawerEmployee}
         onClose={() => setIsDrawerOpen(false)}
-        onEdit={handleEditFromDrawer}
+        onEdit={handleEdit}
         onDelete={handleDelete}
         isSaving={isSaving}
       />
-    </div>
+    </main>
   );
 }

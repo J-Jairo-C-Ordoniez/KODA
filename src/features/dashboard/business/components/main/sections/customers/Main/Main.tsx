@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Search, X, UserPlus, Users } from 'lucide-react';
+import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react';
 import { Customer, CustomerHistoryData } from '@/features/dashboard/business/api/customers.api';
 import type { ToastType } from '@/shared/hooks/useToast';
 import { CustomerFilterType } from '@/features/dashboard/business/hooks/useCustomers';
@@ -33,9 +33,10 @@ interface CustomersMainProps {
   registerPayment: (customerId: string, data: any) => Promise<any>;
   deleteCustomer: (customerId: string) => Promise<any>;
   getCustomerHistory: (customerId: string) => Promise<CustomerHistoryData | null>;
+  isSidebarOpen: boolean;
 }
 
-export default function CustomersMain({ showToast, onNewCustomerRef, filteredCustomers, customers, isLoading, isSaving, searchQuery, setSearchQuery, filterType, saveCustomer, registerPayment, deleteCustomer, getCustomerHistory }: CustomersMainProps) {
+export default function CustomersMain({ showToast, onNewCustomerRef, filteredCustomers, customers, isLoading, isSaving, searchQuery, setSearchQuery, filterType, saveCustomer, registerPayment, deleteCustomer, getCustomerHistory, isSidebarOpen }: CustomersMainProps) {
   const [activeView, setActiveView] = useState<ActiveView>('grid');
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [selectedPaymentCustomer, setSelectedPaymentCustomer] = useState<Customer | null>(null);
@@ -97,7 +98,7 @@ export default function CustomersMain({ showToast, onNewCustomerRef, filteredCus
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-7">
+    <main className="w-full space-y-8 px-2 py-8 md:px-4 md:py-10 xl:px-10">
       {(activeView === 'create-customer' || activeView === 'edit-customer') && (
         <CustomerForm
           editingCustomer={editingCustomer}
@@ -112,40 +113,40 @@ export default function CustomersMain({ showToast, onNewCustomerRef, filteredCus
 
       {activeView === 'grid' && (
         <section className="space-y-6 animate-in fade-in duration-500">
-          <header className="border-b border-primary/5 pb-4">
+          <header className="border-b border-primary/10 pb-6">
             <div className="relative w-full max-w-xl">
-              <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-primary/40">
-                <Search size={18} />
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-primary/40">
+                <MagnifyingGlassIcon size={18} />
               </span>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Buscar por nombre o teléfono..."
-                className="w-full pl-10 pr-10 py-3 bg-foreground-muted/40 hover:bg-foreground-muted/60 focus:bg-background border border-primary/8 focus:border-primary/20 rounded-2xl text-sm font-medium text-primary outline-none transition-all placeholder:text-primary/40"
+                className="w-full rounded-2xl border border-primary/10 bg-background py-3.5 pl-10 pr-10 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 hover:border-primary/20 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-primary/40 hover:text-primary transition-colors cursor-pointer"
+                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-primary/40 transition-colors hover:text-primary cursor-pointer"
                   title="Limpiar búsqueda"
                 >
-                  <X size={16} />
+                  <XIcon size={18} />
                 </button>
               )}
             </div>
           </header>
 
           {filteredCustomers.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-20 w-full h-full mx-auto">
-              <h3 className="text-lg font-medium text-primary tracking-tight">
+            <div className="flex min-h-75 w-full flex-col items-center justify-center rounded-3xl border border-primary/10 bg-background/80 px-6 py-20 text-center shadow-sm">
+              <h3 className="text-xl font-bold tracking-tight text-primary">
                 {searchQuery
                   ? 'No se encontraron clientes'
                   : filterType === 'with-debt'
                     ? 'No hay clientes con deuda pendiente'
                     : 'Lista de clientes vacía'}
               </h3>
-              <p className="text-sm text-primary/60 leading-relaxed max-w-md my-2">
+              <p className="my-2 max-w-md text-sm leading-relaxed text-foreground/65 sm:text-base">
                 {searchQuery
                   ? `Ningún cliente coincide con "${searchQuery}".`
                   : filterType === 'with-debt'
@@ -162,7 +163,7 @@ export default function CustomersMain({ showToast, onNewCustomerRef, filteredCus
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className={`grid grid-cols-1 gap-6 lg:grid-cols-2 ${isSidebarOpen ? 'xl:grid-cols-2' : 'xl:grid-cols-3'}`}>
               {filteredCustomers.map((customer) => (
                 <CustomerCard
                   key={customer.customerId}
@@ -197,6 +198,6 @@ export default function CustomersMain({ showToast, onNewCustomerRef, filteredCus
         onFetchHistory={getCustomerHistory}
         onOpenPayment={(cust) => setSelectedPaymentCustomer(cust)}
       />
-    </div >
+    </main>
   );
 }

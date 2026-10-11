@@ -1,6 +1,12 @@
 'use client';
 
-import { Phone, MessageCircle, Edit2, Trash2 } from 'lucide-react';
+import {
+  PencilSimpleIcon,
+  PhoneIcon,
+  TrashIcon,
+  UserCircleIcon,
+  WhatsappLogoIcon,
+} from '@phosphor-icons/react';
 import { Customer } from '@/features/dashboard/business/api/customers.api';
 import { formatCurrency } from '@/lib/formatters';
 import Link from 'next/link';
@@ -14,6 +20,16 @@ interface CustomerCardProps {
   onDelete: (customerId: string) => void;
 }
 
+function getInitials(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase();
+}
+
 export default function CustomerCard({ customer, onOpenPayment, onOpenHistory, onEdit, onDelete }: CustomerCardProps) {
   const hasDebt = customer.totalDebt > 0;
   const message = encodeURIComponent(
@@ -21,34 +37,42 @@ export default function CustomerCard({ customer, onOpenPayment, onOpenHistory, o
   );
 
   return (
-    <article
-      className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300 group flex flex-col justify-between cursor-default"
-    >
-      <header className="mb-4 relative">
-        <span className={`absolute right-2 top-2 text-xs font-bold px-2.5 py-1 rounded-lg border backdrop-blur-xs ${hasDebt
-          ? 'text-red-700 bg-red-50 border-red-100'
-          : 'text-emerald-700 bg-emerald-50 border-emerald-100'
+    <article className="group flex min-h-75 flex-col rounded-3xl border border-primary/10 bg-background/80 p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md sm:p-6 md:rounded-4xl">
+      <header className="flex items-start justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-sm font-bold ${hasDebt
+            ? 'border-amber-500/15 bg-amber-500/10 text-amber-700'
+            : 'border-emerald-500/15 bg-emerald-500/10 text-emerald-700'
+            }`}>
+            {getInitials(customer.name) || <UserCircleIcon size={24} weight="fill" />}
+          </div>
+          <div className="min-w-0">
+            <h3 className="truncate text-base font-bold leading-tight tracking-tight text-primary sm:text-lg">
+              {customer.name}
+            </h3>
+            <Link
+              href={`tel:${customer.phone}`}
+              onClick={(event) => event.stopPropagation()}
+              className="mt-1 flex w-fit items-center gap-1.5 text-sm leading-relaxed text-foreground/60 transition-colors hover:text-primary"
+            >
+              <PhoneIcon size={16} weight="regular" />
+              <span>{customer.phone}</span>
+            </Link>
+          </div>
+        </div>
+
+        <span className={`shrink-0 px-1 py-0.5 text-base font-semibold leading-relaxed ${hasDebt
+          ? 'text-amber-600'
+          : 'text-emerald-600'
           }`}>
           {hasDebt ? 'Con deuda' : 'Al día'}
         </span>
-        <h3 className="text-base font-bold text-primary leading-snug group-hover:text-secondary transition-colors">
-          {customer.name}
-        </h3>
-        <Link
-          href={`tel:${customer.phone}`}
-          onClick={(e) => e.stopPropagation()}
-          className="text-sm text-primary/60 mt-1 flex items-center gap-2 hover:text-primary transition-colors w-fit"
-        >
-          <Phone size={18} /> {customer.phone}
-        </Link>
       </header>
 
-      <div className="pt-4 border-t border-primary/8 flex items-end justify-between gap-3">
+      <div className="my-6 flex items-end justify-between gap-4">
         <div>
-          <h4 className="text-xs font-semibold uppercase text-primary/60 mt-1">
-            Saldo pendiente
-          </h4>
-          <p className="text-2xl font-bold tracking-tight text-primary">
+          <p className="text-sm font-medium leading-tight text-foreground/60">Saldo pendiente</p>
+          <p className="mt-1 text-2xl font-bold leading-tight tracking-tight text-primary">
             {formatCurrency(customer.totalDebt)}
           </p>
         </div>
@@ -59,52 +83,49 @@ export default function CustomerCard({ customer, onOpenPayment, onOpenHistory, o
             target="_blank"
             rel="noopener noreferrer"
             title="Enviar recordatorio de cobro por WhatsApp"
-            className="p-2 -mr-2 rounded-xl text-primary/50 hover:text-emerald-500 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all duration-200"
+            aria-label={`Enviar recordatorio de cobro a ${customer.name} por WhatsApp`}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-emerald-700 transition-all hover:bg-emerald-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
           >
-            <MessageCircle size={18} strokeWidth={2.5} />
+            <WhatsappLogoIcon size={21} weight="fill" />
           </Link>
         )}
       </div>
 
-      <div className="pt-3 mt-3 border-t border-primary/8 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 flex-1">
-          <Button
-            variant='primary'
-            onClick={() => onOpenPayment(customer)}
-            disabled={!hasDebt}
-          >
-            Abonar
-          </Button>
-
-          <Button
-            variant='secondary'
-            onClick={() => onOpenHistory(customer)}
-          >
+      <footer className="mt-auto flex items-center justify-between gap-3 border-t border-primary/10 pt-4">
+        <div className="flex min-w-0 items-center gap-2">
+          {hasDebt && (
+            <Button variant="primary" onClick={() => onOpenPayment(customer)}>
+              Abonar
+            </Button>
+          )}
+          <Button variant={hasDebt ? 'secondary' : 'primary'} onClick={() => onOpenHistory(customer)}>
             Cuaderno
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1">
           <button
             onClick={() => onEdit(customer)}
-            className="text-primary/40 hover:text-primary transition-colors cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-primary/45 transition-colors hover:bg-primary/5 hover:text-primary cursor-pointer"
             title="Editar cliente"
+            aria-label={`Editar a ${customer.name}`}
           >
-            <Edit2 size={18} />
+            <PencilSimpleIcon size={20} weight="regular" />
           </button>
           <button
             onClick={() => onDelete(customer.customerId)}
             disabled={hasDebt}
-            className={`text-primary/40 transition-colors cursor-pointer ${hasDebt
-              ? 'text-primary/20 cursor-not-allowed'
-              : 'text-primary/40 hover:text-red-500 hover:bg-foreground-muted/40 cursor-pointer'
+            className={`flex h-9 w-9 items-center justify-center rounded-xl transition-colors ${hasDebt
+              ? 'cursor-not-allowed text-primary/20'
+              : 'cursor-pointer text-primary/45 hover:bg-red-500/10 hover:text-red-600'
               }`}
             title={hasDebt ? 'No puedes eliminar un cliente con deuda' : 'Eliminar cliente'}
+            aria-label={hasDebt ? `No puedes eliminar a ${customer.name} porque tiene deuda` : `Eliminar a ${customer.name}`}
           >
-            <Trash2 size={18} />
+            <TrashIcon size={20} weight="regular" />
           </button>
         </div>
-      </div>
+      </footer>
     </article>
   );
 }

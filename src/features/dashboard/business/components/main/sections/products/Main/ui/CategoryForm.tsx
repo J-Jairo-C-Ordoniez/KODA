@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { LoaderCircle } from 'lucide-react';
+import { SpinnerGapIcon } from '@phosphor-icons/react';
 import Button from '@/shared/components/Button';
 
 interface CategoryFormProps {
@@ -49,33 +49,33 @@ export default function CategoryForm({ editingCategory, onCancel, onSave, isSavi
   };
 
   return (
-    <section className="mx-auto max-w-4xl space-y-8 animate-in fade-in duration-500">
+    <section className="w-full space-y-5 animate-in fade-in duration-500">
       <header>
-        <h2 className="text-2xl font-bold text-primary tracking-tight">
+        <h2 className="text-2xl font-bold tracking-tight leading-tight text-primary">
           {editingCategory ? 'Editar categoría' : 'Crear categoría'}
         </h2>
-        <p className="text-gray-500 text-base mt-1 max-w-2xl">
+        <p className="max-w-3xl text-base font-normal leading-relaxed text-foreground/75 sm:text-lg md:text-xl">
           Define una división clara para agrupar productos y facilitar la navegación del catálogo.
         </p>
       </header>
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-8 border-t  border-primary/10 pt-8"
+        className="space-y-8 border-t border-primary/10 pt-8"
         aria-label="Formulario de creación de categoría"
       >
         {error && (
-          <div className="rounded-lg border border-red-500 bg-red-500/10 p-4 text-sm font-medium text-red-500">
+          <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-medium text-red-600">
             {error}
           </div>
         )}
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+            <label className="block text-base font-medium leading-relaxed text-foreground/75 sm:text-lg">
               Nombre de la categoría *
             </label>
-            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+            <p className="mt-1 text-sm font-normal leading-relaxed text-foreground/75 sm:text-base">
               Usa un nombre corto y reconocible. Este nombre también ordena los productos en el menú lateral.
             </p>
           </div>
@@ -85,16 +85,16 @@ export default function CategoryForm({ editingCategory, onCancel, onSave, isSavi
             value={formData.name}
             onChange={handleChange}
             placeholder="Ej: Calzado, Sudaderas, Accesorios"
-            className="w-full border-b border-primary/15 bg-transparent py-3 text-base font-medium text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
+            className="w-full rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-primary/55">
+            <label className="block text-base font-medium leading-relaxed text-foreground/75 sm:text-lg">
               Descripción
             </label>
-            <p className="mt-2 text-sm leading-relaxed text-primary/50">
+            <p className="mt-1 text-sm font-normal leading-relaxed text-foreground/75 sm:text-base">
               Añade una nota interna para recordar qué colecciones o líneas deben vivir dentro de esta categoría.
             </p>
           </div>
@@ -104,7 +104,7 @@ export default function CategoryForm({ editingCategory, onCancel, onSave, isSavi
             onChange={handleChange}
             placeholder="Ej: Prendas superiores de temporada, lanzamientos y básicos permanentes."
             rows={5}
-            className="w-full resize-none rounded-lg border border-primary/10 bg-background px-4 py-3 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-primary/25 focus:border-accent"
+            className="w-full resize-none rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 sm:text-base"
           />
         </div>
 
@@ -125,7 +125,7 @@ export default function CategoryForm({ editingCategory, onCancel, onSave, isSavi
           >
             {isSaving ? (
               <>
-                <LoaderCircle size={16} className="animate-spin" />
+                <SpinnerGapIcon size={16} className="animate-spin" />
                 Guardando...
               </>
             ) : (

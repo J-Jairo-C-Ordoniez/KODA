@@ -74,7 +74,6 @@ export default function EmployeeCustomersView() {
           onNewCustomer={handleNewCustomer}
           totalWithDebt={totalWithDebt}
           totalPaid={totalPaid}
-          totalCustomers={customers.length}
           totalDebtSum={totalDebtSum}
         />
       </div>

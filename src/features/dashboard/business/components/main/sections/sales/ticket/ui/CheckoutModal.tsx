@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Banknote, Smartphone, User, Loader2 } from 'lucide-react';
+import { DeviceMobileIcon, MoneyIcon, SpinnerGapIcon, UserIcon, XIcon } from '@phosphor-icons/react';
 import { formatCurrency } from '@/lib/formatters';
 import type { CustomerOption } from '@/features/dashboard/business/api/dashboard.api';
 import Button from '@/shared/components/Button';
@@ -74,81 +74,82 @@ export default function CheckoutModal({ isOpen, total, customers, isLoadingCusto
       />
 
       <div className="fixed inset-0 z-150 flex items-center justify-center p-4">
-        <div className="w-full max-w-sm bg-background border border-primary/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
-          <header className="flex items-center justify-between px-5 py-4 border-b border-primary/10">
+        <div role="dialog" aria-modal="true" aria-label="Procesar cobro" className="flex w-full max-w-sm flex-col overflow-hidden rounded-3xl border border-primary/10 bg-background/95 shadow-2xl backdrop-blur-sm md:rounded-4xl">
+          <header className="flex items-center justify-between border-b border-primary/10 px-4 py-4 sm:px-6">
             <div>
-              <h3 className="text-lg font-medium text-primary tracking-tight">
+              <h3 className="text-base font-medium leading-relaxed text-foreground/75 sm:text-md">
                 Procesar Cobro
               </h3>
-              <p className="text-sm text-primary/40">
+              <p className="text-sm font-medium leading-relaxed text-foreground/50">
                 Punto de Venta
               </p>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-primary hover:bg-primary/4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
+              className="rounded-xl border border-transparent p-2 text-primary transition-all duration-200 hover:border-primary/10 hover:bg-primary/5 hover:shadow-sm active:scale-95 cursor-pointer"
+              aria-label="Cerrar modal de cobro"
             >
-              <X size={20} />
+              <XIcon size={20} />
             </button>
           </header>
 
-          <div className="px-5 py-4 text-center border-b border-primary/10">
-            <span className="text-xs font-bold uppercase tracking-widest text-primary/50 block mb-0.5">
+          <div className="border-b border-primary/10 px-4 py-4 text-center sm:px-6">
+            <span className="mb-0.5 block text-sm font-medium leading-relaxed text-foreground/50">
               Total a pagar
             </span>
-            <span className="text-3xl font-bold text-primary tracking-tight">
+            <span className="text-2xl font-bold leading-relaxed text-primary sm:text-3xl">
               {formatCurrency(total)}
             </span>
           </div>
 
           <form
             onSubmit={handleSubmit}
-            className="p-5 space-y-5"
+            className="space-y-6 p-4 sm:p-6"
           >
             {error && (
-              <div className="rounded-lg border border-red-500 bg-red-500/10 p-4 text-sm font-medium text-red-500">
+              <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm font-medium text-red-600">
                 {error}
               </div>
             )}
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
+              <label className="block text-sm font-medium leading-relaxed text-foreground/75">
                 Método de Pago *
               </label>
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={() => handleSelectPayment('cash')}
-                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${paymentMethod === 'cash'
-                    ? 'bg-primary text-background border-primary shadow-xs'
-                    : 'bg-foreground-muted/30 border-primary/8 text-primary/70 hover:bg-foreground-muted/60'
+                  className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl border p-3 text-sm font-medium leading-relaxed transition-all cursor-pointer ${paymentMethod === 'cash'
+                    ? 'border-primary bg-primary text-background shadow-sm'
+                    : 'border-primary/10 bg-background text-foreground/75 hover:bg-primary/2'
                     }`}
                 >
-                  <Banknote size={20} />
+                  <MoneyIcon size={20} weight="bold" />
                   Efectivo
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleSelectPayment('transfer')}
-                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${paymentMethod === 'transfer'
-                    ? 'bg-primary text-background border-primary shadow-xs'
-                    : 'bg-foreground-muted/30 border-primary/8 text-primary/70 hover:bg-foreground-muted/60'
+                  className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl border p-3 text-sm font-medium leading-relaxed transition-all cursor-pointer ${paymentMethod === 'transfer'
+                    ? 'border-primary bg-primary text-background shadow-sm'
+                    : 'border-primary/10 bg-background text-foreground/75 hover:bg-primary/2'
                     }`}
                 >
-                  <Smartphone size={20} />
+                  <DeviceMobileIcon size={20} weight="bold" />
                   Transf.
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleSelectPayment('debt')}
-                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${paymentMethod === 'debt'
-                    ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
-                    : 'bg-amber-50 border-amber-200 text-amber-800 hover:bg-amber-100'
+                  className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl border p-3 text-sm font-medium leading-relaxed transition-all cursor-pointer ${paymentMethod === 'debt'
+                    ? 'border-amber-600 bg-amber-600 text-white shadow-sm'
+                    : 'border-amber-200 bg-background text-amber-800 hover:bg-amber-50'
                     }`}
                 >
-                  <User size={20} />
+                  <UserIcon size={20} weight="bold" />
                   Fiado
                 </button>
               </div>
@@ -156,19 +157,19 @@ export default function CheckoutModal({ isOpen, total, customers, isLoadingCusto
 
             {paymentMethod === 'debt' && (
               <div className="space-y-2">
-                <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
+                <label className="block text-sm font-medium leading-relaxed text-foreground/75">
                   Cliente *
                 </label>
                 {isLoadingCustomers ? (
-                  <div className="flex items-center justify-center gap-2 py-3 text-sm text-primary/60">
-                    <Loader2 size={14} className="animate-spin" />
+                  <div className="flex items-center justify-center gap-2 py-3 text-sm font-medium leading-relaxed text-foreground/50">
+                    <SpinnerGapIcon size={14} className="animate-spin" />
                     Cargando clientes...
                   </div>
                 ) : (
                   <select
                     value={selectedCustomerId}
                     onChange={e => setSelectedCustomerId(e.target.value)}
-                    className="w-full bg-foreground-muted/40 border border-primary/8 focus:border-primary/20 rounded-xl p-3 text-xs font-semibold text-primary outline-none transition-all cursor-pointer"
+                    className="w-full cursor-pointer rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
                     required
                   >
                     <option value="" disabled>
@@ -186,7 +187,7 @@ export default function CheckoutModal({ isOpen, total, customers, isLoadingCusto
             )}
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-primary/65 uppercase tracking-widest block">
+              <label className="block text-sm font-medium leading-relaxed text-foreground/75">
                 Nota (Opcional)
               </label>
               <input
@@ -194,12 +195,12 @@ export default function CheckoutModal({ isOpen, total, customers, isLoadingCusto
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
                 placeholder="Ej: descuento aplicado, cliente frecuente..."
-                className="w-full bg-foreground-muted/40 border border-primary/8 focus:border-primary/20 rounded-xl px-3.5 py-2.5 text-xs text-primary font-medium outline-none transition-all"
+                className="w-full rounded-2xl border border-primary/10 bg-background px-4 py-3.5 text-sm font-medium leading-relaxed text-primary outline-none transition-all placeholder:text-foreground/35 focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
               />
             </div>
           </form>
 
-          <div className="px-5 pb-5 flex items-center justify-between gap-3 border-t border-primary/5 pt-4">
+          <div className="flex items-center justify-between gap-3 border-t border-primary/10 px-4 pb-4 pt-4 sm:px-6 sm:pb-6">
             <Button
               variant='secondary'
               onClick={onClose}
@@ -213,7 +214,7 @@ export default function CheckoutModal({ isOpen, total, customers, isLoadingCusto
               disabled={isProcessing || (paymentMethod === 'debt' && !selectedCustomerId)}
             >
               {isProcessing
-                ? <Loader2 size={14} className="animate-spin" />
+                ? <SpinnerGapIcon size={14} className="animate-spin" />
                 : `Confirmar · ${formatCurrency(total)}`
               }
             </Button>

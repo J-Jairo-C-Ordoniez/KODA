@@ -1,87 +1,108 @@
 'use client';
 
-import { ShoppingBag, TrendingUp, Clock, CreditCard } from 'lucide-react';
+import {
+  EnvelopeSimpleIcon,
+  PencilSimpleIcon,
+  TrashIcon,
+  UserCircleIcon,
+} from '@phosphor-icons/react';
 import type { Employee } from '@/features/dashboard/business/api/team.api';
 import { formatCurrency } from '@/lib/formatters';
+import Button from '@/shared/components/Button';
 
 interface EmployeeCardProps {
   employee: Employee;
-  onClick: () => void;
+  onOpenDrawer: (employee: Employee) => void;
+  onEdit: (employee: Employee) => void;
+  onDelete: (employeeId: string) => void;
 }
 
 function getInitials(name: string) {
   return name
-    .split(' ')
+    .trim()
+    .split(/\s+/)
     .slice(0, 2)
     .map((n) => n[0])
     .join('')
     .toUpperCase();
 }
 
-export default function EmployeeCard({ employee, onClick }: EmployeeCardProps) {
+export default function EmployeeCard({ employee, onOpenDrawer, onEdit, onDelete }: EmployeeCardProps) {
   const totalAmount = employee.sales.reduce((sum, s) => sum + s.total, 0);
-  const avgSale = employee._count.sales > 0 ? totalAmount / employee._count.sales : 0;
-
-  const lastSale = employee.sales[0];
-  const lastSaleDate = lastSale
-    ? new Date(lastSale.createdAt).toLocaleDateString('es-CO', {
-        day: 'numeric',
-        month: 'short',
-      })
-    : null;
 
   return (
-    <article
-      onClick={onClick}
-      className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300 group cursor-pointer flex flex-col justify-between"
-    >
-      {/* Header compacto */}
-      <header className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 shrink-0 rounded-xl bg-primary/8 flex items-center justify-center text-sm font-bold text-primary overflow-hidden">
-          {employee.avatar ? (
-            <img src={employee.avatar} alt={employee.name} className="w-full h-full object-cover" />
-          ) : (
-            getInitials(employee.name)
-          )}
+    <article className="group flex min-h-75 flex-col rounded-3xl border border-primary/10 bg-background/80 p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md sm:p-6 md:rounded-4xl">
+      <header className="flex items-start justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-sm font-bold border-primary/10 bg-primary/5 text-primary overflow-hidden">
+            {employee.avatar ? (
+              <img src={employee.avatar} alt={employee.name} className="h-full w-full object-cover" />
+            ) : (
+              getInitials(employee.name) || <UserCircleIcon size={24} weight="fill" />
+            )}
+          </div>
+          <div className="min-w-0">
+            <h3 className="truncate text-base font-bold leading-tight tracking-tight text-primary sm:text-lg">
+              {employee.name}
+            </h3>
+            <a
+              href={`mailto:${employee.email}`}
+              onClick={(event) => event.stopPropagation()}
+              className="mt-1 flex w-fit items-center gap-1.5 text-sm leading-relaxed text-foreground/60 transition-colors hover:text-primary"
+            >
+              <EnvelopeSimpleIcon size={16} weight="regular" />
+              <span className="truncate">{employee.email}</span>
+            </a>
+          </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-base font-bold text-primary leading-snug group-hover:text-secondary transition-colors truncate">
-            {employee.name}
-          </h3>
-          <p className="text-xs text-primary/45 truncate">{employee.email}</p>
-        </div>
-        <span className="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-lg border text-emerald-700 bg-emerald-50 border-emerald-100">
+
+        <span className="shrink-0 px-1 py-0.5 text-base font-semibold leading-relaxed text-emerald-600">
           Activo
         </span>
       </header>
 
-      {/* Info */}
-      <div className="flex flex-1 flex-col justify-between border-t border-primary/10 pt-4">
-        <p className="text-sm text-primary/60 mb-4">
-          {employee._count.sales} {employee._count.sales === 1 ? 'venta' : 'ventas'} registradas
-        </p>
+      <div className="my-6 flex items-end justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium leading-tight text-foreground/60">Total ventas</p>
+          <p className="mt-1 text-2xl font-bold leading-tight tracking-tight text-primary">
+            {formatCurrency(totalAmount)}
+          </p>
+        </div>
 
-        {/* Stats footer */}
-        <div className="pt-4 border-t border-primary/10 flex items-end justify-between gap-3">
-          <div>
-            <h4 className="text-sm font-semibold uppercase text-primary/60">
-              Total ventas
-            </h4>
-            <p className="text-2xl font-bold tracking-tight text-primary">
-              {formatCurrency(totalAmount)}
-            </p>
-          </div>
-
-          <div className="text-right">
-            <h4 className="text-sm font-semibold uppercase text-primary/60">
-              Promedio
-            </h4>
-            <p className="text-lg font-bold tracking-tight text-primary">
-              {formatCurrency(avgSale)}
-            </p>
-          </div>
+        <div className="text-right">
+          <p className="text-sm font-medium leading-tight text-foreground/60">Ventas</p>
+          <p className="mt-1 text-xl font-bold leading-tight tracking-tight text-primary">
+            {employee._count.sales}
+          </p>
         </div>
       </div>
+
+      <footer className="mt-auto flex items-center justify-between gap-3 border-t border-primary/10 pt-4">
+        <div className="flex min-w-0 items-center gap-2">
+          <Button variant="primary" onClick={() => onOpenDrawer(employee)}>
+            Detalles
+          </Button>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-1">
+          <button
+            onClick={() => onEdit(employee)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-primary/45 transition-colors hover:bg-primary/5 hover:text-primary cursor-pointer"
+            title="Editar empleado"
+            aria-label={`Editar a ${employee.name}`}
+          >
+            <PencilSimpleIcon size={20} weight="regular" />
+          </button>
+          <button
+            onClick={() => onDelete(employee.userId)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-primary/45 transition-colors hover:bg-red-500/10 hover:text-red-600 cursor-pointer"
+            title="Eliminar empleado"
+            aria-label={`Eliminar a ${employee.name}`}
+          >
+            <TrashIcon size={20} weight="regular" />
+          </button>
+        </div>
+      </footer>
     </article>
   );
 }

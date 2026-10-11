@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Check, Loader2, Package } from 'lucide-react';
+import { CheckIcon, PackageIcon, SpinnerGapIcon } from '@phosphor-icons/react';
 import type { Variant } from '@/features/dashboard/business/api/products.api';
 import { formatCurrency } from '@/lib/formatters';
 import Image from 'next/image';
@@ -64,9 +64,17 @@ export default function VariantCard({ variant, productName, onClick, onUpdateSto
   return (
     <article
       onClick={onClick}
-      className="bg-background-card border border-primary/8 hover:shadow-md p-5 rounded-2xl transition-all duration-300 group cursor-pointer flex flex-col justify-between"
+      className="group flex cursor-pointer flex-col justify-between rounded-3xl border border-primary/10 bg-background/80 p-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md md:rounded-4xl sm:p-6"
     >
-      <div className="relative aspect-square w-full overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]">
+      <header className="mb-3 flex items-start justify-end">
+        <span className={`rounded-full px-2 py-0.5 text-base font-semibold leading-relaxed ${
+          variant.isActive ? 'text-emerald-600' : 'text-primary/60'
+        }`}>
+          {variant.isActive ? 'Activo' : 'Pausado'}
+        </span>
+      </header>
+
+      <div className="relative aspect-[4/3] w-full overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]">
         {primaryImage !== '/placeholder-product.png' ? (
           <Image
             src={primaryImage}
@@ -77,39 +85,31 @@ export default function VariantCard({ variant, productName, onClick, onUpdateSto
           />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-primary/25">
-            <Package size={44} strokeWidth={1.25} />
+            <PackageIcon size={44} weight="light" />
             <span className="text-xs font-bold uppercase tracking-widest">Sin imagen</span>
           </div>
         )}
-
-        <span className={`absolute right-3 top-3 text-xs font-bold px-2.5 py-1 rounded-lg border backdrop-blur-xs ${
-          variant.isActive
-            ? 'text-emerald-700 bg-emerald-50 border-emerald-100'
-            : 'text-primary/60 bg-primary/2 border-primary/8'
-        }`}>
-          {variant.isActive ? 'Activo' : 'Pausado'}
-        </span>
       </div>
 
-      <div className="flex flex-1 flex-col justify-between border-t border-primary/10 pt-4">
-        <header className="mb-4 space-y-2">
-          <p className="text-sm font-semibold uppercase text-primary/60">
+      <div className="mt-2 flex flex-1 flex-col justify-between border-t border-primary/10 pt-2">
+        <div className="mb-4 space-y-1">
+          <p className="text-sm font-medium leading-relaxed text-foreground/50">
             {variant.sku || 'Sin SKU'}
           </p>
-          <h3 className="text-base font-bold text-primary leading-snug group-hover:text-secondary transition-colors">
+          <h3 className="text-base font-medium leading-relaxed text-foreground/75 transition-colors group-hover:text-secondary sm:text-md">
             {productName} · {variant.name}
           </h3>
-          <p className="text-sm text-primary/60">
+          <p className="text-sm font-medium leading-relaxed text-foreground/50">
             Color {variant.color || 'N/A'} · Talla {variant.size || 'N/A'}
           </p>
-        </header>
+        </div>
 
-        <div className="pt-4 border-t border-primary/10 flex items-end justify-between gap-3">
+        <div className="mt-2 flex items-end justify-between gap-3 border-t border-primary/10 pt-2">
           <div>
-            <h4 className="text-sm font-semibold uppercase text-primary/60">
+            <h4 className="text-sm font-medium leading-relaxed text-foreground/50">
               Precio
             </h4>
-            <p className="text-2xl font-bold tracking-tight text-primary">
+            <p className="text-base font-bold leading-relaxed text-primary sm:text-lg md:text-2xl">
               {formatCurrency(Number(variant.price))}
             </p>
           </div>
@@ -151,9 +151,9 @@ export default function VariantCard({ variant, productName, onClick, onUpdateSto
                 aria-label={`Guardar stock de ${variant.name}`}
               >
                 {isUpdating ? (
-                  <Loader2 size={16} className="animate-spin" />
+              <SpinnerGapIcon size={16} className="animate-spin" />
                 ) : (
-                  <Check size={16} />
+              <CheckIcon size={16} weight="bold" />
                 )}
               </button>
             )}

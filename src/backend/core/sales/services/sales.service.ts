@@ -1,6 +1,4 @@
 import salesRepository, { PaginationOptions } from '../repositories/sales.repository';
-import catalogService from '@/backend/core/catalog/services/catalog.service';
-import inventoryService from '@/backend/core/inventory/services/inventory.service';
 import customerService from '@/backend/core/customers/services/customer.service';
 import { PaymentMethod } from '@prisma/client';
 import { CreateSaleDTO } from '../types';
@@ -9,46 +7,13 @@ export { type CreateSaleDTO } from '../types';
 
 const salesService = {
   async registerSale(tenantId: string, userId: string, saleData: CreateSaleDTO) {
-    const itemsToCreate = [];
-
-    for (const item of saleData.items) {
-      const variant = await catalogService.getVariantById(item.variantId);
-
-      // Decrement stock in inventory domain
-      await inventoryService.decreaseStock(item.variantId, item.quantity);
-
-      // Increment variant popularity in catalog domain
-      await catalogService.incrementPopularity(item.variantId, item.quantity);
-
-      itemsToCreate.push({
-        variantId: item.variantId,
-        quantity: item.quantity,
-        priceAtSale: Number(variant.price),
-      });
-    }
-
-    const calculatedTotal = itemsToCreate.reduce(
-      (acc, item) => acc + item.priceAtSale * item.quantity,
-      0
-    );
-    const finalTotal = (saleData.total && saleData.total > 0) ? saleData.total : calculatedTotal;
-
-    // Register sale record in sales domain
-    const newSale = await salesRepository.createSale({
+    return salesRepository.registerSale({
       tenantId,
       userId,
       customerId: saleData.customerId,
-      total: finalTotal,
       paymentMethod: saleData.paymentMethod,
-      items: itemsToCreate,
+      items: saleData.items,
     });
-
-    // Update customer debt if credit sale
-    if (saleData.paymentMethod === PaymentMethod.debt && saleData.customerId) {
-      await customerService.addDebt(tenantId, saleData.customerId, finalTotal);
-    }
-
-    return newSale;
   },
 
   async getAllSales(tenantId: string, pagination?: PaginationOptions) {

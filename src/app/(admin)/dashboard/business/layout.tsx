@@ -1,5 +1,6 @@
 import Sidebar from '@/features/dashboard/business/components/sidebar/Sidebar';
 import TabBar from '@/features/dashboard/business/components/sidebar/TabBar';
+import MobileUserMenu from '@/features/dashboard/business/components/sidebar/MobileUserMenu';
 
 export default function BusinessDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +14,7 @@ export default function BusinessDashboardLayout({ children }: { children: React.
           {children}
         </div>
       </div>
+      <MobileUserMenu />
       <TabBar />
     </div>
   );

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { SidebarIcon, LoaderCircle, Eye, EyeOff, UploadCloud } from 'lucide-react';
+import { EyeIcon, EyeSlashIcon, SidebarSimpleIcon, SpinnerGapIcon, UploadSimpleIcon } from '@phosphor-icons/react';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
 import Button from '@/shared/components/Button';
@@ -20,6 +20,8 @@ interface VariantDrawerProps {
 export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDelete, isSaving, }: VariantDrawerProps) {
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     sku: '',
@@ -35,6 +37,18 @@ export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDele
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      const animationFrame = window.requestAnimationFrame(() => setIsVisible(true));
+      return () => window.cancelAnimationFrame(animationFrame);
+    }
+
+    setIsVisible(false);
+    const closeTimer = window.setTimeout(() => setShouldRender(false), 300);
+    return () => window.clearTimeout(closeTimer);
+  }, [isOpen]);
 
   useEffect(() => {
     if (variant) {
@@ -65,7 +79,7 @@ export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDele
     setError(null);
   }, [variant, isOpen]);
 
-  if (!isOpen || !mounted) return null;
+  if (!shouldRender || !mounted) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -120,11 +134,11 @@ export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDele
     <>
       <div
         onClick={onClose}
-        className="fixed inset-0 z-9999 bg-black/10 backdrop-blur-[1px] transition-opacity"
+        className={`fixed inset-0 z-9999 bg-black/10 backdrop-blur-[1px] transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
       />
 
-      <aside className="fixed inset-y-0 right-0 z-10000 w-full max-w-md bg-background border-l border-primary/5 shadow-2xl flex flex-col animate-slide-in-right h-full">
-        <header className="flex items-center justify-between px-5 py-3 border-b border-primary/5">
+      <aside role="dialog" aria-modal="true" aria-label={variant ? 'Editar variante' : 'Nueva variante'} className={`fixed inset-y-0 right-0 z-10000 flex h-full w-65 max-w-full flex-col border-l border-primary/10 bg-background shadow-2xl transition-transform duration-300 ease-out md:w-80 ${isVisible ? 'translate-x-0' : 'translate-x-full'}`}>
+        <header className="flex items-center justify-between px-5 py-4 border-b border-primary/10">
           <div>
             <h3 className="text-lg font-medium text-primary tracking-tight">
               {variant ? 'Editar Variante' : 'Nueva Variante'}
@@ -136,10 +150,10 @@ export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDele
 
           <button
             onClick={onClose}
-            className="p-2 text-primary hover:bg-primary/4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
-            aria-label="Alternar menú lateral"
+            className="p-2 text-primary hover:bg-primary/5 rounded-xl border border-transparent hover:border-primary/10 hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
+            aria-label="Cerrar panel de variante"
           >
-            <SidebarIcon size={20} />
+            <SidebarSimpleIcon size={24} weight="regular" />
           </button>
         </header>
 
@@ -196,11 +210,11 @@ export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDele
               >
                 {formData.isActive ? (
                   <>
-                    <Eye size={14} /> Activo
+                    <EyeIcon size={16} weight="bold" /> Activo
                   </>
                 ) : (
                   <>
-                    <EyeOff size={14} /> Inactivo
+                    <EyeSlashIcon size={16} weight="bold" /> Inactivo
                   </>
                 )}
               </button>
@@ -337,10 +351,10 @@ export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDele
                     className="w-full border-2 border-dashed border-primary/15 hover:border-primary/30 bg-foreground-muted/20 hover:bg-foreground-muted/40 rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all group"
                   >
                     <div className="w-10 h-10 rounded-xl bg-primary/5 group-hover:bg-primary/10 text-primary flex items-center justify-center transition-colors">
-                      <UploadCloud size={20} />
+                      <UploadSimpleIcon size={20} />
                     </div>
                     <div className="text-center">
-                      <p className="text-sm font-bold text-primary">Subir imagen del equipo</p>
+                      <p className="text-sm font-bold text-primary">Subir imagen de la variante</p>
                       <p className="text-xs font-medium text-primary/50 mt-1">
                         Selecciona un archivo
                       </p>
@@ -378,7 +392,7 @@ export default function VariantDrawer({ isOpen, variant, onClose, onSave, onDele
           >
             {isSaving ? (
               <>
-                <LoaderCircle size={16} className="animate-spin" />
+                <SpinnerGapIcon size={16} className="animate-spin" />
                 Guardando...
               </>
             ) : (

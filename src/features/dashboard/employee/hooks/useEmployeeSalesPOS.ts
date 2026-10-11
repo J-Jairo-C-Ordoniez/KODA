@@ -265,7 +265,8 @@ export default function useEmployeeSalesPOS() {
     try {
       const res = await createSaleApi(tenantId, payload);
       clearCart();
-      await Promise.all([loadInitialCatalog(), loadStats()]);
+      // La venta ya fue confirmada. Refrescamos el catálogo sin bloquear el cierre del cobro.
+      void loadInitialCatalog();
       return { success: true, data: res };
     } catch (err: any) {
       return { success: false, error: err.message || 'Error al procesar la venta' };

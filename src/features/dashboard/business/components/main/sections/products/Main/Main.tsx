@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { CaretRightIcon } from '@phosphor-icons/react';
 import { useProductsStore } from '@/store/useProductsStore';
 import useProducts from '@/features/dashboard/business/hooks/useProducts';
 import type { Product, Variant } from '@/features/dashboard/business/api/products.api';
@@ -19,9 +19,10 @@ type VariantWithProductName = Variant & { productName?: string };
 
 interface ProductsMainProps {
     showToast: ToastHandler;
+    isSidebarOpen: boolean;
 }
 
-export default function ProductsMain({ showToast }: ProductsMainProps) {
+export default function ProductsMain({ showToast, isSidebarOpen }: ProductsMainProps) {
     const { activeView, selectedProductId, editingItem, products, categories, setActiveView, isLoading } = useProductsStore();
     const { isSaving, saveVariant, updateVariantStock, deleteVariant, saveCategory, saveProduct } = useProducts();
 
@@ -121,7 +122,7 @@ export default function ProductsMain({ showToast }: ProductsMainProps) {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-7">
+        <main className="w-full space-y-8 px-2 py-4 md:px-4 xl:px-10">
             {activeView === 'create-category' && (
                 <CategoryForm
                     editingCategory={editingItem}
@@ -143,30 +144,32 @@ export default function ProductsMain({ showToast }: ProductsMainProps) {
 
             {activeView === 'grid' && (
                 <section className="space-y-6 animate-in fade-in duration-500">
-                    <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-primary/5 pb-4">
+                    <header className="flex flex-col gap-4 border-b border-primary/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
                         <nav
-                            className="flex flex-wrap items-center gap-2 text-xs font-medium text-primary/60"
+                            className="flex flex-wrap items-center gap-3 text-base font-normal leading-relaxed text-foreground/75 sm:text-lg md:text-xl"
                             aria-label="Ubicación del Productos"
                         >
-                            <span className="rounded-md bg-foreground-muted/40 px-3 py-1 text-sm text-primary/80">
+                            <span>
                                 Productos
                             </span>
-                            <ChevronRight
-                                size={18}
-                                className="text-primary/25"
+                            <CaretRightIcon
+                                size={20}
+                                weight="bold"
+                                className="text-foreground/30"
                             />
                             {selectedCategory && (
                                 <>
-                                    <span className="text-sm text-primary/80">
+                                    <span>
                                         {selectedCategory.name}
                                     </span>
-                                    <ChevronRight
-                                        size={18}
-                                        className="text-primary/25"
+                                    <CaretRightIcon
+                                        size={20}
+                                        weight="bold"
+                                        className="text-foreground/30"
                                     />
                                 </>
                             )}
-                            <span className="p-1 text-sm text-primary/80">
+                            <span>
                                 {selectedProduct ? selectedProduct.name : 'Todos los productos'}
                             </span>
                         </nav>
@@ -190,11 +193,11 @@ export default function ProductsMain({ showToast }: ProductsMainProps) {
                     </header>
 
                     {displayedVariants.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center text-center py-20 w-full h-full mx-auto">
-                            <h3 className="text-lg font-medium text-primary tracking-tight">
+                        <div className="flex min-h-80 w-full flex-col items-center justify-center rounded-2xl border border-primary/10 bg-background-card px-6 py-20 text-center shadow-sm">
+                            <h3 className="text-xl font-bold text-primary tracking-tight">
                                 {selectedProduct ? 'Sin variantes registradas' : 'Tu catálogo está listo para organizarse'}
                             </h3>
-                            <p className="text-sm text-primary/60 leading-relaxed max-w-md my-2">
+                            <p className="my-2 max-w-md text-sm leading-relaxed text-primary/60">
                                 {selectedProduct
                                     ? 'Crea una variante con precio, color, talla y stock inicial para empezar a vender este producto.'
                                     : 'Selecciona un producto del menú lateral para ver sus variantes, o crea un producto nuevo para empezar a cargar inventario.'}
@@ -209,7 +212,7 @@ export default function ProductsMain({ showToast }: ProductsMainProps) {
                             )}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                        <div className={`grid grid-cols-1 gap-6 sm:grid-cols-2 ${isSidebarOpen ? 'xl:grid-cols-2' : 'xl:grid-cols-3'}`}>
                             {displayedVariants.map(variant => (
                                 <VariantCard
                                     key={variant.variantId}
@@ -233,6 +236,6 @@ export default function ProductsMain({ showToast }: ProductsMainProps) {
                 onDelete={handleDeleteVariant}
                 isSaving={isSaving}
             />
-        </div>
+        </main>
     );
 }
